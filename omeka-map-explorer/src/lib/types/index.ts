@@ -1,0 +1,54 @@
+// Omeka S API types
+export interface OmekaItem {
+  id: string;
+  title: string;
+  "dcterms:spatial": Array<{
+    "@id": string;
+    "@value"?: string;
+  }>;
+  "dcterms:date": Array<{
+    "@value": string;
+  }>;
+  "dcterms:title": Array<{
+    "@value": string;
+  }>;
+  // Other Dublin Core fields
+}
+
+// Processed Item with coordinate data
+export interface ProcessedItem {
+  id: string;
+  title: string;
+  publishDate: Date;
+  coordinates: [number, number][] | null; // [lat, lng]
+  country: string;
+  region: string | null;
+  prefecture: string | null;
+  newspaperSource: string;
+  keywords: string[];
+}
+
+// Temporal data for timeline visualization
+export interface TemporalData {
+  date: Date;
+  count: number;
+  items: ProcessedItem[];
+}
+
+// GeoJSON types
+export interface GeoJsonFeature {
+  type: string;
+  properties: {
+    name: string;
+    [key: string]: any;
+  };
+  geometry: {
+    type: string;
+    coordinates: any[];
+  };
+}
+
+export interface GeoJsonData {
+  type: string;
+  features: GeoJsonFeature[];
+} 
