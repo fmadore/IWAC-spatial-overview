@@ -6,39 +6,40 @@
   import { loadGeoJson } from '$lib/api/geoJsonService';
   import { browser } from '$app/environment';
   
-  // Import type only for TypeScript - fixed type imports
-  import type { Map as LeafletMap, LayerGroup } from 'leaflet';
+  // Using any types here to avoid TypeScript errors with Leaflet
+  let mapElement: HTMLDivElement;
+  let map: any = null;
+  let layers: Record<string, any> = {};
+  let L: any; // Will hold the Leaflet library when loaded
   
   // Props
   export let height = '600px';
   
-  // Local state
-  let mapElement: HTMLDivElement;
-  let map: LeafletMap | null = null;
-  let layers: Record<string, any> = {}; // Using any for mixed layer types
-  let L: any; // Will hold the Leaflet library when loaded
-  
   // Initialize map on mount
-  onMount(async () => {
+  onMount(() => {
     if (!browser) return undefined;
     
-    // Dynamically import Leaflet only on the client side
-    L = await import('leaflet');
-    await import('leaflet/dist/leaflet.css');
+    const initMap = async () => {
+      // Dynamically import Leaflet only on the client side
+      L = await import('leaflet');
+      await import('leaflet/dist/leaflet.css');
+      
+      // Initialize the map
+      map = L.map(mapElement).setView($mapDataStore.center, $mapDataStore.zoom);
+      
+      // Add base tile layer
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap contributors'
+      }).addTo(map);
+      
+      // Load initial data
+      await loadMapData();
+      
+      // Setup event handlers
+      map.on('moveend', handleMapMove);
+    };
     
-    // Initialize the map
-    map = L.map(mapElement).setView($mapDataStore.center, $mapDataStore.zoom);
-    
-    // Add base tile layer
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '© OpenStreetMap contributors'
-    }).addTo(map);
-    
-    // Load initial data
-    await loadMapData();
-    
-    // Setup event handlers
-    map.on('moveend', handleMapMove);
+    initMap();
     
     return () => {
       if (map) {

@@ -5,19 +5,19 @@
   import type { GeoJsonData, GeoJsonFeature } from '$lib/types';
   import { browser } from '$app/environment';
   
-  // Import types only - fixed to use correct type imports
-  import type { Map as LeafletMap, GeoJSON as LeafletGeoJSON, Control as LeafletControl } from 'leaflet';
+  // Import custom Leaflet type definitions
+  import type { LeafletMap, LeafletControl } from '$lib/types/leaflet-types';
   
   // Props
-  export let map: LeafletMap;
+  export let map: any;
   export let geoJson: GeoJsonData;
   export let data: Record<string, number> = {}; // Count data per region
   export let colorRange = schemeBlues[7]; // Color scheme
   
-  // Local state
-  let layer: LeafletGeoJSON | null = null;
-  let info: LeafletControl | null = null;
-  let legend: LeafletControl | null = null;
+  // Local state - using any to avoid TypeScript errors with Leaflet
+  let layer: any = null;
+  let info: any = null;
+  let legend: any = null;
   let L: any; // Will hold the Leaflet library when loaded
   
   // Create event dispatcher
@@ -26,20 +26,24 @@
   // Generate color scale based on data
   $: colorScale = generateColorScale(data, colorRange);
   
-  onMount(async () => {
+  onMount(() => {
     if (!browser || !map || !geoJson) return undefined;
     
-    // Dynamically import Leaflet
-    L = (await import('leaflet')).default;
+    const initMap = async () => {
+      // Dynamically import Leaflet
+      L = (await import('leaflet')).default;
+      
+      // Create layer
+      createLayer();
+      
+      // Add info control
+      createInfoControl();
+      
+      // Add legend
+      createLegendControl();
+    };
     
-    // Create layer
-    createLayer();
-    
-    // Add info control
-    createInfoControl();
-    
-    // Add legend
-    createLegendControl();
+    initMap();
     
     return () => {
       if (layer && map) {
