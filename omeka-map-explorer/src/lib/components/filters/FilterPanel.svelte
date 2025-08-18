@@ -3,14 +3,7 @@
   import { appState } from '$lib/state/appState.svelte';
   import CountryFilter from './CountryFilter.svelte';
   import DateRangeFilter from './DateRangeFilter.svelte';
-  
-  // Local state
-  let expanded = $state(true);
-  
-  // Toggle expanded state
-  function toggleExpanded() {
-    expanded = !expanded;
-  }
+  import * as Sidebar from '$lib/components/ui/sidebar';
   
   // Reset all filters
   function resetFilters() {
@@ -22,87 +15,48 @@
   }
 </script>
 
-<div class="filter-panel">
-  <div class="header">
-    <h2>Filters</h2>
-  <button class="toggle-button" onclick={toggleExpanded}>
-      {expanded ? '−' : '+'}
-    </button>
-  </div>
+<Sidebar.Root>
+  <Sidebar.Header>
+    <Sidebar.Group>
+      <Sidebar.GroupLabel>Filters</Sidebar.GroupLabel>
+      <Sidebar.GroupAction>
+        <Sidebar.Trigger />
+      </Sidebar.GroupAction>
+    </Sidebar.Group>
+  </Sidebar.Header>
   
-  {#if expanded}
-    <div class="filters">
-      <CountryFilter 
-        countries={filters.available.countries}
-        selected={filters.selected.countries}
-      />
-      
-      <DateRangeFilter 
-        range={filters.available.dateRange}
-        selected={filters.selected.dateRange}
-      />
-      
-      <div class="filter-actions">
-  <button class="reset-button" onclick={resetFilters}>
-          Reset All Filters
-        </button>
-      </div>
+  <Sidebar.Content>
+    <Sidebar.Group>
+      <Sidebar.GroupContent>
+        <CountryFilter 
+          countries={filters.available.countries}
+          selected={filters.selected.countries}
+        />
+      </Sidebar.GroupContent>
+    </Sidebar.Group>
+    
+    <Sidebar.Separator />
+    
+    <Sidebar.Group>
+      <Sidebar.GroupContent>
+        <DateRangeFilter 
+          range={filters.available.dateRange}
+          selected={filters.selected.dateRange}
+        />
+      </Sidebar.GroupContent>
+    </Sidebar.Group>
+  </Sidebar.Content>
+  
+  <Sidebar.Footer>
+    <div class="p-4">
+      <button 
+        class="w-full px-4 py-2 text-sm font-medium text-foreground bg-background border border-input rounded-md hover:bg-accent hover:text-accent-foreground transition-colors" 
+        onclick={resetFilters}
+      >
+        Reset All Filters
+      </button>
     </div>
-  {/if}
-</div>
+  </Sidebar.Footer>
+</Sidebar.Root>
 
-<style>
-  .filter-panel {
-    background-color: white;
-    border-radius: 4px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    overflow: hidden;
-  }
-  
-  .header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 15px;
-    background-color: #f5f5f5;
-    border-bottom: 1px solid #ddd;
-  }
-  
-  .header h2 {
-    margin: 0;
-    font-size: 1.2rem;
-  }
-  
-  .toggle-button {
-    background: none;
-    border: none;
-    font-size: 1.5rem;
-    cursor: pointer;
-    padding: 0 5px;
-  }
-  
-  .filters {
-    padding: 15px;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-  }
-  
-  .filter-actions {
-    display: flex;
-    justify-content: center;
-    margin-top: 10px;
-  }
-  
-  .reset-button {
-    background-color: #f5f5f5;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    padding: 5px 10px;
-    cursor: pointer;
-  }
-  
-  .reset-button:hover {
-    background-color: #e5e5e5;
-  }
-</style> 
+ 

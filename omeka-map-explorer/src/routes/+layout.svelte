@@ -1,6 +1,10 @@
 <script>
   import '../app.css';
+  import * as Sidebar from '$lib/components/ui/sidebar';
+  
   let { children } = $props();
 </script>
 
-{@render children()}
+<Sidebar.Provider>
+  {@render children()}
+</Sidebar.Provider>

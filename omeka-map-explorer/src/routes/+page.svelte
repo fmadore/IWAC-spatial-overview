@@ -12,10 +12,10 @@
   import type { ProcessedItem } from '$lib/types';
   import { browser } from '$app/environment';
   
-  // Components
   import Map from '$lib/components/maps/Map.svelte';
   import Timeline from '$lib/components/timeline/Timeline.svelte';
   import FilterPanel from '$lib/components/filters/FilterPanel.svelte';
+  import * as Sidebar from '$lib/components/ui/sidebar';
   
   // Configuration
   const countryItemSets: Record<string, number[]> = {
@@ -166,139 +166,61 @@
   <title>Omeka S Map Explorer</title>
 </svelte:head>
 
-<div class="app-container">
-  {#if !browser}
-    <div class="ssr-message">
-      <p>Map visualization loading...</p>
-    </div>
-  {:else if appState.loading}
-    <div class="loading-indicator">
-      <p>Loading data...</p>
-    </div>
-  {:else if appState.error}
-    <div class="error-display">
-      <h2>Error</h2>
-  <p>{appState.error}</p>
-    </div>
-  {:else}
-    <header>
-      <h1>Newspaper Article Locations</h1>
-      <div class="view-controls">
-        <!-- View switching controls -->
-      </div>
-    </header>
+{#if !browser}
+  <div class="ssr-message">
+    <p>Map visualization loading...</p>
+  </div>
+{:else if appState.loading}
+  <div class="loading-indicator">
+    <p>Loading data...</p>
+  </div>
+{:else if appState.error}
+  <div class="error-display">
+    <h2>Error</h2>
+    <p>{appState.error}</p>
+  </div>
+{:else}
+  <div class="flex h-screen w-screen overflow-hidden">
+    <FilterPanel />
     
-    <main>
-  <aside class="sidebar" class:collapsed={!appState.sidebarOpen}>
-  <button class="sidebar-toggle" onclick={() => { appState.sidebarOpen = !appState.sidebarOpen }}>
-          {appState.sidebarOpen ? '◀' : '▶'}
-        </button>
-        
-        {#if appState.sidebarOpen}
-          <FilterPanel />
-          
-          {#if appState.selectedItem}
-            <div class="article-details">
-              <h3>{appState.selectedItem.title}</h3>
-              <p>Date: {appState.selectedItem.publishDate?.toLocaleDateString()}</p>
-              <p>Country: {appState.selectedItem.country}</p>
-              <p>Source: {appState.selectedItem.newspaperSource}</p>
-            </div>
-          {/if}
-        {/if}
-      </aside>
+    <main class="flex flex-col flex-1 overflow-hidden">
+      <header class="flex h-16 items-center justify-between px-4 border-b">
+        <h1 class="text-xl font-bold">Newspaper Article Locations</h1>
+        <div class="flex items-center gap-2">
+          <Sidebar.Trigger />
+        </div>
+      </header>
       
-      <div class="content">
-        <Map />
+      <div class="flex flex-col flex-1 overflow-hidden">
+        <div class="flex-1">
+          <Map />
+        </div>
         
-        <div class="timeline-wrapper">
+        <div class="border-t bg-muted/30 p-4">
           <Timeline 
             data={timeData.data}
             height="120px"
           />
         </div>
+        
+        {#if appState.selectedItem}
+          <div class="border-t p-4 bg-background">
+            <div class="bg-card rounded-lg p-4 shadow-sm">
+              <h3 class="font-semibold text-lg mb-2">{appState.selectedItem.title}</h3>
+              <div class="space-y-1 text-sm text-muted-foreground">
+                <p>Date: {appState.selectedItem.publishDate?.toLocaleDateString()}</p>
+                <p>Country: {appState.selectedItem.country}</p>
+                <p>Source: {appState.selectedItem.newspaperSource}</p>
+              </div>
+            </div>
+          </div>
+        {/if}
       </div>
     </main>
-  {/if}
-</div>
+  </div>
+{/if}
 
 <style>
-  .app-container {
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
-    width: 100vw;
-    overflow: hidden;
-  }
-  
-  header {
-    padding: 10px 20px;
-    background-color: #4a86e8;
-    color: white;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-  }
-  
-  header h1 {
-    margin: 0;
-    font-size: 1.5rem;
-  }
-  
-  main {
-    display: flex;
-    flex: 1;
-    overflow: hidden;
-    position: relative;
-  }
-  
-  .sidebar {
-    width: 300px;
-    background-color: #f5f5f5;
-    overflow-y: auto;
-    transition: width 0.3s ease;
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-    padding: 15px;
-  }
-  
-  .sidebar.collapsed {
-    width: 30px;
-    padding: 0;
-  }
-  
-  .sidebar-toggle {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    z-index: 10;
-    background: white;
-    border: 1px solid #ddd;
-    border-radius: 50%;
-    width: 24px;
-    height: 24px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-  }
-  
-  .content {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-  }
-  
-  .timeline-wrapper {
-    padding: 10px;
-    background-color: #f5f5f5;
-    border-top: 1px solid #ddd;
-  }
-  
   .loading-indicator, .error-display, .ssr-message {
     display: flex;
     flex-direction: column;
@@ -315,32 +237,5 @@
   .ssr-message {
     background-color: #f5f5f5;
     color: #333;
-  }
-  
-  .article-details {
-    background-color: white;
-    border-radius: 4px;
-    padding: 15px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-  }
-  
-  .article-details h3 {
-    margin-top: 0;
-    font-size: 1.1rem;
-  }
-  
-  @media (max-width: 768px) {
-    main {
-      flex-direction: column;
-    }
-    
-    .sidebar {
-      width: 100%;
-      max-height: 50vh;
-    }
-    
-    .sidebar.collapsed {
-      max-height: 30px;
-    }
   }
 </style>
