@@ -14,19 +14,26 @@
   
   // Toggle country selection
   function toggleCountry(country: string) {
+    console.log('toggleCountry called for:', country);
     const list = filters.selected.countries;
     const index = list.indexOf(country);
+    console.log('Current selected countries:', list);
+    console.log('Country index:', index);
     if (index === -1) {
       filters.selected.countries = [...list, country];
+      console.log('Added country, new list:', filters.selected.countries);
     } else {
       filters.selected.countries = list.filter(c => c !== country);
+      console.log('Removed country, new list:', filters.selected.countries);
     }
     dispatch('change', { countries: filters.selected.countries });
   }
   
   // Clear all selections
   function clearAll() {
+    console.log('clearAll called, current countries:', filters.selected.countries);
     filters.selected.countries = [];
+    console.log('clearAll after clear:', filters.selected.countries);
     dispatch('change', { countries: filters.selected.countries });
   }
   
@@ -62,7 +69,10 @@
             variant="ghost"
             size="sm"
             class="h-6 px-2 text-xs"
-            onclick={clearAll}
+            onclick={() => {
+              console.log('Clear button clicked');
+              clearAll();
+            }}
             disabled={filters.selected.countries.length === 0}
           >
             Clear
@@ -80,13 +90,17 @@
           {@const isChecked = filters.selected.countries.includes(country)}
           <div class="flex items-center space-x-2">
             <Checkbox
-              id="country-{country}"
+              id={`country-${country}`}
               checked={isChecked}
-              onclick={() => toggleCountry(country)}
+              onCheckedChange={(checked) => {
+                console.log('Checkbox onCheckedChange event fired for:', country, 'checked:', checked);
+                toggleCountry(country);
+              }}
             />
             <Label
-              for="country-{country}"
+              for={`country-${country}`}
               class="text-sm font-normal cursor-pointer leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+              onclick={() => toggleCountry(country)}
             >
               {country}
             </Label>
