@@ -17,7 +17,8 @@
 		"test:unit": "vitest"
 	},
 	"devDependencies": {
-		"@lucide/svelte": "^0.539.0",
+		"@internationalized/date": "^3.8.2",
+		"@lucide/svelte": "^0.515.0",
 		"@playwright/test": "^1.54.2",
 		"@sveltejs/adapter-auto": "^4.0.0",
 		"@sveltejs/kit": "^2.31.1",
@@ -30,6 +31,7 @@
 		"@types/d3-scale-chromatic": "^3.1.0",
 		"@types/leaflet": "^1.9.20",
 		"autoprefixer": "^10.4.20",
+		"bits-ui": "^2.9.3",
 		"clsx": "^2.1.1",
 		"jsdom": "^26.1.0",
 		"postcss": "^8.5.6",
