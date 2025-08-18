@@ -1,0 +1,1 @@
+{ "css.lint.unknownAtRules": "ignore", "editor.quickSuggestions": { "strings": true }, "tailwindCSS.includeLanguages": { "plaintext": "html", "svelte": "html" } }
