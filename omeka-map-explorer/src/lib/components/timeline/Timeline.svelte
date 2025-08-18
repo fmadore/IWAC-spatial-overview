@@ -19,57 +19,65 @@
   // Event dispatcher
   const dispatch = createEventDispatcher();
   
-  onMount(async () => {
-    if (!browser) return;
+  onMount(() => {
+    if (!browser) return undefined;
     
-    try {
-      // Import D3 modules dynamically
-      const [
-        selection,
-        scale,
-        axis,
-        shape,
-        time,
-        timeFormat
-      ] = await Promise.all([
-        import('d3-selection'),
-        import('d3-scale'),
-        import('d3-axis'),
-        import('d3-shape'),
-        import('d3-time'),
-        import('d3-time-format')
-      ]);
-      
-      // Build d3 object with imported modules
-      d3 = {
-        select: selection.select,
-        scaleTime: scale.scaleTime,
-        scaleLinear: scale.scaleLinear,
-        axisBottom: axis.axisBottom,
-        area: shape.area,
-        curveBasis: shape.curveBasis,
-        timeMonth: time.timeMonth,
-        timeYear: time.timeYear,
-        timeFormat: timeFormat.timeFormat
-      };
-      
-      initChart();
-      
-      // Set up resize observer
-      const resizeObserver = new ResizeObserver(entries => {
-        if (entries.length > 0) {
-          updateChartDimensions();
-        }
-      });
-      
-      resizeObserver.observe(svgElement.parentNode as Element);
-      
-      return () => {
-        resizeObserver.disconnect();
-      };
-    } catch (error) {
-      console.error('Error initializing timeline:', error);
-    }
+    const initChart = async () => {
+      try {
+        // Import D3 modules dynamically
+        const [
+          selection,
+          scale,
+          axis,
+          shape,
+          time,
+          timeFormat
+        ] = await Promise.all([
+          import('d3-selection'),
+          import('d3-scale'),
+          import('d3-axis'),
+          import('d3-shape'),
+          import('d3-time'),
+          import('d3-time-format')
+        ]);
+        
+        // Build d3 object with imported modules
+        d3 = {
+          select: selection.select,
+          scaleTime: scale.scaleTime,
+          scaleLinear: scale.scaleLinear,
+          axisBottom: axis.axisBottom,
+          area: shape.area,
+          curveBasis: shape.curveBasis,
+          timeMonth: time.timeMonth,
+          timeYear: time.timeYear,
+          timeFormat: timeFormat.timeFormat
+        };
+        
+        initChart();
+        
+        // Set up resize observer
+        const resizeObserver = new ResizeObserver(entries => {
+          if (entries.length > 0) {
+            updateChartDimensions();
+          }
+        });
+        
+        resizeObserver.observe(svgElement.parentNode as Element);
+        
+        return () => {
+          resizeObserver.disconnect();
+        };
+      } catch (error) {
+        console.error('Error initializing timeline:', error);
+      }
+    };
+    
+    initChart();
+    
+    return () => {
+      // Cleanup when component unmounts
+    };
   });
   
   // Initialize the chart

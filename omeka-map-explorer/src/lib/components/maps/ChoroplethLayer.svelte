@@ -5,9 +5,6 @@
   import type { GeoJsonData, GeoJsonFeature } from '$lib/types';
   import { browser } from '$app/environment';
   
-  // Import custom Leaflet type definitions
-  import type { LeafletMap, LeafletControl } from '$lib/types/leaflet-types';
-  
   // Props
   export let map: any;
   export let geoJson: GeoJsonData;
