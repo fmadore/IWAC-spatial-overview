@@ -1,4 +1,3 @@
-import { writable } from 'svelte/store';
 import type { ProcessedItem } from '$lib/types';
 
 interface AppState {
@@ -10,11 +9,20 @@ interface AppState {
   selectedItem: ProcessedItem | null;
 }
 
-export const appStateStore = writable<AppState>({
+export const appState = $state<AppState>({
   loading: true,
   error: null,
   dataLoaded: false,
   activeView: 'map',
   sidebarOpen: true,
   selectedItem: null
-}); 
+});
+
+export function setError(message: string) {
+  appState.error = message;
+  appState.loading = false;
+}
+
+export function setSelectedItem(item: ProcessedItem | null) {
+  appState.selectedItem = item;
+}

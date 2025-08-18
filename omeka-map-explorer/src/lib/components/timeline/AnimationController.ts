@@ -1,5 +1,4 @@
-import { get } from 'svelte/store';
-import { timeDataStore } from '$lib/stores/timeDataStore';
+import { timeData } from '$lib/state/timeData.svelte';
 
 let animationFrame: number | null = null;
 let lastTimestamp: number = 0;
@@ -22,7 +21,7 @@ export function stopAnimation() {
 
 // Animation loop
 function animationLoop(timestamp: number) {
-  const state = get(timeDataStore);
+  const state = timeData;
   
   if (!state.playing) {
     animationFrame = null;
@@ -42,20 +41,14 @@ function animationLoop(timestamp: number) {
   
   // Check if we've reached the end
   if (newDate > state.range.end) {
-    timeDataStore.update(s => ({
-      ...s,
-      currentDate: s.range.start,
-      playing: false
-    }));
+    timeData.currentDate = state.range.start;
+    timeData.playing = false;
     animationFrame = null;
     return;
   }
   
   // Update current date
-  timeDataStore.update(s => ({
-    ...s,
-    currentDate: newDate
-  }));
+  timeData.currentDate = newDate;
   
   // Continue animation loop
   animationFrame = requestAnimationFrame(animationLoop);
@@ -63,11 +56,14 @@ function animationLoop(timestamp: number) {
 
 // Initialize animation listeners
 export function initialize() {
-  timeDataStore.subscribe(state => {
-    if (state.playing && !animationFrame) {
+  // Polling effect: minimal overhead approach; could be replaced with $effect in Svelte component
+  const check = () => {
+    if (timeData.playing && !animationFrame) {
       startAnimation();
-    } else if (!state.playing && animationFrame) {
+    } else if (!timeData.playing && animationFrame) {
       stopAnimation();
     }
-  });
-} 
+    requestAnimationFrame(check);
+  };
+  requestAnimationFrame(check);
+}

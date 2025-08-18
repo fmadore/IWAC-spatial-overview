@@ -1,9 +1,10 @@
 <script lang="ts">
   import { onMount } from 'svelte';
-  import { appStateStore } from '$lib/stores/appStateStore';
-  import { timeDataStore } from '$lib/stores/timeDataStore';
-  import { filterStore } from '$lib/stores/filterStore';
-  import { mapDataStore } from '$lib/stores/mapDataStore';
+  // Rune state modules (Svelte 5)
+  import { appState } from '$lib/state/appState.svelte';
+  import { timeData } from '$lib/state/timeData.svelte';
+  import { filters } from '$lib/state/filters.svelte';
+  import { mapData } from '$lib/state/mapData.svelte';
   import { initialize as initAnimationController } from '$lib/components/timeline/AnimationController';
   import { fetchItemSets, fetchItemsFromSet } from '$lib/api/omekaService';
   import { processItems, groupItemsByTime } from '$lib/utils/dataProcessor';
@@ -38,19 +39,13 @@
       initializeFilters();
       
       // Mark loading complete
-      appStateStore.update(state => ({
-        ...state,
-        loading: false,
-        dataLoaded: true
-      }));
+  appState.loading = false;
+  appState.dataLoaded = true;
     } catch (error) {
       console.error('Error initializing application:', error);
       
-      appStateStore.update(state => ({
-        ...state,
-        loading: false,
-        error: error instanceof Error ? error.message : 'Failed to initialize application'
-      }));
+  appState.loading = false;
+  appState.error = error instanceof Error ? error.message : 'Failed to initialize application';
     }
   });
   
@@ -71,22 +66,14 @@
     const timelineData = groupItemsByTime(allItems, 'month');
     
     // Update stores
-    timeDataStore.update(state => ({
-      ...state,
-      data: timelineData,
-      range: {
-        start: timelineData[0]?.date || new Date('1900-01-01'),
-        end: timelineData[timelineData.length - 1]?.date || new Date('2023-12-31')
-      },
-      currentDate: timelineData[0]?.date || new Date('1900-01-01')
-    }));
-    
-    mapDataStore.update(state => ({
-      ...state,
-      allItems: allItems,
-      countriesData: countriesData,
-      visibleItems: allItems
-    }));
+  timeData.data = timelineData;
+  timeData.range.start = timelineData[0]?.date || new Date('1900-01-01');
+  timeData.range.end = timelineData[timelineData.length - 1]?.date || new Date('2023-12-31');
+  timeData.currentDate = timelineData[0]?.date || new Date('1900-01-01');
+
+  mapData.allItems = allItems;
+  mapData.countriesData = countriesData;
+  mapData.visibleItems = allItems;
   }
   
   // Create mock items for demo
@@ -151,7 +138,7 @@
     const newspapers = new Set<string>();
     const dates: Date[] = [];
     
-    const allItems = get(mapDataStore).allItems || [];
+  const allItems = mapData.allItems || [];
     
     allItems.forEach(item => {
       if (item.newspaperSource) {
@@ -169,15 +156,9 @@
       } : 
       { min: new Date('1900-01-01'), max: new Date('2023-12-31') };
     
-    filterStore.update(state => ({
-      ...state,
-      available: {
-        ...state.available,
-        countries,
-        newspapers: Array.from(newspapers),
-        dateRange
-      }
-    }));
+  filters.available.countries = countries;
+  filters.available.newspapers = Array.from(newspapers);
+  filters.available.dateRange = dateRange;
   }
 </script>
 
@@ -190,14 +171,14 @@
     <div class="ssr-message">
       <p>Map visualization loading...</p>
     </div>
-  {:else if $appStateStore.loading}
+  {:else if appState.loading}
     <div class="loading-indicator">
       <p>Loading data...</p>
     </div>
-  {:else if $appStateStore.error}
+  {:else if appState.error}
     <div class="error-display">
       <h2>Error</h2>
-      <p>{$appStateStore.error}</p>
+  <p>{appState.error}</p>
     </div>
   {:else}
     <header>
@@ -208,22 +189,20 @@
     </header>
     
     <main>
-      <aside class="sidebar" class:collapsed={!$appStateStore.sidebarOpen}>
-        <button class="sidebar-toggle" on:click={() => {
-          appStateStore.update(s => ({ ...s, sidebarOpen: !s.sidebarOpen }))
-        }}>
-          {$appStateStore.sidebarOpen ? '◀' : '▶'}
+  <aside class="sidebar" class:collapsed={!appState.sidebarOpen}>
+  <button class="sidebar-toggle" onclick={() => { appState.sidebarOpen = !appState.sidebarOpen }}>
+          {appState.sidebarOpen ? '◀' : '▶'}
         </button>
         
-        {#if $appStateStore.sidebarOpen}
+        {#if appState.sidebarOpen}
           <FilterPanel />
           
-          {#if $appStateStore.selectedItem}
+          {#if appState.selectedItem}
             <div class="article-details">
-              <h3>{$appStateStore.selectedItem.title}</h3>
-              <p>Date: {$appStateStore.selectedItem.publishDate?.toLocaleDateString()}</p>
-              <p>Country: {$appStateStore.selectedItem.country}</p>
-              <p>Source: {$appStateStore.selectedItem.newspaperSource}</p>
+              <h3>{appState.selectedItem.title}</h3>
+              <p>Date: {appState.selectedItem.publishDate?.toLocaleDateString()}</p>
+              <p>Country: {appState.selectedItem.country}</p>
+              <p>Source: {appState.selectedItem.newspaperSource}</p>
             </div>
           {/if}
         {/if}
@@ -234,7 +213,7 @@
         
         <div class="timeline-wrapper">
           <Timeline 
-            data={$timeDataStore.data}
+            data={timeData.data}
             height="120px"
           />
         </div>

@@ -1,4 +1,3 @@
-import { writable } from 'svelte/store';
 import type { GeoJsonData, ProcessedItem } from '$lib/types';
 
 interface MapDataState {
@@ -13,14 +12,14 @@ interface MapDataState {
   countriesData: Record<string, ProcessedItem[]>;
 }
 
-export const mapDataStore = writable<MapDataState>({
-  geoData: {}, // GeoJSON data for countries/regions
+export const mapData = $state<MapDataState>({
+  geoData: {},
   allItems: [],
-  visibleItems: [], // Currently visible items based on filters
-  highlightedRegions: {}, // Regions to highlight based on count
+  visibleItems: [],
+  highlightedRegions: {},
   selectedCountry: null,
   selectedRegion: null,
   zoom: 5,
-  center: [10.0, 0.0], // Default center (West Africa)
+  center: [10.0, 0.0],
   countriesData: {}
-}); 
+});

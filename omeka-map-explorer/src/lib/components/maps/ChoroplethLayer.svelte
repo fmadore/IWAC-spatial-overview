@@ -5,11 +5,13 @@
   import type { GeoJsonData, GeoJsonFeature } from '$lib/types';
   import { browser } from '$app/environment';
   
-  // Props
-  export let map: any;
-  export let geoJson: GeoJsonData;
-  export let data: Record<string, number> = {}; // Count data per region
-  export let colorRange = schemeBlues[7]; // Color scheme
+  // Props (runes mode)
+  let { map, geoJson, data = {}, colorRange = schemeBlues[7] } = $props<{
+    map: any;
+    geoJson: GeoJsonData;
+    data?: Record<string, number>;
+    colorRange?: string[];
+  }>();
   
   // Local state - using any to avoid TypeScript errors with Leaflet
   let layer: any = null;
@@ -20,8 +22,8 @@
   // Create event dispatcher
   const dispatch = createEventDispatcher();
   
-  // Generate color scale based on data
-  $: colorScale = generateColorScale(data, colorRange);
+  // Derived color scale
+  const colorScale = $derived.by(() => generateColorScale(data, colorRange));
   
   onMount(() => {
     if (!browser || !map || !geoJson) return undefined;
@@ -213,9 +215,9 @@
   }
   
   // Update when data changes
-  $: if (browser && layer && data) {
-    updateLayer();
-  }
+  $effect(() => {
+    if (browser && layer && data) updateLayer();
+  });
   
   // Update layer with new data
   function updateLayer() {

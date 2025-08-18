@@ -1,8 +1,8 @@
 <script lang="ts">
   import { onMount, onDestroy } from 'svelte';
-  import { mapDataStore } from '$lib/stores/mapDataStore';
-  import { timeDataStore } from '$lib/stores/timeDataStore';
-  import { filterStore } from '$lib/stores/filterStore';
+  import { mapData } from '$lib/state/mapData.svelte';
+  import { timeData } from '$lib/state/timeData.svelte';
+  import { filters } from '$lib/state/filters.svelte';
   import { loadGeoJson } from '$lib/api/geoJsonService';
   import { browser } from '$app/environment';
   
@@ -13,7 +13,7 @@
   let L: any; // Will hold the Leaflet library when loaded
   
   // Props
-  export let height = '600px';
+  let { height = '600px' } = $props();
   
   // Initialize map on mount
   onMount(() => {
@@ -25,7 +25,7 @@
       await import('leaflet/dist/leaflet.css');
       
       // Initialize the map
-      map = L.map(mapElement).setView($mapDataStore.center, $mapDataStore.zoom);
+  map = L.map(mapElement).setView(mapData.center, mapData.zoom);
       
       // Add base tile layer
       L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -59,18 +59,12 @@
     layers = {};
     
     // Load GeoJSON data for selected country
-    if ($mapDataStore.selectedCountry) {
+  if (mapData.selectedCountry) {
       try {
-        const geoJson = await loadGeoJson($mapDataStore.selectedCountry, 'regions');
+    const geoJson = await loadGeoJson(mapData.selectedCountry, 'regions');
         
         // Cache the GeoJSON data
-        mapDataStore.update(state => ({
-          ...state,
-          geoData: {
-            ...state.geoData,
-            [$mapDataStore.selectedCountry as string]: geoJson
-          }
-        }));
+    mapData.geoData[mapData.selectedCountry as string] = geoJson;
         
         // Add GeoJSON layer
         const geoJsonLayer = L.geoJSON(geoJson, {
@@ -97,15 +91,15 @@
         
         layers['geoJson'] = geoJsonLayer;
       } catch (error) {
-        console.error(`Error loading GeoJSON for ${$mapDataStore.selectedCountry}:`, error);
+  console.error(`Error loading GeoJSON for ${mapData.selectedCountry}:`, error);
       }
     }
     
     // Add markers for visible items
-    if ($mapDataStore.visibleItems.length > 0) {
+    if (mapData.visibleItems.length > 0) {
       const markers = L.layerGroup();
       
-      $mapDataStore.visibleItems.forEach(item => {
+      mapData.visibleItems.forEach(item => {
         if (item.coordinates && item.coordinates.length > 0) {
           const [lat, lng] = item.coordinates[0];
           const marker = L.marker([lat, lng])
@@ -129,11 +123,8 @@
     const center = map.getCenter();
     const zoom = map.getZoom();
     
-    mapDataStore.update(state => ({
-      ...state,
-      center: [center.lat, center.lng] as [number, number],
-      zoom
-    }));
+  mapData.center = [center.lat, center.lng];
+  mapData.zoom = zoom;
   }
   
   // Highlight a region on hover
@@ -168,35 +159,35 @@
     const properties = layer.feature.properties;
     
     if (properties && properties.name) {
-      mapDataStore.update(state => ({
-        ...state,
-        selectedRegion: properties.name
-      }));
+  mapData.selectedRegion = properties.name;
     }
   }
   
   // Select an item
   function selectItem(item: any) {
-    import('$lib/stores/appStateStore').then(({ appStateStore }) => {
-      appStateStore.update(state => ({
-        ...state,
-        selectedItem: item
-      }));
+    import('$lib/state/appState.svelte').then(({ appState }) => {
+      appState.selectedItem = item;
     });
   }
   
   // Update map when stores change
-  $: if (browser && map && $timeDataStore.currentDate) {
-    updateMapForDate($timeDataStore.currentDate);
-  }
-  
-  $: if (browser && map && $filterStore.selected) {
-    updateMapForFilters($filterStore.selected);
-  }
-  
-  $: if (browser && map && $mapDataStore.visibleItems) {
-    loadMapData();
-  }
+  $effect(() => {
+    if (browser && map && timeData.currentDate) {
+      updateMapForDate(timeData.currentDate);
+    }
+  });
+
+  $effect(() => {
+    if (browser && map && filters.selected) {
+      updateMapForFilters(filters.selected);
+    }
+  });
+
+  $effect(() => {
+    if (browser && map && mapData.visibleItems) {
+      loadMapData();
+    }
+  });
   
   // Update map for specific date
   function updateMapForDate(date: Date) {

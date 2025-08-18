@@ -1,11 +1,11 @@
 <script lang="ts">
-  import { filterStore } from '$lib/stores/filterStore';
-  import { appStateStore } from '$lib/stores/appStateStore';
+  import { filters } from '$lib/state/filters.svelte';
+  import { appState } from '$lib/state/appState.svelte';
   import CountryFilter from './CountryFilter.svelte';
   import DateRangeFilter from './DateRangeFilter.svelte';
   
   // Local state
-  let expanded = true;
+  let expanded = $state(true);
   
   // Toggle expanded state
   function toggleExpanded() {
@@ -14,23 +14,18 @@
   
   // Reset all filters
   function resetFilters() {
-    filterStore.update(state => ({
-      ...state,
-      selected: {
-        countries: [],
-        regions: [],
-        newspapers: [],
-        dateRange: null,
-        keywords: []
-      }
-    }));
+    filters.selected.countries = [];
+    filters.selected.regions = [];
+    filters.selected.newspapers = [];
+    filters.selected.dateRange = null;
+    filters.selected.keywords = [];
   }
 </script>
 
 <div class="filter-panel">
   <div class="header">
     <h2>Filters</h2>
-    <button class="toggle-button" on:click={toggleExpanded}>
+  <button class="toggle-button" onclick={toggleExpanded}>
       {expanded ? '−' : '+'}
     </button>
   </div>
@@ -38,17 +33,17 @@
   {#if expanded}
     <div class="filters">
       <CountryFilter 
-        countries={$filterStore.available.countries}
-        selected={$filterStore.selected.countries}
+        countries={filters.available.countries}
+        selected={filters.selected.countries}
       />
       
       <DateRangeFilter 
-        range={$filterStore.available.dateRange}
-        selected={$filterStore.selected.dateRange}
+        range={filters.available.dateRange}
+        selected={filters.selected.dateRange}
       />
       
       <div class="filter-actions">
-        <button class="reset-button" on:click={resetFilters}>
+  <button class="reset-button" onclick={resetFilters}>
           Reset All Filters
         </button>
       </div>

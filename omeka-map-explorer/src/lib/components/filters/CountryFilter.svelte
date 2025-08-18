@@ -1,54 +1,45 @@
 <script lang="ts">
   import { createEventDispatcher } from 'svelte';
-  import { filterStore } from '$lib/stores/filterStore';
+  import { filters } from '$lib/state/filters.svelte';
   import { Checkbox } from '$lib/components/ui/checkbox';
   import { Label } from '$lib/components/ui/label';
   import { Card, CardContent, CardHeader, CardTitle } from '$lib/components/ui/card';
   import { Button } from '$lib/components/ui/button';
   
-  // Props
-  export let countries: string[] = [];
-  export let selected: string[] = [];
+  // Props (read-only); selection relies on global filters state
+  let { countries = [], selected = [] } = $props<{ countries?: string[]; selected?: string[] }>();
   
   // Event dispatcher
   const dispatch = createEventDispatcher();
   
   // Toggle country selection
   function toggleCountry(country: string) {
-    const index = selected.indexOf(country);
-    
+    const list = filters.selected.countries;
+    const index = list.indexOf(country);
     if (index === -1) {
-      selected = [...selected, country];
+      filters.selected.countries = [...list, country];
     } else {
-      selected = selected.filter(c => c !== country);
+      filters.selected.countries = list.filter(c => c !== country);
     }
-    
-    updateStore();
+    dispatch('change', { countries: filters.selected.countries });
   }
   
   // Clear all selections
   function clearAll() {
-    selected = [];
-    updateStore();
+    filters.selected.countries = [];
+    dispatch('change', { countries: filters.selected.countries });
   }
   
   // Select all countries
   function selectAll() {
-    selected = [...countries];
-    updateStore();
+    filters.selected.countries = [...countries];
+    dispatch('change', { countries: filters.selected.countries });
   }
   
   // Update the filter store
+  // Deprecated legacy method retained for compatibility if invoked
   function updateStore() {
-    filterStore.update((state: any) => ({
-      ...state,
-      selected: {
-        ...state.selected,
-        countries: selected
-      }
-    }));
-    
-    dispatch('change', { countries: selected });
+    dispatch('change', { countries: filters.selected.countries });
   }
 </script>
 
@@ -63,7 +54,7 @@
             size="sm"
             class="h-6 px-2 text-xs"
             onclick={selectAll}
-            disabled={selected.length === countries.length}
+            disabled={filters.selected.countries.length === countries.length}
           >
             All
           </Button>
@@ -72,7 +63,7 @@
             size="sm"
             class="h-6 px-2 text-xs"
             onclick={clearAll}
-            disabled={selected.length === 0}
+            disabled={filters.selected.countries.length === 0}
           >
             Clear
           </Button>
@@ -86,7 +77,7 @@
         <p class="text-sm text-muted-foreground italic">No countries available</p>
       {:else}
         {#each countries as country (country)}
-          {@const isChecked = selected.includes(country)}
+          {@const isChecked = filters.selected.countries.includes(country)}
           <div class="flex items-center space-x-2">
             <Checkbox
               id="country-{country}"
@@ -104,10 +95,10 @@
       {/if}
     </div>
     
-    {#if selected.length > 0}
+  {#if filters.selected.countries.length > 0}
       <div class="mt-3 pt-3 border-t border-border">
         <p class="text-xs text-muted-foreground">
-          {selected.length} countr{selected.length === 1 ? 'y' : 'ies'} selected
+      {filters.selected.countries.length} countr{filters.selected.countries.length === 1 ? 'y' : 'ies'} selected
         </p>
       </div>
     {/if}

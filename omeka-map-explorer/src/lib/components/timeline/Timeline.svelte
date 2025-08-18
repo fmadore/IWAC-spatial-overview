@@ -1,12 +1,11 @@
 <script lang="ts">
   import { onMount, createEventDispatcher } from 'svelte';
-  import { timeDataStore } from '$lib/stores/timeDataStore';
+  import { timeData } from '$lib/state/timeData.svelte';
   import type { TemporalData } from '$lib/types';
   import { browser } from '$app/environment';
   
-  // Props
-  export let data: TemporalData[] = []; // Array of {date, count} objects
-  export let height = '120px';
+  // Props (runes mode)
+  let { data = [], height = '120px' } = $props<{ data?: TemporalData[]; height?: string }>();
   
   // Local state
   let svgElement: HTMLDivElement;
@@ -19,69 +18,66 @@
   // Event dispatcher
   const dispatch = createEventDispatcher();
   
+  let resizeObserver: ResizeObserver | null = null;
+  let chartInitialized = false;
+
   onMount(() => {
-    if (!browser) return undefined;
-    
-    const initChart = async () => {
-      try {
-        // Import D3 modules dynamically
-        const [
-          selection,
-          scale,
-          axis,
-          shape,
-          time,
-          timeFormat
-        ] = await Promise.all([
-          import('d3-selection'),
-          import('d3-scale'),
-          import('d3-axis'),
-          import('d3-shape'),
-          import('d3-time'),
-          import('d3-time-format')
-        ]);
-        
-        // Build d3 object with imported modules
-        d3 = {
-          select: selection.select,
-          scaleTime: scale.scaleTime,
-          scaleLinear: scale.scaleLinear,
-          axisBottom: axis.axisBottom,
-          area: shape.area,
-          curveBasis: shape.curveBasis,
-          timeMonth: time.timeMonth,
-          timeYear: time.timeYear,
-          timeFormat: timeFormat.timeFormat
-        };
-        
-        initChart();
-        
-        // Set up resize observer
-        const resizeObserver = new ResizeObserver(entries => {
-          if (entries.length > 0) {
-            updateChartDimensions();
-          }
-        });
-        
-        resizeObserver.observe(svgElement.parentNode as Element);
-        
-        return () => {
-          resizeObserver.disconnect();
-        };
-      } catch (error) {
-        console.error('Error initializing timeline:', error);
-      }
-    };
-    
-    initChart();
-    
+    if (!browser) return;
+    (async () => {
+      await loadD3();
+      createChart();
+      setupResizeObserver();
+    })();
     return () => {
-      // Cleanup when component unmounts
+      if (resizeObserver) resizeObserver.disconnect();
     };
   });
+
+  async function loadD3() {
+    if (d3) return; // already loaded
+    try {
+      const [selection, scale, axis, shape, time, timeFormat] = await Promise.all([
+        import('d3-selection'),
+        import('d3-scale'),
+        import('d3-axis'),
+        import('d3-shape'),
+        import('d3-time'),
+        import('d3-time-format')
+      ]);
+      d3 = {
+        select: selection.select,
+        scaleTime: scale.scaleTime,
+        scaleLinear: scale.scaleLinear,
+        axisBottom: axis.axisBottom,
+        area: shape.area,
+        curveBasis: shape.curveBasis,
+        timeMonth: time.timeMonth,
+        timeYear: time.timeYear,
+        timeFormat: timeFormat.timeFormat
+      };
+    } catch (error) {
+      console.error('Error loading D3 modules:', error);
+    }
+  }
+
+  function createChart() {
+    if (chartInitialized || !d3 || !svgElement) return;
+    initChartInternal();
+    chartInitialized = true;
+  }
+
+  function setupResizeObserver() {
+    if (!svgElement || resizeObserver) return;
+    const container = svgElement.parentElement;
+    if (!container) return;
+    resizeObserver = new ResizeObserver(entries => {
+      if (entries.length > 0) updateChartDimensions();
+    });
+    resizeObserver.observe(container);
+  }
   
   // Initialize the chart
-  function initChart() {
+  function initChartInternal() {
     if (!d3 || !svgElement) return;
     
     // Create SVG
@@ -116,8 +112,8 @@
       .attr('stroke-width', 2)
       .attr('y1', 0);
     
-    // Update dimensions and data
-    updateChartDimensions();
+  // Update dimensions and data (guard if parent not yet available)
+  if (svgElement.parentElement) updateChartDimensions();
   }
   
   // Update chart dimensions on resize
@@ -125,8 +121,9 @@
     if (!chart || !d3) return;
     
     // Get container width
-    const container = svgElement.parentNode as Element;
-    width = container.getBoundingClientRect().width;
+  const container = svgElement.parentElement as Element | null;
+  if (!container) return;
+  width = container.getBoundingClientRect().width;
     
     // Update SVG dimensions
     chart
@@ -155,7 +152,7 @@
       data[data.length - 1].date
     ];
     
-    const maxCount = Math.max(...data.map(d => d.count));
+  const maxCount = Math.max(...data.map((d: TemporalData) => d.count));
     
     x.domain(dateExtent);
     y.domain([0, maxCount * 1.1]); // Add 10% padding
@@ -178,15 +175,12 @@
       .attr('d', areaGenerator);
     
     // Update current date indicator
-    updateCurrentDateIndicator($timeDataStore.currentDate);
+  updateCurrentDateIndicator(timeData.currentDate);
   }
   
   // Play/pause timeline animation
   function togglePlayback() {
-    timeDataStore.update((state: any) => ({
-      ...state,
-      playing: !state.playing
-    }));
+    timeData.playing = !timeData.playing;
   }
   
   // Handle user clicking or keying on timeline
@@ -209,10 +203,7 @@
     const date = x.invert(clickX);
     
     // Update current date
-    timeDataStore.update((state: any) => ({
-      ...state,
-      currentDate: date
-    }));
+  timeData.currentDate = date;
     
     // Dispatch event
     dispatch('dateSelected', { date });
@@ -222,8 +213,8 @@
   function handleKeyDown(event: KeyboardEvent) {
     if (!chart || !x || !data.length) return;
     
-    const state = $timeDataStore;
-    let newDate = new Date(state.currentDate);
+  const state = timeData;
+  let newDate = new Date(timeData.currentDate);
     
     // Handle arrow keys
     if (event.key === 'ArrowLeft') {
@@ -254,10 +245,7 @@
     }
     
     // Update current date
-    timeDataStore.update((s: any) => ({
-      ...s,
-      currentDate: newDate
-    }));
+  timeData.currentDate = newDate;
     
     // Update visualization
     updateCurrentDateIndicator(newDate);
@@ -276,24 +264,27 @@
   }
   
   // Watch for changes to data
-  $: if (browser && chart && d3 && data && data.length > 0) {
-    updateChart();
-  }
-  
-  // Watch for changes to current date
-  $: if (browser && chart && x && $timeDataStore.currentDate) {
-    updateCurrentDateIndicator($timeDataStore.currentDate);
-  }
+  $effect(() => {
+    if (browser && chart && d3 && data && data.length > 0) {
+      updateChart();
+    }
+  });
+
+  $effect(() => {
+    if (browser && chart && x && timeData.currentDate) {
+      updateCurrentDateIndicator(timeData.currentDate);
+    }
+  });
 </script>
 
 <div class="timeline-container">
   <div class="controls">
-    <button class="play-button" on:click={togglePlayback}>
-      {$timeDataStore.playing ? 'Pause' : 'Play'}
+    <button class="play-button" onclick={togglePlayback}>
+      {timeData.playing ? 'Pause' : 'Play'}
     </button>
     
     <span class="current-date">
-      {$timeDataStore.currentDate.toLocaleDateString()}
+  {timeData.currentDate.toLocaleDateString()}
     </span>
     
     <div class="speed-control">
@@ -304,18 +295,19 @@
         min="0.1" 
         max="5" 
         step="0.1" 
-        bind:value={$timeDataStore.playbackSpeed}
+        value={timeData.playbackSpeed}
+        oninput={(e) => { const v = parseFloat((e.target as HTMLInputElement).value); if (!isNaN(v)) timeData.playbackSpeed = v; }}
       />
-      <span>{$timeDataStore.playbackSpeed}x</span>
+      <span>{timeData.playbackSpeed}x</span>
     </div>
   </div>
   
   <div 
     class="chart" 
     bind:this={svgElement} 
-    on:click={handleTimelineInteraction}
-    on:keydown={handleKeyDown}
-    on:keypress={handleTimelineInteraction}
+  onclick={handleTimelineInteraction}
+  onkeydown={handleKeyDown}
+  onkeypress={handleTimelineInteraction}
     role="slider"
     tabindex="0"
     aria-label="Timeline slider - click or use arrow keys to navigate through time"

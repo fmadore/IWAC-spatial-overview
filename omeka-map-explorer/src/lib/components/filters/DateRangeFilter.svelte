@@ -1,18 +1,14 @@
 <script lang="ts">
   import { createEventDispatcher } from 'svelte';
-  import { filterStore } from '$lib/stores/filterStore';
+  import { filters } from '$lib/state/filters.svelte';
   
   // Props
-  export let range: { min: Date; max: Date } = {
-    min: new Date('1900-01-01'),
-    max: new Date('2023-12-31')
-  };
-  export let selected: { start: Date; end: Date } | null = null;
+  let { range = { min: new Date('1900-01-01'), max: new Date('2023-12-31') }, selected = null } = $props<{ range?: { min: Date; max: Date }; selected?: { start: Date; end: Date } | null }>();
   
   // Local state
-  let startDate: string = selected?.start.toISOString().slice(0, 10) || range.min.toISOString().slice(0, 10);
-  let endDate: string = selected?.end.toISOString().slice(0, 10) || range.max.toISOString().slice(0, 10);
-  let isActive: boolean = !!selected;
+  let startDate = $state(selected?.start.toISOString().slice(0, 10) || range.min.toISOString().slice(0, 10));
+  let endDate = $state(selected?.end.toISOString().slice(0, 10) || range.max.toISOString().slice(0, 10));
+  let isActive = $state(!!selected);
   
   // Event dispatcher
   const dispatch = createEventDispatcher();
@@ -46,23 +42,18 @@
   
   // Update the filter store
   function updateStore(dateRange: { start: Date; end: Date } | null) {
-    filterStore.update(state => ({
-      ...state,
-      selected: {
-        ...state.selected,
-        dateRange
-      }
-    }));
-    
+    filters.selected.dateRange = dateRange;
     dispatch('change', { dateRange });
   }
   
   // Initialize from props on mount
-  $: if (selected) {
-    startDate = selected.start.toISOString().slice(0, 10);
-    endDate = selected.end.toISOString().slice(0, 10);
-    isActive = true;
-  }
+  $effect(() => {
+    if (selected) {
+      startDate = selected.start.toISOString().slice(0, 10);
+      endDate = selected.end.toISOString().slice(0, 10);
+      isActive = true;
+    }
+  });
 </script>
 
 <div class="date-range-filter">
@@ -72,7 +63,7 @@
       <input 
         type="checkbox" 
         bind:checked={isActive}
-        on:change={handleToggle}
+  onchange={handleToggle}
       />
       <span>Active</span>
     </label>
@@ -86,8 +77,8 @@
         type="date" 
         min={range.min.toISOString().slice(0, 10)}
         max={range.max.toISOString().slice(0, 10)}
-        bind:value={startDate}
-        on:change={handleDateChange}
+  bind:value={startDate}
+  onchange={handleDateChange}
         disabled={!isActive}
       />
     </div>
@@ -99,8 +90,8 @@
         type="date"
         min={range.min.toISOString().slice(0, 10)}
         max={range.max.toISOString().slice(0, 10)}
-        bind:value={endDate}
-        on:change={handleDateChange}
+  bind:value={endDate}
+  onchange={handleDateChange}
         disabled={!isActive}
       />
     </div>
