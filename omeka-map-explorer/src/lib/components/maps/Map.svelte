@@ -3,14 +3,17 @@
   import { mapData } from '$lib/state/mapData.svelte';
   import { timeData } from '$lib/state/timeData.svelte';
   import { filters } from '$lib/state/filters.svelte';
-  import { loadGeoJson } from '$lib/api/geoJsonService';
+  import { loadGeoJson, loadWorldCountries } from '$lib/api/geoJsonService';
   import { browser } from '$app/environment';
+  import ChoroplethLayer from './ChoroplethLayer.svelte';
   
   // Using any types here to avoid TypeScript errors with Leaflet
   let mapElement: HTMLDivElement;
-  let map: any = null;
+  let map: any = $state(null);
   let layers: Record<string, any> = {};
   let L: any; // Will hold the Leaflet library when loaded
+  let worldGeo: any = $state(null); // world countries geojson cache
+  let choroplethData: Record<string, number> = $state({});
   
   // Props
   let { height = '600px' } = $props();
@@ -41,6 +44,13 @@
         attribution: '© OpenStreetMap contributors'
       }).addTo(map);
 
+      // Try to preload world countries for choropleth
+      try {
+        worldGeo = await loadWorldCountries();
+      } catch (e) {
+        console.warn('World countries GeoJSON not available:', e);
+      }
+
       // Load initial data
       await loadMapData();
 
@@ -64,13 +74,22 @@
     if (!map || !L) return;
     
     // Clear existing layers
-    Object.values(layers).forEach(layer => {
-      if (map) map.removeLayer(layer);
+    Object.entries(layers).forEach(([key, layer]) => {
+      if (layer && typeof (layer as any).$destroy === 'function') {
+        // Svelte component wrapper (e.g., ChoroplethLayer)
+        try { (layer as any).$destroy(); } catch {}
+      } else if (layer && typeof (layer as any).remove === 'function') {
+        // Leaflet layer
+        try { (layer as any).remove(); } catch {}
+      } else if (map && typeof (layer as any) === 'object') {
+        try { map.removeLayer(layer); } catch {}
+      }
+      delete (layers as any)[key];
     });
     layers = {};
     
-    // Load GeoJSON data for selected country
-  if (mapData.selectedCountry) {
+    // Load GeoJSON data for selected country (outline) when not in choropleth mode
+  if (mapData.selectedCountry && mapData.viewMode !== 'choropleth') {
       try {
     const geoJson = await loadGeoJson(mapData.selectedCountry, 'regions');
         
@@ -106,49 +125,9 @@
       }
     }
     
-    // Choropleth by country: shade countries based on number of items
-    if (mapData.viewMode === 'choropleth') {
-      // Build counts by country
-      const counts: Record<string, number> = {};
-      for (const item of mapData.visibleItems) {
-        if (!item.country) continue;
-        counts[item.country] = (counts[item.country] || 0) + 1;
-      }
-
-      // Build a simple color scale
-      const values = Object.values(counts);
-      const max = values.length ? Math.max(...values) : 1;
-      const getColor = (v: number) => {
-        const t = v / max; // 0..1
-        // interpolate from #e3f2fd to #1565c0
-        const c1 = [227, 242, 253];
-        const c2 = [21, 101, 192];
-        const c = c1.map((a, i) => Math.round(a + (c2[i] - a) * t));
-        return `rgb(${c[0]}, ${c[1]}, ${c[2]})`;
-      };
-
-      // Draw country polygons using a world countries GeoJSON if available per selected set
-      // For now, use selectedCountry boundaries if present; otherwise skip until country-level geojson is available
-      if (mapData.selectedCountry) {
-        try {
-          const geoJson = await loadGeoJson(mapData.selectedCountry, 'regions');
-          const geoLayer = L.geoJSON(geoJson, {
-            style: (feature: any) => {
-              const name = feature?.properties?.name as string;
-              const v = counts[name] || 0;
-              return {
-                color: '#ffffff',
-                weight: 1,
-                fillOpacity: 0.6,
-                fillColor: getColor(v)
-              };
-            }
-          }).addTo(map);
-          layers['choropleth'] = geoLayer;
-        } catch (e) {
-          console.error('Choropleth load error:', e);
-        }
-      }
+    // Choropleth is rendered by child component; skip adding Leaflet layers here
+    if (mapData.viewMode === 'choropleth' && worldGeo) {
+      // no-op
     } else if (mapData.visibleItems.length > 0) {
       // Aggregate items by coordinate and add circle markers sized by count (much fewer markers)
       const groups = new Map<string, { lat: number; lng: number; count: number; sample: any }>();
@@ -272,6 +251,33 @@
       loadMapData();
     }
   });
+
+  // Compute choropleth data reactively for the child component
+  $effect(() => {
+    if (!browser || !worldGeo) return;
+    if (mapData.viewMode !== 'choropleth') {
+      choroplethData = {};
+      return;
+    }
+    const normalize = (s: string) => s
+      .normalize('NFD').replace(/\p{Diacritic}/gu, '')
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, ' ')
+      .trim();
+    const nameIndex = new Map<string, string>();
+    for (const f of worldGeo.features ?? []) {
+      const nm = f?.properties?.name;
+      if (typeof nm === 'string' && nm.trim()) nameIndex.set(normalize(nm), nm);
+    }
+    const counts: Record<string, number> = {};
+    for (const item of mapData.visibleItems) {
+      const c = item.country?.trim();
+      if (!c) continue;
+      const key = nameIndex.get(normalize(c));
+      if (key) counts[key] = (counts[key] || 0) + 1;
+    }
+    choroplethData = counts;
+  });
   
   // Update map for specific date
   function updateMapForDate(date: Date) {
@@ -289,6 +295,9 @@
 </script>
 
 <div class="map-container" bind:this={mapElement} style="height: {height};" data-testid="map-container"></div>
+{#if browser && map && worldGeo && mapData.viewMode === 'choropleth'}
+  <ChoroplethLayer {map} geoJson={worldGeo} data={choroplethData} />
+{/if}
 
 <style>
   .map-container {

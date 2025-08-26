@@ -57,6 +57,26 @@ export async function loadGeoJsonFile(fileName: string): Promise<GeoJsonData> {
 }
 
 /**
+ * Load world countries GeoJSON from /data/maps/world_countries.geojson
+ */
+export async function loadWorldCountries(): Promise<GeoJsonData> {
+  const cacheKey = 'world_countries';
+  if (geoJsonCache.has(cacheKey)) {
+    return geoJsonCache.get(cacheKey) as GeoJsonData;
+  }
+
+  const url = `/data/maps/world_countries.geojson`;
+  const response = await fetch(url);
+  if (!response.ok) {
+    throw new Error(`Failed to load world countries GeoJSON: ${response.statusText}`);
+  }
+  const geoJson = await response.json();
+  normalizeGeoJson(geoJson);
+  geoJsonCache.set(cacheKey, geoJson);
+  return geoJson as GeoJsonData;
+}
+
+/**
  * Normalize GeoJSON to ensure it has a 'name' property
  * @param {GeoJsonData} geoJson - GeoJSON object
  */
@@ -74,6 +94,12 @@ function normalizeGeoJson(geoJson: GeoJsonData): void {
       // Try to find name in other properties
       if (feature.properties.NAME) {
         feature.properties.name = feature.properties.NAME;
+      } else if (feature.properties.ADMIN) {
+        feature.properties.name = feature.properties.ADMIN;
+      } else if (feature.properties.NAME_EN) {
+        feature.properties.name = feature.properties.NAME_EN;
+      } else if (feature.properties.NAME_LONG) {
+        feature.properties.name = feature.properties.NAME_LONG;
       } else if (feature.properties.shape2) {
         feature.properties.name = feature.properties.shape2;
       } else if (feature.properties.id) {
