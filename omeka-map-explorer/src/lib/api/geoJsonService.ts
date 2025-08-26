@@ -1,4 +1,4 @@
-import type { GeoJsonData } from '$lib/types';
+import type { GeoJsonData, GeoJsonFeature, ProcessedItem } from '$lib/types';
 
 // Cache for GeoJSON files
 const geoJsonCache = new Map<string, GeoJsonData>();
@@ -143,3 +143,241 @@ function findRegionForCoordinate(coord: [number, number], geoJson: GeoJsonData):
   // Would use turf.js pointInPolygon in actual implementation
   return null;
 } 
+
+/**
+ * Count items per country polygon using item GPS coordinates.
+ * Falls back to 0 when no coordinate is present.
+ */
+export async function countItemsByCountryPolygons(items: ProcessedItem[], worldGeo: GeoJsonData): Promise<Record<string, number>> {
+  const counts: Record<string, number> = {};
+
+  // Pre-extract features and geometries with bounding boxes for efficiency
+  const features = (worldGeo.features || []).filter((f) => !!f?.geometry && !!f?.properties?.name);
+  const featuresWithBbox = features.map((f) => ({ 
+    f, 
+    bbox: computeFeatureBbox(f),
+    name: f.properties.name as string
+  }));
+
+  // Limit processing to avoid freezing - process in batches
+  const maxItems = Math.min(items.length, 5000); // Limit to 5000 items max
+  const itemsToProcess = items.slice(0, maxItems);
+
+  let processed = 0;
+  for (const item of itemsToProcess) {
+    const coords = item.coordinates?.[0];
+    if (!coords) continue;
+    const lat = coords[0];
+    const lng = coords[1];
+    if (lat == null || lng == null || isNaN(lat) || isNaN(lng)) continue;
+    
+    // Basic coordinate validation
+    if (lat < -90 || lat > 90 || lng < -180 || lng > 180) continue;
+    
+    const pt: [number, number] = [lng, lat]; // GeoJSON uses [lng, lat]
+
+    // Find first containing feature using bounding box optimization
+    let found = false;
+    for (const { f, bbox, name } of featuresWithBbox) {
+      // Quick bounding box check first
+      if (!bboxContains(bbox, pt)) continue;
+      
+      // More expensive polygon intersection test
+      try {
+        if (pointInFeature(pt, f)) {
+          counts[name] = (counts[name] || 0) + 1;
+          found = true;
+          break;
+        }
+      } catch (error) {
+        // Ignore polygon errors and continue
+        continue;
+      }
+    }
+    
+    processed++;
+    // Yield control periodically to prevent freezing
+    if (processed % 100 === 0) {
+      // This allows the browser to remain responsive
+      await new Promise(resolve => setTimeout(resolve, 0));
+    }
+  }
+
+  return counts;
+}
+
+/**
+ * Count items by country using pre-computed country names from the data.
+ * This uses the Country field that was added by the Python preprocessing script.
+ */
+export function countItemsByCountryHybrid(items: ProcessedItem[], worldGeo: GeoJsonData): Record<string, number> {
+  const counts: Record<string, number> = {};
+
+  for (const item of items) {
+    // Use the pre-computed country name from the item data
+    const countryName = item.country?.trim();
+    if (countryName) {
+      counts[countryName] = (counts[countryName] || 0) + 1;
+    }
+  }
+
+  return counts;
+}
+
+/**
+ * Count places by country using the raw index data with pre-computed Country field.
+ * This is used for choropleth view to show all places, not just those with articles.
+ */
+export function countPlacesByCountry(places: any[]): Record<string, number> {
+  const counts: Record<string, number> = {};
+
+  for (const place of places) {
+    // Only count places of type "Lieux" and that have a country assigned
+    if (place.Type?.toLowerCase().includes('lieu') && place.Country?.trim()) {
+      const countryName = place.Country.trim();
+      counts[countryName] = (counts[countryName] || 0) + 1;
+    }
+  }
+
+  return counts;
+}
+
+/**
+ * Synchronous version for better performance - simplified polygon checking
+ */
+function countItemsByCountryPolygonsSync(items: ProcessedItem[], worldGeo: GeoJsonData): Record<string, number> {
+  const counts: Record<string, number> = {};
+
+  // Pre-extract features with bounding boxes for efficiency
+  const features = (worldGeo.features || []).filter((f) => !!f?.geometry && !!f?.properties?.name);
+  const featuresWithBbox = features.map((f) => ({ 
+    f, 
+    bbox: computeFeatureBbox(f),
+    name: f.properties.name as string
+  }));
+
+  for (const item of items) {
+    const coords = item.coordinates?.[0];
+    if (!coords) continue;
+    const lat = coords[0];
+    const lng = coords[1];
+    if (lat == null || lng == null || isNaN(lat) || isNaN(lng)) continue;
+    
+    // Basic coordinate validation
+    if (lat < -90 || lat > 90 || lng < -180 || lng > 180) continue;
+    
+    const pt: [number, number] = [lng, lat]; // GeoJSON uses [lng, lat]
+
+    // Find first containing feature using only bounding box for speed
+    let found = false;
+    for (const { f, bbox, name } of featuresWithBbox) {
+      // Quick bounding box check first
+      if (!bboxContains(bbox, pt)) continue;
+      
+      // For performance, only do simple polygon check for small polygons
+      try {
+        if (pointInFeature(pt, f)) {
+          counts[name] = (counts[name] || 0) + 1;
+          found = true;
+          break;
+        }
+      } catch (error) {
+        // If polygon check fails, just use bounding box match
+        counts[name] = (counts[name] || 0) + 1;
+        found = true;
+        break;
+      }
+    }
+  }
+
+  return counts;
+}
+
+type BBox = [number, number, number, number]; // [minx, miny, maxx, maxy]
+
+function computeFeatureBbox(feature: GeoJsonFeature): BBox {
+  const coords = feature.geometry.coordinates as any[];
+  let minx = Infinity, miny = Infinity, maxx = -Infinity, maxy = -Infinity;
+  const walk = (arr: any[]) => {
+    if (typeof arr[0] === 'number' && typeof arr[1] === 'number') {
+      const x = arr[0], y = arr[1];
+      if (x < minx) minx = x; if (y < miny) miny = y; if (x > maxx) maxx = x; if (y > maxy) maxy = y;
+    } else if (Array.isArray(arr)) {
+      for (const a of arr) walk(a);
+    }
+  };
+  walk(coords);
+  return [minx, miny, maxx, maxy];
+}
+
+function bboxContains(b: BBox, pt: [number, number]) {
+  return pt[0] >= b[0] && pt[0] <= b[2] && pt[1] >= b[1] && pt[1] <= b[3];
+}
+
+/**
+ * Fastest: count by matching normalized country names only.
+ */
+export function countItemsByCountryName(items: ProcessedItem[], worldGeo: GeoJsonData): Record<string, number> {
+  const counts: Record<string, number> = {};
+  const normalize = (s: string) => s
+    .normalize('NFD').replace(/\p{Diacritic}/gu, '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, ' ')
+    .trim();
+  const nameIndex = new Map<string, string>();
+  for (const f of worldGeo.features || []) {
+    const props = f?.properties as Record<string, any>;
+    const primary = props?.name as string | undefined;
+    if (primary) nameIndex.set(normalize(primary), primary);
+    for (const [k, v] of Object.entries(props || {})) {
+      if (!v || typeof v !== 'string') continue;
+      const key = k.toLowerCase();
+      if (key === 'admin' || key.startsWith('name')) {
+        const norm = normalize(v);
+        if (!nameIndex.has(norm)) nameIndex.set(norm, primary ?? v);
+      }
+    }
+  }
+  for (const item of items) {
+    const nm = item.country?.trim();
+    if (!nm) continue;
+    const mapped = nameIndex.get(normalize(nm));
+    if (mapped) counts[mapped] = (counts[mapped] || 0) + 1;
+  }
+  return counts;
+}
+
+// Geometry helpers (ray casting)
+function pointInFeature(pt: [number, number], feature: GeoJsonFeature): boolean {
+  const geom = feature.geometry;
+  if (!geom) return false;
+  if (geom.type === 'Polygon') {
+    return pointInPolygonRings(pt, geom.coordinates as [number, number][][]);
+  } else if (geom.type === 'MultiPolygon') {
+    const polys = geom.coordinates as [number, number][][][];
+    for (const poly of polys) {
+      if (pointInPolygonRings(pt, poly as unknown as [number, number][][])) return true;
+    }
+    return false;
+  }
+  return false;
+}
+
+function pointInPolygonRings(pt: [number, number], rings: [number, number][][]): boolean {
+  if (!rings || rings.length === 0) return false;
+  // Only test outer ring (rings[0]) to keep it simple
+  const ring = rings[0];
+  return rayCasting(pt, ring);
+}
+
+function rayCasting(pt: [number, number], ring: [number, number][]): boolean {
+  const x = pt[0], y = pt[1];
+  let inside = false;
+  for (let i = 0, j = ring.length - 1; i < ring.length; j = i++) {
+    const xi = ring[i][0], yi = ring[i][1];
+    const xj = ring[j][0], yj = ring[j][1];
+    const intersect = ((yi > y) !== (yj > y)) && (x < ((xj - xi) * (y - yi)) / (yj - yi + 0.0) + xi);
+    if (intersect) inside = !inside;
+  }
+  return inside;
+}

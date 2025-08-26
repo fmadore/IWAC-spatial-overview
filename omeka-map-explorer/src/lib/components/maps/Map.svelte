@@ -3,7 +3,7 @@
   import { mapData } from '$lib/state/mapData.svelte';
   import { timeData } from '$lib/state/timeData.svelte';
   import { filters } from '$lib/state/filters.svelte';
-  import { loadGeoJson, loadWorldCountries } from '$lib/api/geoJsonService';
+  import { loadGeoJson, loadWorldCountries, countItemsByCountryHybrid, countPlacesByCountry } from '$lib/api/geoJsonService';
   import { browser } from '$app/environment';
   import ChoroplethLayer from './ChoroplethLayer.svelte';
   
@@ -133,7 +133,7 @@
       const groups = new Map<string, { lat: number; lng: number; count: number; sample: any }>();
       for (const item of mapData.visibleItems) {
         if (!item.coordinates || item.coordinates.length === 0) continue;
-        const [lat, lng] = item.coordinates[0];
+        const [lat, lng] = item.coordinates[0]; // Each item now has exactly one coordinate
         if (lat == null || lng == null) continue;
         const key = `${lat.toFixed(4)},${lng.toFixed(4)}`; // merge nearby points
         const existing = groups.get(key);
@@ -259,24 +259,9 @@
       choroplethData = {};
       return;
     }
-    const normalize = (s: string) => s
-      .normalize('NFD').replace(/\p{Diacritic}/gu, '')
-      .toLowerCase()
-      .replace(/[^a-z0-9]+/g, ' ')
-      .trim();
-    const nameIndex = new Map<string, string>();
-    for (const f of worldGeo.features ?? []) {
-      const nm = f?.properties?.name;
-      if (typeof nm === 'string' && nm.trim()) nameIndex.set(normalize(nm), nm);
-    }
-    const counts: Record<string, number> = {};
-    for (const item of mapData.visibleItems) {
-      const c = item.country?.trim();
-      if (!c) continue;
-      const key = nameIndex.get(normalize(c));
-      if (key) counts[key] = (counts[key] || 0) + 1;
-    }
-    choroplethData = counts;
+    
+    // Use places data instead of ProcessedItems for choropleth to show all places
+    choroplethData = countPlacesByCountry(mapData.places);
   });
   
   // Update map for specific date
@@ -296,7 +281,7 @@
 
 <div class="map-container" bind:this={mapElement} style="height: {height};" data-testid="map-container"></div>
 {#if browser && map && worldGeo && mapData.viewMode === 'choropleth'}
-  <ChoroplethLayer {map} geoJson={worldGeo} data={choroplethData} />
+  <ChoroplethLayer {map} geoJson={worldGeo} data={choroplethData} scaleMode="log" />
 {/if}
 
 <style>

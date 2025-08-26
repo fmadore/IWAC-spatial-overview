@@ -15,6 +15,7 @@ type IndexRow = {
   Titre: string;
   Type: string; // e.g., 'Lieux'
   Coordonnées: string; // e.g., "lat, lon" or similar
+  Country?: string; // Pre-computed country name from add_countries.py script
 };
 
 type LoadedData = {
@@ -24,6 +25,7 @@ type LoadedData = {
   newspapers: string[];
   dateMin: Date | null;
   dateMax: Date | null;
+  places: IndexRow[]; // Raw places data for choropleth counting
 };
 
 function parsePipeList(s: string | null | undefined): string[] {
@@ -65,15 +67,16 @@ function parseCoordPair(s: string): [number, number] | null {
   return [a, b];
 }
 
-function buildPlacesMap(indexRows: IndexRow[]): Map<string, [number, number]> {
-  const map = new Map<string, [number, number]>();
+function buildPlacesMap(indexRows: IndexRow[]): Map<string, {coords: [number, number], country: string}> {
+  const map = new Map<string, {coords: [number, number], country: string}>();
   for (const row of indexRows) {
     if (!row || !row.Titre) continue;
     if (row.Type && row.Type.toLowerCase().includes('lieu')) {
       const coords = parseCoordPair(row.Coordonnées || '');
       if (coords) {
         const key = row.Titre.trim().toLowerCase();
-        if (!map.has(key)) map.set(key, coords);
+        const country = row.Country || '';
+        if (!map.has(key)) map.set(key, {coords, country});
       }
     }
   }
@@ -132,32 +135,72 @@ export async function loadStaticData(basePath = '/data'):
     }
 
     const coordinates: [number, number][] = [];
+    const coordinateCountries: string[] = []; // Track country for each coordinate
+    let derivedCountry = country; // Start with country from articles data
+    
     for (const label of spatialLabels) {
       const key = label.trim().toLowerCase();
-      const coords = places.get(key);
-      if (coords) coordinates.push(coords);
+      const placeInfo = places.get(key);
+      if (placeInfo) {
+        coordinates.push(placeInfo.coords);
+        coordinateCountries.push(placeInfo.country || '');
+        // If no country in articles data but we have it from places, use it
+        if (!derivedCountry && placeInfo.country) {
+          derivedCountry = placeInfo.country;
+        }
+      }
     }
 
-    const processed: ProcessedItem = {
-      id,
-      title,
-      publishDate,
-      coordinates: coordinates.length ? coordinates : null,
-      country,
-      region: null,
-      prefecture: null,
-      newspaperSource,
-      keywords
-    };
+    // Create one ProcessedItem per coordinate to handle multi-location articles correctly
+    if (coordinates.length > 0) {
+      for (let i = 0; i < coordinates.length; i++) {
+        const coord = coordinates[i];
+        const coordCountry = coordinateCountries[i] || derivedCountry;
+        
+        const processed: ProcessedItem = {
+          id: `${id}-${i}`, // Unique ID per coordinate
+          title,
+          publishDate,
+          coordinates: [coord], // Single coordinate per item
+          country: coordCountry,
+          region: null,
+          prefecture: null,
+          newspaperSource,
+          keywords
+        };
 
-    if (country) countriesSet.add(country);
-    if (newspaperSource) newspapersSet.add(newspaperSource);
-    if (isValidDate(publishDate)) {
-      if (!dateMin || publishDate < dateMin) dateMin = publishDate;
-      if (!dateMax || publishDate > dateMax) dateMax = publishDate;
+        if (coordCountry) countriesSet.add(coordCountry);
+        if (newspaperSource) newspapersSet.add(newspaperSource);
+        if (isValidDate(publishDate)) {
+          if (!dateMin || publishDate < dateMin) dateMin = publishDate;
+          if (!dateMax || publishDate > dateMax) dateMax = publishDate;
+        }
+
+        items.push(processed);
+      }
+    } else {
+      // No coordinates found, create item without coordinates
+      const processed: ProcessedItem = {
+        id,
+        title,
+        publishDate,
+        coordinates: null,
+        country: derivedCountry,
+        region: null,
+        prefecture: null,
+        newspaperSource,
+        keywords
+      };
+
+      if (derivedCountry) countriesSet.add(derivedCountry);
+      if (newspaperSource) newspapersSet.add(newspaperSource);
+      if (isValidDate(publishDate)) {
+        if (!dateMin || publishDate < dateMin) dateMin = publishDate;
+        if (!dateMax || publishDate > dateMax) dateMax = publishDate;
+      }
+
+      items.push(processed);
     }
-
-    items.push(processed);
   }
 
   const timeline = groupByMonth(items);
@@ -167,6 +210,7 @@ export async function loadStaticData(basePath = '/data'):
     countries: Array.from(countriesSet).sort(),
     newspapers: Array.from(newspapersSet).sort(),
     dateMin,
-    dateMax
+    dateMax,
+    places: indexRows // Include raw places data
   };
 }

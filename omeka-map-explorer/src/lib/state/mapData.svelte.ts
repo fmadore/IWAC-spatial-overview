@@ -4,6 +4,7 @@ interface MapDataState {
   geoData: Record<string, GeoJsonData>;
   allItems: ProcessedItem[];
   visibleItems: ProcessedItem[];
+  places: any[]; // Raw places data from index.json
   highlightedRegions: Record<string, number>;
   selectedCountry: string | null;
   selectedRegion: string | null;
@@ -17,6 +18,7 @@ export const mapData = $state<MapDataState>({
   geoData: {},
   allItems: [],
   visibleItems: [],
+  places: [], // Raw places data from index.json
   highlightedRegions: {},
   selectedCountry: null,
   selectedRegion: null,

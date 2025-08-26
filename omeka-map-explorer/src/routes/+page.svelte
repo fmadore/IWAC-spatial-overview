@@ -38,6 +38,7 @@
       // Populate stores from static data
       mapData.allItems = loaded.items;
       mapData.visibleItems = loaded.items;
+      mapData.places = loaded.places; // Raw places data for choropleth
 
       filters.available.countries = loaded.countries;
       filters.available.newspapers = loaded.newspapers;

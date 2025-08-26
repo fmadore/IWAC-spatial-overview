@@ -3,3667 +3,4278 @@
     "o:id": 269,
     "Titre": "Abidjan",
     "Type": "Lieux",
-    "Coordonnées": "5.35444, -4.00167"
+    "Coordonnées": "5.35444, -4.00167",
+    "Country": "Côte d'Ivoire"
   },
   {
     "o:id": 270,
     "Titre": "Abomey",
     "Type": "Lieux",
-    "Coordonnées": "7.18286, 1.99119"
+    "Coordonnées": "7.18286, 1.99119",
+    "Country": "Benin"
   },
   {
     "o:id": 271,
     "Titre": "Abomey-Calavi",
     "Type": "Lieux",
-    "Coordonnées": "6.44852, 2.35566"
+    "Coordonnées": "6.44852, 2.35566",
+    "Country": "Benin"
   },
   {
     "o:id": 272,
     "Titre": "Adjarra",
     "Type": "Lieux",
-    "Coordonnées": "6.53445, 2.66833"
+    "Coordonnées": "6.53445, 2.66833",
+    "Country": "Benin"
   },
   {
     "o:id": 273,
     "Titre": "Algérie",
     "Type": "Lieux",
-    "Coordonnées": "28.0, 3.0"
+    "Coordonnées": "28.0, 3.0",
+    "Country": "Algeria"
   },
   {
     "o:id": 274,
     "Titre": "Allada",
     "Type": "Lieux",
-    "Coordonnées": "6.66547, 2.15138"
+    "Coordonnées": "6.66547, 2.15138",
+    "Country": "Benin"
   },
   {
     "o:id": 275,
     "Titre": "Allemagne",
     "Type": "Lieux",
-    "Coordonnées": "51.5, 10.5"
+    "Coordonnées": "51.5, 10.5",
+    "Country": "Germany"
   },
   {
     "o:id": 276,
     "Titre": "Aplahoué",
     "Type": "Lieux",
-    "Coordonnées": "6.93333, 1.68333"
+    "Coordonnées": "6.93333, 1.68333",
+    "Country": "Benin"
   },
   {
     "o:id": 277,
     "Titre": "Arabie saoudite",
     "Type": "Lieux",
-    "Coordonnées": "25.0, 45.0"
+    "Coordonnées": "25.0, 45.0",
+    "Country": "Saudi Arabia"
   },
   {
     "o:id": 278,
     "Titre": "Athiémé",
     "Type": "Lieux",
-    "Coordonnées": "6.5808, 1.6696"
+    "Coordonnées": "6.5808, 1.6696",
+    "Country": "Benin"
   },
   {
     "o:id": 279,
     "Titre": "Banfora",
     "Type": "Lieux",
-    "Coordonnées": "10.63333, -4.76667"
+    "Coordonnées": "10.63333, -4.76667",
+    "Country": "Burkina Faso"
   },
   {
     "o:id": 280,
     "Titre": "Banikoara",
     "Type": "Lieux",
-    "Coordonnées": "11.33966, 2.45915"
+    "Coordonnées": "11.33966, 2.45915",
+    "Country": "Benin"
   },
   {
     "o:id": 281,
     "Titre": "Bassila",
     "Type": "Lieux",
-    "Coordonnées": "9.00814, 1.6654"
+    "Coordonnées": "9.00814, 1.6654",
+    "Country": "Benin"
   },
   {
     "o:id": 282,
     "Titre": "Bembèrèkè",
     "Type": "Lieux",
-    "Coordonnées": "10.22827, 2.66335"
+    "Coordonnées": "10.22827, 2.66335",
+    "Country": "Benin"
   },
   {
     "o:id": 283,
     "Titre": "Bénin",
     "Type": "Lieux",
-    "Coordonnées": "9.5, 2.25"
+    "Coordonnées": "9.5, 2.25",
+    "Country": "Benin"
   },
   {
     "o:id": 284,
     "Titre": "Bobo-Dioulasso",
     "Type": "Lieux",
-    "Coordonnées": "11.17715, -4.2979"
+    "Coordonnées": "11.17715, -4.2979",
+    "Country": "Burkina Faso"
   },
   {
     "o:id": 285,
     "Titre": "Bogandé",
     "Type": "Lieux",
-    "Coordonnées": "12.9704, -0.14953"
+    "Coordonnées": "12.9704, -0.14953",
+    "Country": "Burkina Faso"
   },
   {
     "o:id": 286,
     "Titre": "Bohicon",
     "Type": "Lieux",
-    "Coordonnées": "7.17826, 2.0667"
+    "Coordonnées": "7.17826, 2.0667",
+    "Country": "Benin"
   },
   {
     "o:id": 287,
     "Titre": "Boromo",
     "Type": "Lieux",
-    "Coordonnées": "11.75, -2.93333"
+    "Coordonnées": "11.75, -2.93333",
+    "Country": "Burkina Faso"
   },
   {
     "o:id": 288,
     "Titre": "Boulsa",
     "Type": "Lieux",
-    "Coordonnées": "12.65, -0.567"
+    "Coordonnées": "12.65, -0.567",
+    "Country": "Burkina Faso"
   },
   {
     "o:id": 293,
     "Titre": "Centre culturel arabe libyen",
     "Type": "Lieux",
-    "Coordonnées": ""
+    "Coordonnées": "",
+    "Country": ""
   },
   {
     "o:id": 294,
     "Titre": "Centre culturel islamique AEEMB",
     "Type": "Lieux",
-    "Coordonnées": "12.37545088285411, -1.4871601188636745"
+    "Coordonnées": "12.37545088285411, -1.4871601188636745",
+    "Country": "Burkina Faso"
   },
   {
     "o:id": 295,
     "Titre": "Centre médical islamique de la Patte d'Oie",
     "Type": "Lieux",
-    "Coordonnées": ""
+    "Coordonnées": "",
+    "Country": ""
   },
   {
     "o:id": 296,
     "Titre": "Cocotomey",
     "Type": "Lieux",
-    "Coordonnées": "6.38957, 2.31227"
+    "Coordonnées": "6.38957, 2.31227",
+    "Country": "Benin"
   },
   {
     "o:id": 297,
     "Titre": "Comè",
     "Type": "Lieux",
-    "Coordonnées": "6.40764, 1.88198"
+    "Coordonnées": "6.40764, 1.88198",
+    "Country": "Benin"
   },
   {
     "o:id": 298,
     "Titre": "Côte d'Ivoire",
     "Type": "Lieux",
-    "Coordonnées": "8.0, -5.5"
+    "Coordonnées": "8.0, -5.5",
+    "Country": "Côte d'Ivoire"
   },
   {
     "o:id": 299,
     "Titre": "Cotonou",
     "Type": "Lieux",
-    "Coordonnées": "6.36536, 2.41833"
+    "Coordonnées": "6.36536, 2.41833",
+    "Country": "Benin"
   },
   {
     "o:id": 300,
     "Titre": "Cové",
     "Type": "Lieux",
-    "Coordonnées": "7.22097, 2.34017"
+    "Coordonnées": "7.22097, 2.34017",
+    "Country": "Benin"
   },
   {
     "o:id": 301,
     "Titre": "Dablo",
     "Type": "Lieux",
-    "Coordonnées": "13.71873, -1.18186"
+    "Coordonnées": "13.71873, -1.18186",
+    "Country": "Burkina Faso"
   },
   {
     "o:id": 302,
     "Titre": "Dassa-Zoumè",
     "Type": "Lieux",
-    "Coordonnées": "7.696, 2.278"
+    "Coordonnées": "7.696, 2.278",
+    "Country": "Benin"
   },
   {
     "o:id": 303,
     "Titre": "Dédougou",
     "Type": "Lieux",
-    "Coordonnées": "12.46338, -3.46075"
+    "Coordonnées": "12.46338, -3.46075",
+    "Country": "Burkina Faso"
   },
   {
     "o:id": 304,
     "Titre": "Djibo",
     "Type": "Lieux",
-    "Coordonnées": "14.12526, -1.6249"
+    "Coordonnées": "14.12526, -1.6249",
+    "Country": "Burkina Faso"
   },
   {
     "o:id": 305,
     "Titre": "Djougou",
     "Type": "Lieux",
-    "Coordonnées": "9.70853, 1.66598"
+    "Coordonnées": "9.70853, 1.66598",
+    "Country": "Benin"
   },
   {
     "o:id": 306,
     "Titre": "Dogbo-Tota",
     "Type": "Lieux",
-    "Coordonnées": "6.79925, 1.78413"
+    "Coordonnées": "6.79925, 1.78413",
+    "Country": "Benin"
   },
   {
     "o:id": 307,
     "Titre": "Dori",
     "Type": "Lieux",
-    "Coordonnées": "14.0341, -0.03261"
+    "Coordonnées": "14.0341, -0.03261",
+    "Country": "Burkina Faso"
   },
   {
     "o:id": 308,
     "Titre": "Égypte",
     "Type": "Lieux",
-    "Coordonnées": "27.0, 30.0"
+    "Coordonnées": "27.0, 30.0",
+    "Country": "Egypt"
   },
   {
     "o:id": 309,
     "Titre": "Émirats arabes unis",
     "Type": "Lieux",
-    "Coordonnées": "23.75, 54.5"
+    "Coordonnées": "23.75, 54.5",
+    "Country": "United Arab Emirates"
   },
   {
     "o:id": 310,
     "Titre": "États-Unis",
     "Type": "Lieux",
-    "Coordonnées": "39.76, -98.5"
+    "Coordonnées": "39.76, -98.5",
+    "Country": "United States of America"
   },
   {
     "o:id": 311,
     "Titre": "Fada N'Gourma",
     "Type": "Lieux",
-    "Coordonnées": "12.06157, 0.35843"
+    "Coordonnées": "12.06157, 0.35843",
+    "Country": "Burkina Faso"
   },
   {
     "o:id": 312,
     "Titre": "France",
     "Type": "Lieux",
-    "Coordonnées": "46.0, 2.0"
+    "Coordonnées": "46.0, 2.0",
+    "Country": "France"
   },
   {
     "o:id": 318,
     "Titre": "Gaoua",
     "Type": "Lieux",
-    "Coordonnées": "10.38247, -3.16475"
+    "Coordonnées": "10.38247, -3.16475",
+    "Country": "Burkina Faso"
   },
   {
     "o:id": 319,
     "Titre": "Ghana",
     "Type": "Lieux",
-    "Coordonnées": "8.1, -1.2"
+    "Coordonnées": "8.1, -1.2",
+    "Country": "Ghana"
   },
   {
     "o:id": 320,
     "Titre": "Gorom-Gorom",
     "Type": "Lieux",
-    "Coordonnées": "14.45417, -0.21895"
+    "Coordonnées": "14.45417, -0.21895",
+    "Country": "Burkina Faso"
   },
   {
     "o:id": 321,
     "Titre": "Gourcy",
     "Type": "Lieux",
-    "Coordonnées": "13.20776, -2.35893"
+    "Coordonnées": "13.20776, -2.35893",
+    "Country": "Burkina Faso"
   },
   {
     "o:id": 322,
     "Titre": "Grand Popo",
     "Type": "Lieux",
-    "Coordonnées": "6.28333, 1.83333"
+    "Coordonnées": "6.28333, 1.83333",
+    "Country": "Benin"
   },
   {
     "o:id": 323,
     "Titre": "Grande Mosquée de Ouagadougou",
     "Type": "Lieux",
-    "Coordonnées": "12.36625, -1.52122"
+    "Coordonnées": "12.36625, -1.52122",
+    "Country": "Burkina Faso"
   },
   {
     "o:id": 324,
     "Titre": "Grande mosquée de Banfora",
     "Type": "Lieux",
-    "Coordonnées": ""
+    "Coordonnées": "",
+    "Country": ""
   },
   {
     "o:id": 325,
     "Titre": "Grande mosquée de Bassan",
     "Type": "Lieux",
-    "Coordonnées": ""
+    "Coordonnées": "",
+    "Country": ""
   },
   {
     "o:id": 326,
     "Titre": "Grande mosquée de Pouytenga",
     "Type": "Lieux",
-    "Coordonnées": ""
+    "Coordonnées": "",
+    "Country": ""
   },
   {
     "o:id": 327,
     "Titre": "Grande Mosquée Sunnite de Ouagadougou",
     "Type": "Lieux",
-    "Coordonnées": "12.360522000171635, -1.5185420989673841"
+    "Coordonnées": "12.360522000171635, -1.5185420989673841",
+    "Country": "Burkina Faso"
   },
   {
     "o:id": 328,
     "Titre": "Guinée",
     "Type": "Lieux",
-    "Coordonnées": "10.83333, -10.66667"
+    "Coordonnées": "10.83333, -10.66667",
+    "Country": "Guinea"
   },
   {
     "o:id": 329,
     "Titre": "Hamdalaye",
     "Type": "Lieux",
-    "Coordonnées": ""
+    "Coordonnées": "",
+    "Country": ""
   },
   {
     "o:id": 330,
     "Titre": "Irak",
     "Type": "Lieux",
-    "Coordonnées": "33.0, 44.0"
+    "Coordonnées": "33.0, 44.0",
+    "Country": "Iraq"
   },
   {
     "o:id": 331,
     "Titre": "Iran",
     "Type": "Lieux",
-    "Coordonnées": "32.0, 53.0"
+    "Coordonnées": "32.0, 53.0",
+    "Country": "Iran"
   },
   {
     "o:id": 332,
     "Titre": "Japon",
     "Type": "Lieux",
-    "Coordonnées": "35.68536, 139.75309"
+    "Coordonnées": "35.68536, 139.75309",
+    "Country": "Japan"
   },
   {
     "o:id": 333,
     "Titre": "Kandi",
     "Type": "Lieux",
-    "Coordonnées": "11.13417, 2.93861"
+    "Coordonnées": "11.13417, 2.93861",
+    "Country": "Benin"
   },
   {
     "o:id": 334,
     "Titre": "Karimama",
     "Type": "Lieux",
-    "Coordonnées": "11.93816, 2.75703"
+    "Coordonnées": "11.93816, 2.75703",
+    "Country": "Benin"
   },
   {
     "o:id": 335,
     "Titre": "Kassoum",
     "Type": "Lieux",
-    "Coordonnées": "13.0788, -3.3024"
+    "Coordonnées": "13.0788, -3.3024",
+    "Country": "Burkina Faso"
   },
   {
     "o:id": 336,
     "Titre": "Kaya",
     "Type": "Lieux",
-    "Coordonnées": "13.09167, -1.08444"
+    "Coordonnées": "13.09167, -1.08444",
+    "Country": "Burkina Faso"
   },
   {
     "o:id": 337,
     "Titre": "Kérou",
     "Type": "Lieux",
-    "Coordonnées": "10.91433, 1.99153"
+    "Coordonnées": "10.91433, 1.99153",
+    "Country": "Benin"
   },
   {
     "o:id": 343,
     "Titre": "Kétou",
     "Type": "Lieux",
-    "Coordonnées": "7.45, 2.626"
+    "Coordonnées": "7.45, 2.626",
+    "Country": "Benin"
   },
   {
     "o:id": 344,
     "Titre": "Kombissiri",
     "Type": "Lieux",
-    "Coordonnées": "12.06884, -1.33644"
+    "Coordonnées": "12.06884, -1.33644",
+    "Country": "Burkina Faso"
   },
   {
     "o:id": 345,
     "Titre": "Kompienga",
     "Type": "Lieux",
-    "Coordonnées": "11.41667, 0.91667"
+    "Coordonnées": "11.41667, 0.91667",
+    "Country": "Burkina Faso"
   },
   {
     "o:id": 346,
     "Titre": "Kongoussi",
     "Type": "Lieux",
-    "Coordonnées": "13.32583, -1.53472"
+    "Coordonnées": "13.32583, -1.53472",
+    "Country": "Burkina Faso"
   },
   {
     "o:id": 347,
     "Titre": "Kouandé",
     "Type": "Lieux",
-    "Coordonnées": "10.42486, 1.71466"
+    "Coordonnées": "10.42486, 1.71466",
+    "Country": "Benin"
   },
   {
     "o:id": 348,
     "Titre": "Koubri",
     "Type": "Lieux",
-    "Coordonnées": "12.1675, -1.35556"
+    "Coordonnées": "12.1675, -1.35556",
+    "Country": "Burkina Faso"
   },
   {
     "o:id": 349,
     "Titre": "Koudougou",
     "Type": "Lieux",
-    "Coordonnées": "12.25263, -2.36272"
+    "Coordonnées": "12.25263, -2.36272",
+    "Country": "Burkina Faso"
   },
   {
     "o:id": 350,
     "Titre": "Koupéla",
     "Type": "Lieux",
-    "Coordonnées": "12.17864, -0.35103"
+    "Coordonnées": "12.17864, -0.35103",
+    "Country": "Burkina Faso"
   },
   {
     "o:id": 351,
     "Titre": "Koweït",
     "Type": "Lieux",
-    "Coordonnées": "29.5, 47.75"
+    "Coordonnées": "29.5, 47.75",
+    "Country": "Kuwait"
   },
   {
     "o:id": 352,
     "Titre": "Léo",
     "Type": "Lieux",
-    "Coordonnées": "11.10033, -2.10654"
+    "Coordonnées": "11.10033, -2.10654",
+    "Country": "Burkina Faso"
   },
   {
     "o:id": 353,
     "Titre": "Liban",
     "Type": "Lieux",
-    "Coordonnées": "33.83333, 35.83333"
+    "Coordonnées": "33.83333, 35.83333",
+    "Country": "Lebanon"
   },
   {
     "o:id": 354,
     "Titre": "Libye",
     "Type": "Lieux",
-    "Coordonnées": "28.0, 17.0"
+    "Coordonnées": "28.0, 17.0",
+    "Country": "Libya"
   },
   {
     "o:id": 355,
     "Titre": "Lokossa",
     "Type": "Lieux",
-    "Coordonnées": "6.63869, 1.71674"
+    "Coordonnées": "6.63869, 1.71674",
+    "Country": "Benin"
   },
   {
     "o:id": 356,
     "Titre": "Malanville",
     "Type": "Lieux",
-    "Coordonnées": "11.86819, 3.38327"
+    "Coordonnées": "11.86819, 3.38327",
+    "Country": "Benin"
   },
   {
     "o:id": 357,
     "Titre": "Mali",
     "Type": "Lieux",
-    "Coordonnées": "18.0, -2.0"
+    "Coordonnées": "18.0, -2.0",
+    "Country": "Mali"
   },
   {
     "o:id": 358,
     "Titre": "Manga",
     "Type": "Lieux",
-    "Coordonnées": "11.66361, -1.07306"
+    "Coordonnées": "11.66361, -1.07306",
+    "Country": "Burkina Faso"
   },
   {
     "o:id": 359,
     "Titre": "Maroc",
     "Type": "Lieux",
-    "Coordonnées": "28.5, -10.0"
+    "Coordonnées": "28.5, -10.0",
+    "Country": "Morocco"
   },
   {
     "o:id": 360,
     "Titre": "Mosquée de Dioulassoba",
     "Type": "Lieux",
-    "Coordonnées": ""
+    "Coordonnées": "",
+    "Country": ""
   },
   {
     "o:id": 361,
     "Titre": "Mosquée du camp militaire Général Sangoulé Lamizana",
     "Type": "Lieux",
-    "Coordonnées": ""
+    "Coordonnées": "",
+    "Country": ""
   },
   {
     "o:id": 367,
     "Titre": "Mosquée Hamdalaye",
     "Type": "Lieux",
-    "Coordonnées": ""
+    "Coordonnées": "",
+    "Country": ""
   },
   {
     "o:id": 368,
     "Titre": "Namissiguima",
     "Type": "Lieux",
-    "Coordonnées": "13.59468, -2.21892"
+    "Coordonnées": "13.59468, -2.21892",
+    "Country": "Burkina Faso"
   },
   {
     "o:id": 369,
     "Titre": "Nassoumbou",
     "Type": "Lieux",
-    "Coordonnées": "14.4089, -1.5507"
+    "Coordonnées": "14.4089, -1.5507",
+    "Country": "Burkina Faso"
   },
   {
     "o:id": 370,
     "Titre": "Natitingou",
     "Type": "Lieux",
-    "Coordonnées": "10.30416, 1.37962"
+    "Coordonnées": "10.30416, 1.37962",
+    "Country": "Benin"
   },
   {
     "o:id": 371,
     "Titre": "N'Dali",
     "Type": "Lieux",
-    "Coordonnées": "9.73027, 2.45032"
+    "Coordonnées": "9.73027, 2.45032",
+    "Country": "Benin"
   },
   {
     "o:id": 372,
     "Titre": "Nikki",
     "Type": "Lieux",
-    "Coordonnées": "9.94009, 3.21075"
+    "Coordonnées": "9.94009, 3.21075",
+    "Country": "Benin"
   },
   {
     "o:id": 373,
     "Titre": "Nouna",
     "Type": "Lieux",
-    "Coordonnées": "12.74367, -3.86322"
+    "Coordonnées": "12.74367, -3.86322",
+    "Country": "Burkina Faso"
   },
   {
     "o:id": 374,
     "Titre": "Orodara",
     "Type": "Lieux",
-    "Coordonnées": "10.98568, -4.92612"
+    "Coordonnées": "10.98568, -4.92612",
+    "Country": "Burkina Faso"
   },
   {
     "o:id": 375,
     "Titre": "Ouaga 2000",
     "Type": "Lieux",
-    "Coordonnées": "12.31538, -1.50888"
+    "Coordonnées": "12.31538, -1.50888",
+    "Country": "Burkina Faso"
   },
   {
     "o:id": 376,
     "Titre": "Ouagadougou",
     "Type": "Lieux",
-    "Coordonnées": "12.36566, -1.53388"
+    "Coordonnées": "12.36566, -1.53388",
+    "Country": "Burkina Faso"
   },
   {
     "o:id": 377,
     "Titre": "Ouahigouya",
     "Type": "Lieux",
-    "Coordonnées": "13.58278, -2.42158"
+    "Coordonnées": "13.58278, -2.42158",
+    "Country": "Burkina Faso"
   },
   {
     "o:id": 378,
     "Titre": "Ouidah",
     "Type": "Lieux",
-    "Coordonnées": "6.36307, 2.08506"
+    "Coordonnées": "6.36307, 2.08506",
+    "Country": "Benin"
   },
   {
     "o:id": 379,
     "Titre": "Parakou",
     "Type": "Lieux",
-    "Coordonnées": "9.33716, 2.63031"
+    "Coordonnées": "9.33716, 2.63031",
+    "Country": "Benin"
   },
   {
     "o:id": 380,
     "Titre": "Parc national de la Pendjari",
     "Type": "Lieux",
-    "Coordonnées": "11.2482, 1.59839"
+    "Coordonnées": "11.2482, 1.59839",
+    "Country": "Benin"
   },
   {
     "o:id": 381,
     "Titre": "Parc national du W",
     "Type": "Lieux",
-    "Coordonnées": "12.07596, 2.5235"
+    "Coordonnées": "12.07596, 2.5235",
+    "Country": "Benin"
   },
   {
     "o:id": 382,
     "Titre": "Place de la Révolution",
     "Type": "Lieux",
-    "Coordonnées": ""
+    "Coordonnées": "",
+    "Country": ""
   },
   {
     "o:id": 383,
     "Titre": "Pô",
     "Type": "Lieux",
-    "Coordonnées": "11.16972, -1.145"
+    "Coordonnées": "11.16972, -1.145",
+    "Country": "Burkina Faso"
   },
   {
     "o:id": 384,
     "Titre": "Pobé",
     "Type": "Lieux",
-    "Coordonnées": "6.98008, 2.6649"
+    "Coordonnées": "6.98008, 2.6649",
+    "Country": "Benin"
   },
   {
     "o:id": 385,
     "Titre": "Porto-Novo",
     "Type": "Lieux",
-    "Coordonnées": "6.49646, 2.60359"
+    "Coordonnées": "6.49646, 2.60359",
+    "Country": "Benin"
   },
   {
     "o:id": 386,
     "Titre": "Pouytenga",
     "Type": "Lieux",
-    "Coordonnées": "12.25162, -0.42565"
+    "Coordonnées": "12.25162, -0.42565",
+    "Country": "Burkina Faso"
   },
   {
     "o:id": 387,
     "Titre": "Ramatoulaye",
     "Type": "Lieux",
-    "Coordonnées": "13.633333, -2.316667"
+    "Coordonnées": "13.633333, -2.316667",
+    "Country": "Burkina Faso"
   },
   {
     "o:id": 388,
     "Titre": "Sakété",
     "Type": "Lieux",
-    "Coordonnées": "6.73618, 2.65866"
+    "Coordonnées": "6.73618, 2.65866",
+    "Country": "Benin"
   },
   {
     "o:id": 389,
     "Titre": "Salmossi",
     "Type": "Lieux",
-    "Coordonnées": "14.56148, -0.07253"
+    "Coordonnées": "14.56148, -0.07253",
+    "Country": "Burkina Faso"
   },
   {
     "o:id": 390,
     "Titre": "Sanmatenga",
     "Type": "Lieux",
-    "Coordonnées": "13.25, -1.08333"
+    "Coordonnées": "13.25, -1.08333",
+    "Country": "Burkina Faso"
   },
   {
     "o:id": 391,
     "Titre": "Sapouy",
     "Type": "Lieux",
-    "Coordonnées": "11.55444, -1.77361"
+    "Coordonnées": "11.55444, -1.77361",
+    "Country": "Burkina Faso"
   },
   {
     "o:id": 392,
     "Titre": "Savalou",
     "Type": "Lieux",
-    "Coordonnées": "7.92807, 1.97558"
+    "Coordonnées": "7.92807, 1.97558",
+    "Country": "Benin"
   },
   {
     "o:id": 393,
     "Titre": "Savé",
     "Type": "Lieux",
-    "Coordonnées": "8.03424, 2.4866"
+    "Coordonnées": "8.03424, 2.4866",
+    "Country": "Benin"
   },
   {
     "o:id": 394,
     "Titre": "Segbana",
     "Type": "Lieux",
-    "Coordonnées": "10.92821, 3.69429"
+    "Coordonnées": "10.92821, 3.69429",
+    "Country": "Benin"
   },
   {
     "o:id": 395,
     "Titre": "Sénégal",
     "Type": "Lieux",
-    "Coordonnées": "14.5, -14.25"
+    "Coordonnées": "14.5, -14.25",
+    "Country": "Senegal"
   },
   {
     "o:id": 396,
     "Titre": "Solenzo",
     "Type": "Lieux",
-    "Coordonnées": "12.17423, -4.08477"
+    "Coordonnées": "12.17423, -4.08477",
+    "Country": "Burkina Faso"
   },
   {
     "o:id": 397,
     "Titre": "Soum",
     "Type": "Lieux",
-    "Coordonnées": "14.1, -1.633333"
+    "Coordonnées": "14.1, -1.633333",
+    "Country": "Burkina Faso"
   },
   {
     "o:id": 398,
     "Titre": "Tanguiéta",
     "Type": "Lieux",
-    "Coordonnées": "10.62118, 1.26651"
+    "Coordonnées": "10.62118, 1.26651",
+    "Country": "Benin"
   },
   {
     "o:id": 399,
     "Titre": "Tchaourou",
     "Type": "Lieux",
-    "Coordonnées": "9.0349, 2.5169"
+    "Coordonnées": "9.0349, 2.5169",
+    "Country": "Benin"
   },
   {
     "o:id": 400,
     "Titre": "Tenkodogo",
     "Type": "Lieux",
-    "Coordonnées": "11.78, -0.36972"
+    "Coordonnées": "11.78, -0.36972",
+    "Country": "Burkina Faso"
   },
   {
     "o:id": 401,
     "Titre": "Tougan",
     "Type": "Lieux",
-    "Coordonnées": "13.05913, -3.07527"
+    "Coordonnées": "13.05913, -3.07527",
+    "Country": "Burkina Faso"
   },
   {
     "o:id": 403,
     "Titre": "Tripoli",
     "Type": "Lieux",
-    "Coordonnées": "32.88743, 13.18733"
+    "Coordonnées": "32.88743, 13.18733",
+    "Country": "Libya"
   },
   {
     "o:id": 404,
     "Titre": "Yako",
     "Type": "Lieux",
-    "Coordonnées": "12.9591, -2.26075"
+    "Coordonnées": "12.9591, -2.26075",
+    "Country": "Burkina Faso"
   },
   {
     "o:id": 405,
     "Titre": "Ziniaré",
     "Type": "Lieux",
-    "Coordonnées": "12.58186, -1.2971"
+    "Coordonnées": "12.58186, -1.2971",
+    "Country": "Burkina Faso"
   },
   {
     "o:id": 406,
     "Titre": "Zogbodomey",
     "Type": "Lieux",
-    "Coordonnées": "7.018, 2.183"
+    "Coordonnées": "7.018, 2.183",
+    "Country": "Benin"
   },
   {
     "o:id": 407,
     "Titre": "Palestine",
     "Type": "Lieux",
-    "Coordonnées": "31.92157, 35.20329"
+    "Coordonnées": "31.92157, 35.20329",
+    "Country": "Palestine"
   },
   {
     "o:id": 408,
     "Titre": "Israël",
     "Type": "Lieux",
-    "Coordonnées": "31.5, 34.75"
+    "Coordonnées": "31.5, 34.75",
+    "Country": "Israel"
   },
   {
     "o:id": 409,
     "Titre": "Somalie",
     "Type": "Lieux",
-    "Coordonnées": "6.0, 48.0"
+    "Coordonnées": "6.0, 48.0",
+    "Country": "Somalia"
   },
   {
     "o:id": 410,
     "Titre": "Tchad",
     "Type": "Lieux",
-    "Coordonnées": "15.0, 19.0"
+    "Coordonnées": "15.0, 19.0",
+    "Country": "Chad"
   },
   {
     "o:id": 411,
     "Titre": "Ganvié",
     "Type": "Lieux",
-    "Coordonnées": "6.46441, 2.39288"
+    "Coordonnées": "6.46441, 2.39288",
+    "Country": "Benin"
   },
   {
     "o:id": 412,
     "Titre": "Godomey",
     "Type": "Lieux",
-    "Coordonnées": "6.38948, 2.34581"
+    "Coordonnées": "6.38948, 2.34581",
+    "Country": "Benin"
   },
   {
     "o:id": 413,
     "Titre": "Tunisie",
     "Type": "Lieux",
-    "Coordonnées": "34.0, 9.0"
+    "Coordonnées": "34.0, 9.0",
+    "Country": "Tunisia"
   },
   {
     "o:id": 414,
     "Titre": "Soudan",
     "Type": "Lieux",
-    "Coordonnées": "16.0, 30.0"
+    "Coordonnées": "16.0, 30.0",
+    "Country": "Sudan"
   },
   {
     "o:id": 415,
     "Titre": "Bibliothèque du Congrès",
     "Type": "Lieux",
-    "Coordonnées": "38.88845, -77.00442"
+    "Coordonnées": "38.88845, -77.00442",
+    "Country": "United States of America"
   },
   {
     "o:id": 416,
     "Titre": "Institut de Recherche pour le Développement",
     "Type": "Lieux",
-    "Coordonnées": "12.36993, -1.51299"
+    "Coordonnées": "12.36993, -1.51299",
+    "Country": "Burkina Faso"
   },
   {
     "o:id": 425,
     "Titre": "Bassan",
     "Type": "Lieux",
-    "Coordonnées": "13.0837, -3.1726"
+    "Coordonnées": "13.0837, -3.1726",
+    "Country": "Burkina Faso"
   },
   {
     "o:id": 426,
     "Titre": "Barsalogho",
     "Type": "Lieux",
-    "Coordonnées": "13.41389, -1.05583"
+    "Coordonnées": "13.41389, -1.05583",
+    "Country": "Burkina Faso"
   },
   {
     "o:id": 427,
     "Titre": "Royaume-Uni",
     "Type": "Lieux",
-    "Coordonnées": "54.75844, -2.69531"
+    "Coordonnées": "54.75844, -2.69531",
+    "Country": "United Kingdom"
   },
   {
     "o:id": 428,
     "Titre": "Danemark",
     "Type": "Lieux",
-    "Coordonnées": "56.0, 10.0"
+    "Coordonnées": "56.0, 10.0",
+    "Country": "Denmark"
   },
   {
     "o:id": 429,
     "Titre": "Suisse",
     "Type": "Lieux",
-    "Coordonnées": "47.00016, 8.01427"
+    "Coordonnées": "47.00016, 8.01427",
+    "Country": "Switzerland"
   },
   {
     "o:id": 430,
     "Titre": "Canada",
     "Type": "Lieux",
-    "Coordonnées": "60.10867, -113.64258"
+    "Coordonnées": "60.10867, -113.64258",
+    "Country": "Canada"
   },
   {
     "o:id": 431,
     "Titre": "République démocratique du Congo",
     "Type": "Lieux",
-    "Coordonnées": ""
+    "Coordonnées": "",
+    "Country": ""
   },
   {
     "o:id": 432,
     "Titre": "Institut Musulman d'Enseignement et d'Éducation",
     "Type": "Lieux",
-    "Coordonnées": ""
+    "Coordonnées": "",
+    "Country": ""
   },
   {
     "o:id": 433,
     "Titre": "Institut Aorèma",
     "Type": "Lieux",
-    "Coordonnées": ""
+    "Coordonnées": "",
+    "Country": ""
   },
   {
     "o:id": 434,
     "Titre": "Institut islamique El Nour",
     "Type": "Lieux",
-    "Coordonnées": ""
+    "Coordonnées": "",
+    "Country": ""
   },
   {
     "o:id": 435,
     "Titre": "Mosquée AEEMB (Université de Ouagadougou)",
     "Type": "Lieux",
-    "Coordonnées": ""
+    "Coordonnées": "",
+    "Country": ""
   },
   {
     "o:id": 436,
     "Titre": "Institut Al Ilmi",
     "Type": "Lieux",
-    "Coordonnées": ""
+    "Coordonnées": "",
+    "Country": ""
   },
   {
     "o:id": 437,
     "Titre": "Maternité Sakina",
     "Type": "Lieux",
-    "Coordonnées": ""
+    "Coordonnées": "",
+    "Country": ""
   },
   {
     "o:id": 438,
     "Titre": "Médersa centrale de Ouagadougou",
     "Type": "Lieux",
-    "Coordonnées": ""
+    "Coordonnées": "",
+    "Country": ""
   },
   {
     "o:id": 439,
     "Titre": "Université Al Houda",
     "Type": "Lieux",
-    "Coordonnées": ""
+    "Coordonnées": "",
+    "Country": ""
   },
   {
     "o:id": 440,
     "Titre": "Belgique",
     "Type": "Lieux",
-    "Coordonnées": "50.75, 4.5"
+    "Coordonnées": "50.75, 4.5",
+    "Country": "Belgium"
   },
   {
     "o:id": 441,
     "Titre": "Grand-Bassam",
     "Type": "Lieux",
-    "Coordonnées": "5.2118, -3.73884"
+    "Coordonnées": "5.2118, -3.73884",
+    "Country": "Côte d'Ivoire"
   },
   {
     "o:id": 442,
     "Titre": "Djeddah",
     "Type": "Lieux",
-    "Coordonnées": "21.49012, 39.18624"
+    "Coordonnées": "21.49012, 39.18624",
+    "Country": "Saudi Arabia"
   },
   {
     "o:id": 443,
     "Titre": "Médine",
     "Type": "Lieux",
-    "Coordonnées": "24.46861, 39.61417"
+    "Coordonnées": "24.46861, 39.61417",
+    "Country": "Saudi Arabia"
   },
   {
     "o:id": 444,
     "Titre": "Université de Ouagadougou",
     "Type": "Lieux",
-    "Coordonnées": "12.37735, -1.5009"
+    "Coordonnées": "12.37735, -1.5009",
+    "Country": "Burkina Faso"
   },
   {
     "o:id": 452,
     "Titre": "Université d'Abomey-Calavi",
     "Type": "Lieux",
-    "Coordonnées": "6.44105, 2.35238"
+    "Coordonnées": "6.44105, 2.35238",
+    "Country": "Benin"
   },
   {
     "o:id": 453,
     "Titre": "Institut de la Langue Arabe et de la Culture Islamique",
     "Type": "Lieux",
-    "Coordonnées": "6.42047, 2.34345"
+    "Coordonnées": "6.42047, 2.34345",
+    "Country": "Benin"
   },
   {
     "o:id": 454,
     "Titre": "Jordanie",
     "Type": "Lieux",
-    "Coordonnées": "31.0, 36.0"
+    "Coordonnées": "31.0, 36.0",
+    "Country": "Jordan"
   },
   {
     "o:id": 455,
     "Titre": "Mosquée Oumar Ibn Khattab",
     "Type": "Lieux",
-    "Coordonnées": "6.414748141664798, 2.3372766573629"
+    "Coordonnées": "6.414748141664798, 2.3372766573629",
+    "Country": "Benin"
   },
   {
     "o:id": 456,
     "Titre": "Paris",
     "Type": "Lieux",
-    "Coordonnées": "48.85341, 2.3488"
+    "Coordonnées": "48.85341, 2.3488",
+    "Country": "France"
   },
   {
     "o:id": 457,
     "Titre": "Lomé",
     "Type": "Lieux",
-    "Coordonnées": "6.12874, 1.22154"
+    "Coordonnées": "6.12874, 1.22154",
+    "Country": "Togo"
   },
   {
     "o:id": 458,
     "Titre": "Bibliothèque nationale du Togo",
     "Type": "Lieux",
-    "Coordonnées": "6.129117, 1.218427"
+    "Coordonnées": "6.129117, 1.218427",
+    "Country": "Togo"
   },
   {
     "o:id": 459,
     "Titre": "Mosquée centrale de Porto-Novo",
     "Type": "Lieux",
-    "Coordonnées": "6.470333, 2.626611"
+    "Coordonnées": "6.470333, 2.626611",
+    "Country": "Benin"
   },
   {
     "o:id": 460,
     "Titre": "Mosquée centrale de Cotonou Jonquet",
     "Type": "Lieux",
-    "Coordonnées": ""
+    "Coordonnées": "",
+    "Country": ""
   },
   {
     "o:id": 461,
     "Titre": "Centre islamique de Dantokpa",
     "Type": "Lieux",
-    "Coordonnées": ""
+    "Coordonnées": "",
+    "Country": ""
   },
   {
     "o:id": 462,
     "Titre": "Lycée Béhanzin",
     "Type": "Lieux",
-    "Coordonnées": ""
+    "Coordonnées": "",
+    "Country": ""
   },
   {
     "o:id": 463,
     "Titre": "Mosquée centrale de Bohicon",
     "Type": "Lieux",
-    "Coordonnées": ""
+    "Coordonnées": "",
+    "Country": ""
   },
   {
     "o:id": 464,
     "Titre": "Mosquée centrale de Cadjèhoun",
     "Type": "Lieux",
-    "Coordonnées": ""
+    "Coordonnées": "",
+    "Country": ""
   },
   {
     "o:id": 465,
     "Titre": "Mosquée centrale de Djougou",
     "Type": "Lieux",
-    "Coordonnées": ""
+    "Coordonnées": "",
+    "Country": ""
   },
   {
     "o:id": 466,
     "Titre": "Mosquée centrale de Fidjrossè",
     "Type": "Lieux",
-    "Coordonnées": ""
+    "Coordonnées": "",
+    "Country": ""
   },
   {
     "o:id": 467,
     "Titre": "Mosquée centrale de Godomey",
     "Type": "Lieux",
-    "Coordonnées": ""
+    "Coordonnées": "",
+    "Country": ""
   },
   {
     "o:id": 468,
     "Titre": "Mosquée centrale de Lokossa",
     "Type": "Lieux",
-    "Coordonnées": ""
+    "Coordonnées": "",
+    "Country": ""
   },
   {
     "o:id": 469,
     "Titre": "Mosquée centrale de Natitingou",
     "Type": "Lieux",
-    "Coordonnées": ""
+    "Coordonnées": "",
+    "Country": ""
   },
   {
     "o:id": 470,
     "Titre": "Mosquée centrale de Ouando",
     "Type": "Lieux",
-    "Coordonnées": ""
+    "Coordonnées": "",
+    "Country": ""
   },
   {
     "o:id": 473,
     "Titre": "Mosquée centrale de Pèrèrè",
     "Type": "Lieux",
-    "Coordonnées": ""
+    "Coordonnées": "",
+    "Country": ""
   },
   {
     "o:id": 474,
     "Titre": "Mosquée centrale de Toviklin",
     "Type": "Lieux",
-    "Coordonnées": ""
+    "Coordonnées": "",
+    "Country": ""
   },
   {
     "o:id": 475,
     "Titre": "Mosquée centrale de Zongo (Cotonou)",
     "Type": "Lieux",
-    "Coordonnées": ""
+    "Coordonnées": "",
+    "Country": ""
   },
   {
     "o:id": 476,
     "Titre": "Mosquée centrale Yara Kinnin",
     "Type": "Lieux",
-    "Coordonnées": ""
+    "Coordonnées": "",
+    "Country": ""
   },
   {
     "o:id": 477,
     "Titre": "Mosquée de Ganvié",
     "Type": "Lieux",
-    "Coordonnées": ""
+    "Coordonnées": "",
+    "Country": ""
   },
   {
     "o:id": 478,
     "Titre": "Toviklin",
     "Type": "Lieux",
-    "Coordonnées": "6.88796, 1.80739"
+    "Coordonnées": "6.88796, 1.80739",
+    "Country": "Benin"
   },
   {
     "o:id": 479,
     "Titre": "Pèrèrè",
     "Type": "Lieux",
-    "Coordonnées": "9.58703, 2.99607"
+    "Coordonnées": "9.58703, 2.99607",
+    "Country": "Benin"
   },
   {
     "o:id": 480,
     "Titre": "Université al-Azhar",
     "Type": "Lieux",
-    "Coordonnées": ""
+    "Coordonnées": "",
+    "Country": ""
   },
   {
     "o:id": 481,
     "Titre": "Université islamique Imam Muhammad ibn Saud",
     "Type": "Lieux",
-    "Coordonnées": ""
+    "Coordonnées": "",
+    "Country": ""
   },
   {
     "o:id": 482,
     "Titre": "Université islamique de Médine",
     "Type": "Lieux",
-    "Coordonnées": ""
+    "Coordonnées": "",
+    "Country": ""
   },
   {
     "o:id": 483,
     "Titre": "Mosquée du Cercle d'Études, de Recherches et de Formation Islamiques",
     "Type": "Lieux",
-    "Coordonnées": ""
+    "Coordonnées": "",
+    "Country": ""
   },
   {
     "o:id": 484,
     "Titre": "Zaria",
     "Type": "Lieux",
-    "Coordonnées": "11.066667, 7.7"
+    "Coordonnées": "11.066667, 7.7",
+    "Country": "Nigeria"
   },
   {
     "o:id": 485,
     "Titre": "Yola",
     "Type": "Lieux",
-    "Coordonnées": "9.2, 12.483333"
+    "Coordonnées": "9.2, 12.483333",
+    "Country": "Nigeria"
   },
   {
     "o:id": 487,
     "Titre": "Zinvié",
     "Type": "Lieux",
-    "Coordonnées": "6.61667, 2.35"
+    "Coordonnées": "6.61667, 2.35",
+    "Country": "Benin"
   },
   {
     "o:id": 488,
     "Titre": "Lagos",
     "Type": "Lieux",
-    "Coordonnées": "6.45, 3.4"
+    "Coordonnées": "6.45, 3.4",
+    "Country": ""
   },
   {
     "o:id": 489,
     "Titre": "La Mecque",
     "Type": "Lieux",
-    "Coordonnées": "21.4225, 39.826111"
+    "Coordonnées": "21.4225, 39.826111",
+    "Country": "Saudi Arabia"
   },
   {
     "o:id": 490,
     "Titre": "Niamey",
     "Type": "Lieux",
-    "Coordonnées": "13.515, 2.1175"
+    "Coordonnées": "13.515, 2.1175",
+    "Country": "Niger"
   },
   {
     "o:id": 491,
     "Titre": "Mosquée centrale Médine II d'Agori Plateau",
     "Type": "Lieux",
-    "Coordonnées": "6.4327785, 2.3442182"
+    "Coordonnées": "6.4327785, 2.3442182",
+    "Country": "Benin"
   },
   {
     "o:id": 492,
     "Titre": "Adjengré",
     "Type": "Lieux",
-    "Coordonnées": ""
+    "Coordonnées": "",
+    "Country": ""
   },
   {
     "o:id": 493,
     "Titre": "Amlamé",
     "Type": "Lieux",
-    "Coordonnées": "7.4605555555556, 0.90305555555556"
+    "Coordonnées": "7.4605555555556, 0.90305555555556",
+    "Country": "Togo"
   },
   {
     "o:id": 494,
     "Titre": "Aného",
     "Type": "Lieux",
-    "Coordonnées": "6.2288888888889, 1.5930555555556"
+    "Coordonnées": "6.2288888888889, 1.5930555555556",
+    "Country": "Togo"
   },
   {
     "o:id": 495,
     "Titre": "Anié",
     "Type": "Lieux",
-    "Coordonnées": "7.76111111, 1.19166667"
+    "Coordonnées": "7.76111111, 1.19166667",
+    "Country": "Togo"
   },
   {
     "o:id": 496,
     "Titre": "Assoli",
     "Type": "Lieux",
-    "Coordonnées": "9.35, 1.2666666666667"
+    "Coordonnées": "9.35, 1.2666666666667",
+    "Country": "Togo"
   },
   {
     "o:id": 497,
     "Titre": "Atakpamé",
     "Type": "Lieux",
-    "Coordonnées": "7.5269444444444, 1.1266666666667"
+    "Coordonnées": "7.5269444444444, 1.1266666666667",
+    "Country": "Togo"
   },
   {
     "o:id": 498,
     "Titre": "Badou",
     "Type": "Lieux",
-    "Coordonnées": "7.584327, 0.606651"
+    "Coordonnées": "7.584327, 0.606651",
+    "Country": "Togo"
   },
   {
     "o:id": 499,
     "Titre": "Bafilo",
     "Type": "Lieux",
-    "Coordonnées": "9.35, 1.26666667"
+    "Coordonnées": "9.35, 1.26666667",
+    "Country": "Togo"
   },
   {
     "o:id": 500,
     "Titre": "Bassar",
     "Type": "Lieux",
-    "Coordonnées": "9.25, 0.78333333333333"
+    "Coordonnées": "9.25, 0.78333333333333",
+    "Country": "Togo"
   },
   {
     "o:id": 501,
     "Titre": "Biankouri",
     "Type": "Lieux",
-    "Coordonnées": "11.019444444444, 0.054722222222222"
+    "Coordonnées": "11.019444444444, 0.054722222222222",
+    "Country": "Togo"
   },
   {
     "o:id": 502,
     "Titre": "Cathédrale du Sacré-Cœur de Lomé",
     "Type": "Lieux",
-    "Coordonnées": "6.12486111, 1.22627778"
+    "Coordonnées": "6.12486111, 1.22627778",
+    "Country": "Togo"
   },
   {
     "o:id": 503,
     "Titre": "Cinkassé",
     "Type": "Lieux",
-    "Coordonnées": "11.096876, 0.016393"
+    "Coordonnées": "11.096876, 0.016393",
+    "Country": "Togo"
   },
   {
     "o:id": 504,
     "Titre": "Dapaong",
     "Type": "Lieux",
-    "Coordonnées": "10.866666666667, 0.2"
+    "Coordonnées": "10.866666666667, 0.2",
+    "Country": "Togo"
   },
   {
     "o:id": 505,
     "Titre": "Galangachi",
     "Type": "Lieux",
-    "Coordonnées": "10.4169843, 0.3560076"
+    "Coordonnées": "10.4169843, 0.3560076",
+    "Country": "Togo"
   },
   {
     "o:id": 506,
     "Titre": "Gando",
     "Type": "Lieux",
-    "Coordonnées": "10.3257, 0.749044"
+    "Coordonnées": "10.3257, 0.749044",
+    "Country": "Togo"
   },
   {
     "o:id": 507,
     "Titre": "Kandé",
     "Type": "Lieux",
-    "Coordonnées": "9.9563888888889, 1.0463888888889"
+    "Coordonnées": "9.9563888888889, 1.0463888888889",
+    "Country": "Togo"
   },
   {
     "o:id": 508,
     "Titre": "Kara",
     "Type": "Lieux",
-    "Coordonnées": "9.5488888888889, 1.1905555555556"
+    "Coordonnées": "9.5488888888889, 1.1905555555556",
+    "Country": "Togo"
   },
   {
     "o:id": 509,
     "Titre": "Kéran",
     "Type": "Lieux",
-    "Coordonnées": "10.083333333333, 1.0"
+    "Coordonnées": "10.083333333333, 1.0",
+    "Country": "Togo"
   },
   {
     "o:id": 510,
     "Titre": "Kétao",
     "Type": "Lieux",
-    "Coordonnées": "9.6611111111111, 1.3113888888889"
+    "Coordonnées": "9.6611111111111, 1.3113888888889",
+    "Country": "Togo"
   },
   {
     "o:id": 511,
     "Titre": "Kpagouda",
     "Type": "Lieux",
-    "Coordonnées": "9.75, 1.3166666666666669"
+    "Coordonnées": "9.75, 1.3166666666666669",
+    "Country": "Togo"
   },
   {
     "o:id": 512,
     "Titre": "Kpalimé",
     "Type": "Lieux",
-    "Coordonnées": "6.91, 0.62805555555556"
+    "Coordonnées": "6.91, 0.62805555555556",
+    "Country": "Togo"
   },
   {
     "o:id": 513,
     "Titre": "Kparatao",
     "Type": "Lieux",
-    "Coordonnées": ""
+    "Coordonnées": "",
+    "Country": ""
   },
   {
     "o:id": 514,
     "Titre": "Mango",
     "Type": "Lieux",
-    "Coordonnées": "10.355555555556, 0.47555555555556"
+    "Coordonnées": "10.355555555556, 0.47555555555556",
+    "Country": "Togo"
   },
   {
     "o:id": 515,
     "Titre": "Niamtougou",
     "Type": "Lieux",
-    "Coordonnées": "9.7666666666667, 1.1"
+    "Coordonnées": "9.7666666666667, 1.1",
+    "Country": "Togo"
   },
   {
     "o:id": 517,
     "Titre": "Pya",
     "Type": "Lieux",
-    "Coordonnées": "9.65194444, 1.13638889"
+    "Coordonnées": "9.65194444, 1.13638889",
+    "Country": "Togo"
   },
   {
     "o:id": 518,
     "Titre": "Sarakawa",
     "Type": "Lieux",
-    "Coordonnées": "9.6218425, 0.9866713"
+    "Coordonnées": "9.6218425, 0.9866713",
+    "Country": "Togo"
   },
   {
     "o:id": 519,
     "Titre": "Sokodé",
     "Type": "Lieux",
-    "Coordonnées": "8.9833333333333, 1.1333333333333"
+    "Coordonnées": "8.9833333333333, 1.1333333333333",
+    "Country": "Togo"
   },
   {
     "o:id": 520,
     "Titre": "Sotouboua",
     "Type": "Lieux",
-    "Coordonnées": "8.56667, 0.983333"
+    "Coordonnées": "8.56667, 0.983333",
+    "Country": "Togo"
   },
   {
     "o:id": 521,
     "Titre": "Tabligbo",
     "Type": "Lieux",
-    "Coordonnées": "6.5833333333333, 1.5"
+    "Coordonnées": "6.5833333333333, 1.5",
+    "Country": "Togo"
   },
   {
     "o:id": 522,
     "Titre": "Tchamba",
     "Type": "Lieux",
-    "Coordonnées": "9.0333333333333, 1.4166666666667"
+    "Coordonnées": "9.0333333333333, 1.4166666666667",
+    "Country": "Togo"
   },
   {
     "o:id": 523,
     "Titre": "Tchaoudjo",
     "Type": "Lieux",
-    "Coordonnées": "8.98333333, 1.13333333"
+    "Coordonnées": "8.98333333, 1.13333333",
+    "Country": "Togo"
   },
   {
     "o:id": 524,
     "Titre": "Tsévié",
     "Type": "Lieux",
-    "Coordonnées": "6.4333333333333, 1.2166666666667"
+    "Coordonnées": "6.4333333333333, 1.2166666666667",
+    "Country": "Togo"
   },
   {
     "o:id": 525,
     "Titre": "Vogan",
     "Type": "Lieux",
-    "Coordonnées": "6.3333333333333, 1.5333333333333"
+    "Coordonnées": "6.3333333333333, 1.5333333333333",
+    "Country": "Togo"
   },
   {
     "o:id": 526,
     "Titre": "Palais des congrès de Lomé",
     "Type": "Lieux",
-    "Coordonnées": "6.13059, 1.21739"
+    "Coordonnées": "6.13059, 1.21739",
+    "Country": "Togo"
   },
   {
     "o:id": 527,
     "Titre": "Lycée de Tokoin",
     "Type": "Lieux",
-    "Coordonnées": ""
+    "Coordonnées": "",
+    "Country": ""
   },
   {
     "o:id": 528,
     "Titre": "Grande mosquée de Lomé",
     "Type": "Lieux",
-    "Coordonnées": ""
+    "Coordonnées": "",
+    "Country": ""
   },
   {
     "o:id": 529,
     "Titre": "Centre Culturel Islamique de Lomé II",
     "Type": "Lieux",
-    "Coordonnées": ""
+    "Coordonnées": "",
+    "Country": ""
   },
   {
     "o:id": 531,
     "Titre": "Riyad",
     "Type": "Lieux",
-    "Coordonnées": "24.65, 46.71"
+    "Coordonnées": "24.65, 46.71",
+    "Country": "Saudi Arabia"
   },
   {
     "o:id": 532,
     "Titre": "Kloto",
     "Type": "Lieux",
-    "Coordonnées": "7.083333, 0.75"
+    "Coordonnées": "7.083333, 0.75",
+    "Country": "Togo"
   },
   {
     "o:id": 533,
     "Titre": "Kozah",
     "Type": "Lieux",
-    "Coordonnées": "9.583333, 1.166667"
+    "Coordonnées": "9.583333, 1.166667",
+    "Country": "Togo"
   },
   {
     "o:id": 534,
     "Titre": "Kabou",
     "Type": "Lieux",
-    "Coordonnées": "9.45, 0.816667"
+    "Coordonnées": "9.45, 0.816667",
+    "Country": "Togo"
   },
   {
     "o:id": 535,
     "Titre": "Temple œcuménique de Pya",
     "Type": "Lieux",
-    "Coordonnées": ""
+    "Coordonnées": "",
+    "Country": ""
   },
   {
     "o:id": 536,
     "Titre": "Zio",
     "Type": "Lieux",
-    "Coordonnées": "6.433333, 1.216667"
+    "Coordonnées": "6.433333, 1.216667",
+    "Country": "Togo"
   },
   {
     "o:id": 537,
     "Titre": "Ogou",
     "Type": "Lieux",
-    "Coordonnées": "7.516667, 1.116667"
+    "Coordonnées": "7.516667, 1.116667",
+    "Country": "Togo"
   },
   {
     "o:id": 538,
     "Titre": "Maison du Hadj",
     "Type": "Lieux",
-    "Coordonnées": "6.181735, 1.255005"
+    "Coordonnées": "6.181735, 1.255005",
+    "Country": "Togo"
   },
   {
     "o:id": 539,
     "Titre": "Mauritanie",
     "Type": "Lieux",
-    "Coordonnées": "20.25, -10.5"
+    "Coordonnées": "20.25, -10.5",
+    "Country": "Mauritania"
   },
   {
     "o:id": 540,
     "Titre": "Niger",
     "Type": "Lieux",
-    "Coordonnées": "18.0, 9.0"
+    "Coordonnées": "18.0, 9.0",
+    "Country": "Niger"
   },
   {
     "o:id": 541,
     "Titre": "Nigéria",
     "Type": "Lieux",
-    "Coordonnées": "10.0, 8.0"
+    "Coordonnées": "10.0, 8.0",
+    "Country": "Nigeria"
   },
   {
     "o:id": 542,
     "Titre": "Qatar",
     "Type": "Lieux",
-    "Coordonnées": "25.5, 51.25"
+    "Coordonnées": "25.5, 51.25",
+    "Country": "Qatar"
   },
   {
     "o:id": 543,
     "Titre": "Syrie",
     "Type": "Lieux",
-    "Coordonnées": "35.0, 38.0"
+    "Coordonnées": "35.0, 38.0",
+    "Country": "Syria"
   },
   {
     "o:id": 544,
     "Titre": "Togo",
     "Type": "Lieux",
-    "Coordonnées": "8.66667, 1.08333"
+    "Coordonnées": "8.66667, 1.08333",
+    "Country": "Togo"
   },
   {
     "o:id": 545,
     "Titre": "Turquie",
     "Type": "Lieux",
-    "Coordonnées": "39.0, 35.0"
+    "Coordonnées": "39.0, 35.0",
+    "Country": "Turkey"
   },
   {
     "o:id": 546,
     "Titre": "Burkina Faso",
     "Type": "Lieux",
-    "Coordonnées": "12.5, -1.66667"
+    "Coordonnées": "12.5, -1.66667",
+    "Country": "Burkina Faso"
   },
   {
     "o:id": 547,
     "Titre": "Cameroun",
     "Type": "Lieux",
-    "Coordonnées": "6.0, 12.5"
+    "Coordonnées": "6.0, 12.5",
+    "Country": "Cameroon"
   },
   {
     "o:id": 548,
     "Titre": "Gabon",
     "Type": "Lieux",
-    "Coordonnées": "-1.0, 11.75"
+    "Coordonnées": "-1.0, 11.75",
+    "Country": "Gabon"
   },
   {
     "o:id": 549,
     "Titre": "Inde",
     "Type": "Lieux",
-    "Coordonnées": "22.0, 79.0"
+    "Coordonnées": "22.0, 79.0",
+    "Country": "India"
   },
   {
     "o:id": 550,
     "Titre": "Pakistan",
     "Type": "Lieux",
-    "Coordonnées": "30.0, 70.0"
+    "Coordonnées": "30.0, 70.0",
+    "Country": "Pakistan"
   },
   {
     "o:id": 551,
     "Titre": "Union des républiques socialistes soviétiques",
     "Type": "Lieux",
-    "Coordonnées": "65.0, 90.0"
+    "Coordonnées": "65.0, 90.0",
+    "Country": "Russia"
   },
   {
     "o:id": 552,
     "Titre": "Université Abdou Moumouni",
     "Type": "Lieux",
-    "Coordonnées": "13.501361, 2.098528"
+    "Coordonnées": "13.501361, 2.098528",
+    "Country": "Niger"
   },
   {
     "o:id": 553,
     "Titre": "Pays-Bas",
     "Type": "Lieux",
-    "Coordonnées": "52.366666666667, 4.8833333333333"
+    "Coordonnées": "52.366666666667, 4.8833333333333",
+    "Country": "Netherlands"
   },
   {
     "o:id": 554,
     "Titre": "Italie",
     "Type": "Lieux",
-    "Coordonnées": "42.5, 12.5"
+    "Coordonnées": "42.5, 12.5",
+    "Country": "Italy"
   },
   {
     "o:id": 555,
     "Titre": "Afrique du Sud",
     "Type": "Lieux",
-    "Coordonnées": "-29.0, 24.0"
+    "Coordonnées": "-29.0, 24.0",
+    "Country": "South Africa"
   },
   {
     "o:id": 556,
     "Titre": "Slovénie",
     "Type": "Lieux",
-    "Coordonnées": "46.0, 15.0"
+    "Coordonnées": "46.0, 15.0",
+    "Country": "Slovenia"
   },
   {
     "o:id": 557,
     "Titre": "Suède",
     "Type": "Lieux",
-    "Coordonnées": "61.0, 15.0"
+    "Coordonnées": "61.0, 15.0",
+    "Country": "Sweden"
   },
   {
     "o:id": 558,
     "Titre": "Université Félix Houphouët-Boigny",
     "Type": "Lieux",
-    "Coordonnées": "5.345556, -3.986111"
+    "Coordonnées": "5.345556, -3.986111",
+    "Country": "Côte d'Ivoire"
   },
   {
     "o:id": 559,
     "Titre": "Université de Lomé",
     "Type": "Lieux",
-    "Coordonnées": "6.173669, 1.215866"
+    "Coordonnées": "6.173669, 1.215866",
+    "Country": "Togo"
   },
   {
     "o:id": 560,
     "Titre": "Université Alassane Ouattara",
     "Type": "Lieux",
-    "Coordonnées": "7.68642, -5.06669"
+    "Coordonnées": "7.68642, -5.06669",
+    "Country": "Côte d'Ivoire"
   },
   {
     "o:id": 561,
     "Titre": "Corée du Nord",
     "Type": "Lieux",
-    "Coordonnées": "40.0, 127.0"
+    "Coordonnées": "40.0, 127.0",
+    "Country": "North Korea"
   },
   {
     "o:id": 562,
     "Titre": "Namibie",
     "Type": "Lieux",
-    "Coordonnées": "-23.0, 17.0"
+    "Coordonnées": "-23.0, 17.0",
+    "Country": "Namibia"
   },
   {
     "o:id": 563,
     "Titre": "Bibliothèque d'État de Berlin",
     "Type": "Lieux",
-    "Coordonnées": "52.5064, 13.3703"
+    "Coordonnées": "52.5064, 13.3703",
+    "Country": "Germany"
   },
   {
     "o:id": 12853,
     "Titre": "Mosquée centrale de Cococodji",
     "Type": "Lieux",
-    "Coordonnées": ""
+    "Coordonnées": "",
+    "Country": ""
   },
   {
     "o:id": 12866,
     "Titre": "Brésil",
     "Type": "Lieux",
-    "Coordonnées": "-14, -53"
+    "Coordonnées": "-14, -53",
+    "Country": "Brazil"
   },
   {
     "o:id": 12886,
     "Titre": "New York",
     "Type": "Lieux",
-    "Coordonnées": "40.712778, -74.006111"
+    "Coordonnées": "40.712778, -74.006111",
+    "Country": ""
   },
   {
     "o:id": 12951,
     "Titre": "Sya",
     "Type": "Lieux",
-    "Coordonnées": ""
+    "Coordonnées": "",
+    "Country": ""
   },
   {
     "o:id": 13045,
     "Titre": "Mosquée Dar Es Salam",
     "Type": "Lieux",
-    "Coordonnées": ""
+    "Coordonnées": "",
+    "Country": ""
   },
   {
     "o:id": 13118,
     "Titre": "Accra",
     "Type": "Lieux",
-    "Coordonnées": "5.533333, -0.216667"
+    "Coordonnées": "5.533333, -0.216667",
+    "Country": ""
   },
   {
     "o:id": 13242,
     "Titre": "Nangbéto",
     "Type": "Lieux",
-    "Coordonnées": "7.423643, 1.434753"
+    "Coordonnées": "7.423643, 1.434753",
+    "Country": "Togo"
   },
   {
     "o:id": 13251,
     "Titre": "Île Maurice",
     "Type": "Lieux",
-    "Coordonnées": "-20.2, 57.5"
+    "Coordonnées": "-20.2, 57.5",
+    "Country": "Mauritius"
   },
   {
     "o:id": 13416,
     "Titre": "Cococodji",
     "Type": "Lieux",
-    "Coordonnées": "6.387477, 2.272057"
+    "Coordonnées": "6.387477, 2.272057",
+    "Country": "Benin"
   },
   {
     "o:id": 13448,
     "Titre": "Le Caire",
     "Type": "Lieux",
-    "Coordonnées": "30.044444, 31.235833"
+    "Coordonnées": "30.044444, 31.235833",
+    "Country": "Egypt"
   },
   {
     "o:id": 13522,
     "Titre": "Jérusalem",
     "Type": "Lieux",
-    "Coordonnées": "31.778889, 35.225556"
+    "Coordonnées": "31.778889, 35.225556",
+    "Country": "Palestine"
   },
   {
     "o:id": 13616,
     "Titre": "Azovè",
     "Type": "Lieux",
-    "Coordonnées": ""
+    "Coordonnées": "",
+    "Country": ""
   },
   {
     "o:id": 13625,
     "Titre": "Diarabakoko",
     "Type": "Lieux",
-    "Coordonnées": "10.466667, -4.783333"
+    "Coordonnées": "10.466667, -4.783333",
+    "Country": "Burkina Faso"
   },
   {
     "o:id": 13642,
     "Titre": "Mosquée centrale de Dassa-Zoumè",
     "Type": "Lieux",
-    "Coordonnées": ""
+    "Coordonnées": "",
+    "Country": ""
   },
   {
     "o:id": 13665,
     "Titre": "Burundi",
     "Type": "Lieux",
-    "Coordonnées": "-3.666667, 29.816667"
+    "Coordonnées": "-3.666667, 29.816667",
+    "Country": "Burundi"
   },
   {
     "o:id": 13719,
     "Titre": "Mosquée centrale d'Aïdjèdo",
     "Type": "Lieux",
-    "Coordonnées": ""
+    "Coordonnées": "",
+    "Country": ""
   },
   {
     "o:id": 13747,
     "Titre": "Téhéran",
     "Type": "Lieux",
-    "Coordonnées": "35.7, 51.416667"
+    "Coordonnées": "35.7, 51.416667",
+    "Country": "Iran"
   },
   {
     "o:id": 13837,
     "Titre": "Chine",
     "Type": "Lieux",
-    "Coordonnées": "35.844722, 103.451944"
+    "Coordonnées": "35.844722, 103.451944",
+    "Country": "China"
   },
   {
     "o:id": 13955,
     "Titre": "République centrafricaine",
     "Type": "Lieux",
-    "Coordonnées": "6.7, 20.9"
+    "Coordonnées": "6.7, 20.9",
+    "Country": "Central African Rep."
   },
   {
     "o:id": 14216,
     "Titre": "Portugal",
     "Type": "Lieux",
-    "Coordonnées": "38.7, -9.183333"
+    "Coordonnées": "38.7, -9.183333",
+    "Country": ""
   },
   {
     "o:id": 14218,
     "Titre": "Sèmè-Podji",
     "Type": "Lieux",
-    "Coordonnées": "6.366667, 2.616667"
+    "Coordonnées": "6.366667, 2.616667",
+    "Country": "Benin"
   },
   {
     "o:id": 14293,
     "Titre": "Ouémé",
     "Type": "Lieux",
-    "Coordonnées": "6.5, 2.6"
+    "Coordonnées": "6.5, 2.6",
+    "Country": "Benin"
   },
   {
     "o:id": 14322,
     "Titre": "Titao",
     "Type": "Lieux",
-    "Coordonnées": "13.766735, -2.073643"
+    "Coordonnées": "13.766735, -2.073643",
+    "Country": "Burkina Faso"
   },
   {
     "o:id": 14355,
     "Titre": "Sokoto",
     "Type": "Lieux",
-    "Coordonnées": "13.062222, 5.233889"
+    "Coordonnées": "13.062222, 5.233889",
+    "Country": "Nigeria"
   },
   {
     "o:id": 14379,
     "Titre": "Houndé",
     "Type": "Lieux",
-    "Coordonnées": "11.5, -3.516667"
+    "Coordonnées": "11.5, -3.516667",
+    "Country": "Burkina Faso"
   },
   {
     "o:id": 14385,
     "Titre": "Toma",
     "Type": "Lieux",
-    "Coordonnées": "12.766667, -2.883333"
+    "Coordonnées": "12.766667, -2.883333",
+    "Country": "Burkina Faso"
   },
   {
     "o:id": 14604,
     "Titre": "Mosquée centrale de Kandi",
     "Type": "Lieux",
-    "Coordonnées": ""
+    "Coordonnées": "",
+    "Country": ""
   },
   {
     "o:id": 14637,
     "Titre": "Rwanda",
     "Type": "Lieux",
-    "Coordonnées": "-2, 30"
+    "Coordonnées": "-2, 30",
+    "Country": "Rwanda"
   },
   {
     "o:id": 14751,
     "Titre": "Akpakpa",
     "Type": "Lieux",
-    "Coordonnées": "6.36634, 2.45579"
+    "Coordonnées": "6.36634, 2.45579",
+    "Country": "Benin"
   },
   {
     "o:id": 14774,
     "Titre": "Beyrouth",
     "Type": "Lieux",
-    "Coordonnées": "33.886944, 35.513056"
+    "Coordonnées": "33.886944, 35.513056",
+    "Country": ""
   },
   {
     "o:id": 14825,
     "Titre": "Sèmèrè",
     "Type": "Lieux",
-    "Coordonnées": ""
+    "Coordonnées": "",
+    "Country": ""
   },
   {
     "o:id": 14929,
     "Titre": "Kouba",
     "Type": "Lieux",
-    "Coordonnées": ""
+    "Coordonnées": "",
+    "Country": ""
   },
   {
     "o:id": 15204,
     "Titre": "Mosquée centrale d'Abomey",
     "Type": "Lieux",
-    "Coordonnées": ""
+    "Coordonnées": "",
+    "Country": ""
   },
   {
     "o:id": 15216,
     "Titre": "Mosquée centrale de Guèma",
     "Type": "Lieux",
-    "Coordonnées": ""
+    "Coordonnées": "",
+    "Country": ""
   },
   {
     "o:id": 15273,
     "Titre": "Liberia",
     "Type": "Lieux",
-    "Coordonnées": "6.533333, -9.75"
+    "Coordonnées": "6.533333, -9.75",
+    "Country": "Liberia"
   },
   {
     "o:id": 15378,
     "Titre": "Zimbabwe",
     "Type": "Lieux",
-    "Coordonnées": "-19, 30"
+    "Coordonnées": "-19, 30",
+    "Country": "Zimbabwe"
   },
   {
     "o:id": 15400,
     "Titre": "Site d'accueil des pèlerins (Akpakpa)",
     "Type": "Lieux",
-    "Coordonnées": ""
+    "Coordonnées": "",
+    "Country": ""
   },
   {
     "o:id": 15429,
     "Titre": "Tanzanie",
     "Type": "Lieux",
-    "Coordonnées": "-6.306944, 34.853889"
+    "Coordonnées": "-6.306944, 34.853889",
+    "Country": "Tanzania"
   },
   {
     "o:id": 15482,
     "Titre": "Kano",
     "Type": "Lieux",
-    "Coordonnées": "12, 8.516667"
+    "Coordonnées": "12, 8.516667",
+    "Country": "Nigeria"
   },
   {
     "o:id": 23465,
     "Titre": "Korhogo",
     "Type": "Lieux",
-    "Coordonnées": "9.457778, -5.629444"
+    "Coordonnées": "9.457778, -5.629444",
+    "Country": "Côte d'Ivoire"
   },
   {
     "o:id": 23506,
     "Titre": "Université Islamique Al-Fourqane",
     "Type": "Lieux",
-    "Coordonnées": "5.318399197445977, -4.112374498969468"
+    "Coordonnées": "5.318399197445977, -4.112374498969468",
+    "Country": "Côte d'Ivoire"
   },
   {
     "o:id": 23522,
     "Titre": "Université musulmane de Côte d'Ivoire",
     "Type": "Lieux",
-    "Coordonnées": ""
+    "Coordonnées": "",
+    "Country": ""
   },
   {
     "o:id": 23532,
     "Titre": "Mosquée Salam du Plateau",
     "Type": "Lieux",
-    "Coordonnées": "5.319408854484132, -4.015756299712146"
+    "Coordonnées": "5.319408854484132, -4.015756299712146",
+    "Country": "Côte d'Ivoire"
   },
   {
     "o:id": 23568,
     "Titre": "Université Musulmane Africaine",
     "Type": "Lieux",
-    "Coordonnées": "5.371117023113153, -3.9657553615550776"
+    "Coordonnées": "5.371117023113153, -3.9657553615550776",
+    "Country": "Côte d'Ivoire"
   },
   {
     "o:id": 23572,
     "Titre": "Mosquée Rayyane",
     "Type": "Lieux",
-    "Coordonnées": ""
+    "Coordonnées": "",
+    "Country": ""
   },
   {
     "o:id": 23590,
     "Titre": "Institut International de l'Imamat en Afrique",
     "Type": "Lieux",
-    "Coordonnées": ""
+    "Coordonnées": "",
+    "Country": ""
   },
   {
     "o:id": 23600,
     "Titre": "Grande mosquée des II-Plateaux Aghien",
     "Type": "Lieux",
-    "Coordonnées": "5.382535557731071, -3.993870062858185"
+    "Coordonnées": "5.382535557731071, -3.993870062858185",
+    "Country": "Côte d'Ivoire"
   },
   {
     "o:id": 23605,
     "Titre": "Mosquée Ibn Baz",
     "Type": "Lieux",
-    "Coordonnées": ""
+    "Coordonnées": "",
+    "Country": ""
   },
   {
     "o:id": 23632,
     "Titre": "Bingerville",
     "Type": "Lieux",
-    "Coordonnées": "5.35, -3.9"
+    "Coordonnées": "5.35, -3.9",
+    "Country": "Côte d'Ivoire"
   },
   {
     "o:id": 23643,
     "Titre": "Mosquée centrale d'Angré",
     "Type": "Lieux",
-    "Coordonnées": "5.406001042853644, -3.9832638354364414"
+    "Coordonnées": "5.406001042853644, -3.9832638354364414",
+    "Country": "Côte d'Ivoire"
   },
   {
     "o:id": 23648,
     "Titre": "Mosquée de la Riviéra Golf",
     "Type": "Lieux",
-    "Coordonnées": "5.33757653748572, -3.9788409923568815"
+    "Coordonnées": "5.33757653748572, -3.9788409923568815",
+    "Country": "Côte d'Ivoire"
   },
   {
     "o:id": 23666,
     "Titre": "Groupe Scolaire IQRA",
     "Type": "Lieux",
-    "Coordonnées": ""
+    "Coordonnées": "",
+    "Country": ""
   },
   {
     "o:id": 23691,
     "Titre": "Abobo",
     "Type": "Lieux",
-    "Coordonnées": "5.418889, -4.020556"
+    "Coordonnées": "5.418889, -4.020556",
+    "Country": "Côte d'Ivoire"
   },
   {
     "o:id": 23692,
     "Titre": "Grande mosquée de Treichville",
     "Type": "Lieux",
-    "Coordonnées": "5.3080303344696205, -4.01092342679036"
+    "Coordonnées": "5.3080303344696205, -4.01092342679036",
+    "Country": "Côte d'Ivoire"
   },
   {
     "o:id": 25155,
     "Titre": "Russie",
     "Type": "Lieux",
-    "Coordonnées": "66.416667, 94.25"
+    "Coordonnées": "66.416667, 94.25",
+    "Country": "Russia"
   },
   {
     "o:id": 25602,
     "Titre": "Gambie",
     "Type": "Lieux",
-    "Coordonnées": "13.5, -15.5"
+    "Coordonnées": "13.5, -15.5",
+    "Country": "Gambia"
   },
   {
     "o:id": 27738,
     "Titre": "Université de Kara",
     "Type": "Lieux",
-    "Coordonnées": "9.530556, 1.208333"
+    "Coordonnées": "9.530556, 1.208333",
+    "Country": "Togo"
   },
   {
     "o:id": 27795,
     "Titre": "Oti",
     "Type": "Lieux",
-    "Coordonnées": "10.357222, 0.471111"
+    "Coordonnées": "10.357222, 0.471111",
+    "Country": "Togo"
   },
   {
     "o:id": 27900,
     "Titre": "Angola",
     "Type": "Lieux",
-    "Coordonnées": "-12.35, 17.35"
+    "Coordonnées": "-12.35, 17.35",
+    "Country": "Angola"
   },
   {
     "o:id": 31354,
     "Titre": "Grande mosquée du port de Lomé",
     "Type": "Lieux",
-    "Coordonnées": ""
+    "Coordonnées": "",
+    "Country": ""
   },
   {
     "o:id": 33155,
     "Titre": "Boussé",
     "Type": "Lieux",
-    "Coordonnées": "12.666666666667, -1.8975"
+    "Coordonnées": "12.666666666667, -1.8975",
+    "Country": "Burkina Faso"
   },
   {
     "o:id": 33156,
     "Titre": "Dano",
     "Type": "Lieux",
-    "Coordonnées": "11.1438, -3.06196"
+    "Coordonnées": "11.1438, -3.06196",
+    "Country": "Burkina Faso"
   },
   {
     "o:id": 33157,
     "Titre": "Diapaga",
     "Type": "Lieux",
-    "Coordonnées": "12.06666667, 1.78333333"
+    "Coordonnées": "12.06666667, 1.78333333",
+    "Country": "Burkina Faso"
   },
   {
     "o:id": 33158,
     "Titre": "Diébougou",
     "Type": "Lieux",
-    "Coordonnées": "10.966666666667, -3.25"
+    "Coordonnées": "10.966666666667, -3.25",
+    "Country": "Burkina Faso"
   },
   {
     "o:id": 33159,
     "Titre": "Ouargaye",
     "Type": "Lieux",
-    "Coordonnées": "11.50333333, 0.05722222"
+    "Coordonnées": "11.50333333, 0.05722222",
+    "Country": "Burkina Faso"
   },
   {
     "o:id": 33160,
     "Titre": "Réo",
     "Type": "Lieux",
-    "Coordonnées": "12.316666666667, -2.4666666666667"
+    "Coordonnées": "12.316666666667, -2.4666666666667",
+    "Country": "Burkina Faso"
   },
   {
     "o:id": 33161,
     "Titre": "Sebba",
     "Type": "Lieux",
-    "Coordonnées": "13.43916667, 0.52888889"
+    "Coordonnées": "13.43916667, 0.52888889",
+    "Country": "Burkina Faso"
   },
   {
     "o:id": 33162,
     "Titre": "Zorgho",
     "Type": "Lieux",
-    "Coordonnées": "12.25, -0.61666666666667"
+    "Coordonnées": "12.25, -0.61666666666667",
+    "Country": "Burkina Faso"
   },
   {
     "o:id": 33163,
     "Titre": "Bitou",
     "Type": "Lieux",
-    "Coordonnées": "11.25, -0.3"
+    "Coordonnées": "11.25, -0.3",
+    "Country": "Burkina Faso"
   },
   {
     "o:id": 33164,
     "Titre": "Garango",
     "Type": "Lieux",
-    "Coordonnées": "11.804722222222, -0.54888888888889"
+    "Coordonnées": "11.804722222222, -0.54888888888889",
+    "Country": "Burkina Faso"
   },
   {
     "o:id": 33165,
     "Titre": "Niangoloko",
     "Type": "Lieux",
-    "Coordonnées": "10.283333333333, -4.9166666666667"
+    "Coordonnées": "10.283333333333, -4.9166666666667",
+    "Country": "Burkina Faso"
   },
   {
     "o:id": 39798,
     "Titre": "Archives nationales de Côte d'Ivoire",
     "Type": "Lieux",
-    "Coordonnées": "5.320438, -4.021261"
+    "Coordonnées": "5.320438, -4.021261",
+    "Country": "Côte d'Ivoire"
   },
   {
     "o:id": 46170,
     "Titre": "Daloa",
     "Type": "Lieux",
-    "Coordonnées": "6.866667, -6.45"
+    "Coordonnées": "6.866667, -6.45",
+    "Country": "Côte d'Ivoire"
   },
   {
     "o:id": 46175,
     "Titre": "Attécoubé",
     "Type": "Lieux",
-    "Coordonnées": "5.333333, -4.033333"
+    "Coordonnées": "5.333333, -4.033333",
+    "Country": "Côte d'Ivoire"
   },
   {
     "o:id": 46181,
     "Titre": "Duékoué",
     "Type": "Lieux",
-    "Coordonnées": "6.741944, -7.349167"
+    "Coordonnées": "6.741944, -7.349167",
+    "Country": "Côte d'Ivoire"
   },
   {
     "o:id": 46196,
     "Titre": "Man",
     "Type": "Lieux",
-    "Coordonnées": "7.4125, -7.553611"
+    "Coordonnées": "7.4125, -7.553611",
+    "Country": "Côte d'Ivoire"
   },
   {
     "o:id": 46215,
     "Titre": "Grande mosquée Mohammed VI",
     "Type": "Lieux",
-    "Coordonnées": "5.3109838973900505, -4.003592777043214"
+    "Coordonnées": "5.3109838973900505, -4.003592777043214",
+    "Country": "Côte d'Ivoire"
   },
   {
     "o:id": 46216,
     "Titre": "Bondoukou",
     "Type": "Lieux",
-    "Coordonnées": "8.04, -2.8"
+    "Coordonnées": "8.04, -2.8",
+    "Country": "Côte d'Ivoire"
   },
   {
     "o:id": 46218,
     "Titre": "Agboville",
     "Type": "Lieux",
-    "Coordonnées": "5.933333, -4.216667"
+    "Coordonnées": "5.933333, -4.216667",
+    "Country": "Côte d'Ivoire"
   },
   {
     "o:id": 46238,
     "Titre": "Bouaké",
     "Type": "Lieux",
-    "Coordonnées": "7.68333, -5.03306"
+    "Coordonnées": "7.68333, -5.03306",
+    "Country": "Côte d'Ivoire"
   },
   {
     "o:id": 46245,
     "Titre": "Adzopé",
     "Type": "Lieux",
-    "Coordonnées": "6.103517, -3.864814"
+    "Coordonnées": "6.103517, -3.864814",
+    "Country": "Côte d'Ivoire"
   },
   {
     "o:id": 46248,
     "Titre": "Yamoussoukro",
     "Type": "Lieux",
-    "Coordonnées": "6.816111, -5.274167"
+    "Coordonnées": "6.816111, -5.274167",
+    "Country": "Côte d'Ivoire"
   },
   {
     "o:id": 46256,
     "Titre": "Treichville",
     "Type": "Lieux",
-    "Coordonnées": "5.3, -4"
+    "Coordonnées": "5.3, -4",
+    "Country": "Côte d'Ivoire"
   },
   {
     "o:id": 46263,
     "Titre": "Daoukro",
     "Type": "Lieux",
-    "Coordonnées": "7.057778, -3.966111"
+    "Coordonnées": "7.057778, -3.966111",
+    "Country": "Côte d'Ivoire"
   },
   {
     "o:id": 46271,
     "Titre": "Gagnoa",
     "Type": "Lieux",
-    "Coordonnées": "6.13333, -5.93333"
+    "Coordonnées": "6.13333, -5.93333",
+    "Country": "Côte d'Ivoire"
   },
   {
     "o:id": 46279,
     "Titre": "Bouaflé",
     "Type": "Lieux",
-    "Coordonnées": "6.990278, -5.744167"
+    "Coordonnées": "6.990278, -5.744167",
+    "Country": "Côte d'Ivoire"
   },
   {
     "o:id": 46294,
     "Titre": "Yopougon",
     "Type": "Lieux",
-    "Coordonnées": "5.316667, -4.066667"
+    "Coordonnées": "5.316667, -4.066667",
+    "Country": "Côte d'Ivoire"
   },
   {
     "o:id": 46298,
     "Titre": "Béoumi",
     "Type": "Lieux",
-    "Coordonnées": "7.666667, -5.583333"
+    "Coordonnées": "7.666667, -5.583333",
+    "Country": "Côte d'Ivoire"
   },
   {
     "o:id": 46311,
     "Titre": "Abengourou",
     "Type": "Lieux",
-    "Coordonnées": "6.729722, -3.496389"
+    "Coordonnées": "6.729722, -3.496389",
+    "Country": "Côte d'Ivoire"
   },
   {
     "o:id": 46316,
     "Titre": "Adjamé",
     "Type": "Lieux",
-    "Coordonnées": "5.3648, -4.02366"
+    "Coordonnées": "5.3648, -4.02366",
+    "Country": "Côte d'Ivoire"
   },
   {
     "o:id": 46770,
     "Titre": "Aboisso",
     "Type": "Lieux",
-    "Coordonnées": "5.466667, -3.2"
+    "Coordonnées": "5.466667, -3.2",
+    "Country": "Côte d'Ivoire"
   },
   {
     "o:id": 48419,
     "Titre": "Koumassi",
     "Type": "Lieux",
-    "Coordonnées": "5.3, -3.95"
+    "Coordonnées": "5.3, -3.95",
+    "Country": "Côte d'Ivoire"
   },
   {
     "o:id": 48425,
     "Titre": "Divo",
     "Type": "Lieux",
-    "Coordonnées": "5.837222, -5.357222"
+    "Coordonnées": "5.837222, -5.357222",
+    "Country": "Côte d'Ivoire"
   },
   {
     "o:id": 48426,
     "Titre": "Lakota",
     "Type": "Lieux",
-    "Coordonnées": "5.8475, -5.681944"
+    "Coordonnées": "5.8475, -5.681944",
+    "Country": "Côte d'Ivoire"
   },
   {
     "o:id": 48427,
     "Titre": "Odienné",
     "Type": "Lieux",
-    "Coordonnées": "9.5, -7.566667"
+    "Coordonnées": "9.5, -7.566667",
+    "Country": "Côte d'Ivoire"
   },
   {
     "o:id": 60088,
     "Titre": "Grande Mosquée de Pagouda",
     "Type": "Lieux",
-    "Coordonnées": ""
+    "Coordonnées": "",
+    "Country": ""
   },
   {
     "o:id": 60454,
     "Titre": "Abou Dhabi",
     "Type": "Lieux",
-    "Coordonnées": "24.45111111111111,54.39694444444444"
+    "Coordonnées": "24.45111111111111,54.39694444444444",
+    "Country": "United Arab Emirates"
   },
   {
     "o:id": 60455,
     "Titre": "Adéta",
     "Type": "Lieux",
-    "Coordonnées": "7.12815,0.730591"
+    "Coordonnées": "7.12815,0.730591",
+    "Country": "Togo"
   },
   {
     "o:id": 60456,
     "Titre": "Afagnan",
     "Type": "Lieux",
-    "Coordonnées": "6.4939168,1.6339159"
+    "Coordonnées": "6.4939168,1.6339159",
+    "Country": "Togo"
   },
   {
     "o:id": 60457,
     "Titre": "Afghanistan",
     "Type": "Lieux",
-    "Coordonnées": "33,66"
+    "Coordonnées": "33,66",
+    "Country": "Afghanistan"
   },
   {
     "o:id": 60458,
     "Titre": "Agbalépédogan",
     "Type": "Lieux",
-    "Coordonnées": "6.19943,1.19883"
+    "Coordonnées": "6.19943,1.19883",
+    "Country": "Togo"
   },
   {
     "o:id": 60459,
     "Titre": "Agbandi",
     "Type": "Lieux",
-    "Coordonnées": "8.22371017106444,1.1360012215229036"
+    "Coordonnées": "8.22371017106444,1.1360012215229036",
+    "Country": "Togo"
   },
   {
     "o:id": 60461,
     "Titre": "Agoulou",
     "Type": "Lieux",
-    "Coordonnées": ""
+    "Coordonnées": "",
+    "Country": ""
   },
   {
     "o:id": 60462,
     "Titre": "Akébou",
     "Type": "Lieux",
-    "Coordonnées": "7.6559489,0.7922752"
+    "Coordonnées": "7.6559489,0.7922752",
+    "Country": "Togo"
   },
   {
     "o:id": 60463,
     "Titre": "Aléhéridè",
     "Type": "Lieux",
-    "Coordonnées": "9.2166666666667,1.2"
+    "Coordonnées": "9.2166666666667,1.2",
+    "Country": "Togo"
   },
   {
     "o:id": 60464,
     "Titre": "Amou",
     "Type": "Lieux",
-    "Coordonnées": "7.5,1.05"
+    "Coordonnées": "7.5,1.05",
+    "Country": "Togo"
   },
   {
     "o:id": 60465,
     "Titre": "Amou-Oblo",
     "Type": "Lieux",
-    "Coordonnées": ""
+    "Coordonnées": "",
+    "Country": ""
   },
   {
     "o:id": 60466,
     "Titre": "Aouda",
     "Type": "Lieux",
-    "Coordonnées": ""
+    "Coordonnées": "",
+    "Country": ""
   },
   {
     "o:id": 60467,
     "Titre": "Apégamé",
     "Type": "Lieux",
-    "Coordonnées": "6.85,0.73333"
+    "Coordonnées": "6.85,0.73333",
+    "Country": "Togo"
   },
   {
     "o:id": 60468,
     "Titre": "Danyi-Apéyémé",
     "Type": "Lieux",
-    "Coordonnées": "7.25,0.95"
+    "Coordonnées": "7.25,0.95",
+    "Country": "Togo"
   },
   {
     "o:id": 60469,
     "Titre": "Mont Arafat",
     "Type": "Lieux",
-    "Coordonnées": "21.354831,39.983886"
+    "Coordonnées": "21.354831,39.983886",
+    "Country": "Saudi Arabia"
   },
   {
     "o:id": 60470,
     "Titre": "Assahoun",
     "Type": "Lieux",
-    "Coordonnées": "6.4546,0.9096"
+    "Coordonnées": "6.4546,0.9096",
+    "Country": "Togo"
   },
   {
     "o:id": 60471,
     "Titre": "Atalotè",
     "Type": "Lieux",
-    "Coordonnées": ""
+    "Coordonnées": "",
+    "Country": ""
   },
   {
     "o:id": 60472,
     "Titre": "Avéta",
     "Type": "Lieux",
-    "Coordonnées": "6.272716667,1.288466667"
+    "Coordonnées": "6.272716667,1.288466667",
+    "Country": "Togo"
   },
   {
     "o:id": 60473,
     "Titre": "Aéroport International Gnassingbé Eyadéma",
     "Type": "Lieux",
-    "Coordonnées": "6.1658333333333,1.2541666666667"
+    "Coordonnées": "6.1658333333333,1.2541666666667",
+    "Country": "Togo"
   },
   {
     "o:id": 60474,
     "Titre": "Balanka",
     "Type": "Lieux",
-    "Coordonnées": ""
+    "Coordonnées": "",
+    "Country": ""
   },
   {
     "o:id": 60475,
     "Titre": "Banjul",
     "Type": "Lieux",
-    "Coordonnées": "13.453055555556,-16.5775"
+    "Coordonnées": "13.453055555556,-16.5775",
+    "Country": ""
   },
   {
     "o:id": 60476,
     "Titre": "Bas-Mono",
     "Type": "Lieux",
-    "Coordonnées": "6.48333333,1.65"
+    "Coordonnées": "6.48333333,1.65",
+    "Country": "Togo"
   },
   {
     "o:id": 60477,
     "Titre": "Basssar",
     "Type": "Lieux",
-    "Coordonnées": "9.25,0.78333333"
+    "Coordonnées": "9.25,0.78333333",
+    "Country": "Togo"
   },
   {
     "o:id": 60478,
     "Titre": "Berlin",
     "Type": "Lieux",
-    "Coordonnées": "52.516666666667,13.383333333333"
+    "Coordonnées": "52.516666666667,13.383333333333",
+    "Country": "Germany"
   },
   {
     "o:id": 60479,
     "Titre": "Bethléem",
     "Type": "Lieux",
-    "Coordonnées": "31.704444444444,35.206111111111"
+    "Coordonnées": "31.704444444444,35.206111111111",
+    "Country": "Palestine"
   },
   {
     "o:id": 60480,
     "Titre": "Binah",
     "Type": "Lieux",
-    "Coordonnées": "9.75,1.31667"
+    "Coordonnées": "9.75,1.31667",
+    "Country": "Togo"
   },
   {
     "o:id": 60481,
     "Titre": "Blitta",
     "Type": "Lieux",
-    "Coordonnées": "8.316667, 0.983333"
+    "Coordonnées": "8.316667, 0.983333",
+    "Country": "Togo"
   },
   {
     "o:id": 60482,
     "Titre": "Borgou",
     "Type": "Lieux",
-    "Coordonnées": "10.74821385974019, 0.6196353130056622"
+    "Coordonnées": "10.74821385974019, 0.6196353130056622",
+    "Country": "Togo"
   },
   {
     "o:id": 60483,
     "Titre": "Cisjordanie",
     "Type": "Lieux",
-    "Coordonnées": "32,35.35"
+    "Coordonnées": "32,35.35",
+    "Country": "Palestine"
   },
   {
     "o:id": 60484,
     "Titre": "Dakar",
     "Type": "Lieux",
-    "Coordonnées": "14.731944444444,-17.457222222222"
+    "Coordonnées": "14.731944444444,-17.457222222222",
+    "Country": "Senegal"
   },
   {
     "o:id": 60485,
     "Titre": "Dalavé",
     "Type": "Lieux",
-    "Coordonnées": "6.386,1.2436"
+    "Coordonnées": "6.386,1.2436",
+    "Country": "Togo"
   },
   {
     "o:id": 60486,
     "Titre": "Dankpen",
     "Type": "Lieux",
-    "Coordonnées": "9.6833333333333,0.6"
+    "Coordonnées": "9.6833333333333,0.6",
+    "Country": "Togo"
   },
   {
     "o:id": 60487,
     "Titre": "Danyi",
     "Type": "Lieux",
-    "Coordonnées": "7.25,0.95"
+    "Coordonnées": "7.25,0.95",
+    "Country": "Togo"
   },
   {
     "o:id": 60488,
     "Titre": "Datcha",
     "Type": "Lieux",
-    "Coordonnées": "7.4309,1.1607"
+    "Coordonnées": "7.4309,1.1607",
+    "Country": "Togo"
   },
   {
     "o:id": 60489,
     "Titre": "Djarkpanga",
     "Type": "Lieux",
-    "Coordonnées": "8.77,0.56"
+    "Coordonnées": "8.77,0.56",
+    "Country": "Togo"
   },
   {
     "o:id": 60490,
     "Titre": "Doha",
     "Type": "Lieux",
-    "Coordonnées": "25.286205555555554,51.52943611111111"
+    "Coordonnées": "25.286205555555554,51.52943611111111",
+    "Country": "Qatar"
   },
   {
     "o:id": 60491,
     "Titre": "Doufelgou",
     "Type": "Lieux",
-    "Coordonnées": "9.76666667,1.1"
+    "Coordonnées": "9.76666667,1.1",
+    "Country": "Togo"
   },
   {
     "o:id": 60492,
     "Titre": "Elavagnon",
     "Type": "Lieux",
-    "Coordonnées": "7.9612,1.2866"
+    "Coordonnées": "7.9612,1.2866",
+    "Country": "Togo"
   },
   {
     "o:id": 60493,
     "Titre": "Espagne",
     "Type": "Lieux",
-    "Coordonnées": "40.2,-3.5"
+    "Coordonnées": "40.2,-3.5",
+    "Country": "Spain"
   },
   {
     "o:id": 60494,
     "Titre": "Eswatini",
     "Type": "Lieux",
-    "Coordonnées": "-26.483333,31.433333"
+    "Coordonnées": "-26.483333,31.433333",
+    "Country": "eSwatini"
   },
   {
     "o:id": 60495,
     "Titre": "Fazao",
     "Type": "Lieux",
-    "Coordonnées": ""
+    "Coordonnées": "",
+    "Country": ""
   },
   {
     "o:id": 60496,
     "Titre": "Agou-Gadzépé",
     "Type": "Lieux",
-    "Coordonnées": "7.4669444444444,1.9169444444444"
+    "Coordonnées": "7.4669444444444,1.9169444444444",
+    "Country": "Benin"
   },
   {
     "o:id": 60497,
     "Titre": "Gao",
     "Type": "Lieux",
-    "Coordonnées": "16.266666666667,-0.05"
+    "Coordonnées": "16.266666666667,-0.05",
+    "Country": "Mali"
   },
   {
     "o:id": 60498,
     "Titre": "Bande de Gaza",
     "Type": "Lieux",
-    "Coordonnées": "31.45,34.4"
+    "Coordonnées": "31.45,34.4",
+    "Country": "Palestine"
   },
   {
     "o:id": 60499,
     "Titre": "Guinée-Bissau",
     "Type": "Lieux",
-    "Coordonnées": "12,-15"
+    "Coordonnées": "12,-15",
+    "Country": "Guinea-Bissau"
   },
   {
     "o:id": 60500,
     "Titre": "Guérin-Kouka",
     "Type": "Lieux",
-    "Coordonnées": "9.6905555555556,0.61138888888889"
+    "Coordonnées": "9.6905555555556,0.61138888888889",
+    "Country": "Togo"
   },
   {
     "o:id": 60501,
     "Titre": "Haho",
     "Type": "Lieux",
-    "Coordonnées": "6.95,1.16666667"
+    "Coordonnées": "6.95,1.16666667",
+    "Country": "Togo"
   },
   {
     "o:id": 60502,
     "Titre": "Hahomégbé",
     "Type": "Lieux",
-    "Coordonnées": ""
+    "Coordonnées": "",
+    "Country": ""
   },
   {
     "o:id": 60503,
     "Titre": "Hihéatro",
     "Type": "Lieux",
-    "Coordonnées": ""
+    "Coordonnées": "",
+    "Country": ""
   },
   {
     "o:id": 60504,
     "Titre": "Katchamba",
     "Type": "Lieux",
-    "Coordonnées": "9.8875,0.52583333333333"
+    "Coordonnées": "9.8875,0.52583333333333",
+    "Country": "Togo"
   },
   {
     "o:id": 60505,
     "Titre": "Kazakhstan",
     "Type": "Lieux",
-    "Coordonnées": "48,68"
+    "Coordonnées": "48,68",
+    "Country": "Kazakhstan"
   },
   {
     "o:id": 60506,
     "Titre": "Klolto",
     "Type": "Lieux",
-    "Coordonnées": "7.0833333333333,0.75"
+    "Coordonnées": "7.0833333333333,0.75",
+    "Country": "Togo"
   },
   {
     "o:id": 60507,
     "Titre": "Koffiti",
     "Type": "Lieux",
-    "Coordonnées": ""
+    "Coordonnées": "",
+    "Country": ""
   },
   {
     "o:id": 60508,
     "Titre": "Komah",
     "Type": "Lieux",
-    "Coordonnées": ""
+    "Coordonnées": "",
+    "Country": ""
   },
   {
     "o:id": 60509,
     "Titre": "Korbongou",
     "Type": "Lieux",
-    "Coordonnées": ""
+    "Coordonnées": "",
+    "Country": ""
   },
   {
     "o:id": 60510,
     "Titre": "Koussountou",
     "Type": "Lieux",
-    "Coordonnées": ""
+    "Coordonnées": "",
+    "Country": ""
   },
   {
     "o:id": 60511,
     "Titre": "Kovié",
     "Type": "Lieux",
-    "Coordonnées": "6.3417,1.1088"
+    "Coordonnées": "6.3417,1.1088",
+    "Country": "Togo"
   },
   {
     "o:id": 60512,
     "Titre": "Kpangalam",
     "Type": "Lieux",
-    "Coordonnées": ""
+    "Coordonnées": "",
+    "Country": ""
   },
   {
     "o:id": 60513,
     "Titre": "Kpassouadè",
     "Type": "Lieux",
-    "Coordonnées": ""
+    "Coordonnées": "",
+    "Country": ""
   },
   {
     "o:id": 60514,
     "Titre": "Kpendjal",
     "Type": "Lieux",
-    "Coordonnées": "10.8475,0.81666666666667"
+    "Coordonnées": "10.8475,0.81666666666667",
+    "Country": "Togo"
   },
   {
     "o:id": 60515,
     "Titre": "Kpodzi",
     "Type": "Lieux",
-    "Coordonnées": "6.739283333,1.0868"
+    "Coordonnées": "6.739283333,1.0868",
+    "Country": "Togo"
   },
   {
     "o:id": 60516,
     "Titre": "Kpélé",
     "Type": "Lieux",
-    "Coordonnées": "6.857,1.183"
+    "Coordonnées": "6.857,1.183",
+    "Country": "Togo"
   },
   {
     "o:id": 60517,
     "Titre": "Kéméni",
     "Type": "Lieux",
-    "Coordonnées": ""
+    "Coordonnées": "",
+    "Country": ""
   },
   {
     "o:id": 60518,
     "Titre": "Lama-Tessi",
     "Type": "Lieux",
-    "Coordonnées": ""
+    "Coordonnées": "",
+    "Country": ""
   },
   {
     "o:id": 60519,
     "Titre": "Langabou",
     "Type": "Lieux",
-    "Coordonnées": ""
+    "Coordonnées": "",
+    "Country": ""
   },
   {
     "o:id": 60520,
     "Titre": "Laouwai Finade",
     "Type": "Lieux",
-    "Coordonnées": "8.38846667,1.05343333"
+    "Coordonnées": "8.38846667,1.05343333",
+    "Country": "Togo"
   },
   {
     "o:id": 60521,
     "Titre": "Larini",
     "Type": "Lieux",
-    "Coordonnées": ""
+    "Coordonnées": "",
+    "Country": ""
   },
   {
     "o:id": 60522,
     "Titre": "Lom-Nava",
     "Type": "Lieux",
-    "Coordonnées": "6.732716667,0.9893666667"
+    "Coordonnées": "6.732716667,0.9893666667",
+    "Country": "Togo"
   },
   {
     "o:id": 60523,
     "Titre": "Londres",
     "Type": "Lieux",
-    "Coordonnées": "51.507222222222,-0.1275"
+    "Coordonnées": "51.507222222222,-0.1275",
+    "Country": "United Kingdom"
   },
   {
     "o:id": 60524,
     "Titre": "Moscou",
     "Type": "Lieux",
-    "Coordonnées": "55.755833333333,37.617777777778"
+    "Coordonnées": "55.755833333333,37.617777777778",
+    "Country": "Russia"
   },
   {
     "o:id": 60525,
     "Titre": "Moyen-Mono",
     "Type": "Lieux",
-    "Coordonnées": "7.0230555555556,1.615"
+    "Coordonnées": "7.0230555555556,1.615",
+    "Country": "Togo"
   },
   {
     "o:id": 60526,
     "Titre": "Nadoba",
     "Type": "Lieux",
-    "Coordonnées": "9.85,0.63333333"
+    "Coordonnées": "9.85,0.63333333",
+    "Country": "Togo"
   },
   {
     "o:id": 60527,
     "Titre": "Nairobi",
     "Type": "Lieux",
-    "Coordonnées": "-1.2863888888889,36.817222222222"
+    "Coordonnées": "-1.2863888888889,36.817222222222",
+    "Country": "Kenya"
   },
   {
     "o:id": 60528,
     "Titre": "Nangbani",
     "Type": "Lieux",
-    "Coordonnées": "9.2666666666667,0.8"
+    "Coordonnées": "9.2666666666667,0.8",
+    "Country": "Togo"
   },
   {
     "o:id": 60529,
     "Titre": "Natchiboré",
     "Type": "Lieux",
-    "Coordonnées": ""
+    "Coordonnées": "",
+    "Country": ""
   },
   {
     "o:id": 60530,
     "Titre": "Nawaré",
     "Type": "Lieux",
-    "Coordonnées": ""
+    "Coordonnées": "",
+    "Country": ""
   },
   {
     "o:id": 60531,
     "Titre": "Notsé",
     "Type": "Lieux",
-    "Coordonnées": "6.948333333333333,1.1680555555555556"
+    "Coordonnées": "6.948333333333333,1.1680555555555556",
+    "Country": "Togo"
   },
   {
     "o:id": 60532,
     "Titre": "Nouakchott",
     "Type": "Lieux",
-    "Coordonnées": "18.08581,-15.9785"
+    "Coordonnées": "18.08581,-15.9785",
+    "Country": "Mauritania"
   },
   {
     "o:id": 60533,
     "Titre": "Nyamassila",
     "Type": "Lieux",
-    "Coordonnées": "7.9824,1.2044"
+    "Coordonnées": "7.9824,1.2044",
+    "Country": "Togo"
   },
   {
     "o:id": 60534,
     "Titre": "Nyékonakpoé",
     "Type": "Lieux",
-    "Coordonnées": "6.1305555555555555,1.2055555555555555"
+    "Coordonnées": "6.1305555555555555,1.2055555555555555",
+    "Country": "Togo"
   },
   {
     "o:id": 60535,
     "Titre": "Ouganda",
     "Type": "Lieux",
-    "Coordonnées": "1.28,32.39"
+    "Coordonnées": "1.28,32.39",
+    "Country": "Uganda"
   },
   {
     "o:id": 60536,
     "Titre": "Pagouda",
     "Type": "Lieux",
-    "Coordonnées": "9.75,1.316667"
+    "Coordonnées": "9.75,1.316667",
+    "Country": "Togo"
   },
   {
     "o:id": 60537,
     "Titre": "Pessidè",
     "Type": "Lieux",
-    "Coordonnées": ""
+    "Coordonnées": "",
+    "Country": ""
   },
   {
     "o:id": 60538,
     "Titre": "Rabat",
     "Type": "Lieux",
-    "Coordonnées": "34.025277777778,-6.8361111111111"
+    "Coordonnées": "34.025277777778,-6.8361111111111",
+    "Country": "Morocco"
   },
   {
     "o:id": 60539,
     "Titre": "Rome",
     "Type": "Lieux",
-    "Coordonnées": "41.893055555556,12.482777777778"
+    "Coordonnées": "41.893055555556,12.482777777778",
+    "Country": "Italy"
   },
   {
     "o:id": 60540,
     "Titre": "Sahel",
     "Type": "Lieux",
-    "Coordonnées": "14.474672,13.511696"
+    "Coordonnées": "14.474672,13.511696",
+    "Country": "Niger"
   },
   {
     "o:id": 60541,
     "Titre": "Sanguéra",
     "Type": "Lieux",
-    "Coordonnées": ""
+    "Coordonnées": "",
+    "Country": ""
   },
   {
     "o:id": 60542,
     "Titre": "Région des Savanes",
     "Type": "Lieux",
-    "Coordonnées": "10.5,0.5"
+    "Coordonnées": "10.5,0.5",
+    "Country": "Togo"
   },
   {
     "o:id": 60543,
     "Titre": "Sierra Leone",
     "Type": "Lieux",
-    "Coordonnées": "8.5,-12.1"
+    "Coordonnées": "8.5,-12.1",
+    "Country": "Sierra Leone"
   },
   {
     "o:id": 60544,
     "Titre": "Soudou",
     "Type": "Lieux",
-    "Coordonnées": "9.3166666666667,1.4"
+    "Coordonnées": "9.3166666666667,1.4",
+    "Country": "Togo"
   },
   {
     "o:id": 60545,
     "Titre": "Soumdina",
     "Type": "Lieux",
-    "Coordonnées": ""
+    "Coordonnées": "",
+    "Country": ""
   },
   {
     "o:id": 60546,
     "Titre": "Stade municipal de Bafilo",
     "Type": "Lieux",
-    "Coordonnées": "9.35758,1.25269"
+    "Coordonnées": "9.35758,1.25269",
+    "Country": "Togo"
   },
   {
     "o:id": 60547,
     "Titre": "Tabalo",
     "Type": "Lieux",
-    "Coordonnées": "9.2166666666667,1"
+    "Coordonnées": "9.2166666666667,1",
+    "Country": "Togo"
   },
   {
     "o:id": 60548,
     "Titre": "Tandjouaré",
     "Type": "Lieux",
-    "Coordonnées": "10.655833333333,0.195"
+    "Coordonnées": "10.655833333333,0.195",
+    "Country": "Togo"
   },
   {
     "o:id": 60549,
     "Titre": "Tchalo",
     "Type": "Lieux",
-    "Coordonnées": ""
+    "Coordonnées": "",
+    "Country": ""
   },
   {
     "o:id": 60550,
     "Titre": "Togblékopé",
     "Type": "Lieux",
-    "Coordonnées": "6.2738571,1.209831"
+    "Coordonnées": "6.2738571,1.209831",
+    "Country": "Togo"
   },
   {
     "o:id": 60551,
     "Titre": "Tohoun",
     "Type": "Lieux",
-    "Coordonnées": ""
+    "Coordonnées": "",
+    "Country": ""
   },
   {
     "o:id": 60552,
     "Titre": "Tomégbé",
     "Type": "Lieux",
-    "Coordonnées": ""
+    "Coordonnées": "",
+    "Country": ""
   },
   {
     "o:id": 60553,
     "Titre": "Vo",
     "Type": "Lieux",
-    "Coordonnées": "6.3333333333333,1.5333333333333"
+    "Coordonnées": "6.3333333333333,1.5333333333333",
+    "Country": "Togo"
   },
   {
     "o:id": 60554,
     "Titre": "Wassarabo",
     "Type": "Lieux",
-    "Coordonnées": ""
+    "Coordonnées": "",
+    "Country": ""
   },
   {
     "o:id": 60555,
     "Titre": "Yoto",
     "Type": "Lieux",
-    "Coordonnées": "6.58333333,1.5"
+    "Coordonnées": "6.58333333,1.5",
+    "Country": "Togo"
   },
   {
     "o:id": 60556,
     "Titre": "Yémen",
     "Type": "Lieux",
-    "Coordonnées": "15.5,48"
+    "Coordonnées": "15.5,48",
+    "Country": "Yemen"
   },
   {
     "o:id": 60557,
     "Titre": "Kenya",
     "Type": "Lieux",
-    "Coordonnées": "1, 38"
+    "Coordonnées": "1, 38",
+    "Country": "Kenya"
   },
   {
     "o:id": 60558,
     "Titre": "Agoé-Nyivé",
     "Type": "Lieux",
-    "Coordonnées": "6.257500, 1.192900"
+    "Coordonnées": "6.257500, 1.192900",
+    "Country": "Togo"
   },
   {
     "o:id": 60559,
     "Titre": "Région des plateaux",
     "Type": "Lieux",
-    "Coordonnées": "7.5, 1.1"
+    "Coordonnées": "7.5, 1.1",
+    "Country": "Togo"
   },
   {
     "o:id": 60560,
     "Titre": "Kadambara",
     "Type": "Lieux",
-    "Coordonnées": ""
+    "Coordonnées": "",
+    "Country": ""
   },
   {
     "o:id": 60561,
     "Titre": "Agou",
     "Type": "Lieux",
-    "Coordonnées": "7.466667, 1.916667"
+    "Coordonnées": "7.466667, 1.916667",
+    "Country": "Benin"
   },
   {
     "o:id": 60562,
     "Titre": "Wawa",
     "Type": "Lieux",
-    "Coordonnées": "7.583333, 0.6"
+    "Coordonnées": "7.583333, 0.6",
+    "Country": "Togo"
   },
   {
     "o:id": 60563,
     "Titre": "Didaourè",
     "Type": "Lieux",
-    "Coordonnées": ""
+    "Coordonnées": "",
+    "Country": ""
   },
   {
     "o:id": 60564,
     "Titre": "Mô",
     "Type": "Lieux",
-    "Coordonnées": "8.77, 0.56"
+    "Coordonnées": "8.77, 0.56",
+    "Country": "Togo"
   },
   {
     "o:id": 60565,
     "Titre": "Est-Mono",
     "Type": "Lieux",
-    "Coordonnées": "7.4475, 0.847222"
+    "Coordonnées": "7.4475, 0.847222",
+    "Country": "Togo"
   },
   {
     "o:id": 60566,
     "Titre": "Tône",
     "Type": "Lieux",
-    "Coordonnées": "10.916667, 0.166667"
+    "Coordonnées": "10.916667, 0.166667",
+    "Country": "Togo"
   },
   {
     "o:id": 60567,
     "Titre": "Kévé",
     "Type": "Lieux",
-    "Coordonnées": "6.427811, 0.924481"
+    "Coordonnées": "6.427811, 0.924481",
+    "Country": "Togo"
   },
   {
     "o:id": 60569,
     "Titre": "Adougba",
     "Type": "Lieux",
-    "Coordonnées": ""
+    "Coordonnées": "",
+    "Country": ""
   },
   {
     "o:id": 60570,
     "Titre": "Agbonou",
     "Type": "Lieux",
-    "Coordonnées": ""
+    "Coordonnées": "",
+    "Country": ""
   },
   {
     "o:id": 60571,
     "Titre": "Daoudè",
     "Type": "Lieux",
-    "Coordonnées": ""
+    "Coordonnées": "",
+    "Country": ""
   },
   {
     "o:id": 60572,
     "Titre": "Kouloundè",
     "Type": "Lieux",
-    "Coordonnées": ""
+    "Coordonnées": "",
+    "Country": ""
   },
   {
     "o:id": 60573,
     "Titre": "Tchawanda",
     "Type": "Lieux",
-    "Coordonnées": ""
+    "Coordonnées": "",
+    "Country": ""
   },
   {
     "o:id": 60967,
     "Titre": "Mosquée centrale Houéyogbé",
     "Type": "Lieux",
-    "Coordonnées": ""
+    "Coordonnées": "",
+    "Country": ""
   },
   {
     "o:id": 60969,
     "Titre": "Mosquée centrale de Nikki",
     "Type": "Lieux",
-    "Coordonnées": ""
+    "Coordonnées": "",
+    "Country": ""
   },
   {
     "o:id": 61323,
     "Titre": "Dabou",
     "Type": "Lieux",
-    "Coordonnées": "5.325556, -4.376667"
+    "Coordonnées": "5.325556, -4.376667",
+    "Country": "Côte d'Ivoire"
   },
   {
     "o:id": 61324,
     "Titre": "Grande Mosquée d'Adjamé",
     "Type": "Lieux",
-    "Coordonnées": "5.353286615241792, -4.026326534959187"
+    "Coordonnées": "5.353286615241792, -4.026326534959187",
+    "Country": "Côte d'Ivoire"
   },
   {
     "o:id": 61325,
     "Titre": "Mosquée Bilal",
     "Type": "Lieux",
-    "Coordonnées": ""
+    "Coordonnées": "",
+    "Country": ""
   },
   {
     "o:id": 61326,
     "Titre": "San-Pédro",
     "Type": "Lieux",
-    "Coordonnées": "4.733333, -6.633333"
+    "Coordonnées": "4.733333, -6.633333",
+    "Country": ""
   },
   {
     "o:id": 61327,
     "Titre": "Stade Félix Houphouët-Boigny",
     "Type": "Lieux",
-    "Coordonnées": "5.32825, -4.018417"
+    "Coordonnées": "5.32825, -4.018417",
+    "Country": "Côte d'Ivoire"
   },
   {
     "o:id": 61329,
     "Titre": "Centre culturel islamique Bilal (Port-Bouët II)",
     "Type": "Lieux",
-    "Coordonnées": ""
+    "Coordonnées": "",
+    "Country": ""
   },
   {
     "o:id": 62018,
     "Titre": "Alibori",
     "Type": "Lieux",
-    "Coordonnées": "11.128611, 2.936944"
+    "Coordonnées": "11.128611, 2.936944",
+    "Country": "Benin"
   },
   {
     "o:id": 62019,
     "Titre": "Cadjèhoun",
     "Type": "Lieux",
-    "Coordonnées": "6.359, 2.3971"
+    "Coordonnées": "6.359, 2.3971",
+    "Country": "Benin"
   },
   {
     "o:id": 62020,
     "Titre": "Bamako",
     "Type": "Lieux",
-    "Coordonnées": "12.645833, -7.992222"
+    "Coordonnées": "12.645833, -7.992222",
+    "Country": "Mali"
   },
   {
     "o:id": 62024,
     "Titre": "Couffo",
     "Type": "Lieux",
-    "Coordonnées": "6.961944, 1.801667"
+    "Coordonnées": "6.961944, 1.801667",
+    "Country": "Benin"
   },
   {
     "o:id": 62025,
     "Titre": "Donga",
     "Type": "Lieux",
-    "Coordonnées": "9.7, 1.666667"
+    "Coordonnées": "9.7, 1.666667",
+    "Country": "Benin"
   },
   {
     "o:id": 62026,
     "Titre": "Porga",
     "Type": "Lieux",
-    "Coordonnées": "11.05, 0.966667"
+    "Coordonnées": "11.05, 0.966667",
+    "Country": "Burkina Faso"
   },
   {
     "o:id": 62027,
     "Titre": "Gbedjromédé",
     "Type": "Lieux",
-    "Coordonnées": ""
+    "Coordonnées": "",
+    "Country": ""
   },
   {
     "o:id": 62028,
     "Titre": "Djakotomey",
     "Type": "Lieux",
-    "Coordonnées": "6.9, 1.716667"
+    "Coordonnées": "6.9, 1.716667",
+    "Country": "Benin"
   },
   {
     "o:id": 62029,
     "Titre": "Kassakou",
     "Type": "Lieux",
-    "Coordonnées": "11.083333, 2.9"
+    "Coordonnées": "11.083333, 2.9",
+    "Country": "Benin"
   },
   {
     "o:id": 62030,
     "Titre": "Ukraine",
     "Type": "Lieux",
-    "Coordonnées": "49, 32"
+    "Coordonnées": "49, 32",
+    "Country": "Ukraine"
   },
   {
     "o:id": 62234,
     "Titre": "Basilique Notre-Dame-de-la-Paix",
     "Type": "Lieux",
-    "Coordonnées": "6.811111, -5.296944"
+    "Coordonnées": "6.811111, -5.296944",
+    "Country": "Côte d'Ivoire"
   },
   {
     "o:id": 62236,
     "Titre": "Hôtel Ivoire",
     "Type": "Lieux",
-    "Coordonnées": "5.3269, -4.00547"
+    "Coordonnées": "5.3269, -4.00547",
+    "Country": "Côte d'Ivoire"
   },
   {
     "o:id": 62237,
     "Titre": "Institut Islamique d'Abobo",
     "Type": "Lieux",
-    "Coordonnées": ""
+    "Coordonnées": "",
+    "Country": ""
   },
   {
     "o:id": 62239,
     "Titre": "Cathédrale Saint-Paul d'Abidjan",
     "Type": "Lieux",
-    "Coordonnées": "5.33291, -4.02008"
+    "Coordonnées": "5.33291, -4.02008",
+    "Country": "Côte d'Ivoire"
   },
   {
     "o:id": 62240,
     "Titre": "Palais des Sports de Treichville",
     "Type": "Lieux",
-    "Coordonnées": "5.298056, -4.005278"
+    "Coordonnées": "5.298056, -4.005278",
+    "Country": "Côte d'Ivoire"
   },
   {
     "o:id": 63374,
     "Titre": "Benghazi",
     "Type": "Lieux",
-    "Coordonnées": "32.116667, 20.066667"
+    "Coordonnées": "32.116667, 20.066667",
+    "Country": "Libya"
   },
   {
     "o:id": 63375,
     "Titre": "Bosnie-Herzégovine",
     "Type": "Lieux",
-    "Coordonnées": "44, 18"
+    "Coordonnées": "44, 18",
+    "Country": "Bosnia and Herz."
   },
   {
     "o:id": 63376,
     "Titre": "Istanbul",
     "Type": "Lieux",
-    "Coordonnées": "41.01, 28.960278"
+    "Coordonnées": "41.01, 28.960278",
+    "Country": ""
   },
   {
     "o:id": 63377,
     "Titre": "République du Congo",
     "Type": "Lieux",
-    "Coordonnées": "-0.75, 15.383331"
+    "Coordonnées": "-0.75, 15.383331",
+    "Country": "Congo"
   },
   {
     "o:id": 63378,
     "Titre": "Cocody-Deux Plateaux",
     "Type": "Lieux",
-    "Coordonnées": ""
+    "Coordonnées": "",
+    "Country": ""
   },
   {
     "o:id": 63379,
     "Titre": "Port-Bouët",
     "Type": "Lieux",
-    "Coordonnées": "5.266667, -3.9"
+    "Coordonnées": "5.266667, -3.9",
+    "Country": "Côte d'Ivoire"
   },
   {
     "o:id": 63380,
     "Titre": "Yopougon-Niangon",
     "Type": "Lieux",
-    "Coordonnées": ""
+    "Coordonnées": "",
+    "Country": ""
   },
   {
     "o:id": 63382,
     "Titre": "Touba",
     "Type": "Lieux",
-    "Coordonnées": "8.283333, -7.683333"
+    "Coordonnées": "8.283333, -7.683333",
+    "Country": "Côte d'Ivoire"
   },
   {
     "o:id": 63383,
     "Titre": "Aghien",
     "Type": "Lieux",
-    "Coordonnées": "5.388123, -3.999984"
+    "Coordonnées": "5.388123, -3.999984",
+    "Country": "Côte d'Ivoire"
   },
   {
     "o:id": 63384,
     "Titre": "Riviera Golf",
     "Type": "Lieux",
-    "Coordonnées": ""
+    "Coordonnées": "",
+    "Country": ""
   },
   {
     "o:id": 63385,
     "Titre": "Riviera III",
     "Type": "Lieux",
-    "Coordonnées": "5.348571, -3.953459"
+    "Coordonnées": "5.348571, -3.953459",
+    "Country": "Côte d'Ivoire"
   },
   {
     "o:id": 63386,
     "Titre": "Plateau",
     "Type": "Lieux",
-    "Coordonnées": "5.32549, -4.02014"
+    "Coordonnées": "5.32549, -4.02014",
+    "Country": "Côte d'Ivoire"
   },
   {
     "o:id": 63387,
     "Titre": "Stade Wobi",
     "Type": "Lieux",
-    "Coordonnées": "11.181944, -4.296944"
+    "Coordonnées": "11.181944, -4.296944",
+    "Country": "Burkina Faso"
   },
   {
     "o:id": 63388,
     "Titre": "Alger",
     "Type": "Lieux",
-    "Coordonnées": "36.776388888889,3.0586111111111"
+    "Coordonnées": "36.776388888889,3.0586111111111",
+    "Country": "Algeria"
   },
   {
     "o:id": 63389,
     "Titre": "Angleterre",
     "Type": "Lieux",
-    "Coordonnées": "53, -1"
+    "Coordonnées": "53, -1",
+    "Country": "United Kingdom"
   },
   {
     "o:id": 63390,
     "Titre": "Anvers",
     "Type": "Lieux",
-    "Coordonnées": "51.221111111111114,4.3997222222222225"
+    "Coordonnées": "51.221111111111114,4.3997222222222225",
+    "Country": "Belgium"
   },
   {
     "o:id": 63391,
     "Titre": "Anyama",
     "Type": "Lieux",
-    "Coordonnées": "5.4944444444444,-4.0516666666667"
+    "Coordonnées": "5.4944444444444,-4.0516666666667",
+    "Country": "Côte d'Ivoire"
   },
   {
     "o:id": 63392,
     "Titre": "Aïn Madhi",
     "Type": "Lieux",
-    "Coordonnées": "33.8,2.3"
+    "Coordonnées": "33.8,2.3",
+    "Country": "Algeria"
   },
   {
     "o:id": 63393,
     "Titre": "Bagdad",
     "Type": "Lieux",
-    "Coordonnées": "33.31527777777778,44.36611111111111"
+    "Coordonnées": "33.31527777777778,44.36611111111111",
+    "Country": "Iraq"
   },
   {
     "o:id": 63394,
     "Titre": "Bangladesh",
     "Type": "Lieux",
-    "Coordonnées": "24.016666666666666,89.86666666666666"
+    "Coordonnées": "24.016666666666666,89.86666666666666",
+    "Country": "Bangladesh"
   },
   {
     "o:id": 63395,
     "Titre": "Berne",
     "Type": "Lieux",
-    "Coordonnées": "46.94798,7.44743"
+    "Coordonnées": "46.94798,7.44743",
+    "Country": "Switzerland"
   },
   {
     "o:id": 63396,
     "Titre": "Blida",
     "Type": "Lieux",
-    "Coordonnées": "36.472222222222,2.8333333333333"
+    "Coordonnées": "36.472222222222,2.8333333333333",
+    "Country": "Algeria"
   },
   {
     "o:id": 63397,
     "Titre": "Bolomakoté",
     "Type": "Lieux",
-    "Coordonnées": "11.158339735248203, -4.293358454395325"
+    "Coordonnées": "11.158339735248203, -4.293358454395325",
+    "Country": "Burkina Faso"
   },
   {
     "o:id": 63398,
     "Titre": "Boulkiemdé",
     "Type": "Lieux",
-    "Coordonnées": "12.25,-2.3666666666667"
+    "Coordonnées": "12.25,-2.3666666666667",
+    "Country": "Burkina Faso"
   },
   {
     "o:id": 63399,
     "Titre": "Brazzaville",
     "Type": "Lieux",
-    "Coordonnées": "-4.269444444444445,15.27111111111111"
+    "Coordonnées": "-4.269444444444445,15.27111111111111",
+    "Country": "Congo"
   },
   {
     "o:id": 63400,
     "Titre": "Casablanca",
     "Type": "Lieux",
-    "Coordonnées": "33.599166666667,-7.62"
+    "Coordonnées": "33.599166666667,-7.62",
+    "Country": "Morocco"
   },
   {
     "o:id": 63401,
     "Titre": "Cascades",
     "Type": "Lieux",
-    "Coordonnées": "10.25,-4.5"
+    "Coordonnées": "10.25,-4.5",
+    "Country": "Burkina Faso"
   },
   {
     "o:id": 63402,
     "Titre": "Cocody",
     "Type": "Lieux",
-    "Coordonnées": "5.35,-3.9666666666667"
+    "Coordonnées": "5.35,-3.9666666666667",
+    "Country": "Côte d'Ivoire"
   },
   {
     "o:id": 63403,
     "Titre": "Comoé",
     "Type": "Lieux",
-    "Coordonnées": "10.633333333333,-4.75"
+    "Coordonnées": "10.633333333333,-4.75",
+    "Country": "Burkina Faso"
   },
   {
     "o:id": 63404,
     "Titre": "Damas",
     "Type": "Lieux",
-    "Coordonnées": "33.513055555556,36.291944444444"
+    "Coordonnées": "33.513055555556,36.291944444444",
+    "Country": "Syria"
   },
   {
     "o:id": 63407,
     "Titre": "Irlande du Nord",
     "Type": "Lieux",
-    "Coordonnées": "54.6075, -6.6925"
+    "Coordonnées": "54.6075, -6.6925",
+    "Country": "United Kingdom"
   },
   {
     "o:id": 63408,
     "Titre": "Jacqueville",
     "Type": "Lieux",
-    "Coordonnées": "5.2,-4.4166666666667"
+    "Coordonnées": "5.2,-4.4166666666667",
+    "Country": "Côte d'Ivoire"
   },
   {
     "o:id": 63409,
     "Titre": "Kaboul",
     "Type": "Lieux",
-    "Coordonnées": "34.532777777778, 69.165833333333"
+    "Coordonnées": "34.532777777778, 69.165833333333",
+    "Country": "Afghanistan"
   },
   {
     "o:id": 63410,
     "Titre": "Kaolack",
     "Type": "Lieux",
-    "Coordonnées": "14.138888888889,-16.076388888889"
+    "Coordonnées": "14.138888888889,-16.076388888889",
+    "Country": "Senegal"
   },
   {
     "o:id": 63411,
     "Titre": "Kiribina",
     "Type": "Lieux",
-    "Coordonnées": "10.65, -4.8"
+    "Coordonnées": "10.65, -4.8",
+    "Country": "Burkina Faso"
   },
   {
     "o:id": 63412,
     "Titre": "Kong",
     "Type": "Lieux",
-    "Coordonnées": "9.150632, -4.610263"
+    "Coordonnées": "9.150632, -4.610263",
+    "Country": "Côte d'Ivoire"
   },
   {
     "o:id": 63413,
     "Titre": "Kougny",
     "Type": "Lieux",
-    "Coordonnées": "12.784055,-3.118572"
+    "Coordonnées": "12.784055,-3.118572",
+    "Country": "Burkina Faso"
   },
   {
     "o:id": 63415,
     "Titre": "Lyon",
     "Type": "Lieux",
-    "Coordonnées": "45.758888888889,4.8413888888889"
+    "Coordonnées": "45.758888888889,4.8413888888889",
+    "Country": "France"
   },
   {
     "o:id": 63416,
     "Titre": "Mankono",
     "Type": "Lieux",
-    "Coordonnées": "8.05,-6.18333333"
+    "Coordonnées": "8.05,-6.18333333",
+    "Country": "Côte d'Ivoire"
   },
   {
     "o:id": 63417,
     "Titre": "Marcory",
     "Type": "Lieux",
-    "Coordonnées": "5.3,-3.9833333333333"
+    "Coordonnées": "5.3,-3.9833333333333",
+    "Country": "Côte d'Ivoire"
   },
   {
     "o:id": 63418,
     "Titre": "Marseille",
     "Type": "Lieux",
-    "Coordonnées": "43.296666666667,5.3763888888889"
+    "Coordonnées": "43.296666666667,5.3763888888889",
+    "Country": "France"
   },
   {
     "o:id": 63419,
     "Titre": "Mono",
     "Type": "Lieux",
-    "Coordonnées": "6.6333333333333, 1.7166666666667"
+    "Coordonnées": "6.6333333333333, 1.7166666666667",
+    "Country": "Benin"
   },
   {
     "o:id": 63420,
     "Titre": "Nafona",
     "Type": "Lieux",
-    "Coordonnées": "10.25,-5.0166666666667"
+    "Coordonnées": "10.25,-5.0166666666667",
+    "Country": "Burkina Faso"
   },
   {
     "o:id": 63421,
     "Titre": "Oumé",
     "Type": "Lieux",
-    "Coordonnées": "6.3833333333333,-5.4166666666667"
+    "Coordonnées": "6.3833333333333,-5.4166666666667",
+    "Country": "Côte d'Ivoire"
   },
   {
     "o:id": 63422,
     "Titre": "Passoré",
     "Type": "Lieux",
-    "Coordonnées": "12.95, -2.2666666666667"
+    "Coordonnées": "12.95, -2.2666666666667",
+    "Country": "Burkina Faso"
   },
   {
     "o:id": 63423,
     "Titre": "Poura",
     "Type": "Lieux",
-    "Coordonnées": "11.616666666667,-2.75"
+    "Coordonnées": "11.616666666667,-2.75",
+    "Country": "Burkina Faso"
   },
   {
     "o:id": 63424,
     "Titre": "Qom",
     "Type": "Lieux",
-    "Coordonnées": "34.64, 50.87638888888889"
+    "Coordonnées": "34.64, 50.87638888888889",
+    "Country": "Iran"
   },
   {
     "o:id": 63425,
     "Titre": "Rouen",
     "Type": "Lieux",
-    "Coordonnées": "49.443055555556,1.1025"
+    "Coordonnées": "49.443055555556,1.1025",
+    "Country": "France"
   },
   {
     "o:id": 63426,
     "Titre": "Samatiguila",
     "Type": "Lieux",
-    "Coordonnées": "9.8333333333333,-7.5666666666667"
+    "Coordonnées": "9.8333333333333,-7.5666666666667",
+    "Country": "Côte d'Ivoire"
   },
   {
     "o:id": 63427,
     "Titre": "Sanguié",
     "Type": "Lieux",
-    "Coordonnées": "12.316666666667, -2.4666666666667"
+    "Coordonnées": "12.316666666667, -2.4666666666667",
+    "Country": "Burkina Faso"
   },
   {
     "o:id": 63428,
     "Titre": "Sassandra",
     "Type": "Lieux",
-    "Coordonnées": "4.95,-6.0833333333333"
+    "Coordonnées": "4.95,-6.0833333333333",
+    "Country": "Côte d'Ivoire"
   },
   {
     "o:id": 63429,
     "Titre": "Sikasso",
     "Type": "Lieux",
-    "Coordonnées": "11.199722222222,-7.0969444444444"
+    "Coordonnées": "11.199722222222,-7.0969444444444",
+    "Country": "Mali"
   },
   {
     "o:id": 63430,
     "Titre": "Soubakaniédougou",
     "Type": "Lieux",
-    "Coordonnées": "10.474941, -5.00423"
+    "Coordonnées": "10.474941, -5.00423",
+    "Country": "Burkina Faso"
   },
   {
     "o:id": 63431,
     "Titre": "Sourou",
     "Type": "Lieux",
-    "Coordonnées": "13.066666666667, -3.0666666666667"
+    "Coordonnées": "13.066666666667, -3.0666666666667",
+    "Country": "Burkina Faso"
   },
   {
     "o:id": 63432,
     "Titre": "Séguéla",
     "Type": "Lieux",
-    "Coordonnées": "7.9611111111111,-6.6730555555556"
+    "Coordonnées": "7.9611111111111,-6.6730555555556",
+    "Country": "Côte d'Ivoire"
   },
   {
     "o:id": 63433,
     "Titre": "Tabou",
     "Type": "Lieux",
-    "Coordonnées": "4.4230555555556,-7.3527777777778"
+    "Coordonnées": "4.4230555555556,-7.3527777777778",
+    "Country": "Côte d'Ivoire"
   },
   {
     "o:id": 63434,
     "Titre": "Tchétchénie",
     "Type": "Lieux",
-    "Coordonnées": "43.4,45.716694444444"
+    "Coordonnées": "43.4,45.716694444444",
+    "Country": "Russia"
   },
   {
     "o:id": 63435,
     "Titre": "Tengréla",
     "Type": "Lieux",
-    "Coordonnées": "10.481111111111,-6.4069444444444"
+    "Coordonnées": "10.481111111111,-6.4069444444444",
+    "Country": "Côte d'Ivoire"
   },
   {
     "o:id": 63436,
     "Titre": "Tové",
     "Type": "Lieux",
-    "Coordonnées": "6.32222,1.12583"
+    "Coordonnées": "6.32222,1.12583",
+    "Country": "Togo"
   },
   {
     "o:id": 63437,
     "Titre": "Tunis",
     "Type": "Lieux",
-    "Coordonnées": "36.800833333333, 10.18"
+    "Coordonnées": "36.800833333333, 10.18",
+    "Country": "Tunisia"
   },
   {
     "o:id": 63438,
     "Titre": "World Trade Center",
     "Type": "Lieux",
-    "Coordonnées": "40.711388888889,-74.0125"
+    "Coordonnées": "40.711388888889,-74.0125",
+    "Country": ""
   },
   {
     "o:id": 63439,
     "Titre": "Zinder",
     "Type": "Lieux",
-    "Coordonnées": "13.8,8.9833333333333"
+    "Coordonnées": "13.8,8.9833333333333",
+    "Country": "Niger"
   },
   {
     "o:id": 63441,
     "Titre": "Mosquée de la Riviéra 3",
     "Type": "Lieux",
-    "Coordonnées": "5.348374315507951, -3.954733469340994"
+    "Coordonnées": "5.348374315507951, -3.954733469340994",
+    "Country": "Côte d'Ivoire"
   },
   {
     "o:id": 63452,
     "Titre": "Grande Mosquée d'Attécoubé",
     "Type": "Lieux",
-    "Coordonnées": ""
+    "Coordonnées": "",
+    "Country": ""
   },
   {
     "o:id": 63453,
     "Titre": "Mosquée Dioula Treichville",
     "Type": "Lieux",
-    "Coordonnées": ""
+    "Coordonnées": "",
+    "Country": ""
   },
   {
     "o:id": 64630,
     "Titre": "Grande Mosquée de Yopougon Banco 2",
     "Type": "Lieux",
-    "Coordonnées": ""
+    "Coordonnées": "",
+    "Country": ""
   },
   {
     "o:id": 67746,
     "Titre": "Mosquée An Nour Riviera 2",
     "Type": "Lieux",
-    "Coordonnées": "5.351224783601886, -3.980895863811308"
+    "Coordonnées": "5.351224783601886, -3.980895863811308",
+    "Country": "Côte d'Ivoire"
   },
   {
     "o:id": 71410,
     "Titre": "Tadjikistan",
     "Type": "Lieux",
-    "Coordonnées": "38.583333, 71.366667"
+    "Coordonnées": "38.583333, 71.366667",
+    "Country": "Tajikistan"
   },
   {
     "o:id": 71411,
     "Titre": "Azerbaïdjan",
     "Type": "Lieux",
-    "Coordonnées": "40.3, 47.7"
+    "Coordonnées": "40.3, 47.7",
+    "Country": "Azerbaijan"
   },
   {
     "o:id": 73282,
     "Titre": "Bè",
     "Type": "Lieux",
-    "Coordonnées": "6.13333, 1.25"
+    "Coordonnées": "6.13333, 1.25",
+    "Country": "Togo"
   },
   {
     "o:id": 73288,
     "Titre": "Tokoin",
     "Type": "Lieux",
-    "Coordonnées": "6.15, 1.216667"
+    "Coordonnées": "6.15, 1.216667",
+    "Country": "Togo"
   },
   {
     "o:id": 73289,
     "Titre": "Préfecture du Golfe",
     "Type": "Lieux",
-    "Coordonnées": "6.133333, 1.2"
+    "Coordonnées": "6.133333, 1.2",
+    "Country": "Togo"
   },
   {
     "o:id": 73290,
     "Titre": "Yadé",
     "Type": "Lieux",
-    "Coordonnées": "9.9, 1.05"
+    "Coordonnées": "9.9, 1.05",
+    "Country": "Togo"
   },
   {
     "o:id": 73293,
     "Titre": "Monument de l'Indépendance",
     "Type": "Lieux",
-    "Coordonnées": "6.13, 1.216"
+    "Coordonnées": "6.13, 1.216",
+    "Country": "Togo"
   },
   {
     "o:id": 73294,
     "Titre": "Hôtel du 2 Février",
     "Type": "Lieux",
-    "Coordonnées": ""
+    "Coordonnées": "",
+    "Country": ""
   },
   {
     "o:id": 73295,
     "Titre": "Indonésie",
     "Type": "Lieux",
-    "Coordonnées": "-2, 118"
+    "Coordonnées": "-2, 118",
+    "Country": ""
   },
   {
     "o:id": 73296,
     "Titre": "Stade Général Gnassingbé Eyadéma",
     "Type": "Lieux",
-    "Coordonnées": ""
+    "Coordonnées": "",
+    "Country": ""
   },
   {
     "o:id": 73297,
     "Titre": "Oman",
     "Type": "Lieux",
-    "Coordonnées": "21, 57"
+    "Coordonnées": "21, 57",
+    "Country": "Oman"
   },
   {
     "o:id": 73298,
     "Titre": "Baguida",
     "Type": "Lieux",
-    "Coordonnées": "6.166667, 1.316667"
+    "Coordonnées": "6.166667, 1.316667",
+    "Country": "Togo"
   },
   {
     "o:id": 73299,
     "Titre": "Djibouti",
     "Type": "Lieux",
-    "Coordonnées": "11.8, 42.433333"
+    "Coordonnées": "11.8, 42.433333",
+    "Country": "Djibouti"
   },
   {
     "o:id": 73300,
     "Titre": "Malaisie",
     "Type": "Lieux",
-    "Coordonnées": "3.780511, 102.314362"
+    "Coordonnées": "3.780511, 102.314362",
+    "Country": "Malaysia"
   },
   {
     "o:id": 73301,
     "Titre": "Bengladesh",
     "Type": "Lieux",
-    "Coordonnées": "24.016667, 89.866667"
+    "Coordonnées": "24.016667, 89.866667",
+    "Country": "Bangladesh"
   },
   {
     "o:id": 73302,
     "Titre": "Bè-Kpota",
     "Type": "Lieux",
-    "Coordonnées": ""
+    "Coordonnées": "",
+    "Country": ""
   },
   {
     "o:id": 73303,
     "Titre": "Akodesséwa",
     "Type": "Lieux",
-    "Coordonnées": "6.1592, 1.27347"
+    "Coordonnées": "6.1592, 1.27347",
+    "Country": "Togo"
   },
   {
     "o:id": 73331,
     "Titre": "Région centrale",
     "Type": "Lieux",
-    "Coordonnées": "8.6, 1.1"
+    "Coordonnées": "8.6, 1.1",
+    "Country": "Togo"
   },
   {
     "o:id": 73333,
     "Titre": "Adidogomé",
     "Type": "Lieux",
-    "Coordonnées": "6.171275049714692, 1.1416055290325384"
+    "Coordonnées": "6.171275049714692, 1.1416055290325384",
+    "Country": "Togo"
   },
   {
     "o:id": 73334,
     "Titre": "Région maritime",
     "Type": "Lieux",
-    "Coordonnées": "6.5, 1.3"
+    "Coordonnées": "6.5, 1.3",
+    "Country": "Togo"
   },
   {
     "o:id": 73335,
     "Titre": "Bruxelles",
     "Type": "Lieux",
-    "Coordonnées": "50.846667, 4.351667"
+    "Coordonnées": "50.846667, 4.351667",
+    "Country": "Belgium"
   },
   {
     "o:id": 73336,
     "Titre": "Agoè-Zongo",
     "Type": "Lieux",
-    "Coordonnées": "6.25442771450599, 1.208791071779277"
+    "Coordonnées": "6.25442771450599, 1.208791071779277",
+    "Country": "Togo"
   },
   {
     "o:id": 73337,
     "Titre": "Dubaï",
     "Type": "Lieux",
-    "Coordonnées": "25.269722, 55.309444"
+    "Coordonnées": "25.269722, 55.309444",
+    "Country": ""
   },
   {
     "o:id": 73338,
     "Titre": "Adétikopé",
     "Type": "Lieux",
-    "Coordonnées": ""
+    "Coordonnées": "",
+    "Country": ""
   },
   {
     "o:id": 73339,
     "Titre": "Mandouri",
     "Type": "Lieux",
-    "Coordonnées": "10.847468, 0.816593"
+    "Coordonnées": "10.847468, 0.816593",
+    "Country": "Togo"
   },
   {
     "o:id": 73347,
     "Titre": "Université de Bayreuth",
     "Type": "Lieux",
-    "Coordonnées": "49.928847, 11.585897"
+    "Coordonnées": "49.928847, 11.585897",
+    "Country": "Germany"
   },
   {
     "o:id": 73458,
     "Titre": "Mosquée de Yopougon-Selmer",
     "Type": "Lieux",
-    "Coordonnées": ""
+    "Coordonnées": "",
+    "Country": ""
   },
   {
     "o:id": 75838,
     "Titre": "Mosquée centrale d'Attogon",
     "Type": "Lieux",
-    "Coordonnées": ""
+    "Coordonnées": "",
+    "Country": ""
   },
   {
     "o:id": 75840,
     "Titre": "Mosquée de Yaloua",
     "Type": "Lieux",
-    "Coordonnées": ""
+    "Coordonnées": "",
+    "Country": ""
   },
   {
     "o:id": 75841,
     "Titre": "Attogon",
     "Type": "Lieux",
-    "Coordonnées": "6.716667, 2.15"
+    "Coordonnées": "6.716667, 2.15",
+    "Country": "Benin"
   },
   {
     "o:id": 75844,
     "Titre": "Centre des études islamiques de Djougou",
     "Type": "Lieux",
-    "Coordonnées": ""
+    "Coordonnées": "",
+    "Country": ""
   },
   {
     "o:id": 75845,
     "Titre": "Mosquée centrale d'Allada",
     "Type": "Lieux",
-    "Coordonnées": ""
+    "Coordonnées": "",
+    "Country": ""
   },
   {
     "o:id": 75846,
     "Titre": "Mosquée centrale d'Azovè",
     "Type": "Lieux",
-    "Coordonnées": ""
+    "Coordonnées": "",
+    "Country": ""
   },
   {
     "o:id": 75847,
     "Titre": "Mosquée centrale de Covè",
     "Type": "Lieux",
-    "Coordonnées": ""
+    "Coordonnées": "",
+    "Country": ""
   },
   {
     "o:id": 75848,
     "Titre": "Mosquée centrale de Savè",
     "Type": "Lieux",
-    "Coordonnées": ""
+    "Coordonnées": "",
+    "Country": ""
   },
   {
     "o:id": 76032,
     "Titre": "Mozambique",
     "Type": "Lieux",
-    "Coordonnées": "-19, 35"
+    "Coordonnées": "-19, 35",
+    "Country": "Mozambique"
   },
   {
     "o:id": 76279,
     "Titre": "Abobo Banco",
     "Type": "Lieux",
-    "Coordonnées": "5.41301, -4.02092"
+    "Coordonnées": "5.41301, -4.02092",
+    "Country": "Côte d'Ivoire"
   },
   {
     "o:id": 76296,
     "Titre": "Centre national des archives du Burkina Faso",
     "Type": "Lieux",
-    "Coordonnées": "12.369369, -1.513517"
+    "Coordonnées": "12.369369, -1.513517",
+    "Country": "Burkina Faso"
   },
   {
     "o:id": 76313,
     "Titre": "Kaaba",
     "Type": "Lieux",
-    "Coordonnées": "21.4225, 39.826167"
+    "Coordonnées": "21.4225, 39.826167",
+    "Country": "Saudi Arabia"
   },
   {
     "o:id": 76314,
     "Titre": "Kadiogo",
     "Type": "Lieux",
-    "Coordonnées": "12.333333, -1.5"
+    "Coordonnées": "12.333333, -1.5",
+    "Country": "Burkina Faso"
   },
   {
     "o:id": 76315,
     "Titre": "Yatenga",
     "Type": "Lieux",
-    "Coordonnées": "13.583333, -2.416667"
+    "Coordonnées": "13.583333, -2.416667",
+    "Country": "Burkina Faso"
   },
   {
     "o:id": 76316,
     "Titre": "Gounghin",
     "Type": "Lieux",
-    "Coordonnées": "12.35641975819987, -1.5480543813205"
+    "Coordonnées": "12.35641975819987, -1.5480543813205",
+    "Country": "Burkina Faso"
   },
   {
     "o:id": 76317,
     "Titre": "Hauts-Bassins",
     "Type": "Lieux",
-    "Coordonnées": ""
+    "Coordonnées": "",
+    "Country": ""
   },
   {
     "o:id": 76319,
     "Titre": "Maison du Peuple",
     "Type": "Lieux",
-    "Coordonnées": "12.3722, -1.5236"
+    "Coordonnées": "12.3722, -1.5236",
+    "Country": "Burkina Faso"
   },
   {
     "o:id": 76320,
     "Titre": "Boucle du Mouhoun",
     "Type": "Lieux",
-    "Coordonnées": "12.5, -3.5"
+    "Coordonnées": "12.5, -3.5",
+    "Country": "Burkina Faso"
   },
   {
     "o:id": 76321,
     "Titre": "Oubritenga",
     "Type": "Lieux",
-    "Coordonnées": "12.583333, -1.416667"
+    "Coordonnées": "12.583333, -1.416667",
+    "Country": "Burkina Faso"
   },
   {
     "o:id": 76322,
     "Titre": "Dioulassoba",
     "Type": "Lieux",
-    "Coordonnées": "11.178, -4.2961"
+    "Coordonnées": "11.178, -4.2961",
+    "Country": "Burkina Faso"
   },
   {
     "o:id": 76323,
     "Titre": "Palais Kosyam",
     "Type": "Lieux",
-    "Coordonnées": "12.288426, -1.50273"
+    "Coordonnées": "12.288426, -1.50273",
+    "Country": "Burkina Faso"
   },
   {
     "o:id": 76324,
     "Titre": "Houet",
     "Type": "Lieux",
-    "Coordonnées": "11.333333, -4.25"
+    "Coordonnées": "11.333333, -4.25",
+    "Country": "Burkina Faso"
   },
   {
     "o:id": 76337,
     "Titre": "Bogodogo",
     "Type": "Lieux",
-    "Coordonnées": "12.352169909817203, -1.4886685037354437"
+    "Coordonnées": "12.352169909817203, -1.4886685037354437",
+    "Country": "Burkina Faso"
   },
   {
     "o:id": 76338,
     "Titre": "Stade du 4-août",
     "Type": "Lieux",
-    "Coordonnées": "12.368694, -1.553444"
+    "Coordonnées": "12.368694, -1.553444",
+    "Country": "Burkina Faso"
   },
   {
     "o:id": 76339,
     "Titre": "Pissy",
     "Type": "Lieux",
-    "Coordonnées": "12.34470328615928, -1.5683851823295623"
+    "Coordonnées": "12.34470328615928, -1.5683851823295623",
+    "Country": "Burkina Faso"
   },
   {
     "o:id": 855,
