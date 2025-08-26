@@ -18,32 +18,43 @@
   // Initialize map on mount
   onMount(() => {
     if (!browser) return undefined;
-    
-    const initMap = async () => {
+    let disposed = false;
+
+    const actuallyInit = async () => {
+      if (disposed) return;
+      if (!mapElement || !mapElement.isConnected) {
+        // wait for next frame if container not yet connected
+        requestAnimationFrame(actuallyInit);
+        return;
+      }
+      if (map) return; // already initialized
+
       // Dynamically import Leaflet only on the client side
       L = await import('leaflet');
       await import('leaflet/dist/leaflet.css');
-      
+
       // Initialize the map
-  map = L.map(mapElement).setView(mapData.center, mapData.zoom);
-      
+      map = L.map(mapElement).setView(mapData.center, mapData.zoom);
+
       // Add base tile layer
       L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '© OpenStreetMap contributors'
       }).addTo(map);
-      
+
       // Load initial data
       await loadMapData();
-      
+
       // Setup event handlers
       map.on('moveend', handleMapMove);
     };
-    
-    initMap();
-    
+
+    requestAnimationFrame(actuallyInit);
+
     return () => {
+      disposed = true;
       if (map) {
         map.remove();
+        map = null;
       }
     };
   });
@@ -95,8 +106,51 @@
       }
     }
     
-    // Aggregate items by coordinate and add circle markers sized by count (much fewer markers)
-    if (mapData.visibleItems.length > 0) {
+    // Choropleth by country: shade countries based on number of items
+    if (mapData.viewMode === 'choropleth') {
+      // Build counts by country
+      const counts: Record<string, number> = {};
+      for (const item of mapData.visibleItems) {
+        if (!item.country) continue;
+        counts[item.country] = (counts[item.country] || 0) + 1;
+      }
+
+      // Build a simple color scale
+      const values = Object.values(counts);
+      const max = values.length ? Math.max(...values) : 1;
+      const getColor = (v: number) => {
+        const t = v / max; // 0..1
+        // interpolate from #e3f2fd to #1565c0
+        const c1 = [227, 242, 253];
+        const c2 = [21, 101, 192];
+        const c = c1.map((a, i) => Math.round(a + (c2[i] - a) * t));
+        return `rgb(${c[0]}, ${c[1]}, ${c[2]})`;
+      };
+
+      // Draw country polygons using a world countries GeoJSON if available per selected set
+      // For now, use selectedCountry boundaries if present; otherwise skip until country-level geojson is available
+      if (mapData.selectedCountry) {
+        try {
+          const geoJson = await loadGeoJson(mapData.selectedCountry, 'regions');
+          const geoLayer = L.geoJSON(geoJson, {
+            style: (feature: any) => {
+              const name = feature?.properties?.name as string;
+              const v = counts[name] || 0;
+              return {
+                color: '#ffffff',
+                weight: 1,
+                fillOpacity: 0.6,
+                fillColor: getColor(v)
+              };
+            }
+          }).addTo(map);
+          layers['choropleth'] = geoLayer;
+        } catch (e) {
+          console.error('Choropleth load error:', e);
+        }
+      }
+    } else if (mapData.visibleItems.length > 0) {
+      // Aggregate items by coordinate and add circle markers sized by count (much fewer markers)
       const groups = new Map<string, { lat: number; lng: number; count: number; sample: any }>();
       for (const item of mapData.visibleItems) {
         if (!item.coordinates || item.coordinates.length === 0) continue;
@@ -134,8 +188,8 @@
         circle.addTo(layerGroup);
       }
 
-      layerGroup.addTo(map);
-      layers['markers'] = layerGroup;
+  layerGroup.addTo(map);
+  layers['markers'] = layerGroup;
     }
   }
   
@@ -208,6 +262,13 @@
 
   $effect(() => {
     if (browser && map && mapData.visibleItems) {
+      loadMapData();
+    }
+  });
+  // Refresh when view mode changes
+  $effect(() => {
+    if (browser && map) {
+      mapData.viewMode;
       loadMapData();
     }
   });

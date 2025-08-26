@@ -43,6 +43,20 @@ export async function loadGeoJson(country: string, level = 'regions'): Promise<G
 }
 
 /**
+ * Load a raw GeoJSON file by filename from /data/geojson
+ */
+export async function loadGeoJsonFile(fileName: string): Promise<GeoJsonData> {
+  const url = `/data/geojson/${fileName}`;
+  const response = await fetch(url);
+  if (!response.ok) {
+    throw new Error(`Failed to load GeoJSON file ${fileName}: ${response.statusText}`);
+  }
+  const geoJson = await response.json();
+  normalizeGeoJson(geoJson);
+  return geoJson as GeoJsonData;
+}
+
+/**
  * Normalize GeoJSON to ensure it has a 'name' property
  * @param {GeoJsonData} geoJson - GeoJSON object
  */
