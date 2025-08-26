@@ -3,7 +3,7 @@
   import { mapData } from '$lib/state/mapData.svelte';
   import { timeData } from '$lib/state/timeData.svelte';
   import { filters } from '$lib/state/filters.svelte';
-  import { loadGeoJson, loadWorldCountries, countItemsByCountryHybrid, countPlacesByCountry } from '$lib/api/geoJsonService';
+  import { loadGeoJson, loadWorldCountries, countItemsByCountryHybrid } from '$lib/api/geoJsonService';
   import { browser } from '$app/environment';
   import ChoroplethLayer from './ChoroplethLayer.svelte';
   
@@ -260,8 +260,8 @@
       return;
     }
     
-    // Use places data instead of ProcessedItems for choropleth to show all places
-    choroplethData = countPlacesByCountry(mapData.places);
+    // Use the same ProcessedItems data as bubbles view for consistency
+    choroplethData = countItemsByCountryHybrid(mapData.visibleItems, worldGeo);
   });
   
   // Update map for specific date
