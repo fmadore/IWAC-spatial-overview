@@ -220,12 +220,16 @@ export function countItemsByCountryHybrid(items: ProcessedItem[], worldGeo: GeoJ
   const articleCountryPairs = new Set<string>();
 
   for (const item of items) {
-    const countryName = item.country?.trim();
-    const articleId = item.id?.toString()?.trim();
+  // Use the LOCATION country for the bucket label (map coloring),
+  // but de-duplicate by the ORIGINAL ARTICLE id and country.
+  const countryName = item.country?.trim();
+  // Base article id (strip -index we added per coordinate)
+  const baseId = (item.id ?? '').toString().split('-')[0].trim();
+  const articleId = baseId || item.id?.toString()?.trim();
     
     if (countryName && articleId) {
       // Create a unique key for this article-country combination
-      const pairKey = `${articleId}:${countryName}`;
+  const pairKey = `${articleId}:${countryName}`;
       
       // Only count if we haven't seen this article-country pair before
       if (!articleCountryPairs.has(pairKey)) {

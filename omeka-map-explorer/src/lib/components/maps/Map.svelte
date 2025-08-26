@@ -229,7 +229,7 @@
   // Update map when stores change
   $effect(() => {
     if (browser && map && timeData.currentDate) {
-      updateMapForDate(timeData.currentDate);
+  updateMapForDate(timeData.currentDate);
     }
   });
 
@@ -243,7 +243,7 @@
         next = next.filter((i) => sel.countries.includes(i.articleCountry || i.country));
       }
       mapData.visibleItems = next;
-      updateMapForFilters(filters.selected);
+  updateMapForFilters(filters.selected);
     }
   });
 
@@ -274,16 +274,12 @@
   
   // Update map for specific date
   function updateMapForDate(date: Date) {
-    // Implementation would update displayed data
-    // This is called when the current date changes
-    console.log('Updating map for date:', date);
+  // Hook for date-driven updates (no-op)
   }
   
   // Update map for applied filters
   function updateMapForFilters(filters: any) {
-    // Implementation would update displayed data
-    // This is called when filters change
-    console.log('Updating map for filters:', filters);
+  // Hook for filter-driven updates (no-op)
   }
 </script>
 

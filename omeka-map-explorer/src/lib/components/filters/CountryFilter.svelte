@@ -5,6 +5,7 @@
   import { Label } from '$lib/components/ui/label';
   import { Card, CardContent, CardHeader, CardTitle } from '$lib/components/ui/card';
   import { Button } from '$lib/components/ui/button';
+  import CountryCheckboxRow from './CountryCheckboxRow.svelte';
 
   // Props (read-only); selection relies on global filters state
   let { countries = [], selected = [] } = $props<{ countries?: string[]; selected?: string[] }>();
@@ -19,10 +20,6 @@
     countries?.length ? allowedCountries.filter((c) => countries.includes(c)) : allowedCountries
   ));
 
-  // Build a stable id for input/label association
-  function idFor(country: string) {
-    return `country-${country.toLowerCase().replace(/[^a-z0-9]+/gi, '-')}`;
-  }
 
   function toggleCountry(country: string) {
     const list = filters.selected.countries;
@@ -66,15 +63,7 @@
         <p class="text-sm text-muted-foreground italic">No countries available</p>
       {:else}
         {#each countryList as country (country)}
-          <div class="flex items-center gap-2">
-            <Checkbox
-              id={idFor(country)}
-              checked={filters.selected.countries.includes(country)}
-              aria-checked={filters.selected.countries.includes(country)}
-              onclick={() => toggleCountry(country)}
-            />
-            <Label for={idFor(country)} class="cursor-pointer">{country}</Label>
-          </div>
+          <CountryCheckboxRow name={country} />
         {/each}
       {/if}
     </div>
