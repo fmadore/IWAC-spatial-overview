@@ -209,15 +209,29 @@ export async function countItemsByCountryPolygons(items: ProcessedItem[], worldG
 /**
  * Count items by country using pre-computed country names from the data.
  * This uses the Country field that was added by the Python preprocessing script.
+ * 
+ * IMPORTANT: This counts each unique article only once per country.
+ * If an article mentions multiple places within the same country, it only counts once for that country.
  */
 export function countItemsByCountryHybrid(items: ProcessedItem[], worldGeo: GeoJsonData): Record<string, number> {
   const counts: Record<string, number> = {};
 
+  // Group items by article ID and country to avoid double-counting
+  const articleCountryPairs = new Set<string>();
+
   for (const item of items) {
-    // Use the pre-computed country name from the item data
     const countryName = item.country?.trim();
-    if (countryName) {
-      counts[countryName] = (counts[countryName] || 0) + 1;
+    const articleId = item.id?.toString()?.trim();
+    
+    if (countryName && articleId) {
+      // Create a unique key for this article-country combination
+      const pairKey = `${articleId}:${countryName}`;
+      
+      // Only count if we haven't seen this article-country pair before
+      if (!articleCountryPairs.has(pairKey)) {
+        articleCountryPairs.add(pairKey);
+        counts[countryName] = (counts[countryName] || 0) + 1;
+      }
     }
   }
 
