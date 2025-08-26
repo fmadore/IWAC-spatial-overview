@@ -108,11 +108,10 @@
         {/each}
       {/if}
     </div>
-    
-  {#if filters.selected.countries.length > 0}
+    {#if filters.selected.countries.length > 0}
       <div class="mt-3 pt-3 border-t border-border">
         <p class="text-xs text-muted-foreground">
-      {filters.selected.countries.length} countr{filters.selected.countries.length === 1 ? 'y' : 'ies'} selected
+          {filters.selected.countries.length} countr{filters.selected.countries.length === 1 ? 'y' : 'ies'} selected
         </p>
       </div>
     {/if}

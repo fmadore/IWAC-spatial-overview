@@ -95,24 +95,47 @@
       }
     }
     
-    // Add markers for visible items
+    // Aggregate items by coordinate and add circle markers sized by count (much fewer markers)
     if (mapData.visibleItems.length > 0) {
-      const markers = L.layerGroup();
-      
-      mapData.visibleItems.forEach(item => {
-        if (item.coordinates && item.coordinates.length > 0) {
-          const [lat, lng] = item.coordinates[0];
-          const marker = L.marker([lat, lng])
-            .bindPopup(`<strong>${item.title}</strong><br>${item.publishDate?.toLocaleDateString() || 'Unknown date'}`);
-          
-          marker.on('click', () => selectItem(item));
-          
-          markers.addLayer(marker);
+      const groups = new Map<string, { lat: number; lng: number; count: number; sample: any }>();
+      for (const item of mapData.visibleItems) {
+        if (!item.coordinates || item.coordinates.length === 0) continue;
+        const [lat, lng] = item.coordinates[0];
+        if (lat == null || lng == null) continue;
+        const key = `${lat.toFixed(4)},${lng.toFixed(4)}`; // merge nearby points
+        const existing = groups.get(key);
+        if (existing) {
+          existing.count += 1;
+        } else {
+          groups.set(key, { lat, lng, count: 1, sample: item });
         }
-      });
-      
-      markers.addTo(map);
-      layers['markers'] = markers;
+      }
+
+      const maxCount = Array.from(groups.values()).reduce((m, g) => Math.max(m, g.count), 1);
+      const canvas = L.canvas({ padding: 0.5 });
+      const layerGroup = L.layerGroup();
+
+      for (const g of groups.values()) {
+        // Radius: base + scaled by sqrt(count) to reduce disparity
+        const radius = 4 + 6 * Math.sqrt(g.count / maxCount);
+        const circle = L.circleMarker([g.lat, g.lng], {
+          radius,
+          color: '#1f78b4',
+          weight: 1,
+          opacity: 0.9,
+          fillOpacity: 0.5,
+          fillColor: '#1f78b4',
+          renderer: canvas
+        });
+        circle.bindPopup(`<div style="min-width:160px">
+          <div><strong>Occurrences:</strong> ${g.count}</div>
+          <div><strong>Sample:</strong> ${(g.sample?.title ?? 'Untitled')}</div>
+        </div>`);
+        circle.addTo(layerGroup);
+      }
+
+      layerGroup.addTo(map);
+      layers['markers'] = layerGroup;
     }
   }
   
