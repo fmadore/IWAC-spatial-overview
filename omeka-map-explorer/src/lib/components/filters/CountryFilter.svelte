@@ -5,47 +5,37 @@
   import { Label } from '$lib/components/ui/label';
   import { Card, CardContent, CardHeader, CardTitle } from '$lib/components/ui/card';
   import { Button } from '$lib/components/ui/button';
-  
+
   // Props (read-only); selection relies on global filters state
   let { countries = [], selected = [] } = $props<{ countries?: string[]; selected?: string[] }>();
-  
-  // Event dispatcher
+
+  // Event dispatcher (optional for parent listeners)
   const dispatch = createEventDispatcher();
-  
-  // Toggle country selection
+
+  // Only allow these countries (fixed order)
+  const allowedCountries = ['Benin', 'Burkina Faso', "Côte d'Ivoire", 'Togo'];
+  // Intersect available countries with allowed list; if none provided, fall back to allowed
+  const countryList = $derived.by<string[]>(() => (
+    countries?.length ? allowedCountries.filter((c) => countries.includes(c)) : allowedCountries
+  ));
+
+  // Build a stable id for input/label association
+  function idFor(country: string) {
+    return `country-${country.toLowerCase().replace(/[^a-z0-9]+/gi, '-')}`;
+  }
+
   function toggleCountry(country: string) {
-    console.log('toggleCountry called for:', country);
     const list = filters.selected.countries;
-    const index = list.indexOf(country);
-    console.log('Current selected countries:', list);
-    console.log('Country index:', index);
-    if (index === -1) {
-      filters.selected.countries = [...list, country];
-      console.log('Added country, new list:', filters.selected.countries);
-    } else {
-      filters.selected.countries = list.filter(c => c !== country);
-      console.log('Removed country, new list:', filters.selected.countries);
-    }
+    const idx = list.indexOf(country);
+    filters.selected.countries = idx === -1 ? [...list, country] : list.filter((c) => c !== country);
     dispatch('change', { countries: filters.selected.countries });
   }
-  
-  // Clear all selections
   function clearAll() {
-    console.log('clearAll called, current countries:', filters.selected.countries);
     filters.selected.countries = [];
-    console.log('clearAll after clear:', filters.selected.countries);
     dispatch('change', { countries: filters.selected.countries });
   }
-  
-  // Select all countries
   function selectAll() {
-    filters.selected.countries = [...countries];
-    dispatch('change', { countries: filters.selected.countries });
-  }
-  
-  // Update the filter store
-  // Deprecated legacy method retained for compatibility if invoked
-  function updateStore() {
+    filters.selected.countries = [...countryList];
     dispatch('change', { countries: filters.selected.countries });
   }
 </script>
@@ -54,56 +44,36 @@
   <CardHeader class="pb-3">
     <div class="flex items-center justify-between">
       <CardTitle class="text-base font-medium">Countries</CardTitle>
-      {#if countries.length > 0}
+      {#if countryList.length > 0}
         <div class="flex gap-2">
-          <Button
-            variant="ghost"
-            size="sm"
-            class="h-6 px-2 text-xs"
+          <Button size="sm" variant="outline"
+            aria-label="Select all"
+            disabled={filters.selected.countries.length === countryList.length}
             onclick={selectAll}
-            disabled={filters.selected.countries.length === countries.length}
-          >
-            All
-          </Button>
-          <Button
-            variant="ghost"
-            size="sm"
-            class="h-6 px-2 text-xs"
-            onclick={() => {
-              console.log('Clear button clicked');
-              clearAll();
-            }}
+          >Select all</Button>
+          <Button size="sm" variant="ghost"
+            aria-label="Clear"
             disabled={filters.selected.countries.length === 0}
-          >
-            Clear
-          </Button>
+            onclick={clearAll}
+          >Clear</Button>
         </div>
       {/if}
     </div>
   </CardHeader>
   <CardContent class="pt-0">
     <div class="space-y-3 max-h-40 overflow-y-auto">
-      {#if countries.length === 0}
+      {#if countryList.length === 0}
         <p class="text-sm text-muted-foreground italic">No countries available</p>
       {:else}
-        {#each countries as country (country)}
-          {@const isChecked = filters.selected.countries.includes(country)}
-          <div class="flex items-center space-x-2">
+        {#each countryList as country (country)}
+          <div class="flex items-center gap-2">
             <Checkbox
-              id={`country-${country}`}
-              checked={isChecked}
-              onCheckedChange={(checked) => {
-                console.log('Checkbox onCheckedChange event fired for:', country, 'checked:', checked);
-                toggleCountry(country);
-              }}
-            />
-            <Label
-              for={`country-${country}`}
-              class="text-sm font-normal cursor-pointer leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+              id={idFor(country)}
+              checked={filters.selected.countries.includes(country)}
+              aria-checked={filters.selected.countries.includes(country)}
               onclick={() => toggleCountry(country)}
-            >
-              {country}
-            </Label>
+            />
+            <Label for={idFor(country)} class="cursor-pointer">{country}</Label>
           </div>
         {/each}
       {/if}
@@ -111,9 +81,9 @@
     {#if filters.selected.countries.length > 0}
       <div class="mt-3 pt-3 border-t border-border">
         <p class="text-xs text-muted-foreground">
-          {filters.selected.countries.length} countr{filters.selected.countries.length === 1 ? 'y' : 'ies'} selected
+          {filters.selected.countries.length} selected
         </p>
       </div>
     {/if}
   </CardContent>
-</Card> 
+</Card>

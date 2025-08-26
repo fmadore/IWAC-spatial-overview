@@ -12,7 +12,7 @@ export const visibleData = $derived.by<ProcessedItem[]>(() => {
 
   const sel = filters.selected;
   let filtered = items.filter(i => i.publishDate && i.publishDate >= monthBefore && i.publishDate <= monthAfter);
-  if (sel.countries.length) filtered = filtered.filter(i => sel.countries.includes(i.country));
+  if (sel.countries.length) filtered = filtered.filter(i => sel.countries.includes((i as any).articleCountry || i.country));
   if (sel.regions.length)   filtered = filtered.filter(i => i.region && sel.regions.includes(i.region));
   if (sel.newspapers.length) filtered = filtered.filter(i => sel.newspapers.includes(i.newspaperSource));
   if (sel.dateRange) {

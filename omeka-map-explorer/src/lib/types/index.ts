@@ -21,7 +21,10 @@ export interface ProcessedItem {
   title: string;
   publishDate: Date;
   coordinates: [number, number][] | null; // [lat, lng]
+  // country: the location's country (from the place coordinate)
   country: string;
+  // articleCountry: the original article country from articles.json
+  articleCountry: string;
   region: string | null;
   prefecture: string | null;
   newspaperSource: string;

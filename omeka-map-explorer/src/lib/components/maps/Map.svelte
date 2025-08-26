@@ -235,6 +235,14 @@
 
   $effect(() => {
     if (browser && map && filters.selected) {
+      const sel = filters.selected;
+      // Derive visible items from all items using country filter only (others can be added later)
+      const all = mapData.allItems || [];
+      let next = all;
+      if (sel.countries && sel.countries.length) {
+        next = next.filter((i) => sel.countries.includes(i.articleCountry || i.country));
+      }
+      mapData.visibleItems = next;
       updateMapForFilters(filters.selected);
     }
   });

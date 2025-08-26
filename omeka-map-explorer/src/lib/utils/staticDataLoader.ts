@@ -123,7 +123,7 @@ export async function loadStaticData(basePath = '/data'):
   for (const a of articles) {
     const id = a['o:id']?.toString() || '';
     const title = a.title || 'Untitled';
-    const country = a.country || '';
+  const country = a.country || '';
     const newspaperSource = a.newspaper || '';
     const keywords = parsePipeList(a.subject);
     const spatialLabels = parsePipeList(a.spatial);
@@ -163,6 +163,7 @@ export async function loadStaticData(basePath = '/data'):
           publishDate,
           coordinates: [coord], // Single coordinate per item
           country: coordCountry,
+          articleCountry: country,
           region: null,
           prefecture: null,
           newspaperSource,
@@ -186,6 +187,7 @@ export async function loadStaticData(basePath = '/data'):
         publishDate,
         coordinates: null,
         country: derivedCountry,
+        articleCountry: country,
         region: null,
         prefecture: null,
         newspaperSource,
