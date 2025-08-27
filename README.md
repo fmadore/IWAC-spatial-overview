@@ -91,6 +91,18 @@ npm run lint       # prettier check
 ## License
 
 MIT
+
+## Deploy to GitHub Pages
+
+This repo is configured to publish the Svelte static build to GitHub Pages:
+
+1) Ensure the repository is public (or Private Pages enabled).
+2) In GitHub > Settings > Pages, set Source to GitHub Actions.
+3) Push to `main`. The workflow `.github/workflows/deploy.yml` will:
+  - build the app in `omeka-map-explorer/`
+  - publish the `build/` output to Pages
+
+Site URL: https://fmadore.github.io/IWAC-spatial-overview
   range: {
     start: new Date('1900-01-01'),
     end: new Date('2023-12-31')

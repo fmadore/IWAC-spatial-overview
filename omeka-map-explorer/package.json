@@ -17,6 +17,7 @@
 		"test:unit": "vitest"
 	},
 	"devDependencies": {
+		"@sveltejs/adapter-static": "^3.0.0",
 		"@internationalized/date": "^3.8.2",
 		"@lucide/svelte": "^0.515.0",
 		"@playwright/test": "^1.54.2",

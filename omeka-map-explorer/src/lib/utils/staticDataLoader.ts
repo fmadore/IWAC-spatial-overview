@@ -100,11 +100,11 @@ function groupByMonth(items: ProcessedItem[]): TemporalData[] {
   return Object.values(groups).sort((a, b) => a.date.getTime() - b.date.getTime());
 }
 
-export async function loadStaticData(basePath = '/data'):
+export async function loadStaticData(basePath = 'data'):
   Promise<LoadedData> {
   const [articlesRes, indexRes] = await Promise.all([
-    fetch(`${basePath}/articles.json`),
-    fetch(`${basePath}/index.json`)
+  fetch(`${basePath}/articles.json`),
+  fetch(`${basePath}/index.json`)
   ]);
   if (!articlesRes.ok) throw new Error(`Failed to load articles.json: ${articlesRes.status}`);
   if (!indexRes.ok) throw new Error(`Failed to load index.json: ${indexRes.status}`);

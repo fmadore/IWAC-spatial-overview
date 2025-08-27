@@ -33,7 +33,7 @@
       
       // Start loading data
       appState.loading = true;
-      const loaded = await loadStaticData('/data');
+  const loaded = await loadStaticData('data');
 
       // Populate stores from static data
       mapData.allItems = loaded.items;
