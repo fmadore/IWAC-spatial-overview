@@ -1,403 +1,96 @@
-# Svelte Interactive Map Visualization for Omeka S Collection
+# IWAC Spatial Overview
 
-## Project Overview
+SvelteKit application to explore newspaper article locations from an Omeka S collection with filters, a timeline, and choropleth mapping. The runnable app lives in `omeka-map-explorer/`, and helper data-prep scripts live in `scripts/`.
 
-This roadmap outlines the development of a Svelte application for interactive visualization of newspaper article locations from an Omeka S collection. The application will feature:
+## Repository layout
 
-- Time-based visualization with animation capabilities
-- Choropleth maps for different countries and regions
-- Filtering by newspaper source, date range, and other metadata
-- Interactive exploration of article locations
-- Responsive design for various devices
+```
+IWAC-spatial-overview
+├─ omeka-map-explorer/           # SvelteKit app (Svelte 5, TS, Tailwind v4)
+│  ├─ src/
+│  │  ├─ lib/
+│  │  │  ├─ api/                # GeoJSON utilities (loading, counts)
+│  │  │  ├─ components/
+│  │  │  │  ├─ maps/            # Leaflet map + choropleth layer
+│  │  │  │  ├─ filters/         # Country + year range filters
+│  │  │  │  └─ timeline/        # D3-based timeline and controller
+│  │  │  ├─ hooks/              # e.g., mobile media query
+│  │  │  ├─ state/              # Svelte 5 runes stores ($state)
+│  │  │  ├─ types/              # TS types and ambient decls
+│  │  │  └─ utils/              # static data loader
+│  │  ├─ routes/                # +page.svelte (client-only)
+│  │  └─ app.css/html           # Tailwind + app shell
+│  ├─ static/
+│  │  └─ data/                  # Articles, index, and maps/*.geojson
+│  ├─ e2e/ and src/**.test.ts   # Playwright + Vitest tests
+│  └─ package.json              # dev/build/test scripts
+├─ scripts/                     # Python data-prep helpers
+│  ├─ prepare_json.py           # Export articles.json, index.json
+│  ├─ add_countries.py          # Add Country to index.json via polygons
+│  └─ requirements.txt          # Python deps
+└─ README.md (this file)
+```
 
-## Implementation Progress
+See the app-level docs in `omeka-map-explorer/README.md` for usage details.
 
-We have created a working implementation of the application in the `omeka-map-explorer` directory. The implementation includes:
+## Quick start
 
-- A SvelteKit application with TypeScript and Tailwind CSS
-- Interactive map visualization using Leaflet
-- Timeline component for temporal navigation using D3
-- Filtering system for data exploration
-- Server-side rendering compatibility
-- Responsive design
+Node 18+ recommended.
 
-See the [implementation README](omeka-map-explorer/README.md) for more details on the current status and how to run the application.
+1) Install and run the app
 
-## Original Roadmap
-
-The original roadmap below was used as a guide for the implementation:
-
-## 1. Project Setup & Architecture (Week 1)
-
-### 1.1 Environment Setup
-
-```bash
-# Install Node.js and npm if not already installed
-# Create new SvelteKit project
-npm create svelte@latest omeka-map-explorer
+```powershell
 cd omeka-map-explorer
 npm install
-
-# Install dependencies
-npm install leaflet maplibre-gl d3-scale d3-scale-chromatic d3-time d3-time-format
-npm install papaparse axios svelte-select
-npm install -D typescript
+npm run dev
 ```
 
-### 1.2 Project Structure
+2) Optional: prepare static data for the app (outputs to `omeka-map-explorer/static/data` by default)
 
-```
-/src
-  /lib
-    /api                 # Omeka S API integration
-    /components
-      /maps              # Map visualization components
-      /timeline          # Time-based visualization
-      /filters           # Filtering components
-      /layout            # UI layout components
-    /stores              # Svelte stores for state management
-    /types               # TypeScript type definitions
-    /utils               # Utility functions
-    /styles              # Global styles
-  /routes                # SvelteKit routes
-  /static
-    /data               # Static GeoJSON data
-    /assets             # Images, icons, etc.
+```powershell
+# Create and activate a venv (optional)
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+
+# Install Python requirements
+pip install -r scripts/requirements.txt
+
+# Generate articles.json and index.json
+python scripts/prepare_json.py
+
+# Add Country to each place in index.json using world_countries.geojson
+python scripts/add_countries.py
 ```
 
-### 1.3 Configuration Management
+Data files expected by the app:
+- `omeka-map-explorer/static/data/articles.json`
+- `omeka-map-explorer/static/data/index.json`
+- `omeka-map-explorer/static/data/maps/world_countries.geojson` and regional files (e.g., Benin, Togo)
 
-Create a `.env` file for configuration:
+## What’s inside the app
 
-```
-VITE_OMEKA_BASE_URL=https://your-omeka-instance.org/api
-VITE_OMEKA_KEY_IDENTITY=your_key_identity
-VITE_OMEKA_KEY_CREDENTIAL=your_key_credential
-VITE_MAP_DEFAULT_CENTER_LAT=10.0
-VITE_MAP_DEFAULT_CENTER_LNG=0.0
-VITE_MAP_DEFAULT_ZOOM=5
-```
+- Map (Leaflet) with optional choropleth by country
+- Timeline (D3) with play/pause animation controller
+- Filters: country selection and year range
+- State via Svelte 5 runes (`$state`) in `src/lib/state`
+- Tailwind CSS v4 and a small UI kit for layout
+- Client-only main route (`src/routes/+page.ts` sets `ssr = false`)
 
-### 1.4 TypeScript Type Definitions
+## Testing and tooling
 
-Create core type definitions in `/lib/types/index.ts`:
+Run from `omeka-map-explorer/`:
 
-```typescript
-// Omeka S API types
-export interface OmekaItem {
-  id: string;
-  title: string;
-  "dcterms:spatial": Array<{
-    "@id": string;
-    "@value"?: string;
-  }>;
-  "dcterms:date": Array<{
-    "@value": string;
-  }>;
-  "dcterms:title": Array<{
-    "@value": string;
-  }>;
-  // Other Dublin Core fields
-}
-
-// Processed Item with coordinate data
-export interface ProcessedItem {
-  id: string;
-  title: string;
-  publishDate: Date;
-  coordinates: [number, number][] | null; // [lat, lng]
-  country: string;
-  region: string | null;
-  prefecture: string | null;
-  newspaperSource: string;
-  keywords: string[];
-}
-
-// Temporal data for timeline visualization
-export interface TemporalData {
-  date: Date;
-  count: number;
-  items: ProcessedItem[];
-}
-
-// GeoJSON types
-export interface GeoJsonFeature {
-  type: string;
-  properties: {
-    name: string;
-    [key: string]: any;
-  };
-  geometry: {
-    type: string;
-    coordinates: any[];
-  };
-}
-
-export interface GeoJsonData {
-  type: string;
-  features: GeoJsonFeature[];
-}
+```powershell
+npm test           # e2e (Playwright) + unit (Vitest)
+npm run test:unit  # unit tests only
+npm run check      # svelte-check
+npm run format     # prettier write
+npm run lint       # prettier check
 ```
 
-## 2. Core Data Integration (Week 2)
+## License
 
-### 2.1 Omeka S API Service
-
-Create a service in `/lib/api/omekaService.js`:
-
-```javascript
-import axios from 'axios';
-
-// Configuration
-const API_CONFIG = {
-  baseURL: import.meta.env.VITE_OMEKA_BASE_URL || '',
-  keyIdentity: import.meta.env.VITE_OMEKA_KEY_IDENTITY || '',
-  keyCredential: import.meta.env.VITE_OMEKA_KEY_CREDENTIAL || '',
-  timeout: 30000,
-  retryAttempts: 3,
-  retryDelay: 1000,
-};
-
-// Create axios instance
-const api = axios.create({
-  baseURL: API_CONFIG.baseURL,
-  timeout: API_CONFIG.timeout,
-});
-
-// Cache implementation
-const cache = {
-  items: new Map(),
-  itemSets: new Map(),
-  coordinates: new Map(),
-  
-  // Cache methods
-  getItem(id) { /* ... */ },
-  setItem(id, data) { /* ... */ },
-  getItemSet(id) { /* ... */ },
-  setItemSet(id, data) { /* ... */ },
-  getCoordinates(url) { /* ... */ },
-  setCoordinates(url, data) { /* ... */ },
-  clearCache() { /* ... */ },
-  clearExpired(expiryTime = 3600000) { /* ... */ }
-};
-
-// API methods
-export async function fetchItemSets() { /* ... */ }
-export async function fetchItemsFromSet(itemSetId) { /* ... */ }
-export async function fetchCoordinates(spatialUrl) { /* ... */ }
-export async function extractCoordinates(item) { /* ... */ }
-export function extractPublicationDate(item) { /* ... */ }
-export function extractNewspaperTitle(item) { /* ... */ }
-```
-
-### 2.2 GeoJSON Data Service
-
-Create a service in `/lib/api/geoJsonService.js`:
-
-```javascript
-// Load and process GeoJSON data
-
-// Cache for GeoJSON files
-const geoJsonCache = new Map();
-
-/**
- * Load GeoJSON file for a country
- * @param {string} country - Country name
- * @param {string} level - 'regions' or 'prefectures'
- * @returns {Promise<Object>} - GeoJSON data
- */
-export async function loadGeoJson(country, level = 'regions') {
-  const cacheKey = `${country}_${level}`;
-  
-  // Check cache first
-  if (geoJsonCache.has(cacheKey)) {
-    return geoJsonCache.get(cacheKey);
-  }
-  
-  // Create filename
-  const fileName = `${country.toLowerCase().replace(/\s+/g, '_')}_${level}.geojson`;
-  const url = `/data/geojson/${fileName}`;
-  
-  try {
-    const response = await fetch(url);
-    if (!response.ok) {
-      throw new Error(`Failed to load GeoJSON: ${response.statusText}`);
-    }
-    
-    const geoJson = await response.json();
-    
-    // Ensure 'name' property exists in each feature
-    normalizeGeoJson(geoJson);
-    
-    // Cache the result
-    geoJsonCache.set(cacheKey, geoJson);
-    
-    return geoJson;
-  } catch (error) {
-    console.error(`Error loading GeoJSON for ${country} (${level}):`, error);
-    throw error;
-  }
-}
-
-/**
- * Normalize GeoJSON to ensure it has a 'name' property
- * @param {Object} geoJson - GeoJSON object
- */
-function normalizeGeoJson(geoJson) {
-  if (!geoJson.features || !Array.isArray(geoJson.features)) {
-    return;
-  }
-  
-  geoJson.features.forEach(feature => {
-    if (!feature.properties) {
-      feature.properties = {};
-    }
-    
-    if (!feature.properties.name) {
-      // Try to find name in other properties
-      if (feature.properties.NAME) {
-        feature.properties.name = feature.properties.NAME;
-      } else if (feature.properties.shape2) {
-        feature.properties.name = feature.properties.shape2;
-      } else if (feature.properties.id) {
-        feature.properties.name = feature.properties.id;
-      } else {
-        feature.properties.name = 'Unknown';
-      }
-    }
-  });
-}
-
-/**
- * Count items per region in GeoJSON
- * @param {Array} coordinates - Array of [lat, lng] coordinates
- * @param {Object} geoJson - GeoJSON object
- * @returns {Object} - Map of region names to counts
- */
-export function countItemsPerRegion(coordinates, geoJson) {
-  // This would use turf.js in a real implementation
-  // Simplified version for roadmap
-  const counts = {};
-  
-  coordinates.forEach(coord => {
-    const region = findRegionForCoordinate(coord, geoJson);
-    if (region) {
-      counts[region] = (counts[region] || 0) + 1;
-    }
-  });
-  
-  return counts;
-}
-
-function findRegionForCoordinate(coord, geoJson) {
-  // This is a placeholder for the actual point-in-polygon check
-  // Would use turf.js pointInPolygon in actual implementation
-  return null;
-}
-```
-
-### 2.3 Data Processing Service
-
-Create a service in `/lib/utils/dataProcessor.js`:
-
-```javascript
-import { extract } from 'dates-from-string';
-
-/**
- * Process raw items from Omeka S API
- * @param {Array} items - Raw items from API
- * @param {string} country - Country name
- * @returns {Promise<Array>} - Processed items
- */
-export async function processItems(items, country) {
-  const processed = [];
-  
-  for (const item of items) {
-    try {
-      // Extract basic metadata
-      const processedItem = {
-        id: item['o:id'] || item.id,
-        title: extractTitle(item),
-        publishDate: extractDate(item),
-        coordinates: extractCoordinates(item),
-        country: country,
-        region: null, // Will be populated later
-        prefecture: null, // Will be populated later
-        newspaperSource: extractNewspaperSource(item),
-        keywords: extractKeywords(item),
-        rawItem: item // Keep reference to original item
-      };
-      
-      if (processedItem.publishDate && processedItem.coordinates && processedItem.coordinates.length > 0) {
-        processed.push(processedItem);
-      }
-    } catch (error) {
-      console.error('Error processing item:', error);
-    }
-  }
-  
-  return processed;
-}
-
-/**
- * Group processed items by time period
- * @param {Array} items - Processed items
- * @param {string} groupBy - 'day', 'month', or 'year'
- * @returns {Object} - Items grouped by time period
- */
-export function groupItemsByTime(items, groupBy = 'month') {
-  const grouped = {};
-  
-  items.forEach(item => {
-    if (!item.publishDate) return;
-    
-    const date = new Date(item.publishDate);
-    let key;
-    
-    if (groupBy === 'day') {
-      key = date.toISOString().substring(0, 10); // YYYY-MM-DD
-    } else if (groupBy === 'month') {
-      key = date.toISOString().substring(0, 7); // YYYY-MM
-    } else {
-      key = date.getFullYear().toString(); // YYYY
-    }
-    
-    if (!grouped[key]) {
-      grouped[key] = {
-        date: new Date(date),
-        count: 0,
-        items: []
-      };
-    }
-    
-    grouped[key].count++;
-    grouped[key].items.push(item);
-  });
-  
-  // Convert to array and sort by date
-  return Object.values(grouped).sort((a, b) => a.date - b.date);
-}
-
-// Helper functions for extraction
-function extractTitle(item) { /* ... */ }
-function extractDate(item) { /* ... */ }
-function extractCoordinates(item) { /* ... */ }
-function extractNewspaperSource(item) { /* ... */ }
-function extractKeywords(item) { /* ... */ }
-```
-
-## 3. State Management with Svelte Stores (Week 2)
-
-### 3.1 Create Main Data Stores
-
-Create stores in `/lib/stores/`:
-
-```javascript
-// timeDataStore.js
-import { writable } from 'svelte/store';
-
-export const timeDataStore = writable({
-  data: [], // Array of temporal data points
+MIT
   range: {
     start: new Date('1900-01-01'),
     end: new Date('2023-12-31')
