@@ -4,7 +4,7 @@
   import { mapData } from '$lib/state/mapData.svelte';
   import { Button } from '$lib/components/ui/button';
   import CountryFilter from './CountryFilter.svelte';
-  import DateRangeFilter from './DateRangeFilter.svelte';
+  import YearRangeFilter from './YearRangeFilter.svelte';
   import * as Sidebar from '$lib/components/ui/sidebar';
   
   // Reset all filters
@@ -41,9 +41,8 @@
     
     <Sidebar.Group>
       <Sidebar.GroupContent>
-        <DateRangeFilter 
+        <YearRangeFilter 
           range={filters.available.dateRange}
-          selected={filters.selected.dateRange}
         />
       </Sidebar.GroupContent>
     </Sidebar.Group>

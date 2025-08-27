@@ -3,6 +3,7 @@
   import { mapData } from '$lib/state/mapData.svelte';
   import { timeData } from '$lib/state/timeData.svelte';
   import { filters } from '$lib/state/filters.svelte';
+  import { getVisibleData } from '$lib/state/derived.svelte';
   import { loadGeoJson, loadWorldCountries, countItemsByCountryHybrid } from '$lib/api/geoJsonService';
   import { browser } from '$app/environment';
   import ChoroplethLayer from './ChoroplethLayer.svelte';
@@ -14,6 +15,9 @@
   let L: any; // Will hold the Leaflet library when loaded
   let worldGeo: any = $state(null); // world countries geojson cache
   let choroplethData: Record<string, number> = $state({});
+  
+  // Create local derived state for visible data
+  const visibleData = $derived.by(() => getVisibleData());
   
   // Props
   let { height = '600px' } = $props();
@@ -128,10 +132,10 @@
     // Choropleth is rendered by child component; skip adding Leaflet layers here
     if (mapData.viewMode === 'choropleth' && worldGeo) {
       // no-op
-    } else if (mapData.visibleItems.length > 0) {
+    } else if (visibleData.length > 0) {
       // Aggregate items by coordinate and add circle markers sized by count (much fewer markers)
       const groups = new Map<string, { lat: number; lng: number; count: number; sample: any }>();
-      for (const item of mapData.visibleItems) {
+      for (const item of visibleData) {
         if (!item.coordinates || item.coordinates.length === 0) continue;
         const [lat, lng] = item.coordinates[0]; // Each item now has exactly one coordinate
         if (lat == null || lng == null) continue;
@@ -235,20 +239,13 @@
 
   $effect(() => {
     if (browser && map && filters.selected) {
-      const sel = filters.selected;
-      // Derive visible items from all items using country filter only (others can be added later)
-      const all = mapData.allItems || [];
-      let next = all;
-      if (sel.countries && sel.countries.length) {
-        next = next.filter((i) => sel.countries.includes(i.articleCountry || i.country));
-      }
-      mapData.visibleItems = next;
-  updateMapForFilters(filters.selected);
+      // Trigger map reload when filters change
+      loadMapData();
     }
   });
 
   $effect(() => {
-    if (browser && map && mapData.visibleItems) {
+    if (browser && map && visibleData) {
       loadMapData();
     }
   });
@@ -268,8 +265,8 @@
       return;
     }
     
-    // Use the same ProcessedItems data as bubbles view for consistency
-    choroplethData = countItemsByCountryHybrid(mapData.visibleItems, worldGeo);
+    // Use the filtered data from derived state that includes all filters
+    choroplethData = countItemsByCountryHybrid(visibleData, worldGeo);
   });
   
   // Update map for specific date

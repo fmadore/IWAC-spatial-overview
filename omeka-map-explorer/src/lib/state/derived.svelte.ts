@@ -3,30 +3,54 @@ import { timeData } from './timeData.svelte';
 import { filters } from './filters.svelte';
 import { mapData } from './mapData.svelte';
 
-export const visibleData = $derived.by<ProcessedItem[]>(() => {
+export function getVisibleData(): ProcessedItem[] {
   const items = mapData.allItems;
   if (!items.length) return [];
-  const currentDate = timeData.currentDate;
-  const monthBefore = new Date(currentDate); monthBefore.setMonth(monthBefore.getMonth() - 1);
-  const monthAfter = new Date(currentDate); monthAfter.setMonth(monthAfter.getMonth() + 1);
 
   const sel = filters.selected;
-  let filtered = items.filter(i => i.publishDate && i.publishDate >= monthBefore && i.publishDate <= monthAfter);
-  if (sel.countries.length) filtered = filtered.filter(i => sel.countries.includes((i as any).articleCountry || i.country));
-  if (sel.regions.length)   filtered = filtered.filter(i => i.region && sel.regions.includes(i.region));
-  if (sel.newspapers.length) filtered = filtered.filter(i => sel.newspapers.includes(i.newspaperSource));
+  let filtered = items;
+
+  // Filter by countries
+  if (sel.countries.length) {
+    filtered = filtered.filter(i => sel.countries.includes((i as any).articleCountry || i.country));
+  }
+
+  // Filter by regions
+  if (sel.regions.length) {
+    filtered = filtered.filter(i => i.region && sel.regions.includes(i.region));
+  }
+
+  // Filter by newspapers
+  if (sel.newspapers.length) {
+    filtered = filtered.filter(i => sel.newspapers.includes(i.newspaperSource));
+  }
+
+  // Filter by date range (year range filter)
   if (sel.dateRange) {
     const { start, end } = sel.dateRange;
     filtered = filtered.filter(i => i.publishDate && i.publishDate >= start && i.publishDate <= end);
   }
+
+  // Filter by timeline current date (for temporal animation) - only if no date range filter is applied
+  if (!sel.dateRange) {
+    const currentDate = timeData.currentDate;
+    const monthBefore = new Date(currentDate); 
+    monthBefore.setMonth(monthBefore.getMonth() - 1);
+    const monthAfter = new Date(currentDate); 
+    monthAfter.setMonth(monthAfter.getMonth() + 1);
+    filtered = filtered.filter(i => i.publishDate && i.publishDate >= monthBefore && i.publishDate <= monthAfter);
+  }
+
+  // Filter by keywords
   if (sel.keywords.length) {
     filtered = filtered.filter(i => i.keywords.length && sel.keywords.some(k => i.keywords.includes(k)));
   }
-  return filtered;
-});
 
-export const stats = $derived.by(() => {
-  const list = visibleData;
+  return filtered;
+}
+
+export function getStats() {
+  const list = getVisibleData();
   const countryBreakdown: Record<string, number> = {};
   const newspaperBreakdown: Record<string, number> = {};
   const timeline: { date: string; count: number }[] = [];
@@ -42,4 +66,4 @@ export const stats = $derived.by(() => {
   }
   timeline.sort((a,b) => a.date.localeCompare(b.date));
   return { totalCount: list.length, countryBreakdown, newspaperBreakdown, timeline };
-});
+}
