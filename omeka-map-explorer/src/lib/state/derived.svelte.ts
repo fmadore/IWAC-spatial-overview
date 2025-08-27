@@ -30,16 +30,8 @@ export function getVisibleData(): ProcessedItem[] {
     const { start, end } = sel.dateRange;
     filtered = filtered.filter(i => i.publishDate && i.publishDate >= start && i.publishDate <= end);
   }
-
-  // Filter by timeline current date (for temporal animation) - only if no date range filter is applied
-  if (!sel.dateRange) {
-    const currentDate = timeData.currentDate;
-    const monthBefore = new Date(currentDate); 
-    monthBefore.setMonth(monthBefore.getMonth() - 1);
-    const monthAfter = new Date(currentDate); 
-    monthAfter.setMonth(monthAfter.getMonth() + 1);
-    filtered = filtered.filter(i => i.publishDate && i.publishDate >= monthBefore && i.publishDate <= monthAfter);
-  }
+  // Note: If no date range is selected, show ALL articles (don't filter by timeline date)
+  // Timeline filtering is only applied when the timeline is actively being used for animation
 
   // Filter by keywords
   if (sel.keywords.length) {
