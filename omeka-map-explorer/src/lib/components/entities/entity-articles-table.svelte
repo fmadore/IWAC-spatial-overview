@@ -1,17 +1,17 @@
 <script lang="ts">
 	import type { ProcessedItem } from '$lib/types';
 	import { Card, CardContent, CardHeader, CardTitle } from '$lib/components/ui/card';
-	import { ExternalLink, Calendar, MapPin, Newspaper, Search, SortAsc, SortDesc, Filter } from 'lucide-svelte';
+	import { ExternalLink, Calendar, MapPin, Newspaper, Search, SortAsc, SortDesc, Filter, ChevronLeft, ChevronRight } from 'lucide-svelte';
 	import { Button } from '$lib/components/ui/button';
 	import { Input } from '$lib/components/ui/input';
 
 	interface Props {
 		articles: ProcessedItem[];
 		entityName: string;
-		maxVisible?: number;
+		itemsPerPage?: number;
 	}
 
-	let { articles, entityName, maxVisible = 10 }: Props = $props();
+	let { articles, entityName, itemsPerPage = 10 }: Props = $props();
 
 	// State for filtering and sorting
 	let searchTerm = $state('');
@@ -20,6 +20,7 @@
 	let filterCountry = $state('');
 	let filterNewspaper = $state('');
 	let showFilters = $state(false);
+	let currentPage = $state(1);
 
 	function getArticleUrl(articleId: string): string {
 		// Extract the original article ID (remove coordinate index suffix)
@@ -89,6 +90,21 @@
 		return filtered;
 	});
 
+	// Pagination calculations
+	const totalPages = $derived(Math.ceil(filteredAndSortedArticles.length / itemsPerPage));
+	const startIndex = $derived((currentPage - 1) * itemsPerPage);
+	const endIndex = $derived(startIndex + itemsPerPage);
+	const paginatedArticles = $derived(filteredAndSortedArticles.slice(startIndex, endIndex));
+
+	// Reset to page 1 when filters change
+	$effect(() => {
+		// Watch for changes in filter state and reset to page 1
+		void searchTerm;
+		void filterCountry;
+		void filterNewspaper;
+		currentPage = 1;
+	});
+
 	function toggleSort(field: typeof sortBy) {
 		if (sortBy === field) {
 			sortOrder = sortOrder === 'asc' ? 'desc' : 'asc';
@@ -102,6 +118,25 @@
 		searchTerm = '';
 		filterCountry = '';
 		filterNewspaper = '';
+		currentPage = 1;
+	}
+
+	function goToPage(page: number) {
+		if (page >= 1 && page <= totalPages) {
+			currentPage = page;
+		}
+	}
+
+	function nextPage() {
+		if (currentPage < totalPages) {
+			currentPage++;
+		}
+	}
+
+	function prevPage() {
+		if (currentPage > 1) {
+			currentPage--;
+		}
 	}
 </script>
 
@@ -199,72 +234,186 @@
 			{/if}
 		</CardHeader>
 		<CardContent>
-			<div class="space-y-3">
-				{#each filteredAndSortedArticles.slice(0, maxVisible) as article}
-					<div class="rounded-lg border p-4 hover:bg-muted/50 transition-colors">
-						<div class="space-y-2">
-							<!-- Title with external link -->
-							<div class="flex items-start justify-between gap-2">
-								<a
-									href={getArticleUrl(article.id)}
-									target="_blank"
-									rel="noopener noreferrer"
-									class="text-base font-medium hover:text-primary transition-colors flex items-start gap-2 flex-1"
-								>
-									<span class="leading-tight overflow-hidden text-ellipsis"
-										style="display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;"
+			<div class="space-y-4">
+				<!-- Articles List -->
+				<div class="space-y-3">
+					{#each paginatedArticles as article}
+						<div class="rounded-lg border p-4 hover:bg-muted/50 transition-colors">
+							<div class="space-y-2">
+								<!-- Title with external link -->
+								<div class="flex items-start justify-between gap-2">
+									<a
+										href={getArticleUrl(article.id)}
+										target="_blank"
+										rel="noopener noreferrer"
+										class="text-base font-medium hover:text-primary transition-colors flex items-start gap-2 flex-1"
 									>
-										{article.title}
-									</span>
-									<ExternalLink class="h-4 w-4 mt-0.5 flex-shrink-0 opacity-60" />
-								</a>
+										<span class="leading-tight overflow-hidden text-ellipsis"
+											style="display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;"
+										>
+											{article.title}
+										</span>
+										<ExternalLink class="h-4 w-4 mt-0.5 flex-shrink-0 opacity-60" />
+									</a>
+								</div>
+								
+								<!-- Metadata -->
+								<div class="flex flex-wrap gap-4 text-sm text-muted-foreground">
+									{#if article.publishDate}
+										<div class="flex items-center gap-1">
+											<Calendar class="h-3 w-3" />
+											<span>{formatDate(article.publishDate)}</span>
+										</div>
+									{/if}
+									
+									{#if article.articleCountry}
+										<div class="flex items-center gap-1">
+											<MapPin class="h-3 w-3" />
+											<span>{article.articleCountry}</span>
+										</div>
+									{/if}
+									
+									{#if article.newspaperSource}
+										<div class="flex items-center gap-1">
+											<Newspaper class="h-3 w-3" />
+											<span>{article.newspaperSource}</span>
+										</div>
+									{/if}
+								</div>
 							</div>
-							
-							<!-- Metadata -->
-							<div class="flex flex-wrap gap-4 text-sm text-muted-foreground">
-								{#if article.publishDate}
-									<div class="flex items-center gap-1">
-										<Calendar class="h-3 w-3" />
-										<span>{formatDate(article.publishDate)}</span>
-									</div>
-								{/if}
-								
-								{#if article.articleCountry}
-									<div class="flex items-center gap-1">
-										<MapPin class="h-3 w-3" />
-										<span>{article.articleCountry}</span>
-									</div>
-								{/if}
-								
-								{#if article.newspaperSource}
-									<div class="flex items-center gap-1">
-										<Newspaper class="h-3 w-3" />
-										<span>{article.newspaperSource}</span>
-									</div>
+						</div>
+					{/each}
+					
+					{#if filteredAndSortedArticles.length === 0}
+						<div class="rounded-lg border border-dashed p-8 text-center">
+							<div class="text-muted-foreground">
+								<Search class="h-8 w-8 mx-auto mb-2 opacity-50" />
+								<p class="text-sm">No articles found matching your filters.</p>
+								{#if searchTerm || filterCountry || filterNewspaper}
+									<Button variant="ghost" size="sm" onclick={clearFilters} class="mt-2">
+										Clear filters
+									</Button>
 								{/if}
 							</div>
 						</div>
-					</div>
-				{/each}
-				
-				{#if filteredAndSortedArticles.length > maxVisible}
-					<div class="rounded-lg border border-dashed p-4 text-center">
-						<span class="text-sm text-muted-foreground">
-							... and {filteredAndSortedArticles.length - maxVisible} more articles
-						</span>
-					</div>
-				{/if}
-				
-				{#if filteredAndSortedArticles.length === 0}
-					<div class="rounded-lg border border-dashed p-8 text-center">
-						<div class="text-muted-foreground">
-							<Search class="h-8 w-8 mx-auto mb-2 opacity-50" />
-							<p class="text-sm">No articles found matching your filters.</p>
-							{#if searchTerm || filterCountry || filterNewspaper}
-								<Button variant="ghost" size="sm" onclick={clearFilters} class="mt-2">
-									Clear filters
-								</Button>
-							{/if}
+					{/if}
+				</div>
+
+				<!-- Pagination -->
+				{#if filteredAndSortedArticles.length > 0 && totalPages > 1}
+					<div class="flex items-center justify-between pt-4 border-t">
+						<div class="text-sm text-muted-foreground">
+							Showing {startIndex + 1} to {Math.min(endIndex, filteredAndSortedArticles.length)} of {filteredAndSortedArticles.length} articles
+						</div>
+						
+						<div class="flex items-center gap-2">
+							<Button 
+								variant="outline" 
+								size="sm" 
+								onclick={prevPage}
+								disabled={currentPage === 1}
+							>
+								<ChevronLeft class="h-4 w-4" />
+								Previous
+							</Button>
+							
+							<div class="flex items-center gap-1">
+								{#if totalPages <= 7}
+									<!-- Show all pages if 7 or fewer -->
+									{#each Array.from({ length: totalPages }, (_, i) => i + 1) as page}
+										<Button 
+											variant={currentPage === page ? "default" : "outline"} 
+											size="sm" 
+											onclick={() => goToPage(page)}
+											class="w-8 h-8 p-0"
+										>
+											{page}
+										</Button>
+									{/each}
+								{:else}
+									<!-- Show condensed pagination for many pages -->
+									{#if currentPage <= 3}
+										{#each [1, 2, 3, 4] as page}
+											<Button 
+												variant={currentPage === page ? "default" : "outline"} 
+												size="sm" 
+												onclick={() => goToPage(page)}
+												class="w-8 h-8 p-0"
+											>
+												{page}
+											</Button>
+										{/each}
+										<span class="px-2 text-muted-foreground">…</span>
+										<Button 
+											variant="outline" 
+											size="sm" 
+											onclick={() => goToPage(totalPages)}
+											class="w-8 h-8 p-0"
+										>
+											{totalPages}
+										</Button>
+									{:else if currentPage >= totalPages - 2}
+										<Button 
+											variant="outline" 
+											size="sm" 
+											onclick={() => goToPage(1)}
+											class="w-8 h-8 p-0"
+										>
+											1
+										</Button>
+										<span class="px-2 text-muted-foreground">…</span>
+										{#each [totalPages - 3, totalPages - 2, totalPages - 1, totalPages] as page}
+											<Button 
+												variant={currentPage === page ? "default" : "outline"} 
+												size="sm" 
+												onclick={() => goToPage(page)}
+												class="w-8 h-8 p-0"
+											>
+												{page}
+											</Button>
+										{/each}
+									{:else}
+										<Button 
+											variant="outline" 
+											size="sm" 
+											onclick={() => goToPage(1)}
+											class="w-8 h-8 p-0"
+										>
+											1
+										</Button>
+										<span class="px-2 text-muted-foreground">…</span>
+										{#each [currentPage - 1, currentPage, currentPage + 1] as page}
+											<Button 
+												variant={currentPage === page ? "default" : "outline"} 
+												size="sm" 
+												onclick={() => goToPage(page)}
+												class="w-8 h-8 p-0"
+											>
+												{page}
+											</Button>
+										{/each}
+										<span class="px-2 text-muted-foreground">…</span>
+										<Button 
+											variant="outline" 
+											size="sm" 
+											onclick={() => goToPage(totalPages)}
+											class="w-8 h-8 p-0"
+										>
+											{totalPages}
+										</Button>
+									{/if}
+								{/if}
+							</div>
+							
+							<Button 
+								variant="outline" 
+								size="sm" 
+								onclick={nextPage}
+								disabled={currentPage === totalPages}
+							>
+								Next
+								<ChevronRight class="h-4 w-4" />
+							</Button>
 						</div>
 					</div>
 				{/if}
