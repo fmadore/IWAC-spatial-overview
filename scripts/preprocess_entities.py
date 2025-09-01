@@ -52,7 +52,8 @@ def extract_entities_by_type(index_data: List[dict], entity_articles: Dict[str, 
         'Personnes': 'persons',
         'Organisations': 'organizations', 
         'Événements': 'events',
-        'Sujets': 'subjects'
+        'Sujets': 'subjects',
+        'Lieux': 'locations'  # Add locations entity type
     }
     
     entities_by_type = {file_name: [] for file_name in entity_types.values()}
@@ -70,12 +71,41 @@ def extract_entities_by_type(index_data: List[dict], entity_articles: Dict[str, 
             # Only include entities that are mentioned in articles
             if related_articles:
                 file_name = entity_types[entity_type]
-                entities_by_type[file_name].append({
+                entity_data = {
                     'id': entity_id,
                     'name': entity_name,
                     'relatedArticleIds': related_articles,
                     'articleCount': len(related_articles)  # Pre-computed count for performance
-                })
+                }
+                
+                # Add location-specific data for places
+                if entity_type == 'Lieux':
+                    coordinates_str = entry.get('Coordonnées', '').strip()
+                    country = entry.get('Country', '').strip()
+                    
+                    # Parse coordinates
+                    coordinates = None
+                    if coordinates_str:
+                        try:
+                            # Handle formats like "lat, lon" or "6.5808, 1.6696"
+                            coords_clean = coordinates_str.replace('(', '').replace(')', '').strip()
+                            if ',' in coords_clean:
+                                parts = [p.strip() for p in coords_clean.split(',')]
+                                if len(parts) >= 2:
+                                    lat, lng = float(parts[0]), float(parts[1])
+                                    # Validate coordinates
+                                    if -90 <= lat <= 90 and -180 <= lng <= 180:
+                                        coordinates = [lat, lng]
+                        except (ValueError, IndexError):
+                            print(f"Warning: Could not parse coordinates '{coordinates_str}' for location '{entity_name}'")
+                    
+                    entity_data.update({
+                        'coordinates': coordinates,
+                        'country': country if country else None,
+                        'coordinatesRaw': coordinates_str
+                    })
+                
+                entities_by_type[file_name].append(entity_data)
     
     # Sort entities by name for consistent output
     for entity_list in entities_by_type.values():

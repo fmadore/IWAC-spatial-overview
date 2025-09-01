@@ -14,7 +14,8 @@ interface AppState {
 		| 'persons'
 		| 'organizations'
 		| 'events'
-		| 'subjects';
+		| 'subjects'
+		| 'locations';
 	// Selected entity for filtering
 	selectedEntity: {
 		type: string;

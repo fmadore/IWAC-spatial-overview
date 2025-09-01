@@ -1,4 +1,4 @@
-import type { GeoJsonData, ProcessedItem } from '$lib/types';
+import type { GeoJsonData, ProcessedItem, Entity, LocationEntity } from '$lib/types';
 
 interface MapDataState {
 	geoData: Record<string, GeoJsonData>;
@@ -13,10 +13,11 @@ interface MapDataState {
 	center: [number, number];
 	countriesData: Record<string, ProcessedItem[]>;
 	// Entity data
-	persons: Array<{ id: string; name: string; relatedArticleIds: string[]; articleCount: number }>;
-	organizations: Array<{ id: string; name: string; relatedArticleIds: string[]; articleCount: number }>;
-	events: Array<{ id: string; name: string; relatedArticleIds: string[]; articleCount: number }>;
-	subjects: Array<{ id: string; name: string; relatedArticleIds: string[]; articleCount: number }>;
+	persons: Entity[];
+	organizations: Entity[];
+	events: Entity[];
+	subjects: Entity[];
+	locations: LocationEntity[];
 }
 
 export const mapData = $state<MapDataState>({
@@ -35,5 +36,6 @@ export const mapData = $state<MapDataState>({
 	persons: [],
 	organizations: [],
 	events: [],
-	subjects: []
+	subjects: [],
+	locations: []
 });

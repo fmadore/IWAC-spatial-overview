@@ -10,3 +10,4 @@ export { default as PersonsVisualization } from './persons-visualization.svelte'
 export { default as OrganizationsVisualization } from './organizations-visualization.svelte';
 export { default as EventsVisualization } from './events-visualization.svelte';
 export { default as SubjectsVisualization } from './subjects-visualization.svelte';
+export { default as LocationsVisualization } from './locations-visualization.svelte';

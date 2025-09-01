@@ -56,3 +56,17 @@ export interface GeoJsonData {
 	type: string;
 	features: GeoJsonFeature[];
 }
+
+// Entity types
+export interface Entity {
+	id: string;
+	name: string;
+	relatedArticleIds: string[];
+	articleCount: number;
+}
+
+export interface LocationEntity extends Entity {
+	coordinates: [number, number] | null;
+	country: string | null;
+	coordinatesRaw: string;
+}

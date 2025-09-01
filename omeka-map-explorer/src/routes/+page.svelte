@@ -9,7 +9,7 @@
 	import { mapData } from '$lib/state/mapData.svelte';
 	import { initialize as initAnimationController } from '$lib/components/timeline/AnimationController';
 	import { loadStaticData } from '$lib/utils/staticDataLoader';
-	import { loadEntities, restoreEntityFromUrl, preloadAllEntities } from '$lib/utils/entityLoader';
+	import { loadEntities, loadLocations, restoreEntityFromUrl, preloadAllEntities } from '$lib/utils/entityLoader';
 	import { urlManager, initializeUrlManager } from '$lib/utils/urlManager.svelte';
 	import type { ProcessedItem } from '$lib/types';
 	import { browser } from '$app/environment';
@@ -25,7 +25,8 @@
 		PersonsVisualization,
 		OrganizationsVisualization,
 		EventsVisualization,
-		SubjectsVisualization
+		SubjectsVisualization,
+		LocationsVisualization
 	} from '$lib/components/entities';
 	import { getVisibleData } from '$lib/state/derived.svelte';
 
@@ -40,22 +41,27 @@
 	};
 
 	// Lazy load entities when navigating to entity views
-	async function loadEntityData(entityType: 'persons' | 'organizations' | 'events' | 'subjects') {
+	async function loadEntityData(entityType: 'persons' | 'organizations' | 'events' | 'subjects' | 'locations') {
 		try {
-			const entities = await loadEntities(entityType, 'data');
-			switch (entityType) {
-				case 'persons':
-					mapData.persons = entities;
-					break;
-				case 'organizations':
-					mapData.organizations = entities;
-					break;
-				case 'events':
-					mapData.events = entities;
-					break;
-				case 'subjects':
-					mapData.subjects = entities;
-					break;
+			if (entityType === 'locations') {
+				const locations = await loadLocations('data');
+				mapData.locations = locations;
+			} else {
+				const entities = await loadEntities(entityType, 'data');
+				switch (entityType) {
+					case 'persons':
+						mapData.persons = entities;
+						break;
+					case 'organizations':
+						mapData.organizations = entities;
+						break;
+					case 'events':
+						mapData.events = entities;
+						break;
+					case 'subjects':
+						mapData.subjects = entities;
+						break;
+				}
 			}
 		} catch (error) {
 			console.error(`Failed to load ${entityType}:`, error);
@@ -129,6 +135,7 @@
 				mapData.organizations = entityData.organizations;
 				mapData.events = entityData.events;
 				mapData.subjects = entityData.subjects;
+				mapData.locations = entityData.locations;
 			} catch (error) {
 				console.error('Failed to preload entity data:', error);
 				// Continue without entity data - they'll be loaded on demand
@@ -152,11 +159,11 @@
 		}
 	});
 
-	// Load entity data when visualization changes to persons/organizations/events/subjects
+	// Load entity data when visualization changes to persons/organizations/events/subjects/locations
 	$effect(() => {
 		if (appState.dataLoaded && browser) {
 			const viz = appState.activeVisualization;
-			if (viz === 'persons' || viz === 'organizations' || viz === 'events' || viz === 'subjects') {
+			if (viz === 'persons' || viz === 'organizations' || viz === 'events' || viz === 'subjects' || viz === 'locations') {
 				loadEntityData(viz).then(() => {
 					// After loading entity data, try to restore entity selection from URL
 					restoreEntitySelection();
@@ -227,6 +234,8 @@
 				<EventsVisualization />
 			{:else if appState.activeVisualization === 'subjects'}
 				<SubjectsVisualization />
+			{:else if appState.activeVisualization === 'locations'}
+				<LocationsVisualization />
 			{:else}
 				<!-- Other visualizations placeholder -->
 				<div class="flex flex-col gap-4 py-4 md:gap-6 md:py-6">

@@ -6,20 +6,21 @@
 	import { mapData } from '$lib/state/mapData.svelte';
 	import { urlManager } from '$lib/utils/urlManager.svelte';
 	import { cn } from '$lib/utils';
-	import { Home, Globe2, Users, Building2, CalendarRange, Tags } from '@lucide/svelte';
+	import { Home, Globe2, Users, Building2, CalendarRange, Tags, MapPin } from '@lucide/svelte';
 	import CountryFilter from '$lib/components/filters/CountryFilter.svelte';
 	import YearRangeFilter from '$lib/components/filters/YearRangeFilter.svelte';
 
 	let { variant = 'inset' } = $props<{ variant?: 'floating' | 'inset' }>();
 
-	type Viz = 'overview' | 'byCountry' | 'persons' | 'organizations' | 'events' | 'subjects';
+	type Viz = 'overview' | 'byCountry' | 'persons' | 'organizations' | 'events' | 'subjects' | 'locations';
 	const nav: Array<{ id: Viz; label: string; icon: any; view?: 'dashboard' | 'map' }> = [
 		{ id: 'overview', label: 'Overview', icon: Home, view: 'dashboard' },
 		{ id: 'byCountry', label: 'By Country (Map)', icon: Globe2, view: 'map' },
 		{ id: 'persons', label: 'Persons', icon: Users, view: 'dashboard' },
 		{ id: 'organizations', label: 'Organizations', icon: Building2, view: 'dashboard' },
 		{ id: 'events', label: 'Events', icon: CalendarRange, view: 'dashboard' },
-		{ id: 'subjects', label: 'Subjects', icon: Tags, view: 'dashboard' }
+		{ id: 'subjects', label: 'Subjects', icon: Tags, view: 'dashboard' },
+		{ id: 'locations', label: 'Locations', icon: MapPin, view: 'dashboard' }
 	];
 
 	function switchTo(item: { id: Viz; view?: 'dashboard' | 'map' }) {

@@ -1,0 +1,5212 @@
+[
+  {
+    "id": "46311",
+    "name": "Abengourou",
+    "relatedArticleIds": [
+      "49021",
+      "48299",
+      "48262",
+      "48298",
+      "48342",
+      "49027",
+      "49036"
+    ],
+    "articleCount": 7,
+    "coordinates": [
+      6.729722,
+      -3.496389
+    ],
+    "country": "Côte d'Ivoire",
+    "coordinatesRaw": "6.729722, -3.496389"
+  },
+  {
+    "id": "269",
+    "name": "Abidjan",
+    "relatedArticleIds": [
+      "48333",
+      "48254",
+      "48872",
+      "48334",
+      "46676",
+      "74741",
+      "46641",
+      "48990",
+      "49035",
+      "74586",
+      "67952",
+      "49059",
+      "48303",
+      "46586",
+      "48914",
+      "48871",
+      "67951",
+      "74603",
+      "74570",
+      "74609",
+      "46700",
+      "49022",
+      "49034",
+      "48912",
+      "48981",
+      "74605",
+      "48979",
+      "46538",
+      "49027",
+      "48909",
+      "48955",
+      "48989",
+      "46370",
+      "49036",
+      "46668",
+      "49025",
+      "48339",
+      "48258",
+      "48868",
+      "48900",
+      "48878",
+      "48338",
+      "48877",
+      "49020",
+      "49021",
+      "74608",
+      "48259",
+      "48993",
+      "48304",
+      "71633",
+      "48997",
+      "49019",
+      "46627",
+      "48873",
+      "49023",
+      "48301",
+      "48293",
+      "48271",
+      "74607",
+      "48988",
+      "46666",
+      "48940",
+      "48874"
+    ],
+    "articleCount": 63,
+    "coordinates": [
+      5.35444,
+      -4.00167
+    ],
+    "country": "Côte d'Ivoire",
+    "coordinatesRaw": "5.35444, -4.00167"
+  },
+  {
+    "id": "23691",
+    "name": "Abobo",
+    "relatedArticleIds": [
+      "67963",
+      "48334",
+      "61456",
+      "48945",
+      "64713",
+      "48380",
+      "61534",
+      "48949",
+      "48269",
+      "48869",
+      "72356",
+      "61425",
+      "61551",
+      "61385",
+      "62364",
+      "64011",
+      "62340",
+      "62374",
+      "48873",
+      "68356",
+      "48541",
+      "68039",
+      "61499",
+      "63981",
+      "67990",
+      "68226",
+      "63949",
+      "62368",
+      "48344",
+      "61509",
+      "68376",
+      "63704",
+      "49036",
+      "68225",
+      "63906",
+      "68270",
+      "62656",
+      "67916",
+      "48866",
+      "48543",
+      "63941",
+      "61576",
+      "61543",
+      "63739",
+      "48981",
+      "64017",
+      "68268",
+      "63747",
+      "61589",
+      "68237",
+      "62722",
+      "63932",
+      "62332",
+      "63667",
+      "48947",
+      "68383",
+      "61586",
+      "64790",
+      "68154",
+      "61510",
+      "63782",
+      "62288",
+      "61587",
+      "48987",
+      "48874",
+      "61585",
+      "48913",
+      "49032",
+      "64721",
+      "49029",
+      "64848",
+      "71558",
+      "63894",
+      "62258",
+      "62373",
+      "61588",
+      "61578",
+      "62612",
+      "76244",
+      "68040",
+      "61584",
+      "67838",
+      "68311",
+      "62361",
+      "63945",
+      "68161",
+      "63852"
+    ],
+    "articleCount": 87,
+    "coordinates": [
+      5.418889,
+      -4.020556
+    ],
+    "country": "Côte d'Ivoire",
+    "coordinatesRaw": "5.418889, -4.020556"
+  },
+  {
+    "id": "46770",
+    "name": "Aboisso",
+    "relatedArticleIds": [
+      "48348",
+      "48259",
+      "68392"
+    ],
+    "articleCount": 3,
+    "coordinates": [
+      5.466667,
+      -3.2
+    ],
+    "country": "Côte d'Ivoire",
+    "coordinatesRaw": "5.466667, -3.2"
+  },
+  {
+    "id": "270",
+    "name": "Abomey",
+    "relatedArticleIds": [
+      "9333",
+      "9361",
+      "9615",
+      "9547",
+      "9453",
+      "9270",
+      "9332",
+      "9441"
+    ],
+    "articleCount": 8,
+    "coordinates": [
+      7.18286,
+      1.99119
+    ],
+    "country": "Benin",
+    "coordinatesRaw": "7.18286, 1.99119"
+  },
+  {
+    "id": "271",
+    "name": "Abomey-Calavi",
+    "relatedArticleIds": [
+      "9587",
+      "9487",
+      "61110",
+      "9598",
+      "9674",
+      "9609",
+      "61135",
+      "9321",
+      "9599",
+      "9369"
+    ],
+    "articleCount": 10,
+    "coordinates": [
+      6.44852,
+      2.35566
+    ],
+    "country": "Benin",
+    "coordinatesRaw": "6.44852, 2.35566"
+  },
+  {
+    "id": "46316",
+    "name": "Adjamé",
+    "relatedArticleIds": [
+      "48266",
+      "61416",
+      "61663",
+      "61413",
+      "61388",
+      "48256",
+      "72316",
+      "63906",
+      "48983",
+      "62484",
+      "64795",
+      "49036",
+      "61664"
+    ],
+    "articleCount": 13,
+    "coordinates": [
+      5.3648,
+      -4.02366
+    ],
+    "country": "Côte d'Ivoire",
+    "coordinatesRaw": "5.3648, -4.02366"
+  },
+  {
+    "id": "272",
+    "name": "Adjarra",
+    "relatedArticleIds": [
+      "9593",
+      "9341"
+    ],
+    "articleCount": 2,
+    "coordinates": [
+      6.53445,
+      2.66833
+    ],
+    "country": "Benin",
+    "coordinatesRaw": "6.53445, 2.66833"
+  },
+  {
+    "id": "46245",
+    "name": "Adzopé",
+    "relatedArticleIds": [
+      "63582",
+      "48333",
+      "63621",
+      "61574",
+      "68234",
+      "68276",
+      "63575",
+      "48303",
+      "63550",
+      "63588",
+      "64914",
+      "62366",
+      "48513",
+      "67843",
+      "68188",
+      "68113",
+      "71550",
+      "61380",
+      "61615",
+      "61503",
+      "68189",
+      "48940"
+    ],
+    "articleCount": 22,
+    "coordinates": [
+      6.103517,
+      -3.864814
+    ],
+    "country": "Côte d'Ivoire",
+    "coordinatesRaw": "6.103517, -3.864814"
+  },
+  {
+    "id": "46218",
+    "name": "Agboville",
+    "relatedArticleIds": [
+      "68263",
+      "64729",
+      "63543",
+      "67988",
+      "62739",
+      "62532",
+      "63621",
+      "68234",
+      "63622",
+      "67843",
+      "63588",
+      "63672",
+      "63617",
+      "68002",
+      "61503",
+      "68279",
+      "62533",
+      "62738"
+    ],
+    "articleCount": 18,
+    "coordinates": [
+      5.933333,
+      -4.216667
+    ],
+    "country": "Côte d'Ivoire",
+    "coordinatesRaw": "5.933333, -4.216667"
+  },
+  {
+    "id": "63388",
+    "name": "Alger",
+    "relatedArticleIds": [
+      "29638"
+    ],
+    "articleCount": 1,
+    "coordinates": [
+      36.776388888889,
+      3.0586111111111
+    ],
+    "country": "Algeria",
+    "coordinatesRaw": "36.776388888889,3.0586111111111"
+  },
+  {
+    "id": "273",
+    "name": "Algérie",
+    "relatedArticleIds": [
+      "9673",
+      "28960"
+    ],
+    "articleCount": 2,
+    "coordinates": [
+      28.0,
+      3.0
+    ],
+    "country": "Algeria",
+    "coordinatesRaw": "28.0, 3.0"
+  },
+  {
+    "id": "274",
+    "name": "Allada",
+    "relatedArticleIds": [
+      "9432",
+      "9522"
+    ],
+    "articleCount": 2,
+    "coordinates": [
+      6.66547,
+      2.15138
+    ],
+    "country": "Benin",
+    "coordinatesRaw": "6.66547, 2.15138"
+  },
+  {
+    "id": "275",
+    "name": "Allemagne",
+    "relatedArticleIds": [
+      "25787",
+      "25716",
+      "9543",
+      "25670",
+      "25786",
+      "25875"
+    ],
+    "articleCount": 6,
+    "coordinates": [
+      51.5,
+      10.5
+    ],
+    "country": "Germany",
+    "coordinatesRaw": "51.5, 10.5"
+  },
+  {
+    "id": "27900",
+    "name": "Angola",
+    "relatedArticleIds": [
+      "29645"
+    ],
+    "articleCount": 1,
+    "coordinates": [
+      -12.35,
+      17.35
+    ],
+    "country": "Angola",
+    "coordinatesRaw": "-12.35, 17.35"
+  },
+  {
+    "id": "495",
+    "name": "Anié",
+    "relatedArticleIds": [
+      "25307"
+    ],
+    "articleCount": 1,
+    "coordinates": [
+      7.76111111,
+      1.19166667
+    ],
+    "country": "Togo",
+    "coordinatesRaw": "7.76111111, 1.19166667"
+  },
+  {
+    "id": "277",
+    "name": "Arabie saoudite",
+    "relatedArticleIds": [
+      "4500",
+      "48901",
+      "9372",
+      "48905",
+      "23328",
+      "9699",
+      "25719",
+      "4511",
+      "28974",
+      "4258",
+      "10165",
+      "29007",
+      "9692",
+      "4094",
+      "4056",
+      "25720",
+      "68306",
+      "74392",
+      "4055",
+      "3924",
+      "28896",
+      "29049",
+      "9371",
+      "4034",
+      "4302",
+      "26279",
+      "74190",
+      "23347",
+      "61500",
+      "9607",
+      "9609",
+      "9307",
+      "9281",
+      "28179",
+      "28563",
+      "23316",
+      "61499",
+      "60981",
+      "23315",
+      "4501",
+      "23281",
+      "28171",
+      "9344",
+      "28976",
+      "28923",
+      "48263",
+      "48912",
+      "3921",
+      "10193",
+      "28894",
+      "48996",
+      "61463",
+      "23302",
+      "62251",
+      "48902",
+      "9684",
+      "23279",
+      "68389",
+      "67471",
+      "29638",
+      "23386",
+      "4207",
+      "3923",
+      "61464",
+      "60982",
+      "3941",
+      "23301",
+      "29051",
+      "29048",
+      "61501",
+      "71676",
+      "4052",
+      "29017",
+      "3956",
+      "62406",
+      "25721",
+      "9685",
+      "4195",
+      "4469",
+      "28895",
+      "9612",
+      "4450",
+      "63670",
+      "25670",
+      "25713",
+      "9629",
+      "4050",
+      "68002",
+      "23326",
+      "4168",
+      "48995",
+      "48997",
+      "23330",
+      "9347",
+      "23366",
+      "62299",
+      "28250",
+      "64717",
+      "4233",
+      "3940",
+      "23156",
+      "26293",
+      "3943",
+      "29054",
+      "29078",
+      "23325",
+      "23358",
+      "25671",
+      "4277",
+      "26306",
+      "28919",
+      "23284",
+      "4026",
+      "28106",
+      "26313",
+      "48258",
+      "3939",
+      "29006",
+      "25760",
+      "23344",
+      "28998",
+      "4426",
+      "23282",
+      "4286",
+      "9440",
+      "62609",
+      "23354",
+      "48917",
+      "74038",
+      "3982",
+      "26303",
+      "4140"
+    ],
+    "articleCount": 132,
+    "coordinates": [
+      25.0,
+      45.0
+    ],
+    "country": "Saudi Arabia",
+    "coordinatesRaw": "25.0, 45.0"
+  },
+  {
+    "id": "496",
+    "name": "Assoli",
+    "relatedArticleIds": [
+      "29053"
+    ],
+    "articleCount": 1,
+    "coordinates": [
+      9.35,
+      1.2666666666667
+    ],
+    "country": "Togo",
+    "coordinatesRaw": "9.35, 1.2666666666667"
+  },
+  {
+    "id": "497",
+    "name": "Atakpamé",
+    "relatedArticleIds": [
+      "28175"
+    ],
+    "articleCount": 1,
+    "coordinates": [
+      7.5269444444444,
+      1.1266666666667
+    ],
+    "country": "Togo",
+    "coordinatesRaw": "7.5269444444444, 1.1266666666667"
+  },
+  {
+    "id": "278",
+    "name": "Athiémé",
+    "relatedArticleIds": [
+      "9513",
+      "9570"
+    ],
+    "articleCount": 2,
+    "coordinates": [
+      6.5808,
+      1.6696
+    ],
+    "country": "Benin",
+    "coordinatesRaw": "6.5808, 1.6696"
+  },
+  {
+    "id": "46175",
+    "name": "Attécoubé",
+    "relatedArticleIds": [
+      "63898",
+      "71595",
+      "46676",
+      "72320",
+      "68067",
+      "74347",
+      "71529",
+      "64997",
+      "61543",
+      "48382",
+      "61659"
+    ],
+    "articleCount": 11,
+    "coordinates": [
+      5.333333,
+      -4.033333
+    ],
+    "country": "Côte d'Ivoire",
+    "coordinatesRaw": "5.333333, -4.033333"
+  },
+  {
+    "id": "279",
+    "name": "Banfora",
+    "relatedArticleIds": [
+      "4181",
+      "10090",
+      "61032",
+      "3960",
+      "4269",
+      "4113",
+      "10212",
+      "4501"
+    ],
+    "articleCount": 8,
+    "coordinates": [
+      10.63333,
+      -4.76667
+    ],
+    "country": "Burkina Faso",
+    "coordinatesRaw": "10.63333, -4.76667"
+  },
+  {
+    "id": "426",
+    "name": "Barsalogho",
+    "relatedArticleIds": [
+      "4299",
+      "4509",
+      "10160"
+    ],
+    "articleCount": 3,
+    "coordinates": [
+      13.41389,
+      -1.05583
+    ],
+    "country": "Burkina Faso",
+    "coordinatesRaw": "13.41389, -1.05583"
+  },
+  {
+    "id": "62234",
+    "name": "Basilique Notre-Dame-de-la-Paix",
+    "relatedArticleIds": [
+      "62695"
+    ],
+    "articleCount": 1,
+    "coordinates": [
+      6.811111,
+      -5.296944
+    ],
+    "country": "Côte d'Ivoire",
+    "coordinatesRaw": "6.811111, -5.296944"
+  },
+  {
+    "id": "281",
+    "name": "Bassila",
+    "relatedArticleIds": [
+      "9522"
+    ],
+    "articleCount": 1,
+    "coordinates": [
+      9.00814,
+      1.6654
+    ],
+    "country": "Benin",
+    "coordinatesRaw": "9.00814, 1.6654"
+  },
+  {
+    "id": "23632",
+    "name": "Bingerville",
+    "relatedArticleIds": [
+      "61413",
+      "61424",
+      "48553",
+      "62322",
+      "64877",
+      "65006",
+      "68394",
+      "72352",
+      "48940",
+      "68377",
+      "48303"
+    ],
+    "articleCount": 11,
+    "coordinates": [
+      5.35,
+      -3.9
+    ],
+    "country": "Côte d'Ivoire",
+    "coordinatesRaw": "5.35, -3.9"
+  },
+  {
+    "id": "284",
+    "name": "Bobo-Dioulasso",
+    "relatedArticleIds": [
+      "3994",
+      "3922",
+      "4196",
+      "4528",
+      "4526",
+      "10209",
+      "4121",
+      "4094",
+      "4056",
+      "4024",
+      "3869",
+      "4270",
+      "4134",
+      "3868",
+      "10189",
+      "4034",
+      "10166",
+      "3999",
+      "4328",
+      "4514",
+      "10168",
+      "4003",
+      "4268",
+      "4088",
+      "4089",
+      "4098",
+      "4135",
+      "4000",
+      "23316",
+      "4099",
+      "10194",
+      "4126",
+      "23281",
+      "4002",
+      "3991",
+      "4410",
+      "3921",
+      "4097",
+      "4095",
+      "61004",
+      "4005",
+      "4267",
+      "4139",
+      "3995",
+      "23274",
+      "23359",
+      "4091",
+      "3993",
+      "4457",
+      "3970",
+      "23277",
+      "3863",
+      "4460",
+      "4378",
+      "10173",
+      "4124",
+      "4195",
+      "3997",
+      "4411",
+      "10206",
+      "23314",
+      "23326",
+      "3998",
+      "4417",
+      "4029",
+      "4085",
+      "4418",
+      "4127",
+      "4263",
+      "4308",
+      "4125",
+      "3996",
+      "4502",
+      "10180",
+      "4395",
+      "4129",
+      "10164",
+      "23368",
+      "23284",
+      "4314",
+      "3958",
+      "4240",
+      "4048",
+      "4096",
+      "3873",
+      "4352",
+      "4133",
+      "4480",
+      "4101",
+      "4340",
+      "4090",
+      "4192",
+      "4232",
+      "10162",
+      "4092",
+      "23360",
+      "4130",
+      "3948",
+      "4093",
+      "4140"
+    ],
+    "articleCount": 100,
+    "coordinates": [
+      11.17715,
+      -4.2979
+    ],
+    "country": "Burkina Faso",
+    "coordinatesRaw": "11.17715, -4.2979"
+  },
+  {
+    "id": "285",
+    "name": "Bogandé",
+    "relatedArticleIds": [
+      "4370"
+    ],
+    "articleCount": 1,
+    "coordinates": [
+      12.9704,
+      -0.14953
+    ],
+    "country": "Burkina Faso",
+    "coordinatesRaw": "12.9704, -0.14953"
+  },
+  {
+    "id": "286",
+    "name": "Bohicon",
+    "relatedArticleIds": [
+      "9445",
+      "9615",
+      "9345",
+      "9489",
+      "9338",
+      "9342",
+      "75940",
+      "9522",
+      "9350",
+      "9353"
+    ],
+    "articleCount": 10,
+    "coordinates": [
+      7.17826,
+      2.0667
+    ],
+    "country": "Benin",
+    "coordinatesRaw": "7.17826, 2.0667"
+  },
+  {
+    "id": "46216",
+    "name": "Bondoukou",
+    "relatedArticleIds": [
+      "63947",
+      "62532",
+      "62365",
+      "48270",
+      "62566",
+      "68274",
+      "68232",
+      "67924",
+      "63869",
+      "63782",
+      "63693",
+      "61376",
+      "71515",
+      "63590",
+      "63573",
+      "68280",
+      "62442",
+      "48512",
+      "68025",
+      "62487",
+      "68195",
+      "67915",
+      "67998",
+      "62337",
+      "62375",
+      "71526",
+      "63775"
+    ],
+    "articleCount": 27,
+    "coordinates": [
+      8.04,
+      -2.8
+    ],
+    "country": "Côte d'Ivoire",
+    "coordinatesRaw": "8.04, -2.8"
+  },
+  {
+    "id": "46279",
+    "name": "Bouaflé",
+    "relatedArticleIds": [
+      "67915",
+      "68082",
+      "67916",
+      "63747",
+      "62567",
+      "68392",
+      "67962",
+      "68395",
+      "62761",
+      "63580",
+      "63738",
+      "67947",
+      "67847",
+      "61532",
+      "62641",
+      "68420",
+      "68352"
+    ],
+    "articleCount": 17,
+    "coordinates": [
+      6.990278,
+      -5.744167
+    ],
+    "country": "Côte d'Ivoire",
+    "coordinatesRaw": "6.990278, -5.744167"
+  },
+  {
+    "id": "46238",
+    "name": "Bouaké",
+    "relatedArticleIds": [
+      "48333",
+      "46390",
+      "62532",
+      "48334",
+      "62457",
+      "68104",
+      "62647",
+      "64766",
+      "64713",
+      "64888",
+      "64881",
+      "49022",
+      "48867",
+      "62537",
+      "61545",
+      "62369",
+      "64832",
+      "48953",
+      "61619",
+      "68275",
+      "63810",
+      "67829",
+      "64675",
+      "62362",
+      "67832",
+      "65045",
+      "62446",
+      "64727",
+      "48991",
+      "62375",
+      "48336",
+      "61500",
+      "64710",
+      "62281",
+      "61544",
+      "67989",
+      "68039",
+      "64842",
+      "63700",
+      "67960",
+      "63577",
+      "63668",
+      "61622",
+      "62336",
+      "63949",
+      "64951",
+      "63773",
+      "61463",
+      "49036",
+      "49038",
+      "62366",
+      "64968",
+      "64684",
+      "63970",
+      "64910",
+      "62300",
+      "63933",
+      "67915",
+      "62333",
+      "62723",
+      "72283",
+      "62656",
+      "63866",
+      "71523",
+      "62295",
+      "63551",
+      "63986",
+      "67841",
+      "68038",
+      "76416",
+      "61576",
+      "62641",
+      "71520",
+      "64959",
+      "74598",
+      "63739",
+      "48981",
+      "48983",
+      "49063",
+      "48982",
+      "61506",
+      "63747",
+      "48518",
+      "49021",
+      "63701",
+      "64963",
+      "68025",
+      "68110",
+      "63667",
+      "64729",
+      "64889",
+      "62538",
+      "62481",
+      "61585",
+      "63625",
+      "68186",
+      "62419",
+      "67926",
+      "48551",
+      "68065",
+      "65008",
+      "64726",
+      "64848",
+      "67947",
+      "61548",
+      "68352",
+      "62681",
+      "63589",
+      "61588",
+      "64965",
+      "68279",
+      "64925",
+      "62726",
+      "68316",
+      "64797",
+      "65006",
+      "48906",
+      "62761",
+      "67839",
+      "63694",
+      "61580",
+      "63984",
+      "68195",
+      "64801",
+      "68112",
+      "67881",
+      "61546",
+      "71557",
+      "67847"
+    ],
+    "articleCount": 129,
+    "coordinates": [
+      7.68333,
+      -5.03306
+    ],
+    "country": "Côte d'Ivoire",
+    "coordinatesRaw": "7.68333, -5.03306"
+  },
+  {
+    "id": "546",
+    "name": "Burkina Faso",
+    "relatedArticleIds": [
+      "9359",
+      "26282",
+      "28135",
+      "26308",
+      "46663",
+      "9673",
+      "26287",
+      "26290",
+      "67470",
+      "61141",
+      "9675",
+      "46594",
+      "9545",
+      "9676",
+      "9610"
+    ],
+    "articleCount": 15,
+    "coordinates": [
+      12.5,
+      -1.66667
+    ],
+    "country": "Burkina Faso",
+    "coordinatesRaw": "12.5, -1.66667"
+  },
+  {
+    "id": "283",
+    "name": "Bénin",
+    "relatedArticleIds": [
+      "28772",
+      "25750",
+      "28135",
+      "29714",
+      "28255",
+      "28405",
+      "25672",
+      "29007",
+      "29008",
+      "28482",
+      "67470",
+      "28599",
+      "28809",
+      "28256",
+      "29088",
+      "28177",
+      "29280"
+    ],
+    "articleCount": 17,
+    "coordinates": [
+      9.5,
+      2.25
+    ],
+    "country": "Benin",
+    "coordinatesRaw": "9.5, 2.25"
+  },
+  {
+    "id": "547",
+    "name": "Cameroun",
+    "relatedArticleIds": [
+      "29088"
+    ],
+    "articleCount": 1,
+    "coordinates": [
+      6.0,
+      12.5
+    ],
+    "country": "Cameroon",
+    "coordinatesRaw": "6.0, 12.5"
+  },
+  {
+    "id": "62239",
+    "name": "Cathédrale Saint-Paul d'Abidjan",
+    "relatedArticleIds": [
+      "62418"
+    ],
+    "articleCount": 1,
+    "coordinates": [
+      5.33291,
+      -4.02008
+    ],
+    "country": "Côte d'Ivoire",
+    "coordinatesRaw": "5.33291, -4.02008"
+  },
+  {
+    "id": "502",
+    "name": "Cathédrale du Sacré-Cœur de Lomé",
+    "relatedArticleIds": [
+      "25754"
+    ],
+    "articleCount": 1,
+    "coordinates": [
+      6.12486111,
+      1.22627778
+    ],
+    "country": "Togo",
+    "coordinatesRaw": "6.12486111, 1.22627778"
+  },
+  {
+    "id": "529",
+    "name": "Centre Culturel Islamique de Lomé II",
+    "relatedArticleIds": [
+      "28569",
+      "25792",
+      "28969",
+      "65922",
+      "29045"
+    ],
+    "articleCount": 5,
+    "coordinates": null,
+    "country": null,
+    "coordinatesRaw": ""
+  },
+  {
+    "id": "293",
+    "name": "Centre culturel arabe libyen",
+    "relatedArticleIds": [
+      "5601",
+      "5576",
+      "2839",
+      "7975",
+      "6567"
+    ],
+    "articleCount": 5,
+    "coordinates": null,
+    "country": null,
+    "coordinatesRaw": ""
+  },
+  {
+    "id": "294",
+    "name": "Centre culturel islamique AEEMB",
+    "relatedArticleIds": [
+      "4044",
+      "4213",
+      "4039",
+      "3714",
+      "4180",
+      "4398",
+      "3920",
+      "4188",
+      "4448",
+      "4078",
+      "3886",
+      "3751",
+      "4068",
+      "3899"
+    ],
+    "articleCount": 14,
+    "coordinates": [
+      12.37545088285411,
+      -1.4871601188636745
+    ],
+    "country": "Burkina Faso",
+    "coordinatesRaw": "12.37545088285411, -1.4871601188636745"
+  },
+  {
+    "id": "61329",
+    "name": "Centre culturel islamique Bilal (Port-Bouët II)",
+    "relatedArticleIds": [
+      "62644",
+      "61505"
+    ],
+    "articleCount": 2,
+    "coordinates": null,
+    "country": null,
+    "coordinatesRaw": ""
+  },
+  {
+    "id": "461",
+    "name": "Centre islamique de Dantokpa",
+    "relatedArticleIds": [
+      "8749",
+      "9087"
+    ],
+    "articleCount": 2,
+    "coordinates": null,
+    "country": null,
+    "coordinatesRaw": ""
+  },
+  {
+    "id": "13837",
+    "name": "Chine",
+    "relatedArticleIds": [
+      "9499",
+      "3822"
+    ],
+    "articleCount": 2,
+    "coordinates": [
+      35.844722,
+      103.451944
+    ],
+    "country": "China",
+    "coordinatesRaw": "35.844722, 103.451944"
+  },
+  {
+    "id": "13416",
+    "name": "Cococodji",
+    "relatedArticleIds": [
+      "7581"
+    ],
+    "articleCount": 1,
+    "coordinates": [
+      6.387477,
+      2.272057
+    ],
+    "country": "Benin",
+    "coordinatesRaw": "6.387477, 2.272057"
+  },
+  {
+    "id": "296",
+    "name": "Cocotomey",
+    "relatedArticleIds": [
+      "9674"
+    ],
+    "articleCount": 1,
+    "coordinates": [
+      6.38957,
+      2.31227
+    ],
+    "country": "Benin",
+    "coordinatesRaw": "6.38957, 2.31227"
+  },
+  {
+    "id": "561",
+    "name": "Corée du Nord",
+    "relatedArticleIds": [
+      "28198"
+    ],
+    "articleCount": 1,
+    "coordinates": [
+      40.0,
+      127.0
+    ],
+    "country": "North Korea",
+    "coordinatesRaw": "40.0, 127.0"
+  },
+  {
+    "id": "299",
+    "name": "Cotonou",
+    "relatedArticleIds": [
+      "9359",
+      "9433",
+      "9652",
+      "9372",
+      "9290",
+      "9514",
+      "9435",
+      "9674",
+      "9314",
+      "9346",
+      "9246",
+      "9635",
+      "9667",
+      "9310",
+      "9447",
+      "9309",
+      "9348",
+      "9580",
+      "9477",
+      "9672",
+      "9405",
+      "9364",
+      "9685",
+      "9597",
+      "9456",
+      "9322",
+      "9262",
+      "9533",
+      "9680",
+      "9648",
+      "9340",
+      "9436",
+      "9543",
+      "9352",
+      "9601",
+      "9403",
+      "9617",
+      "9582",
+      "9245",
+      "9443",
+      "9368",
+      "9684",
+      "9350",
+      "9369",
+      "9311",
+      "9567",
+      "9289",
+      "9440",
+      "9361",
+      "9282",
+      "61181",
+      "9470",
+      "61138",
+      "9308",
+      "9341",
+      "9607",
+      "9472",
+      "9307",
+      "9283"
+    ],
+    "articleCount": 59,
+    "coordinates": [
+      6.36536,
+      2.41833
+    ],
+    "country": "Benin",
+    "coordinatesRaw": "6.36536, 2.41833"
+  },
+  {
+    "id": "298",
+    "name": "Côte d'Ivoire",
+    "relatedArticleIds": [
+      "25750",
+      "9615",
+      "28255",
+      "9614",
+      "9673",
+      "28482",
+      "9683",
+      "10161",
+      "23305",
+      "9629",
+      "4532",
+      "28253",
+      "28256",
+      "9676",
+      "28179"
+    ],
+    "articleCount": 15,
+    "coordinates": [
+      8.0,
+      -5.5
+    ],
+    "country": "Côte d'Ivoire",
+    "coordinatesRaw": "8.0, -5.5"
+  },
+  {
+    "id": "301",
+    "name": "Dablo",
+    "relatedArticleIds": [
+      "4462"
+    ],
+    "articleCount": 1,
+    "coordinates": [
+      13.71873,
+      -1.18186
+    ],
+    "country": "Burkina Faso",
+    "coordinatesRaw": "13.71873, -1.18186"
+  },
+  {
+    "id": "46170",
+    "name": "Daloa",
+    "relatedArticleIds": [
+      "68263",
+      "62295",
+      "48333",
+      "68316",
+      "48265",
+      "62739",
+      "48334",
+      "49021",
+      "68275",
+      "68392",
+      "68038",
+      "68159",
+      "63656",
+      "48983",
+      "67867",
+      "48296",
+      "68279",
+      "48982"
+    ],
+    "articleCount": 18,
+    "coordinates": [
+      6.866667,
+      -6.45
+    ],
+    "country": "Côte d'Ivoire",
+    "coordinatesRaw": "6.866667, -6.45"
+  },
+  {
+    "id": "46263",
+    "name": "Daoukro",
+    "relatedArticleIds": [
+      "63972",
+      "71599",
+      "67843",
+      "68388",
+      "68378",
+      "64676",
+      "64846",
+      "64767"
+    ],
+    "articleCount": 8,
+    "coordinates": [
+      7.057778,
+      -3.966111
+    ],
+    "country": "Côte d'Ivoire",
+    "coordinatesRaw": "7.057778, -3.966111"
+  },
+  {
+    "id": "13625",
+    "name": "Diarabakoko",
+    "relatedArticleIds": [
+      "10212"
+    ],
+    "articleCount": 1,
+    "coordinates": [
+      10.466667,
+      -4.783333
+    ],
+    "country": "Burkina Faso",
+    "coordinatesRaw": "10.466667, -4.783333"
+  },
+  {
+    "id": "48425",
+    "name": "Divo",
+    "relatedArticleIds": [
+      "62258",
+      "48956",
+      "49037",
+      "49026",
+      "48984"
+    ],
+    "articleCount": 5,
+    "coordinates": [
+      5.837222,
+      -5.357222
+    ],
+    "country": "Côte d'Ivoire",
+    "coordinatesRaw": "5.837222, -5.357222"
+  },
+  {
+    "id": "304",
+    "name": "Djibo",
+    "relatedArticleIds": [
+      "4486",
+      "4193",
+      "4234",
+      "4487",
+      "4361",
+      "4446",
+      "4422",
+      "3949",
+      "10187",
+      "10180",
+      "3914",
+      "4190",
+      "3921",
+      "10181",
+      "10195",
+      "3908",
+      "61036",
+      "3887",
+      "4015",
+      "3913",
+      "3984",
+      "4484",
+      "4485",
+      "4482",
+      "10186",
+      "10182",
+      "3974",
+      "4120",
+      "4483",
+      "4347",
+      "4476",
+      "4266",
+      "10163",
+      "10156",
+      "10185"
+    ],
+    "articleCount": 35,
+    "coordinates": [
+      14.12526,
+      -1.6249
+    ],
+    "country": "Burkina Faso",
+    "coordinatesRaw": "14.12526, -1.6249"
+  },
+  {
+    "id": "305",
+    "name": "Djougou",
+    "relatedArticleIds": [
+      "9264",
+      "9295",
+      "9293",
+      "9296",
+      "9302",
+      "9294",
+      "9299",
+      "9297",
+      "9291",
+      "9331",
+      "9284",
+      "9468",
+      "9474",
+      "9275",
+      "9337",
+      "9469"
+    ],
+    "articleCount": 16,
+    "coordinates": [
+      9.70853,
+      1.66598
+    ],
+    "country": "Benin",
+    "coordinatesRaw": "9.70853, 1.66598"
+  },
+  {
+    "id": "307",
+    "name": "Dori",
+    "relatedArticleIds": [
+      "4059",
+      "4268",
+      "4385",
+      "4466",
+      "4509",
+      "4429",
+      "4315",
+      "3970",
+      "4113",
+      "4187",
+      "4361",
+      "4446",
+      "4422",
+      "4481",
+      "4360",
+      "4322",
+      "4364",
+      "4336",
+      "4387",
+      "4510",
+      "4183",
+      "4353",
+      "4123",
+      "3906",
+      "4015",
+      "4518",
+      "4181",
+      "60984",
+      "3913",
+      "4397",
+      "4445",
+      "4296",
+      "4359",
+      "4034",
+      "4461",
+      "4242",
+      "4431",
+      "4428",
+      "10163",
+      "10156",
+      "4323",
+      "4152"
+    ],
+    "articleCount": 42,
+    "coordinates": [
+      14.0341,
+      -0.03261
+    ],
+    "country": "Burkina Faso",
+    "coordinatesRaw": "14.0341, -0.03261"
+  },
+  {
+    "id": "46181",
+    "name": "Duékoué",
+    "relatedArticleIds": [
+      "48946"
+    ],
+    "articleCount": 1,
+    "coordinates": [
+      6.741944,
+      -7.349167
+    ],
+    "country": "Côte d'Ivoire",
+    "coordinatesRaw": "6.741944, -7.349167"
+  },
+  {
+    "id": "303",
+    "name": "Dédougou",
+    "relatedArticleIds": [
+      "4405"
+    ],
+    "articleCount": 1,
+    "coordinates": [
+      12.46338,
+      -3.46075
+    ],
+    "country": "Burkina Faso",
+    "coordinatesRaw": "12.46338, -3.46075"
+  },
+  {
+    "id": "311",
+    "name": "Fada N'Gourma",
+    "relatedArticleIds": [
+      "4528",
+      "4334",
+      "10162",
+      "4300",
+      "10169",
+      "10209",
+      "4301",
+      "61023"
+    ],
+    "articleCount": 8,
+    "coordinates": [
+      12.06157,
+      0.35843
+    ],
+    "country": "Burkina Faso",
+    "coordinatesRaw": "12.06157, 0.35843"
+  },
+  {
+    "id": "312",
+    "name": "France",
+    "relatedArticleIds": [
+      "4433",
+      "10161",
+      "4435",
+      "10130",
+      "4501",
+      "4356",
+      "10122",
+      "10158",
+      "4434",
+      "9452",
+      "9675",
+      "10186",
+      "4430",
+      "9614",
+      "4504",
+      "4530",
+      "4242",
+      "4444",
+      "4439"
+    ],
+    "articleCount": 19,
+    "coordinates": [
+      46.0,
+      2.0
+    ],
+    "country": "France",
+    "coordinatesRaw": "46.0, 2.0"
+  },
+  {
+    "id": "46271",
+    "name": "Gagnoa",
+    "relatedArticleIds": [
+      "61534",
+      "62446",
+      "48949",
+      "61540",
+      "49021",
+      "63670",
+      "48345",
+      "48337",
+      "48873",
+      "64994",
+      "61428",
+      "61613",
+      "68223",
+      "48268",
+      "68224"
+    ],
+    "articleCount": 15,
+    "coordinates": [
+      6.13333,
+      -5.93333
+    ],
+    "country": "Côte d'Ivoire",
+    "coordinatesRaw": "6.13333, -5.93333"
+  },
+  {
+    "id": "25602",
+    "name": "Gambie",
+    "relatedArticleIds": [
+      "25750",
+      "28179"
+    ],
+    "articleCount": 2,
+    "coordinates": [
+      13.5,
+      -15.5
+    ],
+    "country": "Gambia",
+    "coordinatesRaw": "13.5, -15.5"
+  },
+  {
+    "id": "318",
+    "name": "Gaoua",
+    "relatedArticleIds": [
+      "4346",
+      "4500",
+      "4452",
+      "4365",
+      "4325",
+      "4479",
+      "4455",
+      "4396",
+      "4524",
+      "4451",
+      "4445",
+      "3869"
+    ],
+    "articleCount": 12,
+    "coordinates": [
+      10.38247,
+      -3.16475
+    ],
+    "country": "Burkina Faso",
+    "coordinatesRaw": "10.38247, -3.16475"
+  },
+  {
+    "id": "319",
+    "name": "Ghana",
+    "relatedArticleIds": [
+      "9676",
+      "28135",
+      "28599"
+    ],
+    "articleCount": 3,
+    "coordinates": [
+      8.1,
+      -1.2
+    ],
+    "country": "Ghana",
+    "coordinatesRaw": "8.1, -1.2"
+  },
+  {
+    "id": "412",
+    "name": "Godomey",
+    "relatedArticleIds": [
+      "9660"
+    ],
+    "articleCount": 1,
+    "coordinates": [
+      6.38948,
+      2.34581
+    ],
+    "country": "Benin",
+    "coordinatesRaw": "6.38948, 2.34581"
+  },
+  {
+    "id": "320",
+    "name": "Gorom-Gorom",
+    "relatedArticleIds": [
+      "4446"
+    ],
+    "articleCount": 1,
+    "coordinates": [
+      14.45417,
+      -0.21895
+    ],
+    "country": "Burkina Faso",
+    "coordinatesRaw": "14.45417, -0.21895"
+  },
+  {
+    "id": "441",
+    "name": "Grand-Bassam",
+    "relatedArticleIds": [
+      "61585",
+      "48944",
+      "63542",
+      "64951",
+      "62580",
+      "67918",
+      "67992",
+      "64754",
+      "46466",
+      "68202",
+      "48900",
+      "48878",
+      "48998",
+      "48902",
+      "64715",
+      "67838",
+      "68200",
+      "68149",
+      "48410",
+      "71525",
+      "73678"
+    ],
+    "articleCount": 21,
+    "coordinates": [
+      5.2118,
+      -3.73884
+    ],
+    "country": "Côte d'Ivoire",
+    "coordinatesRaw": "5.2118, -3.73884"
+  },
+  {
+    "id": "61324",
+    "name": "Grande Mosquée d'Adjamé",
+    "relatedArticleIds": [
+      "62732",
+      "63625",
+      "61577",
+      "76371",
+      "67871",
+      "64799",
+      "67885",
+      "67917",
+      "61427",
+      "63624",
+      "67918",
+      "73987",
+      "72274",
+      "61511",
+      "62379",
+      "63785"
+    ],
+    "articleCount": 16,
+    "coordinates": [
+      5.353286615241792,
+      -4.026326534959187
+    ],
+    "country": "Côte d'Ivoire",
+    "coordinatesRaw": "5.353286615241792, -4.026326534959187"
+  },
+  {
+    "id": "63452",
+    "name": "Grande Mosquée d'Attécoubé",
+    "relatedArticleIds": [
+      "63898"
+    ],
+    "articleCount": 1,
+    "coordinates": null,
+    "country": null,
+    "coordinatesRaw": ""
+  },
+  {
+    "id": "323",
+    "name": "Grande Mosquée de Ouagadougou",
+    "relatedArticleIds": [
+      "60970"
+    ],
+    "articleCount": 1,
+    "coordinates": [
+      12.36625,
+      -1.52122
+    ],
+    "country": "Burkina Faso",
+    "coordinatesRaw": "12.36625, -1.52122"
+  },
+  {
+    "id": "64630",
+    "name": "Grande Mosquée de Yopougon Banco 2",
+    "relatedArticleIds": [
+      "64885"
+    ],
+    "articleCount": 1,
+    "coordinates": null,
+    "country": null,
+    "coordinatesRaw": ""
+  },
+  {
+    "id": "46215",
+    "name": "Grande mosquée Mohammed VI",
+    "relatedArticleIds": [
+      "48876",
+      "48875",
+      "46377"
+    ],
+    "articleCount": 3,
+    "coordinates": [
+      5.3109838973900505,
+      -4.003592777043214
+    ],
+    "country": "Côte d'Ivoire",
+    "coordinatesRaw": "5.3109838973900505, -4.003592777043214"
+  },
+  {
+    "id": "528",
+    "name": "Grande mosquée de Lomé",
+    "relatedArticleIds": [
+      "28924",
+      "25916",
+      "25864",
+      "25955",
+      "25829",
+      "25788",
+      "25799",
+      "25796",
+      "28123",
+      "25800",
+      "25918",
+      "25868",
+      "25755",
+      "25754",
+      "25883",
+      "28202",
+      "25840",
+      "25826",
+      "25865",
+      "28964",
+      "25876",
+      "25912",
+      "25956"
+    ],
+    "articleCount": 23,
+    "coordinates": null,
+    "country": null,
+    "coordinatesRaw": ""
+  },
+  {
+    "id": "23692",
+    "name": "Grande mosquée de Treichville",
+    "relatedArticleIds": [
+      "64875",
+      "63671",
+      "62608",
+      "63546",
+      "67886"
+    ],
+    "articleCount": 5,
+    "coordinates": [
+      5.3080303344696205,
+      -4.01092342679036
+    ],
+    "country": "Côte d'Ivoire",
+    "coordinatesRaw": "5.3080303344696205, -4.01092342679036"
+  },
+  {
+    "id": "23600",
+    "name": "Grande mosquée des II-Plateaux Aghien",
+    "relatedArticleIds": [
+      "48381",
+      "46378"
+    ],
+    "articleCount": 2,
+    "coordinates": [
+      5.382535557731071,
+      -3.993870062858185
+    ],
+    "country": "Côte d'Ivoire",
+    "coordinatesRaw": "5.382535557731071, -3.993870062858185"
+  },
+  {
+    "id": "23666",
+    "name": "Groupe Scolaire IQRA",
+    "relatedArticleIds": [
+      "73914",
+      "71805",
+      "74717",
+      "74776",
+      "73916",
+      "49026"
+    ],
+    "articleCount": 6,
+    "coordinates": null,
+    "country": null,
+    "coordinatesRaw": ""
+  },
+  {
+    "id": "328",
+    "name": "Guinée",
+    "relatedArticleIds": [
+      "28135",
+      "28482",
+      "23305",
+      "25706",
+      "4532",
+      "28256",
+      "29088",
+      "28405",
+      "28179"
+    ],
+    "articleCount": 9,
+    "coordinates": [
+      10.83333,
+      -10.66667
+    ],
+    "country": "Guinea",
+    "coordinatesRaw": "10.83333, -10.66667"
+  },
+  {
+    "id": "14379",
+    "name": "Houndé",
+    "relatedArticleIds": [
+      "4314"
+    ],
+    "articleCount": 1,
+    "coordinates": [
+      11.5,
+      -3.516667
+    ],
+    "country": "Burkina Faso",
+    "coordinatesRaw": "11.5, -3.516667"
+  },
+  {
+    "id": "62236",
+    "name": "Hôtel Ivoire",
+    "relatedArticleIds": [
+      "64841",
+      "76372",
+      "62609",
+      "71567",
+      "71517",
+      "71518",
+      "72315",
+      "64840",
+      "71566",
+      "64839",
+      "64956"
+    ],
+    "articleCount": 11,
+    "coordinates": [
+      5.3269,
+      -4.00547
+    ],
+    "country": "Côte d'Ivoire",
+    "coordinatesRaw": "5.3269, -4.00547"
+  },
+  {
+    "id": "436",
+    "name": "Institut Al Ilmi",
+    "relatedArticleIds": [
+      "6586",
+      "3733",
+      "3844"
+    ],
+    "articleCount": 3,
+    "coordinates": null,
+    "country": null,
+    "coordinatesRaw": ""
+  },
+  {
+    "id": "433",
+    "name": "Institut Aorèma",
+    "relatedArticleIds": [
+      "2825",
+      "2701"
+    ],
+    "articleCount": 2,
+    "coordinates": null,
+    "country": null,
+    "coordinatesRaw": ""
+  },
+  {
+    "id": "62237",
+    "name": "Institut Islamique d'Abobo",
+    "relatedArticleIds": [
+      "62374",
+      "62373"
+    ],
+    "articleCount": 2,
+    "coordinates": null,
+    "country": null,
+    "coordinatesRaw": ""
+  },
+  {
+    "id": "432",
+    "name": "Institut Musulman d'Enseignement et d'Éducation",
+    "relatedArticleIds": [
+      "2861",
+      "2590",
+      "3408",
+      "2341"
+    ],
+    "articleCount": 4,
+    "coordinates": null,
+    "country": null,
+    "coordinatesRaw": ""
+  },
+  {
+    "id": "453",
+    "name": "Institut de la Langue Arabe et de la Culture Islamique",
+    "relatedArticleIds": [
+      "6896",
+      "6870",
+      "6927"
+    ],
+    "articleCount": 3,
+    "coordinates": [
+      6.42047,
+      2.34345
+    ],
+    "country": "Benin",
+    "coordinatesRaw": "6.42047, 2.34345"
+  },
+  {
+    "id": "330",
+    "name": "Irak",
+    "relatedArticleIds": [
+      "25682"
+    ],
+    "articleCount": 1,
+    "coordinates": [
+      33.0,
+      44.0
+    ],
+    "country": "Iraq",
+    "coordinatesRaw": "33.0, 44.0"
+  },
+  {
+    "id": "331",
+    "name": "Iran",
+    "relatedArticleIds": [
+      "4305",
+      "63735",
+      "65813"
+    ],
+    "articleCount": 3,
+    "coordinates": [
+      32.0,
+      53.0
+    ],
+    "country": "Iran",
+    "coordinatesRaw": "32.0, 53.0"
+  },
+  {
+    "id": "408",
+    "name": "Israël",
+    "relatedArticleIds": [
+      "28896",
+      "25712",
+      "28935",
+      "25713",
+      "28934",
+      "62606"
+    ],
+    "articleCount": 6,
+    "coordinates": [
+      31.5,
+      34.75
+    ],
+    "country": "Israel",
+    "coordinatesRaw": "31.5, 34.75"
+  },
+  {
+    "id": "332",
+    "name": "Japon",
+    "relatedArticleIds": [
+      "4175",
+      "4287"
+    ],
+    "articleCount": 2,
+    "coordinates": [
+      35.68536,
+      139.75309
+    ],
+    "country": "Japan",
+    "coordinatesRaw": "35.68536, 139.75309"
+  },
+  {
+    "id": "333",
+    "name": "Kandi",
+    "relatedArticleIds": [
+      "9359",
+      "9295",
+      "9293",
+      "9296",
+      "9689",
+      "9294",
+      "9299",
+      "9285",
+      "9291",
+      "9297",
+      "9284",
+      "9281",
+      "9481",
+      "9278",
+      "9283"
+    ],
+    "articleCount": 15,
+    "coordinates": [
+      11.13417,
+      2.93861
+    ],
+    "country": "Benin",
+    "coordinatesRaw": "11.13417, 2.93861"
+  },
+  {
+    "id": "508",
+    "name": "Kara",
+    "relatedArticleIds": [
+      "67418",
+      "65954"
+    ],
+    "articleCount": 2,
+    "coordinates": [
+      9.5488888888889,
+      1.1905555555556
+    ],
+    "country": "Togo",
+    "coordinatesRaw": "9.5488888888889, 1.1905555555556"
+  },
+  {
+    "id": "62029",
+    "name": "Kassakou",
+    "relatedArticleIds": [
+      "26271",
+      "9481"
+    ],
+    "articleCount": 2,
+    "coordinates": [
+      11.083333,
+      2.9
+    ],
+    "country": "Benin",
+    "coordinatesRaw": "11.083333, 2.9"
+  },
+  {
+    "id": "336",
+    "name": "Kaya",
+    "relatedArticleIds": [
+      "4509",
+      "4345",
+      "4321",
+      "10160"
+    ],
+    "articleCount": 4,
+    "coordinates": [
+      13.09167,
+      -1.08444
+    ],
+    "country": "Burkina Faso",
+    "coordinatesRaw": "13.09167, -1.08444"
+  },
+  {
+    "id": "344",
+    "name": "Kombissiri",
+    "relatedArticleIds": [
+      "4493"
+    ],
+    "articleCount": 1,
+    "coordinates": [
+      12.06884,
+      -1.33644
+    ],
+    "country": "Burkina Faso",
+    "coordinatesRaw": "12.06884, -1.33644"
+  },
+  {
+    "id": "63412",
+    "name": "Kong",
+    "relatedArticleIds": [
+      "68078"
+    ],
+    "articleCount": 1,
+    "coordinates": [
+      9.150632,
+      -4.610263
+    ],
+    "country": "Côte d'Ivoire",
+    "coordinatesRaw": "9.150632, -4.610263"
+  },
+  {
+    "id": "346",
+    "name": "Kongoussi",
+    "relatedArticleIds": [
+      "4531",
+      "4372",
+      "10182",
+      "10187"
+    ],
+    "articleCount": 4,
+    "coordinates": [
+      13.32583,
+      -1.53472
+    ],
+    "country": "Burkina Faso",
+    "coordinatesRaw": "13.32583, -1.53472"
+  },
+  {
+    "id": "23465",
+    "name": "Korhogo",
+    "relatedArticleIds": [
+      "63620",
+      "67949",
+      "48333",
+      "48334",
+      "49021",
+      "68001",
+      "68392",
+      "62242",
+      "67841",
+      "61655",
+      "46618",
+      "48382",
+      "48952"
+    ],
+    "articleCount": 13,
+    "coordinates": [
+      9.457778,
+      -5.629444
+    ],
+    "country": "Côte d'Ivoire",
+    "coordinatesRaw": "9.457778, -5.629444"
+  },
+  {
+    "id": "14929",
+    "name": "Kouba",
+    "relatedArticleIds": [
+      "4447",
+      "3841",
+      "4515",
+      "3842"
+    ],
+    "articleCount": 4,
+    "coordinates": null,
+    "country": null,
+    "coordinatesRaw": ""
+  },
+  {
+    "id": "349",
+    "name": "Koudougou",
+    "relatedArticleIds": [
+      "3900",
+      "3958",
+      "4202",
+      "4113",
+      "4021"
+    ],
+    "articleCount": 5,
+    "coordinates": [
+      12.25263,
+      -2.36272
+    ],
+    "country": "Burkina Faso",
+    "coordinatesRaw": "12.25263, -2.36272"
+  },
+  {
+    "id": "48419",
+    "name": "Koumassi",
+    "relatedArticleIds": [
+      "61413",
+      "48992",
+      "61388",
+      "72316",
+      "48917",
+      "49062",
+      "63906",
+      "48984"
+    ],
+    "articleCount": 8,
+    "coordinates": [
+      5.3,
+      -3.95
+    ],
+    "country": "Côte d'Ivoire",
+    "coordinatesRaw": "5.3, -3.95"
+  },
+  {
+    "id": "351",
+    "name": "Koweït",
+    "relatedArticleIds": [
+      "9668",
+      "75920",
+      "23331",
+      "60975",
+      "28802",
+      "9660",
+      "28686",
+      "4113",
+      "29009",
+      "9635",
+      "61081",
+      "60978",
+      "60971",
+      "28803",
+      "28650",
+      "28724",
+      "75921",
+      "29012",
+      "28648",
+      "9434",
+      "9337",
+      "25714",
+      "28805",
+      "9260",
+      "28172",
+      "61464"
+    ],
+    "articleCount": 26,
+    "coordinates": [
+      29.5,
+      47.75
+    ],
+    "country": "Kuwait",
+    "coordinatesRaw": "29.5, 47.75"
+  },
+  {
+    "id": "512",
+    "name": "Kpalimé",
+    "relatedArticleIds": [
+      "25872",
+      "65887",
+      "25946",
+      "25875",
+      "25722",
+      "25867"
+    ],
+    "articleCount": 6,
+    "coordinates": [
+      6.91,
+      0.62805555555556
+    ],
+    "country": "Togo",
+    "coordinatesRaw": "6.91, 0.62805555555556"
+  },
+  {
+    "id": "337",
+    "name": "Kérou",
+    "relatedArticleIds": [
+      "9692"
+    ],
+    "articleCount": 1,
+    "coordinates": [
+      10.91433,
+      1.99153
+    ],
+    "country": "Benin",
+    "coordinatesRaw": "10.91433, 1.99153"
+  },
+  {
+    "id": "343",
+    "name": "Kétou",
+    "relatedArticleIds": [
+      "7479",
+      "9322",
+      "9607"
+    ],
+    "articleCount": 3,
+    "coordinates": [
+      7.45,
+      2.626
+    ],
+    "country": "Benin",
+    "coordinatesRaw": "7.45, 2.626"
+  },
+  {
+    "id": "48426",
+    "name": "Lakota",
+    "relatedArticleIds": [
+      "61542",
+      "48510"
+    ],
+    "articleCount": 2,
+    "coordinates": [
+      5.8475,
+      -5.681944
+    ],
+    "country": "Côte d'Ivoire",
+    "coordinatesRaw": "5.8475, -5.681944"
+  },
+  {
+    "id": "15273",
+    "name": "Liberia",
+    "relatedArticleIds": [
+      "28179"
+    ],
+    "articleCount": 1,
+    "coordinates": [
+      6.533333,
+      -9.75
+    ],
+    "country": "Liberia",
+    "coordinatesRaw": "6.533333, -9.75"
+  },
+  {
+    "id": "354",
+    "name": "Libye",
+    "relatedArticleIds": [
+      "25664",
+      "25750",
+      "28924",
+      "9673",
+      "25792",
+      "29721",
+      "23153",
+      "23328",
+      "3920",
+      "4113",
+      "60977",
+      "28728",
+      "28929",
+      "29292",
+      "23150",
+      "9692",
+      "28935",
+      "45969",
+      "9681",
+      "61033",
+      "25680",
+      "60972",
+      "29511",
+      "25672",
+      "28930",
+      "25716",
+      "28931",
+      "29636",
+      "29645",
+      "25717",
+      "4143",
+      "29528",
+      "29644",
+      "9286",
+      "9285",
+      "7001",
+      "45968",
+      "28846"
+    ],
+    "articleCount": 38,
+    "coordinates": [
+      28.0,
+      17.0
+    ],
+    "country": "Libya",
+    "coordinatesRaw": "28.0, 17.0"
+  },
+  {
+    "id": "355",
+    "name": "Lokossa",
+    "relatedArticleIds": [
+      "9525",
+      "9522",
+      "9570"
+    ],
+    "articleCount": 3,
+    "coordinates": [
+      6.63869,
+      1.71674
+    ],
+    "country": "Benin",
+    "coordinatesRaw": "6.63869, 1.71674"
+  },
+  {
+    "id": "457",
+    "name": "Lomé",
+    "relatedArticleIds": [
+      "28574",
+      "67440",
+      "28135",
+      "25707",
+      "28125",
+      "65848",
+      "67468",
+      "25842",
+      "29633",
+      "28366",
+      "28920",
+      "25949",
+      "67421",
+      "28681",
+      "25720",
+      "66092",
+      "28575"
+    ],
+    "articleCount": 17,
+    "coordinates": [
+      6.12874,
+      1.22154
+    ],
+    "country": "Togo",
+    "coordinatesRaw": "6.12874, 1.22154"
+  },
+  {
+    "id": "462",
+    "name": "Lycée Béhanzin",
+    "relatedArticleIds": [
+      "7759",
+      "8750"
+    ],
+    "articleCount": 2,
+    "coordinates": null,
+    "country": null,
+    "coordinatesRaw": ""
+  },
+  {
+    "id": "527",
+    "name": "Lycée de Tokoin",
+    "relatedArticleIds": [
+      "25790"
+    ],
+    "articleCount": 1,
+    "coordinates": null,
+    "country": null,
+    "coordinatesRaw": ""
+  },
+  {
+    "id": "352",
+    "name": "Léo",
+    "relatedArticleIds": [
+      "4369"
+    ],
+    "articleCount": 1,
+    "coordinates": [
+      11.10033,
+      -2.10654
+    ],
+    "country": "Burkina Faso",
+    "coordinatesRaw": "11.10033, -2.10654"
+  },
+  {
+    "id": "538",
+    "name": "Maison du Hadj",
+    "relatedArticleIds": [
+      "28404"
+    ],
+    "articleCount": 1,
+    "coordinates": [
+      6.181735,
+      1.255005
+    ],
+    "country": "Togo",
+    "coordinatesRaw": "6.181735, 1.255005"
+  },
+  {
+    "id": "356",
+    "name": "Malanville",
+    "relatedArticleIds": [
+      "9359",
+      "9295",
+      "9293",
+      "9296",
+      "9294",
+      "9299",
+      "9297",
+      "9291",
+      "9284",
+      "9281",
+      "9278"
+    ],
+    "articleCount": 11,
+    "coordinates": [
+      11.86819,
+      3.38327
+    ],
+    "country": "Benin",
+    "coordinatesRaw": "11.86819, 3.38327"
+  },
+  {
+    "id": "357",
+    "name": "Mali",
+    "relatedArticleIds": [
+      "9615",
+      "4542",
+      "61016",
+      "4467",
+      "4532",
+      "9675",
+      "9676"
+    ],
+    "articleCount": 7,
+    "coordinates": [
+      18.0,
+      -2.0
+    ],
+    "country": "Mali",
+    "coordinatesRaw": "18.0, -2.0"
+  },
+  {
+    "id": "46196",
+    "name": "Man",
+    "relatedArticleIds": [
+      "68392",
+      "48305",
+      "48902",
+      "48899",
+      "48300",
+      "48264",
+      "62294",
+      "62740",
+      "71524"
+    ],
+    "articleCount": 9,
+    "coordinates": [
+      7.4125,
+      -7.553611
+    ],
+    "country": "Côte d'Ivoire",
+    "coordinatesRaw": "7.4125, -7.553611"
+  },
+  {
+    "id": "514",
+    "name": "Mango",
+    "relatedArticleIds": [
+      "67420",
+      "25867"
+    ],
+    "articleCount": 2,
+    "coordinates": [
+      10.355555555556,
+      0.47555555555556
+    ],
+    "country": "Togo",
+    "coordinatesRaw": "10.355555555556, 0.47555555555556"
+  },
+  {
+    "id": "359",
+    "name": "Maroc",
+    "relatedArticleIds": [
+      "48876",
+      "63907",
+      "46377",
+      "10124",
+      "48872",
+      "29210",
+      "46676",
+      "48875",
+      "4333",
+      "48304"
+    ],
+    "articleCount": 10,
+    "coordinates": [
+      28.5,
+      -10.0
+    ],
+    "country": "Morocco",
+    "coordinatesRaw": "28.5, -10.0"
+  },
+  {
+    "id": "437",
+    "name": "Maternité Sakina",
+    "relatedArticleIds": [
+      "4175",
+      "4287",
+      "3492",
+      "23300"
+    ],
+    "articleCount": 4,
+    "coordinates": null,
+    "country": null,
+    "coordinatesRaw": ""
+  },
+  {
+    "id": "539",
+    "name": "Mauritanie",
+    "relatedArticleIds": [
+      "23305",
+      "4532",
+      "28163",
+      "10159"
+    ],
+    "articleCount": 4,
+    "coordinates": [
+      20.25,
+      -10.5
+    ],
+    "country": "Mauritania",
+    "coordinatesRaw": "20.25, -10.5"
+  },
+  {
+    "id": "60469",
+    "name": "Mont Arafat",
+    "relatedArticleIds": [
+      "62457"
+    ],
+    "articleCount": 1,
+    "coordinates": [
+      21.354831,
+      39.983886
+    ],
+    "country": "Saudi Arabia",
+    "coordinatesRaw": "21.354831,39.983886"
+  },
+  {
+    "id": "67746",
+    "name": "Mosquée An Nour Riviera 2",
+    "relatedArticleIds": [
+      "71839",
+      "72315",
+      "68117"
+    ],
+    "articleCount": 3,
+    "coordinates": [
+      5.351224783601886,
+      -3.980895863811308
+    ],
+    "country": "Côte d'Ivoire",
+    "coordinatesRaw": "5.351224783601886, -3.980895863811308"
+  },
+  {
+    "id": "61325",
+    "name": "Mosquée Bilal",
+    "relatedArticleIds": [
+      "61456"
+    ],
+    "articleCount": 1,
+    "coordinates": null,
+    "country": null,
+    "coordinatesRaw": ""
+  },
+  {
+    "id": "63453",
+    "name": "Mosquée Dioula Treichville",
+    "relatedArticleIds": [
+      "63977"
+    ],
+    "articleCount": 1,
+    "coordinates": null,
+    "country": null,
+    "coordinatesRaw": ""
+  },
+  {
+    "id": "23532",
+    "name": "Mosquée Salam du Plateau",
+    "relatedArticleIds": [
+      "62729",
+      "68351",
+      "64879",
+      "48590",
+      "48905",
+      "64022",
+      "64848",
+      "74622",
+      "65041",
+      "72315",
+      "72320",
+      "64027",
+      "64841",
+      "65001",
+      "63973",
+      "64686",
+      "71920",
+      "63949",
+      "61381",
+      "61547",
+      "64677",
+      "48943",
+      "74535",
+      "65042",
+      "46656",
+      "48384",
+      "48258",
+      "46663",
+      "63934",
+      "48951",
+      "63970",
+      "48388",
+      "46673",
+      "64999",
+      "64990",
+      "74776",
+      "64840",
+      "63783",
+      "63891",
+      "71919",
+      "63945",
+      "74789",
+      "48260",
+      "61461",
+      "64023",
+      "64927",
+      "65031",
+      "68381"
+    ],
+    "articleCount": 48,
+    "coordinates": [
+      5.319408854484132,
+      -4.015756299712146
+    ],
+    "country": "Côte d'Ivoire",
+    "coordinatesRaw": "5.319408854484132, -4.015756299712146"
+  },
+  {
+    "id": "60967",
+    "name": "Mosquée centrale Houéyogbé",
+    "relatedArticleIds": [
+      "61129"
+    ],
+    "articleCount": 1,
+    "coordinates": null,
+    "country": null,
+    "coordinatesRaw": ""
+  },
+  {
+    "id": "491",
+    "name": "Mosquée centrale Médine II d'Agori Plateau",
+    "relatedArticleIds": [
+      "4873",
+      "61143",
+      "4871",
+      "4887",
+      "4894",
+      "4893",
+      "4870",
+      "4892",
+      "4869",
+      "4874",
+      "4886",
+      "4882",
+      "4868"
+    ],
+    "articleCount": 13,
+    "coordinates": [
+      6.4327785,
+      2.3442182
+    ],
+    "country": "Benin",
+    "coordinatesRaw": "6.4327785, 2.3442182"
+  },
+  {
+    "id": "476",
+    "name": "Mosquée centrale Yara Kinnin",
+    "relatedArticleIds": [
+      "75928"
+    ],
+    "articleCount": 1,
+    "coordinates": null,
+    "country": null,
+    "coordinatesRaw": ""
+  },
+  {
+    "id": "15204",
+    "name": "Mosquée centrale d'Abomey",
+    "relatedArticleIds": [
+      "9333",
+      "9332",
+      "75945"
+    ],
+    "articleCount": 3,
+    "coordinates": null,
+    "country": null,
+    "coordinatesRaw": ""
+  },
+  {
+    "id": "75845",
+    "name": "Mosquée centrale d'Allada",
+    "relatedArticleIds": [
+      "75946",
+      "75943",
+      "75956",
+      "75883"
+    ],
+    "articleCount": 4,
+    "coordinates": null,
+    "country": null,
+    "coordinatesRaw": ""
+  },
+  {
+    "id": "75838",
+    "name": "Mosquée centrale d'Attogon",
+    "relatedArticleIds": [
+      "75946"
+    ],
+    "articleCount": 1,
+    "coordinates": null,
+    "country": null,
+    "coordinatesRaw": ""
+  },
+  {
+    "id": "13719",
+    "name": "Mosquée centrale d'Aïdjèdo",
+    "relatedArticleIds": [
+      "61143",
+      "9282",
+      "9605",
+      "9601",
+      "9655",
+      "9364"
+    ],
+    "articleCount": 6,
+    "coordinates": null,
+    "country": null,
+    "coordinatesRaw": ""
+  },
+  {
+    "id": "463",
+    "name": "Mosquée centrale de Bohicon",
+    "relatedArticleIds": [
+      "9261",
+      "75930",
+      "75945",
+      "9605"
+    ],
+    "articleCount": 4,
+    "coordinates": null,
+    "country": null,
+    "coordinatesRaw": ""
+  },
+  {
+    "id": "464",
+    "name": "Mosquée centrale de Cadjèhoun",
+    "relatedArticleIds": [
+      "9680",
+      "9695",
+      "61140",
+      "61137",
+      "9660",
+      "9290",
+      "61173",
+      "9341",
+      "9400",
+      "9698",
+      "26312",
+      "9697",
+      "9472",
+      "9497",
+      "9189",
+      "9494",
+      "26310",
+      "9533"
+    ],
+    "articleCount": 18,
+    "coordinates": null,
+    "country": null,
+    "coordinatesRaw": ""
+  },
+  {
+    "id": "12853",
+    "name": "Mosquée centrale de Cococodji",
+    "relatedArticleIds": [
+      "9654",
+      "9280"
+    ],
+    "articleCount": 2,
+    "coordinates": null,
+    "country": null,
+    "coordinatesRaw": ""
+  },
+  {
+    "id": "460",
+    "name": "Mosquée centrale de Cotonou Jonquet",
+    "relatedArticleIds": [
+      "75933",
+      "9589",
+      "61133",
+      "9255",
+      "9550",
+      "9383",
+      "9258",
+      "9658",
+      "9597",
+      "9257",
+      "9663",
+      "9653",
+      "9245",
+      "9443",
+      "61078",
+      "9557",
+      "9588",
+      "61080",
+      "61131",
+      "75912",
+      "9248",
+      "9596",
+      "26253"
+    ],
+    "articleCount": 23,
+    "coordinates": null,
+    "country": null,
+    "coordinatesRaw": ""
+  },
+  {
+    "id": "13642",
+    "name": "Mosquée centrale de Dassa-Zoumè",
+    "relatedArticleIds": [
+      "9267",
+      "9586"
+    ],
+    "articleCount": 2,
+    "coordinates": null,
+    "country": null,
+    "coordinatesRaw": ""
+  },
+  {
+    "id": "465",
+    "name": "Mosquée centrale de Djougou",
+    "relatedArticleIds": [
+      "9331",
+      "9302",
+      "75927",
+      "75888"
+    ],
+    "articleCount": 4,
+    "coordinates": null,
+    "country": null,
+    "coordinatesRaw": ""
+  },
+  {
+    "id": "467",
+    "name": "Mosquée centrale de Godomey",
+    "relatedArticleIds": [
+      "9581",
+      "9666",
+      "9628"
+    ],
+    "articleCount": 3,
+    "coordinates": null,
+    "country": null,
+    "coordinatesRaw": ""
+  },
+  {
+    "id": "15216",
+    "name": "Mosquée centrale de Guèma",
+    "relatedArticleIds": [
+      "76061",
+      "9273"
+    ],
+    "articleCount": 2,
+    "coordinates": null,
+    "country": null,
+    "coordinatesRaw": ""
+  },
+  {
+    "id": "14604",
+    "name": "Mosquée centrale de Kandi",
+    "relatedArticleIds": [
+      "75953",
+      "75910",
+      "9281",
+      "75875",
+      "9283"
+    ],
+    "articleCount": 5,
+    "coordinates": null,
+    "country": null,
+    "coordinatesRaw": ""
+  },
+  {
+    "id": "469",
+    "name": "Mosquée centrale de Natitingou",
+    "relatedArticleIds": [
+      "9657",
+      "9596",
+      "75937"
+    ],
+    "articleCount": 3,
+    "coordinates": null,
+    "country": null,
+    "coordinatesRaw": ""
+  },
+  {
+    "id": "60969",
+    "name": "Mosquée centrale de Nikki",
+    "relatedArticleIds": [
+      "61125"
+    ],
+    "articleCount": 1,
+    "coordinates": null,
+    "country": null,
+    "coordinatesRaw": ""
+  },
+  {
+    "id": "459",
+    "name": "Mosquée centrale de Porto-Novo",
+    "relatedArticleIds": [
+      "9330",
+      "61131",
+      "9261",
+      "9596",
+      "9677"
+    ],
+    "articleCount": 5,
+    "coordinates": [
+      6.470333,
+      2.626611
+    ],
+    "country": "Benin",
+    "coordinatesRaw": "6.470333, 2.626611"
+  },
+  {
+    "id": "75848",
+    "name": "Mosquée centrale de Savè",
+    "relatedArticleIds": [
+      "75878"
+    ],
+    "articleCount": 1,
+    "coordinates": null,
+    "country": null,
+    "coordinatesRaw": ""
+  },
+  {
+    "id": "475",
+    "name": "Mosquée centrale de Zongo (Cotonou)",
+    "relatedArticleIds": [
+      "9485",
+      "9195",
+      "9646",
+      "9305",
+      "9627",
+      "26268",
+      "45959",
+      "9475",
+      "9549",
+      "9555",
+      "61150",
+      "75948",
+      "9546",
+      "9655",
+      "9538",
+      "9456",
+      "9350",
+      "61102"
+    ],
+    "articleCount": 18,
+    "coordinates": null,
+    "country": null,
+    "coordinatesRaw": ""
+  },
+  {
+    "id": "360",
+    "name": "Mosquée de Dioulassoba",
+    "relatedArticleIds": [
+      "4088",
+      "4091",
+      "4457",
+      "4098",
+      "4526",
+      "4099",
+      "4121",
+      "10173",
+      "4095",
+      "3662",
+      "4411",
+      "4096",
+      "3860",
+      "4352",
+      "4480",
+      "4417",
+      "3995",
+      "4340",
+      "4090",
+      "4092",
+      "23274",
+      "3770",
+      "4418",
+      "23292"
+    ],
+    "articleCount": 24,
+    "coordinates": null,
+    "country": null,
+    "coordinatesRaw": ""
+  },
+  {
+    "id": "73458",
+    "name": "Mosquée de Yopougon-Selmer",
+    "relatedArticleIds": [
+      "74740"
+    ],
+    "articleCount": 1,
+    "coordinates": null,
+    "country": null,
+    "coordinatesRaw": ""
+  },
+  {
+    "id": "23648",
+    "name": "Mosquée de la Riviéra Golf",
+    "relatedArticleIds": [
+      "74560",
+      "46372",
+      "74742",
+      "46554",
+      "74744",
+      "74579",
+      "46564",
+      "67828",
+      "61381",
+      "68156",
+      "74688",
+      "46668",
+      "46614",
+      "74801",
+      "46626",
+      "64834",
+      "61377",
+      "46583",
+      "46562",
+      "46373",
+      "74548",
+      "48293",
+      "74607",
+      "46366",
+      "46531",
+      "63936",
+      "68351",
+      "64843",
+      "48584",
+      "73593",
+      "61378",
+      "46684",
+      "74550",
+      "64803",
+      "74639",
+      "48292",
+      "46618",
+      "72353",
+      "48549",
+      "71559",
+      "46475",
+      "48339",
+      "46510",
+      "48593",
+      "72354",
+      "46658",
+      "48581",
+      "76372",
+      "61535",
+      "73694",
+      "73695",
+      "46642",
+      "46683",
+      "73594",
+      "62413",
+      "46569",
+      "48916",
+      "71567",
+      "46641",
+      "72325",
+      "46682",
+      "73568",
+      "74694",
+      "74603",
+      "48253",
+      "48981",
+      "48507",
+      "46497",
+      "62722",
+      "46601",
+      "46499",
+      "74674",
+      "48997",
+      "74547",
+      "48261",
+      "74654",
+      "74667",
+      "46500",
+      "74563",
+      "68157",
+      "46376",
+      "74711",
+      "74604",
+      "46659",
+      "61390",
+      "74741",
+      "48875",
+      "62050",
+      "63894",
+      "74570",
+      "46556",
+      "61379",
+      "46364",
+      "48509",
+      "68155",
+      "48547",
+      "64839",
+      "74672",
+      "68158",
+      "48592",
+      "74696",
+      "74740",
+      "61584",
+      "64840",
+      "74723",
+      "74743",
+      "74650",
+      "49064",
+      "48260",
+      "74555",
+      "46694",
+      "74571",
+      "74800",
+      "74673"
+    ],
+    "articleCount": 114,
+    "coordinates": [
+      5.33757653748572,
+      -3.9788409923568815
+    ],
+    "country": "Côte d'Ivoire",
+    "coordinatesRaw": "5.33757653748572, -3.9788409923568815"
+  },
+  {
+    "id": "443",
+    "name": "Médine",
+    "relatedArticleIds": [
+      "29638"
+    ],
+    "articleCount": 1,
+    "coordinates": [
+      24.46861,
+      39.61417
+    ],
+    "country": "Saudi Arabia",
+    "coordinatesRaw": "24.46861, 39.61417"
+  },
+  {
+    "id": "369",
+    "name": "Nassoumbou",
+    "relatedArticleIds": [
+      "10163",
+      "4482",
+      "10195"
+    ],
+    "articleCount": 3,
+    "coordinates": [
+      14.4089,
+      -1.5507
+    ],
+    "country": "Burkina Faso",
+    "coordinatesRaw": "14.4089, -1.5507"
+  },
+  {
+    "id": "370",
+    "name": "Natitingou",
+    "relatedArticleIds": [
+      "9225",
+      "9359",
+      "9409",
+      "9295",
+      "9293",
+      "9296",
+      "9302",
+      "9421",
+      "9424",
+      "9380",
+      "9294",
+      "9657",
+      "9299",
+      "9297",
+      "9291",
+      "9385",
+      "9239",
+      "9419"
+    ],
+    "articleCount": 18,
+    "coordinates": [
+      10.30416,
+      1.37962
+    ],
+    "country": "Benin",
+    "coordinatesRaw": "10.30416, 1.37962"
+  },
+  {
+    "id": "540",
+    "name": "Niger",
+    "relatedArticleIds": [
+      "9359",
+      "9615",
+      "28135",
+      "68350",
+      "9673",
+      "67470",
+      "9629",
+      "4532",
+      "9675",
+      "9676",
+      "9686",
+      "9610"
+    ],
+    "articleCount": 12,
+    "coordinates": [
+      18.0,
+      9.0
+    ],
+    "country": "Niger",
+    "coordinatesRaw": "18.0, 9.0"
+  },
+  {
+    "id": "541",
+    "name": "Nigéria",
+    "relatedArticleIds": [
+      "25750",
+      "9615",
+      "9356",
+      "28135",
+      "9355",
+      "28482",
+      "67470",
+      "28163",
+      "61141",
+      "25706",
+      "4532",
+      "9675"
+    ],
+    "articleCount": 12,
+    "coordinates": [
+      10.0,
+      8.0
+    ],
+    "country": "Nigeria",
+    "coordinatesRaw": "10.0, 8.0"
+  },
+  {
+    "id": "372",
+    "name": "Nikki",
+    "relatedArticleIds": [
+      "9295",
+      "9293",
+      "9296",
+      "9294",
+      "9299",
+      "9297",
+      "9291"
+    ],
+    "articleCount": 7,
+    "coordinates": [
+      9.94009,
+      3.21075
+    ],
+    "country": "Benin",
+    "coordinatesRaw": "9.94009, 3.21075"
+  },
+  {
+    "id": "48427",
+    "name": "Odienné",
+    "relatedArticleIds": [
+      "64873",
+      "64872",
+      "49061",
+      "62686",
+      "68349",
+      "63584",
+      "62562",
+      "61538",
+      "63784",
+      "62289",
+      "48982",
+      "63586",
+      "48952",
+      "68077",
+      "63585",
+      "62485",
+      "68064",
+      "68162",
+      "67989",
+      "62691"
+    ],
+    "articleCount": 20,
+    "coordinates": [
+      9.5,
+      -7.566667
+    ],
+    "country": "Côte d'Ivoire",
+    "coordinatesRaw": "9.5, -7.566667"
+  },
+  {
+    "id": "27795",
+    "name": "Oti",
+    "relatedArticleIds": [
+      "29000"
+    ],
+    "articleCount": 1,
+    "coordinates": [
+      10.357222,
+      0.471111
+    ],
+    "country": "Togo",
+    "coordinatesRaw": "10.357222, 0.471111"
+  },
+  {
+    "id": "375",
+    "name": "Ouaga 2000",
+    "relatedArticleIds": [
+      "10141"
+    ],
+    "articleCount": 1,
+    "coordinates": [
+      12.31538,
+      -1.50888
+    ],
+    "country": "Burkina Faso",
+    "coordinatesRaw": "12.31538, -1.50888"
+  },
+  {
+    "id": "376",
+    "name": "Ouagadougou",
+    "relatedArticleIds": [
+      "4320",
+      "4362",
+      "4503",
+      "4079",
+      "4116",
+      "10165",
+      "10124",
+      "3898",
+      "4278",
+      "4094",
+      "4019",
+      "4249",
+      "4045",
+      "3968",
+      "10189",
+      "4224",
+      "4259",
+      "4489",
+      "4431",
+      "4212",
+      "10168",
+      "4171",
+      "4074",
+      "3971",
+      "10205",
+      "4261",
+      "10193",
+      "10201",
+      "4330",
+      "4522",
+      "3974",
+      "10147",
+      "3890",
+      "4459",
+      "4086",
+      "23359",
+      "4298",
+      "4205",
+      "4351",
+      "4186",
+      "4063",
+      "4460",
+      "4041",
+      "3997",
+      "4468",
+      "4008",
+      "10206",
+      "4265",
+      "4209",
+      "61008",
+      "10125",
+      "23330",
+      "4080",
+      "23375",
+      "3962",
+      "75977",
+      "4263",
+      "4109",
+      "3880",
+      "4391",
+      "3885",
+      "4436",
+      "10180",
+      "4329",
+      "10157",
+      "4214",
+      "4492",
+      "4048",
+      "3894",
+      "4327",
+      "4198",
+      "23360",
+      "4130",
+      "4226",
+      "4196",
+      "23333",
+      "4009",
+      "10170",
+      "4524",
+      "10128",
+      "3969",
+      "4006",
+      "10196",
+      "4217",
+      "4419",
+      "4051",
+      "3911",
+      "4496",
+      "4007",
+      "10137",
+      "4334",
+      "3897",
+      "4425",
+      "4089",
+      "3920",
+      "4111",
+      "4435",
+      "10210",
+      "4380",
+      "4255",
+      "10115",
+      "4463",
+      "3892",
+      "4335",
+      "4197",
+      "4439",
+      "10153",
+      "4220",
+      "4297",
+      "4175",
+      "4527",
+      "4497",
+      "4447",
+      "4071",
+      "4353",
+      "4190",
+      "10169",
+      "3928",
+      "4450",
+      "10197",
+      "4108",
+      "4260",
+      "10078",
+      "4326",
+      "4494",
+      "10178",
+      "3945",
+      "3893",
+      "4072",
+      "4534",
+      "3884",
+      "4199",
+      "4395",
+      "4023",
+      "4015",
+      "4473",
+      "3958",
+      "4240",
+      "4208",
+      "4104",
+      "4144",
+      "4184",
+      "3948",
+      "4140",
+      "3904",
+      "4262",
+      "3922",
+      "4121",
+      "4422",
+      "4044",
+      "4188",
+      "4536",
+      "4264",
+      "4055",
+      "4390",
+      "10155",
+      "4147",
+      "4283",
+      "4143",
+      "4381",
+      "4475",
+      "4506",
+      "4077",
+      "4017",
+      "3989",
+      "4230",
+      "4471",
+      "4174",
+      "10207",
+      "10141",
+      "4257",
+      "10194",
+      "4404",
+      "4231",
+      "4106",
+      "10129",
+      "4228",
+      "3921",
+      "4306",
+      "4377",
+      "10214",
+      "4237",
+      "10190",
+      "10119",
+      "4181",
+      "4204",
+      "4434",
+      "4042",
+      "4465",
+      "3919",
+      "4139",
+      "10182",
+      "10118",
+      "4535",
+      "4294",
+      "4333",
+      "3983",
+      "3941",
+      "4180",
+      "3960",
+      "3970",
+      "4141",
+      "10187",
+      "4167",
+      "3956",
+      "4078",
+      "4508",
+      "10148",
+      "4195",
+      "3907",
+      "4469",
+      "3926",
+      "4050",
+      "3900",
+      "23381",
+      "3961",
+      "4105",
+      "3942",
+      "4412",
+      "3966",
+      "10175",
+      "3931",
+      "3891",
+      "4127",
+      "4433",
+      "23367",
+      "4225",
+      "4375",
+      "23325",
+      "4517",
+      "23362",
+      "4277",
+      "4016",
+      "4250",
+      "4525",
+      "4314",
+      "4189",
+      "4344",
+      "4200",
+      "10200",
+      "3899",
+      "4538",
+      "23357",
+      "10120",
+      "4416",
+      "3982",
+      "4373",
+      "4540",
+      "4191",
+      "10209",
+      "4056",
+      "4441",
+      "4456",
+      "4069",
+      "4215",
+      "4454",
+      "4076",
+      "4081",
+      "4206",
+      "4482",
+      "4349",
+      "4087",
+      "4268",
+      "4193",
+      "4311",
+      "10117",
+      "4185",
+      "4446",
+      "4537",
+      "3929",
+      "4070",
+      "4183",
+      "4382",
+      "10191",
+      "4532",
+      "4341",
+      "4424",
+      "10186",
+      "4430",
+      "4066",
+      "4520",
+      "4012",
+      "4020",
+      "4254",
+      "4438",
+      "4376",
+      "4227",
+      "3949",
+      "4491",
+      "4366",
+      "4507",
+      "4110",
+      "10204",
+      "23380",
+      "4274",
+      "3906",
+      "4516",
+      "10151",
+      "4122",
+      "10121",
+      "4476",
+      "10146",
+      "3954",
+      "10184",
+      "4039",
+      "4443",
+      "3914",
+      "4400",
+      "4129",
+      "4350",
+      "4488",
+      "4043",
+      "4239",
+      "4010",
+      "3886",
+      "4386",
+      "4354",
+      "10084",
+      "10211",
+      "10123"
+    ],
+    "articleCount": 320,
+    "coordinates": [
+      12.36566,
+      -1.53388
+    ],
+    "country": "Burkina Faso",
+    "coordinatesRaw": "12.36566, -1.53388"
+  },
+  {
+    "id": "377",
+    "name": "Ouahigouya",
+    "relatedArticleIds": [
+      "4154",
+      "3988",
+      "4422",
+      "4106",
+      "4022",
+      "4024",
+      "4159",
+      "4155",
+      "4157",
+      "3958",
+      "4181",
+      "4042",
+      "4156",
+      "4048",
+      "4050",
+      "4065",
+      "3900",
+      "4158",
+      "4160",
+      "4161"
+    ],
+    "articleCount": 20,
+    "coordinates": [
+      13.58278,
+      -2.42158
+    ],
+    "country": "Burkina Faso",
+    "coordinatesRaw": "13.58278, -2.42158"
+  },
+  {
+    "id": "378",
+    "name": "Ouidah",
+    "relatedArticleIds": [
+      "9607"
+    ],
+    "articleCount": 1,
+    "coordinates": [
+      6.36307,
+      2.08506
+    ],
+    "country": "Benin",
+    "coordinatesRaw": "6.36307, 2.08506"
+  },
+  {
+    "id": "62240",
+    "name": "Palais des Sports de Treichville",
+    "relatedArticleIds": [
+      "76380",
+      "76374",
+      "76376",
+      "72329",
+      "64847"
+    ],
+    "articleCount": 5,
+    "coordinates": [
+      5.298056,
+      -4.005278
+    ],
+    "country": "Côte d'Ivoire",
+    "coordinatesRaw": "5.298056, -4.005278"
+  },
+  {
+    "id": "407",
+    "name": "Palestine",
+    "relatedArticleIds": [
+      "28569",
+      "28935",
+      "28934",
+      "29645"
+    ],
+    "articleCount": 4,
+    "coordinates": [
+      31.92157,
+      35.20329
+    ],
+    "country": "Palestine",
+    "coordinatesRaw": "31.92157, 35.20329"
+  },
+  {
+    "id": "379",
+    "name": "Parakou",
+    "relatedArticleIds": [
+      "9187",
+      "9359",
+      "9249",
+      "9296",
+      "9547",
+      "9220",
+      "9239",
+      "9319",
+      "9254",
+      "9211",
+      "9375",
+      "9572",
+      "9451",
+      "9295",
+      "9218",
+      "9445",
+      "9379",
+      "9489",
+      "9299",
+      "9273",
+      "9297",
+      "9550",
+      "9571",
+      "9551",
+      "9522",
+      "9373",
+      "9537",
+      "9293",
+      "9646",
+      "75874",
+      "9212",
+      "9358",
+      "9468",
+      "9425",
+      "9324",
+      "9365",
+      "9378",
+      "9523",
+      "9294",
+      "9393",
+      "9291",
+      "9390",
+      "9410",
+      "9318",
+      "9545",
+      "9542"
+    ],
+    "articleCount": 46,
+    "coordinates": [
+      9.33716,
+      2.63031
+    ],
+    "country": "Benin",
+    "coordinatesRaw": "9.33716, 2.63031"
+  },
+  {
+    "id": "380",
+    "name": "Parc national de la Pendjari",
+    "relatedArticleIds": [
+      "9359",
+      "9676",
+      "26289",
+      "9606"
+    ],
+    "articleCount": 4,
+    "coordinates": [
+      11.2482,
+      1.59839
+    ],
+    "country": "Benin",
+    "coordinatesRaw": "11.2482, 1.59839"
+  },
+  {
+    "id": "381",
+    "name": "Parc national du W",
+    "relatedArticleIds": [
+      "9359",
+      "9486",
+      "9676",
+      "26289",
+      "9606"
+    ],
+    "articleCount": 5,
+    "coordinates": [
+      12.07596,
+      2.5235
+    ],
+    "country": "Benin",
+    "coordinatesRaw": "12.07596, 2.5235"
+  },
+  {
+    "id": "62026",
+    "name": "Porga",
+    "relatedArticleIds": [
+      "9486",
+      "9676",
+      "26287",
+      "9675"
+    ],
+    "articleCount": 4,
+    "coordinates": [
+      11.05,
+      0.966667
+    ],
+    "country": "Burkina Faso",
+    "coordinatesRaw": "11.05, 0.966667"
+  },
+  {
+    "id": "385",
+    "name": "Porto-Novo",
+    "relatedArticleIds": [
+      "9594",
+      "9213",
+      "9226",
+      "9288",
+      "9372",
+      "9611",
+      "45960",
+      "9239",
+      "61135",
+      "9269",
+      "9252",
+      "9310",
+      "9247",
+      "9328",
+      "9516",
+      "9379",
+      "9580",
+      "9513",
+      "9292",
+      "9196",
+      "9643",
+      "9610",
+      "9262",
+      "9322",
+      "9677",
+      "9330",
+      "9326",
+      "9554",
+      "9646",
+      "9648",
+      "9543",
+      "9199",
+      "9452",
+      "9323",
+      "9504",
+      "9425",
+      "9391",
+      "9361",
+      "9573",
+      "9376",
+      "9508",
+      "9341",
+      "9696",
+      "9607",
+      "9545",
+      "9197"
+    ],
+    "articleCount": 46,
+    "coordinates": [
+      6.49646,
+      2.60359
+    ],
+    "country": "Benin",
+    "coordinatesRaw": "6.49646, 2.60359"
+  },
+  {
+    "id": "386",
+    "name": "Pouytenga",
+    "relatedArticleIds": [
+      "4380",
+      "4441",
+      "10127",
+      "4409",
+      "4440",
+      "23308",
+      "4408",
+      "4445",
+      "4437",
+      "4379"
+    ],
+    "articleCount": 10,
+    "coordinates": [
+      12.25162,
+      -0.42565
+    ],
+    "country": "Burkina Faso",
+    "coordinatesRaw": "12.25162, -0.42565"
+  },
+  {
+    "id": "517",
+    "name": "Pya",
+    "relatedArticleIds": [
+      "25834",
+      "67438",
+      "25957",
+      "65954",
+      "65836"
+    ],
+    "articleCount": 5,
+    "coordinates": [
+      9.65194444,
+      1.13638889
+    ],
+    "country": "Togo",
+    "coordinatesRaw": "9.65194444, 1.13638889"
+  },
+  {
+    "id": "542",
+    "name": "Qatar",
+    "relatedArticleIds": [
+      "4460",
+      "3939",
+      "4034",
+      "3956",
+      "45960",
+      "4170",
+      "3943"
+    ],
+    "articleCount": 7,
+    "coordinates": [
+      25.5,
+      51.25
+    ],
+    "country": "Qatar",
+    "coordinatesRaw": "25.5, 51.25"
+  },
+  {
+    "id": "387",
+    "name": "Ramatoulaye",
+    "relatedArticleIds": [
+      "4062",
+      "4065",
+      "4198",
+      "4156",
+      "10088",
+      "3988",
+      "4050",
+      "4022",
+      "4161"
+    ],
+    "articleCount": 9,
+    "coordinates": [
+      13.633333,
+      -2.316667
+    ],
+    "country": "Burkina Faso",
+    "coordinatesRaw": "13.633333, -2.316667"
+  },
+  {
+    "id": "531",
+    "name": "Riyad",
+    "relatedArticleIds": [
+      "6590",
+      "2865",
+      "2875",
+      "2723",
+      "5712",
+      "6490",
+      "6512",
+      "5632",
+      "8328",
+      "3128",
+      "8302",
+      "6662",
+      "6489"
+    ],
+    "articleCount": 13,
+    "coordinates": [
+      24.65,
+      46.71
+    ],
+    "country": "Saudi Arabia",
+    "coordinatesRaw": "24.65, 46.71"
+  },
+  {
+    "id": "14637",
+    "name": "Rwanda",
+    "relatedArticleIds": [
+      "26298"
+    ],
+    "articleCount": 1,
+    "coordinates": [
+      -2.0,
+      30.0
+    ],
+    "country": "Rwanda",
+    "coordinatesRaw": "-2, 30"
+  },
+  {
+    "id": "388",
+    "name": "Sakété",
+    "relatedArticleIds": [
+      "9355",
+      "9667",
+      "9356",
+      "9322"
+    ],
+    "articleCount": 4,
+    "coordinates": [
+      6.73618,
+      2.65866
+    ],
+    "country": "Benin",
+    "coordinatesRaw": "6.73618, 2.65866"
+  },
+  {
+    "id": "389",
+    "name": "Salmossi",
+    "relatedArticleIds": [
+      "4357"
+    ],
+    "articleCount": 1,
+    "coordinates": [
+      14.56148,
+      -0.07253
+    ],
+    "country": "Burkina Faso",
+    "coordinatesRaw": "14.56148, -0.07253"
+  },
+  {
+    "id": "61326",
+    "name": "San-Pédro",
+    "relatedArticleIds": [
+      "61614",
+      "63979",
+      "63980"
+    ],
+    "articleCount": 3,
+    "coordinates": [
+      4.733333,
+      -6.633333
+    ],
+    "country": null,
+    "coordinatesRaw": "4.733333, -6.633333"
+  },
+  {
+    "id": "15400",
+    "name": "Site d'accueil des pèlerins (Akpakpa)",
+    "relatedArticleIds": [
+      "9447",
+      "9567",
+      "9563",
+      "9446",
+      "9651",
+      "9652",
+      "61091",
+      "4598",
+      "4614",
+      "4888",
+      "9564",
+      "9276",
+      "9467",
+      "4599",
+      "9448",
+      "9650",
+      "9272",
+      "61090"
+    ],
+    "articleCount": 18,
+    "coordinates": null,
+    "country": null,
+    "coordinatesRaw": ""
+  },
+  {
+    "id": "519",
+    "name": "Sokodé",
+    "relatedArticleIds": [
+      "67439",
+      "67418",
+      "67440",
+      "67438",
+      "29633",
+      "65954"
+    ],
+    "articleCount": 6,
+    "coordinates": [
+      8.9833333333333,
+      1.1333333333333
+    ],
+    "country": "Togo",
+    "coordinatesRaw": "8.9833333333333, 1.1333333333333"
+  },
+  {
+    "id": "397",
+    "name": "Soum",
+    "relatedArticleIds": [
+      "4059",
+      "3893",
+      "4151",
+      "4193",
+      "4234",
+      "4487",
+      "4422",
+      "3949",
+      "10187",
+      "4190",
+      "4015",
+      "3976",
+      "4293",
+      "3913",
+      "10186",
+      "3974",
+      "4120",
+      "4137",
+      "3900",
+      "4266",
+      "3889",
+      "10163",
+      "10185"
+    ],
+    "articleCount": 23,
+    "coordinates": [
+      14.1,
+      -1.633333
+    ],
+    "country": "Burkina Faso",
+    "coordinatesRaw": "14.1, -1.633333"
+  },
+  {
+    "id": "61327",
+    "name": "Stade Félix Houphouët-Boigny",
+    "relatedArticleIds": [
+      "61417"
+    ],
+    "articleCount": 1,
+    "coordinates": [
+      5.32825,
+      -4.018417
+    ],
+    "country": "Côte d'Ivoire",
+    "coordinatesRaw": "5.32825, -4.018417"
+  },
+  {
+    "id": "429",
+    "name": "Suisse",
+    "relatedArticleIds": [
+      "4466"
+    ],
+    "articleCount": 1,
+    "coordinates": [
+      47.00016,
+      8.01427
+    ],
+    "country": "Switzerland",
+    "coordinatesRaw": "47.00016, 8.01427"
+  },
+  {
+    "id": "12951",
+    "name": "Sya",
+    "relatedArticleIds": [
+      "4090",
+      "4457"
+    ],
+    "articleCount": 2,
+    "coordinates": null,
+    "country": null,
+    "coordinatesRaw": ""
+  },
+  {
+    "id": "14218",
+    "name": "Sèmè-Podji",
+    "relatedArticleIds": [
+      "9543",
+      "26307",
+      "9351",
+      "9610",
+      "9322"
+    ],
+    "articleCount": 5,
+    "coordinates": [
+      6.366667,
+      2.616667
+    ],
+    "country": "Benin",
+    "coordinatesRaw": "6.366667, 2.616667"
+  },
+  {
+    "id": "14825",
+    "name": "Sèmèrè",
+    "relatedArticleIds": [
+      "9497"
+    ],
+    "articleCount": 1,
+    "coordinates": null,
+    "country": null,
+    "coordinatesRaw": ""
+  },
+  {
+    "id": "395",
+    "name": "Sénégal",
+    "relatedArticleIds": [
+      "25750",
+      "28482",
+      "23305",
+      "4532",
+      "28256",
+      "28179"
+    ],
+    "articleCount": 6,
+    "coordinates": [
+      14.5,
+      -14.25
+    ],
+    "country": "Senegal",
+    "coordinatesRaw": "14.5, -14.25"
+  },
+  {
+    "id": "398",
+    "name": "Tanguiéta",
+    "relatedArticleIds": [
+      "9295",
+      "9293",
+      "9296",
+      "9294",
+      "9299",
+      "9297",
+      "9291"
+    ],
+    "articleCount": 7,
+    "coordinates": [
+      10.62118,
+      1.26651
+    ],
+    "country": "Benin",
+    "coordinatesRaw": "10.62118, 1.26651"
+  },
+  {
+    "id": "410",
+    "name": "Tchad",
+    "relatedArticleIds": [
+      "23305",
+      "29088",
+      "4532",
+      "10159"
+    ],
+    "articleCount": 4,
+    "coordinates": [
+      15.0,
+      19.0
+    ],
+    "country": "Chad",
+    "coordinatesRaw": "15.0, 19.0"
+  },
+  {
+    "id": "523",
+    "name": "Tchaoudjo",
+    "relatedArticleIds": [
+      "67440"
+    ],
+    "articleCount": 1,
+    "coordinates": [
+      8.98333333,
+      1.13333333
+    ],
+    "country": "Togo",
+    "coordinatesRaw": "8.98333333, 1.13333333"
+  },
+  {
+    "id": "399",
+    "name": "Tchaourou",
+    "relatedArticleIds": [
+      "7457",
+      "9572"
+    ],
+    "articleCount": 2,
+    "coordinates": [
+      9.0349,
+      2.5169
+    ],
+    "country": "Benin",
+    "coordinatesRaw": "9.0349, 2.5169"
+  },
+  {
+    "id": "14322",
+    "name": "Titao",
+    "relatedArticleIds": [
+      "4372"
+    ],
+    "articleCount": 1,
+    "coordinates": [
+      13.766735,
+      -2.073643
+    ],
+    "country": "Burkina Faso",
+    "coordinatesRaw": "13.766735, -2.073643"
+  },
+  {
+    "id": "544",
+    "name": "Togo",
+    "relatedArticleIds": [
+      "9676",
+      "9615"
+    ],
+    "articleCount": 2,
+    "coordinates": [
+      8.66667,
+      1.08333
+    ],
+    "country": "Togo",
+    "coordinatesRaw": "8.66667, 1.08333"
+  },
+  {
+    "id": "14385",
+    "name": "Toma",
+    "relatedArticleIds": [
+      "4371"
+    ],
+    "articleCount": 1,
+    "coordinates": [
+      12.766667,
+      -2.883333
+    ],
+    "country": "Burkina Faso",
+    "coordinatesRaw": "12.766667, -2.883333"
+  },
+  {
+    "id": "63382",
+    "name": "Touba",
+    "relatedArticleIds": [
+      "71523"
+    ],
+    "articleCount": 1,
+    "coordinates": [
+      8.283333,
+      -7.683333
+    ],
+    "country": "Côte d'Ivoire",
+    "coordinatesRaw": "8.283333, -7.683333"
+  },
+  {
+    "id": "46256",
+    "name": "Treichville",
+    "relatedArticleIds": [
+      "48876",
+      "62540",
+      "48875",
+      "48911",
+      "72319",
+      "63820",
+      "48303",
+      "48914",
+      "48939",
+      "63977",
+      "63971",
+      "72329",
+      "64847",
+      "61551",
+      "76374",
+      "64878",
+      "76376",
+      "48986",
+      "64790",
+      "76380",
+      "48940"
+    ],
+    "articleCount": 21,
+    "coordinates": [
+      5.3,
+      -4.0
+    ],
+    "country": "Côte d'Ivoire",
+    "coordinatesRaw": "5.3, -4"
+  },
+  {
+    "id": "545",
+    "name": "Turquie",
+    "relatedArticleIds": [
+      "3890",
+      "4508",
+      "3940",
+      "10076"
+    ],
+    "articleCount": 4,
+    "coordinates": [
+      39.0,
+      35.0
+    ],
+    "country": "Turkey",
+    "coordinatesRaw": "39.0, 35.0"
+  },
+  {
+    "id": "23506",
+    "name": "Université Islamique Al-Fourqane",
+    "relatedArticleIds": [
+      "74038"
+    ],
+    "articleCount": 1,
+    "coordinates": [
+      5.318399197445977,
+      -4.112374498969468
+    ],
+    "country": "Côte d'Ivoire",
+    "coordinatesRaw": "5.318399197445977, -4.112374498969468"
+  },
+  {
+    "id": "480",
+    "name": "Université al-Azhar",
+    "relatedArticleIds": [
+      "6742",
+      "8112",
+      "29631",
+      "2809",
+      "28143",
+      "2746",
+      "6226",
+      "2753",
+      "2524"
+    ],
+    "articleCount": 9,
+    "coordinates": null,
+    "country": null,
+    "coordinatesRaw": ""
+  },
+  {
+    "id": "27738",
+    "name": "Université de Kara",
+    "relatedArticleIds": [
+      "28560"
+    ],
+    "articleCount": 1,
+    "coordinates": [
+      9.530556,
+      1.208333
+    ],
+    "country": "Togo",
+    "coordinatesRaw": "9.530556, 1.208333"
+  },
+  {
+    "id": "559",
+    "name": "Université de Lomé",
+    "relatedArticleIds": [
+      "28813",
+      "28723",
+      "29091",
+      "28777",
+      "28285",
+      "28814",
+      "28174",
+      "28177",
+      "28645",
+      "29252"
+    ],
+    "articleCount": 10,
+    "coordinates": [
+      6.173669,
+      1.215866
+    ],
+    "country": "Togo",
+    "coordinatesRaw": "6.173669, 1.215866"
+  },
+  {
+    "id": "444",
+    "name": "Université de Ouagadougou",
+    "relatedArticleIds": [
+      "6742"
+    ],
+    "articleCount": 1,
+    "coordinates": [
+      12.37735,
+      -1.5009
+    ],
+    "country": "Burkina Faso",
+    "coordinatesRaw": "12.37735, -1.5009"
+  },
+  {
+    "id": "481",
+    "name": "Université islamique Imam Muhammad ibn Saud",
+    "relatedArticleIds": [
+      "2922"
+    ],
+    "articleCount": 1,
+    "coordinates": null,
+    "country": null,
+    "coordinatesRaw": ""
+  },
+  {
+    "id": "482",
+    "name": "Université islamique de Médine",
+    "relatedArticleIds": [
+      "3278",
+      "3264",
+      "5504"
+    ],
+    "articleCount": 3,
+    "coordinates": null,
+    "country": null,
+    "coordinatesRaw": ""
+  },
+  {
+    "id": "23522",
+    "name": "Université musulmane de Côte d'Ivoire",
+    "relatedArticleIds": [
+      "46570"
+    ],
+    "articleCount": 1,
+    "coordinates": null,
+    "country": null,
+    "coordinatesRaw": ""
+  },
+  {
+    "id": "46248",
+    "name": "Yamoussoukro",
+    "relatedArticleIds": [
+      "48333",
+      "68104",
+      "67994",
+      "67912",
+      "67996",
+      "62042",
+      "63576",
+      "72352",
+      "62580",
+      "64670",
+      "61415",
+      "63827",
+      "68239",
+      "67995",
+      "64834",
+      "68303",
+      "62695",
+      "62362",
+      "68377",
+      "62245",
+      "62446",
+      "62054",
+      "64836",
+      "62610",
+      "68076",
+      "62375",
+      "48271",
+      "68039",
+      "62298",
+      "68276",
+      "49026",
+      "68236",
+      "71514",
+      "63854",
+      "63553",
+      "48994",
+      "63745",
+      "68347",
+      "68278",
+      "64968",
+      "49067",
+      "63626",
+      "64756",
+      "63695",
+      "71838",
+      "61414",
+      "67915",
+      "63901",
+      "62607",
+      "62656",
+      "68185",
+      "76373",
+      "68277",
+      "68184",
+      "68240",
+      "63866",
+      "63709",
+      "63592",
+      "67911",
+      "62365",
+      "62619",
+      "68263",
+      "63739",
+      "48981",
+      "61655",
+      "63897",
+      "63549",
+      "48501",
+      "48338",
+      "68025",
+      "72324",
+      "68192",
+      "61300",
+      "61617",
+      "64729",
+      "61299",
+      "68106",
+      "62411",
+      "61423",
+      "63812",
+      "64912",
+      "68186",
+      "62241",
+      "65008",
+      "64760",
+      "68388",
+      "67947",
+      "68378",
+      "62339",
+      "62412",
+      "64925",
+      "68158",
+      "68392",
+      "64837",
+      "64835",
+      "67867",
+      "68152",
+      "63891",
+      "71526",
+      "49037",
+      "68272",
+      "68198"
+    ],
+    "articleCount": 102,
+    "coordinates": [
+      6.816111,
+      -5.274167
+    ],
+    "country": "Côte d'Ivoire",
+    "coordinatesRaw": "6.816111, -5.274167"
+  },
+  {
+    "id": "46294",
+    "name": "Yopougon",
+    "relatedArticleIds": [
+      "61426",
+      "71843",
+      "61577",
+      "48334",
+      "61424",
+      "48941",
+      "48583",
+      "63935",
+      "61456",
+      "61625",
+      "48514",
+      "64841",
+      "68066",
+      "62369",
+      "68385",
+      "64834",
+      "61631",
+      "62284",
+      "65045",
+      "64995",
+      "48988",
+      "48252",
+      "61453",
+      "64885",
+      "48990",
+      "71510",
+      "64021",
+      "68236",
+      "71511",
+      "68233",
+      "67990",
+      "67883",
+      "62644",
+      "63704",
+      "49038",
+      "61507",
+      "64802",
+      "61505",
+      "63906",
+      "64676",
+      "63860",
+      "76372",
+      "64960",
+      "48511",
+      "62650",
+      "62531",
+      "68190",
+      "72325",
+      "61576",
+      "72319",
+      "48376",
+      "61659",
+      "68263",
+      "64686",
+      "64757",
+      "64845",
+      "63739",
+      "64917",
+      "48983",
+      "68268",
+      "68068",
+      "63982",
+      "71592",
+      "61589",
+      "68354",
+      "64800",
+      "62291",
+      "64889",
+      "72318",
+      "65048",
+      "64721",
+      "61502",
+      "68388",
+      "63894",
+      "48948",
+      "68075",
+      "71599",
+      "62339",
+      "48957",
+      "61578",
+      "48908",
+      "68040",
+      "72350",
+      "64999",
+      "68118",
+      "61466",
+      "68311",
+      "68112",
+      "61461",
+      "63852",
+      "61624"
+    ],
+    "articleCount": 91,
+    "coordinates": [
+      5.316667,
+      -4.066667
+    ],
+    "country": "Côte d'Ivoire",
+    "coordinatesRaw": "5.316667, -4.066667"
+  },
+  {
+    "id": "405",
+    "name": "Ziniaré",
+    "relatedArticleIds": [
+      "4246",
+      "3970",
+      "4490",
+      "4105"
+    ],
+    "articleCount": 4,
+    "coordinates": [
+      12.58186,
+      -1.2971
+    ],
+    "country": "Burkina Faso",
+    "coordinatesRaw": "12.58186, -1.2971"
+  },
+  {
+    "id": "406",
+    "name": "Zogbodomey",
+    "relatedArticleIds": [
+      "9667"
+    ],
+    "articleCount": 1,
+    "coordinates": [
+      7.018,
+      2.183
+    ],
+    "country": "Benin",
+    "coordinatesRaw": "7.018, 2.183"
+  },
+  {
+    "id": "308",
+    "name": "Égypte",
+    "relatedArticleIds": [
+      "9692",
+      "62374",
+      "68227",
+      "65922",
+      "63735",
+      "31866",
+      "62606",
+      "66240"
+    ],
+    "articleCount": 8,
+    "coordinates": [
+      27.0,
+      30.0
+    ],
+    "country": "Egypt",
+    "coordinatesRaw": "27.0, 30.0"
+  },
+  {
+    "id": "309",
+    "name": "Émirats arabes unis",
+    "relatedArticleIds": [
+      "65001",
+      "9587",
+      "28855",
+      "64677",
+      "9321"
+    ],
+    "articleCount": 5,
+    "coordinates": [
+      23.75,
+      54.5
+    ],
+    "country": "United Arab Emirates",
+    "coordinatesRaw": "23.75, 54.5"
+  },
+  {
+    "id": "310",
+    "name": "États-Unis",
+    "relatedArticleIds": [
+      "28106",
+      "28813",
+      "9302",
+      "4385",
+      "28810",
+      "4382",
+      "28175",
+      "4431",
+      "9341",
+      "23310",
+      "4439"
+    ],
+    "articleCount": 11,
+    "coordinates": [
+      39.76,
+      -98.5
+    ],
+    "country": "United States of America",
+    "coordinatesRaw": "39.76, -98.5"
+  }
+]

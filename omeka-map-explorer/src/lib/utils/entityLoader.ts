@@ -3,14 +3,9 @@
  * This provides better performance by not loading all entities upfront
  */
 
-type EntityType = 'persons' | 'organizations' | 'events' | 'subjects';
+import type { Entity, LocationEntity } from '$lib/types/index.js';
 
-interface Entity {
-	id: string;
-	name: string;
-	relatedArticleIds: string[];
-	articleCount: number;
-}
+type EntityType = 'persons' | 'organizations' | 'events' | 'subjects' | 'locations';
 
 // Cache for loaded entities
 const entityCache = new Map<EntityType, Entity[]>();
@@ -41,6 +36,14 @@ export async function loadEntities(type: EntityType, basePath = 'data'): Promise
 }
 
 /**
+ * Load location entities with coordinates
+ */
+export async function loadLocations(basePath = 'data'): Promise<LocationEntity[]> {
+	const entities = await loadEntities('locations', basePath);
+	return entities as LocationEntity[];
+}
+
+/**
  * Preload all entity types (for dashboard overview)
  */
 export async function preloadAllEntities(basePath = 'data'): Promise<{
@@ -48,15 +51,17 @@ export async function preloadAllEntities(basePath = 'data'): Promise<{
 	organizations: Entity[];
 	events: Entity[];
 	subjects: Entity[];
+	locations: LocationEntity[];
 }> {
-	const [persons, organizations, events, subjects] = await Promise.all([
+	const [persons, organizations, events, subjects, locations] = await Promise.all([
 		loadEntities('persons', basePath),
 		loadEntities('organizations', basePath),
 		loadEntities('events', basePath),
-		loadEntities('subjects', basePath)
+		loadEntities('subjects', basePath),
+		loadLocations(basePath)
 	]);
 
-	return { persons, organizations, events, subjects };
+	return { persons, organizations, events, subjects, locations };
 }
 
 /**
@@ -98,7 +103,8 @@ export async function restoreEntityFromUrl(type: string, id: string, basePath = 
 		'Personnes': 'persons',
 		'Organisations': 'organizations', 
 		'Événements': 'events',
-		'Sujets': 'subjects'
+		'Sujets': 'subjects',
+		'Lieux': 'locations'
 	};
 	
 	const entityType = typeMap[type];
