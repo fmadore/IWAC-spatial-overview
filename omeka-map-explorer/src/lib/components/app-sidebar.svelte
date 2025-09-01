@@ -2,7 +2,7 @@
 	import * as Sidebar from '$lib/components/ui/sidebar';
 	import { Button } from '$lib/components/ui/button';
 	import { appState } from '$lib/state/appState.svelte';
-	import { filters } from '$lib/state/filters.svelte';
+	import { filters, clearFilters } from '$lib/state/filters.svelte';
 	import { mapData } from '$lib/state/mapData.svelte';
 	import { urlManager } from '$lib/utils/urlManager.svelte';
 	import { cn } from '$lib/utils';
@@ -23,18 +23,13 @@
 	];
 
 	function switchTo(item: { id: Viz; view?: 'dashboard' | 'map' }) {
+		// Clear all filters and entity selections when switching visualizations
+		clearFilters();
+		appState.selectedEntity = null;
+		
 		if (item.view) appState.activeView = item.view;
 		appState.activeVisualization = item.id;
 		urlManager.updateUrl();
-	}
-
-	// Reset all filters
-	function resetFilters() {
-		filters.selected.countries = [];
-		filters.selected.regions = [];
-		filters.selected.newspapers = [];
-		filters.selected.dateRange = null;
-		filters.selected.keywords = [];
 	}
 </script>
 
@@ -105,7 +100,7 @@
 				</div>
 				<button
 					class="w-full px-4 py-2 text-sm font-medium text-foreground bg-background border border-input rounded-md hover:bg-accent hover:text-accent-foreground transition-colors"
-					onclick={resetFilters}
+					onclick={clearFilters}
 				>
 					Reset All Filters
 				</button>
