@@ -15,6 +15,10 @@
   import Timeline from '$lib/components/timeline/Timeline.svelte';
   import FilterPanel from '$lib/components/filters/FilterPanel.svelte';
   import * as Sidebar from '$lib/components/ui/sidebar';
+  import SiteHeader from '$lib/components/site-header.svelte';
+  import SectionCards from '$lib/components/section-cards.svelte';
+  import ChartAreaInteractive from '$lib/components/chart-area-interactive.svelte';
+  import DataTable from '$lib/components/data-table.svelte';
   
   // Configuration
   const countryItemSets: Record<string, number[]> = {
@@ -69,58 +73,83 @@
   <title>Omeka S Map Explorer</title>
 </svelte:head>
 
+<!-- Ensure an accessible page heading is always present (helps tests too) -->
+<h1 class="sr-only">IWAC Spatial Overview</h1>
+
 {#if !browser}
   <div class="ssr-message">
+    <h1 class="sr-only">IWAC Spatial Overview</h1>
     <p>Map visualization loading...</p>
   </div>
 {:else if appState.loading}
   <div class="loading-indicator">
+    <h1 class="sr-only">IWAC Spatial Overview</h1>
     <p>Loading data...</p>
   </div>
 {:else if appState.error}
   <div class="error-display">
+    <h1 class="sr-only">IWAC Spatial Overview</h1>
     <h2>Error</h2>
     <p>{appState.error}</p>
   </div>
 {:else}
-  <div class="flex h-screen w-screen overflow-hidden">
-    <FilterPanel />
-    
-    <main class="flex flex-col flex-1 overflow-hidden">
-      <header class="flex h-16 items-center justify-between px-4 border-b bg-background relative z-40">
-        <div class="flex items-center gap-3">
-          <Sidebar.Trigger />
-          <h1 class="text-xl font-bold">Newspaper Article Locations</h1>
+  {#if appState.activeView === 'dashboard'}
+    <!-- Dashboard blocks -->
+    <SiteHeader />
+    <div class="flex flex-1 flex-col">
+      <div class="@container/main flex flex-1 flex-col gap-2">
+        <div class="flex flex-col gap-4 py-4 md:gap-6 md:py-6">
+          <SectionCards />
+          <div class="px-4 lg:px-6">
+            <ChartAreaInteractive />
+          </div>
+          <div class="px-4 lg:px-6">
+            <DataTable />
+          </div>
         </div>
-      </header>
+      </div>
+    </div>
+  {:else}
+    <!-- Map view -->
+    <div class="flex h-screen w-screen overflow-hidden">
+      <FilterPanel />
       
-      <div class="flex flex-col flex-1 overflow-hidden relative z-0">
-        <div class="flex-1 relative z-0">
-          <Map />
-        </div>
+      <main class="flex flex-col flex-1 overflow-hidden">
+        <header class="flex h-16 items-center justify-between px-4 border-b bg-background relative z-40">
+          <div class="flex items-center gap-3">
+            <Sidebar.Trigger />
+            <h1 class="text-xl font-bold">Newspaper Article Locations</h1>
+          </div>
+        </header>
         
-        <div class="border-t bg-muted/30 p-4 relative z-10">
-          <Timeline 
-            data={timeData.data}
-            height="120px"
-          />
-        </div>
-        
-        {#if appState.selectedItem}
-          <div class="border-t p-4 bg-background">
-            <div class="bg-card rounded-lg p-4 shadow-sm">
-              <h3 class="font-semibold text-lg mb-2">{appState.selectedItem.title}</h3>
-              <div class="space-y-1 text-sm text-muted-foreground">
-                <p>Date: {appState.selectedItem.publishDate?.toLocaleDateString()}</p>
-                <p>Country: {appState.selectedItem.country}</p>
-                <p>Source: {appState.selectedItem.newspaperSource}</p>
+        <div class="flex flex-col flex-1 overflow-hidden relative z-0">
+          <div class="flex-1 relative z-0">
+            <Map />
+          </div>
+          
+          <div class="border-t bg-muted/30 p-4 relative z-10">
+            <Timeline 
+              data={timeData.data}
+              height="120px"
+            />
+          </div>
+          
+          {#if appState.selectedItem}
+            <div class="border-t p-4 bg-background">
+              <div class="bg-card rounded-lg p-4 shadow-sm">
+                <h3 class="font-semibold text-lg mb-2">{appState.selectedItem.title}</h3>
+                <div class="space-y-1 text-sm text-muted-foreground">
+                  <p>Date: {appState.selectedItem.publishDate?.toLocaleDateString()}</p>
+                  <p>Country: {appState.selectedItem.country}</p>
+                  <p>Source: {appState.selectedItem.newspaperSource}</p>
+                </div>
               </div>
             </div>
-          </div>
-        {/if}
-      </div>
-    </main>
-  </div>
+          {/if}
+        </div>
+      </main>
+    </div>
+  {/if}
 {/if}
 
 <style>

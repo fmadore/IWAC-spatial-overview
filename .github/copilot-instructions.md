@@ -168,3 +168,36 @@ npm run preview               # Preview production build locally
 - All geographic calculations happen client-side
 - Map and timeline components dynamically import heavy libraries
 - Responsive design uses Tailwind breakpoints and mobile hooks
+
+## Dashboard & Visualizations (New)
+
+We now have a shadcn-svelte “dashboard with sidebar” scaffold to host multiple visualizations:
+
+- Layout: `src/routes/+layout.svelte` wraps the app with `Sidebar.Provider`/`Sidebar.Inset` and includes `AppSidebar`.
+- Entry page: `src/routes/+page.svelte` conditionally renders:
+	- Dashboard (new blocks) when `appState.activeView === 'dashboard'`
+	- Existing Map + Timeline when `appState.activeView === 'map'`
+- State additions in `src/lib/state/appState.svelte.ts`:
+	- `activeView`: 'dashboard' | 'map' | 'list' | 'stats' (defaults to 'dashboard')
+	- `activeVisualization`: 'overview' | 'byCountry' | 'persons' | 'organizations' | 'events' | 'subjects'
+- New components:
+	- `src/lib/components/app-sidebar.svelte`: Sidebar navigation to switch visualizations
+	- `src/lib/components/site-header.svelte`: Sticky header for the dashboard inset
+	- `src/lib/components/section-cards.svelte`: KPI cards (articles, countries, time span)
+	- `src/lib/components/chart-area-interactive.svelte`: Placeholder card for future charts
+	- `src/lib/components/data-table.svelte`: Simple data table of sample records
+
+### Extending with Entity Views
+
+Entity types from `index.json` (Type): Lieux (Places), Personnes (Persons), Événements (Events), Organisations (Organizations), Sujets (Subjects).
+
+Implementation guide:
+1. Extend `src/lib/utils/staticDataLoader.ts` to compute:
+	 - `entitiesByType` with counts and related article IDs
+	 - `articleEntities` mapping for quick filtering
+2. Add `selectedEntity` to app state (type + label) to drive drilldown.
+3. Create `EntityExplorer.svelte` to list/search entities by type and set `selectedEntity`.
+4. On selection, recompute `mapData.visibleItems` and update the timeline/table accordingly.
+5. Keep components typed and use runes: `$state`, `$derived`, `$props`, `$effect`.
+
+See `roadmap.md` at the repo root for the full plan and milestones.

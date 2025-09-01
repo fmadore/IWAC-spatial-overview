@@ -4,18 +4,21 @@ interface AppState {
   loading: boolean;
   error: string | null;
   dataLoaded: boolean;
-  activeView: 'map' | 'list' | 'stats';
+  activeView: 'dashboard' | 'map' | 'list' | 'stats';
   sidebarOpen: boolean;
   selectedItem: ProcessedItem | null;
+  // Which visualization inside dashboard is active
+  activeVisualization: 'overview' | 'byCountry' | 'persons' | 'organizations' | 'events' | 'subjects';
 }
 
 export const appState = $state<AppState>({
   loading: true,
   error: null,
   dataLoaded: false,
-  activeView: 'map',
+  activeView: 'dashboard',
   sidebarOpen: true,
-  selectedItem: null
+  selectedItem: null,
+  activeVisualization: 'overview'
 });
 
 export function setError(message: string) {
