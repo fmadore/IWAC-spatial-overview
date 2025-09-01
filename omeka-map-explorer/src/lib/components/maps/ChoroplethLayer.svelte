@@ -252,6 +252,10 @@
 	// Handle feature click
 	function zoomToFeature(e: any) {
 		map.fitBounds(e.target.getBounds());
+		// Also open popup to show details
+		if (e?.target && typeof e.target.openPopup === 'function') {
+			e.target.openPopup();
+		}
 
 		dispatch('selectRegion', {
 			region: e.target.feature.properties.name
@@ -412,6 +416,21 @@
 </script>
 
 <style>
+	:global(.choropleth-tooltip) {
+		font-size: 12px;
+		padding: 4px 6px;
+		border-radius: 6px;
+	}
+
+	:global(.choropleth-popup-wrapper .leaflet-popup-content-wrapper) {
+		border-radius: 8px;
+	}
+
+	.choropleth-popup h4 {
+		margin: 0 0 6px;
+		font-weight: 600;
+	}
+
 	:global(.info) {
 		padding: 8px 12px;
 		font:
