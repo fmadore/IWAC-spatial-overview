@@ -1,4 +1,4 @@
-"""
+r"""
 Prepare JSON files from the Hugging Face dataset 'fmadore/islam-west-africa-collection'.
 
 Outputs two files in the Svelte app's static data directory by default:
