@@ -280,7 +280,7 @@
   }
 </script>
 
-<div class="map-container" bind:this={mapElement} style="height: {height};" data-testid="map-container"></div>
+<div class="map-container relative z-0" bind:this={mapElement} style="height: {height};" data-testid="map-container"></div>
 {#if browser && map && worldGeo && mapData.viewMode === 'choropleth'}
   <ChoroplethLayer {map} geoJson={worldGeo} data={choroplethData} scaleMode="log" />
 {/if}

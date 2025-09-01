@@ -87,19 +87,19 @@
     <FilterPanel />
     
     <main class="flex flex-col flex-1 overflow-hidden">
-      <header class="flex h-16 items-center justify-between px-4 border-b">
-        <h1 class="text-xl font-bold">Newspaper Article Locations</h1>
-        <div class="flex items-center gap-2">
+      <header class="flex h-16 items-center justify-between px-4 border-b bg-background relative z-40">
+        <div class="flex items-center gap-3">
           <Sidebar.Trigger />
+          <h1 class="text-xl font-bold">Newspaper Article Locations</h1>
         </div>
       </header>
       
-      <div class="flex flex-col flex-1 overflow-hidden">
-        <div class="flex-1">
+      <div class="flex flex-col flex-1 overflow-hidden relative z-0">
+        <div class="flex-1 relative z-0">
           <Map />
         </div>
         
-        <div class="border-t bg-muted/30 p-4">
+        <div class="border-t bg-muted/30 p-4 relative z-10">
           <Timeline 
             data={timeData.data}
             height="120px"

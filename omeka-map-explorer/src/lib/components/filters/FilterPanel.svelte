@@ -17,7 +17,7 @@
   }
 </script>
 
-<Sidebar.Root>
+<Sidebar.Root class="z-50">
   <Sidebar.Header>
     <Sidebar.Group>
       <Sidebar.GroupLabel>Filters</Sidebar.GroupLabel>
