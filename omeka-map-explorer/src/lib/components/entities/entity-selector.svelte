@@ -5,6 +5,7 @@
 	import { Check, ChevronsUpDown } from 'lucide-svelte';
 	import { cn } from '$lib/utils';
 	import { appState } from '$lib/state/appState.svelte';
+	import { urlManager } from '$lib/utils/urlManager.svelte';
 
 	type Entity = {
 		id: string;
@@ -67,11 +68,17 @@
 			name: entity.name,
 			relatedArticleIds: entity.relatedArticleIds
 		};
+
+		// Update URL to reflect the selection
+		urlManager.updateUrl();
 	}
 
 	function clearSelection() {
 		selectedEntityId = null;
 		appState.selectedEntity = null;
+		
+		// Update URL to reflect the cleared selection
+		urlManager.updateUrl();
 	}
 </script>
 

@@ -81,6 +81,35 @@ export async function searchEntities(
 }
 
 /**
+ * Get entity by ID from a specific type
+ */
+export async function getEntityById(type: EntityType, id: string, basePath = 'data'): Promise<Entity | null> {
+	const entities = await loadEntities(type, basePath);
+	return entities.find(entity => entity.id === id) || null;
+}
+
+/**
+ * Restore entity selection from URL parameters
+ */
+export async function restoreEntityFromUrl(type: string, id: string, basePath = 'data'): Promise<Entity | null> {
+	// Map entity type names to our EntityType
+	const typeMap: Record<string, EntityType> = {
+		'Personnes': 'persons',
+		'Organisations': 'organizations', 
+		'Événements': 'events',
+		'Sujets': 'subjects'
+	};
+	
+	const entityType = typeMap[type];
+	if (!entityType) {
+		console.warn(`Unknown entity type: ${type}`);
+		return null;
+	}
+	
+	return await getEntityById(entityType, id, basePath);
+}
+
+/**
  * Clear entity cache (useful for testing or cache invalidation)
  */
 export function clearEntityCache() {

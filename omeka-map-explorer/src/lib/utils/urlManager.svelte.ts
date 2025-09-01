@@ -3,6 +3,7 @@ import { appState } from '$lib/state/appState.svelte';
 import { goto } from '$app/navigation';
 import { page } from '$app/stores';
 import { get } from 'svelte/store';
+import { base } from '$app/paths';
 
 type ViewType = 'dashboard' | 'map' | 'list' | 'stats';
 type VisualizationType =
@@ -21,6 +22,7 @@ export const urlManager = {
 
 		const view = appState.activeView;
 		const viz = appState.activeVisualization;
+		const selectedEntity = appState.selectedEntity;
 
 		// Create URL search parameters
 		const params = new URLSearchParams();
@@ -35,9 +37,15 @@ export const urlManager = {
 			}
 		}
 
-		// Build the URL
+		// Add entity selection if present
+		if (selectedEntity) {
+			params.set('entityType', selectedEntity.type);
+			params.set('entityId', selectedEntity.id);
+		}
+
+		// Build the URL with proper base path
 		const paramString = params.toString();
-		const url = paramString ? `/?${paramString}` : '/';
+		const url = paramString ? `${base}/?${paramString}` : `${base}/`;
 
 		// Use goto to update URL without causing navigation
 		goto(url, { replaceState: true, noScroll: true });
@@ -49,6 +57,8 @@ export const urlManager = {
 
 		const view = searchParams.get('view') as ViewType;
 		const viz = searchParams.get('viz') as VisualizationType;
+		const entityType = searchParams.get('entityType');
+		const entityId = searchParams.get('entityId');
 
 		// Set view - default to dashboard
 		if (view && ['dashboard', 'map', 'list', 'stats'].includes(view)) {
@@ -71,13 +81,37 @@ export const urlManager = {
 		} else {
 			appState.activeVisualization = 'overview';
 		}
+
+		// Handle entity selection from URL
+		if (entityType && entityId) {
+			// We'll need to load the entity data to get the full entity object
+			// For now, store the basic info and let the entity loader fill in the details
+			appState.selectedEntity = {
+				type: entityType,
+				id: entityId,
+				name: '', // Will be filled when entity data loads
+				relatedArticleIds: [] // Will be filled when entity data loads
+			};
+		} else {
+			// Clear entity selection if not in URL
+			appState.selectedEntity = null;
+		}
 	},
 
 	// Navigate to a specific view/visualization
-	navigateTo(view: ViewType, visualization?: VisualizationType) {
+	navigateTo(view: ViewType, visualization?: VisualizationType, entitySelection?: { type: string; id: string }) {
 		appState.activeView = view;
 		if (visualization) {
 			appState.activeVisualization = visualization;
+		}
+		if (entitySelection) {
+			// We'll need to load the full entity details, but set basic info for now
+			appState.selectedEntity = {
+				type: entitySelection.type,
+				id: entitySelection.id,
+				name: '', // Will be filled when entity data loads
+				relatedArticleIds: [] // Will be filled when entity data loads
+			};
 		}
 		this.updateUrl();
 	}

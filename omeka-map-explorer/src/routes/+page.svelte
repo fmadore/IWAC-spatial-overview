@@ -9,7 +9,7 @@
 	import { mapData } from '$lib/state/mapData.svelte';
 	import { initialize as initAnimationController } from '$lib/components/timeline/AnimationController';
 	import { loadStaticData } from '$lib/utils/staticDataLoader';
-	import { loadEntities } from '$lib/utils/entityLoader';
+	import { loadEntities, restoreEntityFromUrl } from '$lib/utils/entityLoader';
 	import { urlManager, initializeUrlManager } from '$lib/utils/urlManager.svelte';
 	import type { ProcessedItem } from '$lib/types';
 	import { browser } from '$app/environment';
@@ -58,6 +58,33 @@
 			}
 		} catch (error) {
 			console.error(`Failed to load ${entityType}:`, error);
+		}
+	}
+
+	// Restore entity selection from URL after entity data is loaded
+	async function restoreEntitySelection() {
+		if (!appState.selectedEntity || appState.selectedEntity.name) {
+			return; // Already restored or no selection
+		}
+
+		const { type, id } = appState.selectedEntity;
+		try {
+			const entity = await restoreEntityFromUrl(type, id, 'data');
+			if (entity) {
+				appState.selectedEntity = {
+					type,
+					id,
+					name: entity.name,
+					relatedArticleIds: entity.relatedArticleIds
+				};
+			} else {
+				// Entity not found, clear the selection
+				appState.selectedEntity = null;
+				urlManager.updateUrl();
+			}
+		} catch (error) {
+			console.error('Failed to restore entity selection:', error);
+			appState.selectedEntity = null;
 		}
 	}
 
@@ -117,7 +144,10 @@
 		if (appState.dataLoaded && browser) {
 			const viz = appState.activeVisualization;
 			if (viz === 'persons' || viz === 'organizations' || viz === 'events' || viz === 'subjects') {
-				loadEntityData(viz);
+				loadEntityData(viz).then(() => {
+					// After loading entity data, try to restore entity selection from URL
+					restoreEntitySelection();
+				});
 			}
 		}
 	});

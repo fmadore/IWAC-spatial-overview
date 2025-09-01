@@ -13,6 +13,11 @@ vi.mock('$app/navigation', () => ({
 	goto: mockGoto
 }));
 
+// Mock base path
+vi.mock('$app/paths', () => ({
+	base: '/IWAC-spatial-overview'
+}));
+
 describe('URL Manager', () => {
 	beforeEach(() => {
 		// Reset state before each test
@@ -63,6 +68,47 @@ describe('URL Manager', () => {
 		expect(appState.activeVisualization).toBe('subjects');
 	});
 
+	test('should parse entity selection correctly', () => {
+		const params = new URLSearchParams('?viz=persons&entityType=Personnes&entityId=person123');
+		urlManager.parseUrlAndUpdateState(params);
+		expect(appState.activeView).toBe('dashboard');
+		expect(appState.activeVisualization).toBe('persons');
+		expect(appState.selectedEntity).toEqual({
+			type: 'Personnes',
+			id: 'person123',
+			name: '',
+			relatedArticleIds: []
+		});
+	});
+
+	test('should handle entity selection without other parameters', () => {
+		const params = new URLSearchParams('?entityType=Organisations&entityId=org456');
+		urlManager.parseUrlAndUpdateState(params);
+		expect(appState.activeView).toBe('dashboard');
+		expect(appState.activeVisualization).toBe('overview');
+		expect(appState.selectedEntity).toEqual({
+			type: 'Organisations',
+			id: 'org456',
+			name: '',
+			relatedArticleIds: []
+		});
+	});
+
+	test('should clear entity selection when not in URL', () => {
+		// First set an entity
+		appState.selectedEntity = {
+			type: 'Personnes',
+			id: 'person123',
+			name: 'Test Person',
+			relatedArticleIds: ['1', '2']
+		};
+
+		// Then parse URL without entity parameters
+		const params = new URLSearchParams('?viz=overview');
+		urlManager.parseUrlAndUpdateState(params);
+		expect(appState.selectedEntity).toBe(null);
+	});
+
 	test('should handle byCountry viz by setting map view', () => {
 		const params = new URLSearchParams('?viz=byCountry');
 		urlManager.parseUrlAndUpdateState(params);
@@ -81,7 +127,7 @@ describe('URL Manager', () => {
 		urlManager.navigateTo('map', 'byCountry');
 		expect(appState.activeView).toBe('map');
 		expect(appState.activeVisualization).toBe('byCountry');
-		expect(mockGoto).toHaveBeenCalledWith('/?view=map&viz=byCountry', {
+		expect(mockGoto).toHaveBeenCalledWith('/IWAC-spatial-overview/?view=map&viz=byCountry', {
 			replaceState: true,
 			noScroll: true
 		});
@@ -91,13 +137,35 @@ describe('URL Manager', () => {
 		urlManager.navigateTo('dashboard', 'persons');
 		expect(appState.activeView).toBe('dashboard');
 		expect(appState.activeVisualization).toBe('persons');
-		expect(mockGoto).toHaveBeenCalledWith('/?viz=persons', { replaceState: true, noScroll: true });
+		expect(mockGoto).toHaveBeenCalledWith('/IWAC-spatial-overview/?viz=persons', { 
+			replaceState: true, 
+			noScroll: true 
+		});
 	});
 
 	test('should navigate to default state with minimal URL', () => {
 		urlManager.navigateTo('dashboard', 'overview');
 		expect(appState.activeView).toBe('dashboard');
 		expect(appState.activeVisualization).toBe('overview');
-		expect(mockGoto).toHaveBeenCalledWith('/', { replaceState: true, noScroll: true });
+		expect(mockGoto).toHaveBeenCalledWith('/IWAC-spatial-overview/', { 
+			replaceState: true, 
+			noScroll: true 
+		});
+	});
+
+	test('should navigate with entity selection', () => {
+		urlManager.navigateTo('dashboard', 'persons', { type: 'Personnes', id: 'person123' });
+		expect(appState.activeView).toBe('dashboard');
+		expect(appState.activeVisualization).toBe('persons');
+		expect(appState.selectedEntity).toEqual({
+			type: 'Personnes',
+			id: 'person123',
+			name: '',
+			relatedArticleIds: []
+		});
+		expect(mockGoto).toHaveBeenCalledWith('/IWAC-spatial-overview/?viz=persons&entityType=Personnes&entityId=person123', { 
+			replaceState: true, 
+			noScroll: true 
+		});
 	});
 });
