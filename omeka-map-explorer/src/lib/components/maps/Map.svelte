@@ -48,7 +48,7 @@
 			attribution: '© OpenStreetMap contributors',
 			name: 'OpenStreetMap'
 		}
-	};
+	} as const;
 
 	// Create local derived state for visible data
 	const visibleData = $derived.by(() => getVisibleData());
@@ -83,11 +83,15 @@
 
 			// Add modern tile layer - using CartoDB Positron for clean, modern look
 			const tileOptions = tileLayerOptions.cartodb;
-			currentTileLayer = L.tileLayer(tileOptions.url, {
+			const layerConfig: any = {
 				attribution: tileOptions.attribution,
-				subdomains: tileOptions.subdomains,
 				maxZoom: 20
-			}).addTo(map);
+			};
+			// Only add subdomains if it exists
+			if ('subdomains' in tileOptions) {
+				layerConfig.subdomains = tileOptions.subdomains;
+			}
+			currentTileLayer = L.tileLayer(tileOptions.url, layerConfig).addTo(map);
 
 			// Add layer control for switching between tile layers
 			const baseMaps: Record<string, any> = {};
@@ -95,11 +99,15 @@
 				if (key === 'cartodb') {
 					baseMaps[options.name] = currentTileLayer;
 				} else {
-					baseMaps[options.name] = L.tileLayer(options.url, {
+					const layerOptions: any = {
 						attribution: options.attribution,
-						subdomains: options.subdomains,
 						maxZoom: 20
-					});
+					};
+					// Only add subdomains if it exists
+					if ('subdomains' in options) {
+						layerOptions.subdomains = options.subdomains;
+					}
+					baseMaps[options.name] = L.tileLayer(options.url, layerOptions);
 				}
 			});
 
