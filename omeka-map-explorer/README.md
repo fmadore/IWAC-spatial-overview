@@ -16,10 +16,10 @@ Key folders under `src/`:
 
 - `lib/api/geoJsonService.ts` – load world/country GeoJSON and compute counts
 - `lib/components/` – UI
-	- `maps/Map.svelte`, `maps/ChoroplethLayer.svelte`
-	- `filters/CountryFilter.svelte`, `filters/YearRangeFilter.svelte`
-	- `timeline/Timeline.svelte`, `timeline/AnimationController.ts`
-	- `ui/*` – small UI kit (sidebar, card, inputs, etc.)
+  - `maps/Map.svelte`, `maps/ChoroplethLayer.svelte`
+  - `filters/CountryFilter.svelte`, `filters/YearRangeFilter.svelte`
+  - `timeline/Timeline.svelte`, `timeline/AnimationController.ts`
+  - `ui/*` – small UI kit (sidebar, card, inputs, etc.)
 - `lib/state/` – Svelte 5 runes stores (`$state`) for app, map, filters, time
 - `lib/types/` – TS models and ambient declarations for D3/Leaflet
 - `lib/utils/staticDataLoader.ts` – loads `static/data/*.json`

@@ -1,32 +1,32 @@
 {
-  "css.lint.unknownAtRules": "ignore",
-  "css.validate": false,
-  "editor.quickSuggestions": {
-    "strings": true
-  },
-  "tailwindCSS.includeLanguages": {
-    "plaintext": "html",
-    "svelte": "html",
-    "css": "css",
-    "postcss": "css"
-  },
-  "tailwindCSS.experimental.configFile": "tailwind.config.cjs",
-  "tailwindCSS.lint.cssConflict": "warning",
-  "tailwindCSS.lint.invalidApply": "error",
-  "tailwindCSS.lint.invalidConfigPath": "error",
-  "tailwindCSS.lint.invalidScreen": "error",
-  "tailwindCSS.lint.invalidTailwindDirective": "error",
-  "tailwindCSS.lint.invalidVariant": "error",
-  "tailwindCSS.lint.recommendedVariantOrder": "warning",
-  "files.associations": {
-    "*.css": "tailwindcss"
-  },
-  "typescript.preferences.includePackageJsonAutoImports": "on",
-  "typescript.suggest.autoImports": true,
-  "typescript.updateImportsOnFileMove.enabled": "always",
-  "svelte.enable-ts-plugin": true,
-  "svelte.plugin.typescript.diagnostics.enable": true,
-  "svelte.plugin.typescript.hover.enable": true,
-  "svelte.plugin.typescript.completions.enable": true,
-  "typescript.preferences.importModuleSpecifier": "relative"
+	"css.lint.unknownAtRules": "ignore",
+	"css.validate": false,
+	"editor.quickSuggestions": {
+		"strings": true
+	},
+	"tailwindCSS.includeLanguages": {
+		"plaintext": "html",
+		"svelte": "html",
+		"css": "css",
+		"postcss": "css"
+	},
+	"tailwindCSS.experimental.configFile": "tailwind.config.cjs",
+	"tailwindCSS.lint.cssConflict": "warning",
+	"tailwindCSS.lint.invalidApply": "error",
+	"tailwindCSS.lint.invalidConfigPath": "error",
+	"tailwindCSS.lint.invalidScreen": "error",
+	"tailwindCSS.lint.invalidTailwindDirective": "error",
+	"tailwindCSS.lint.invalidVariant": "error",
+	"tailwindCSS.lint.recommendedVariantOrder": "warning",
+	"files.associations": {
+		"*.css": "tailwindcss"
+	},
+	"typescript.preferences.includePackageJsonAutoImports": "on",
+	"typescript.suggest.autoImports": true,
+	"typescript.updateImportsOnFileMove.enabled": "always",
+	"svelte.enable-ts-plugin": true,
+	"svelte.plugin.typescript.diagnostics.enable": true,
+	"svelte.plugin.typescript.hover.enable": true,
+	"svelte.plugin.typescript.completions.enable": true,
+	"typescript.preferences.importModuleSpecifier": "relative"
 }
