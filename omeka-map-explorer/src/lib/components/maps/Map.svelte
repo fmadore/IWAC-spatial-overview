@@ -298,6 +298,10 @@
 		}
 	});
 
+	// Debounced choropleth calculation to avoid excessive updates
+	let choroplethUpdateTimeout: number | null = null;
+	const CHOROPLETH_DEBOUNCE_MS = 100;
+
 	// Compute choropleth data reactively for the child component
 	$effect(() => {
 		if (!browser || !worldGeo) return;
@@ -306,8 +310,17 @@
 			return;
 		}
 
-		// Use the filtered data from derived state that includes all filters
-		choroplethData = countItemsByCountryHybrid(visibleData, worldGeo);
+		// Clear any pending timeout
+		if (choroplethUpdateTimeout) {
+			clearTimeout(choroplethUpdateTimeout);
+		}
+
+		// Debounce the update to avoid excessive calculations
+		choroplethUpdateTimeout = setTimeout(() => {
+			// Use the filtered data from derived state that includes all filters
+			choroplethData = countItemsByCountryHybrid(visibleData, worldGeo);
+			choroplethUpdateTimeout = null;
+		}, CHOROPLETH_DEBOUNCE_MS);
 	});
 
 	// Update map for specific date

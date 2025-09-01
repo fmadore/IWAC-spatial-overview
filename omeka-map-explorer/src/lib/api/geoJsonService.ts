@@ -1,7 +1,13 @@
-import type { GeoJsonData, GeoJsonFeature, ProcessedItem } from '$lib/types';
+import type { GeoJsonData, GeoJsonFeature, ProcessedItem, LocationEntity } from '$lib/types';
 
 // Cache for GeoJSON files
 const geoJsonCache = new Map<string, GeoJsonData>();
+
+// Cache for choropleth calculations
+let choroplethCache: {
+	data: Record<string, number>;
+	hash: string;
+} | null = null;
 
 /**
  * Load GeoJSON file for a country
@@ -213,6 +219,18 @@ export async function countItemsByCountryPolygons(
 }
 
 /**
+ * Create hash for choropleth data caching
+ */
+function createChoroplethHash(items: ProcessedItem[]): string {
+	if (items.length === 0) return 'empty';
+	
+	// Create a hash based on the items (simplified)
+	const itemIds = items.map(i => i.id).sort();
+	const sample = itemIds.slice(0, 10).join(',') + itemIds.slice(-10).join(',');
+	return `${items.length}-${sample}`;
+}
+
+/**
  * Count items by country using pre-computed country names from the data.
  * This uses the Country field that was added by the Python preprocessing script.
  *
@@ -223,6 +241,12 @@ export function countItemsByCountryHybrid(
 	items: ProcessedItem[],
 	worldGeo: GeoJsonData
 ): Record<string, number> {
+	// Check cache first
+	const currentHash = createChoroplethHash(items);
+	if (choroplethCache && choroplethCache.hash === currentHash) {
+		return choroplethCache.data;
+	}
+
 	const counts: Record<string, number> = {};
 
 	// Group items by article ID and country to avoid double-counting
@@ -248,20 +272,30 @@ export function countItemsByCountryHybrid(
 		}
 	}
 
+	// Cache the result
+	choroplethCache = { data: counts, hash: currentHash };
+
 	return counts;
 }
 
 /**
- * Count places by country using the raw index data with pre-computed Country field.
- * This is used for choropleth view to show all places, not just those with articles.
+ * Clear choropleth cache (useful for testing or when data changes)
  */
-export function countPlacesByCountry(places: any[]): Record<string, number> {
+export function clearChoroplethCache() {
+	choroplethCache = null;
+	console.log('Choropleth cache cleared');
+}
+
+/**
+ * Count locations by country using the locations entities.
+ * This can be used for choropleth view to show all places with their entity data.
+ */
+export function countLocationsByCountry(locations: LocationEntity[]): Record<string, number> {
 	const counts: Record<string, number> = {};
 
-	for (const place of places) {
-		// Only count places of type "Lieux" and that have a country assigned
-		if (place.Type?.toLowerCase().includes('lieu') && place.Country?.trim()) {
-			const countryName = place.Country.trim();
+	for (const location of locations) {
+		if (location.country?.trim()) {
+			const countryName = location.country.trim();
 			counts[countryName] = (counts[countryName] || 0) + 1;
 		}
 	}

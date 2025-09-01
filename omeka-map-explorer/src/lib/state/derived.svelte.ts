@@ -4,9 +4,56 @@ import { filters } from './filters.svelte';
 import { mapData } from './mapData.svelte';
 import { appState } from './appState.svelte';
 
+// Memoization cache for getVisibleData
+let visibleDataCache: {
+	data: ProcessedItem[];
+	hash: string;
+} | null = null;
+
+// Pre-computed article IDs for faster entity filtering
+let articleIdCache: Map<string, string> = new Map();
+
+function getFilterHash(): string {
+	const sel = filters.selected;
+	const entity = appState.selectedEntity;
+	return JSON.stringify({
+		countries: sel.countries.slice().sort(),
+		regions: sel.regions.slice().sort(), 
+		newspapers: sel.newspapers.slice().sort(),
+		dateRange: sel.dateRange ? { 
+			start: sel.dateRange.start.getTime(), 
+			end: sel.dateRange.end.getTime() 
+		} : null,
+		keywords: sel.keywords.slice().sort(),
+		entityId: entity ? `${entity.type}:${entity.id}` : null,
+		dataVersion: mapData.allItems.length // Simple way to detect data changes
+	});
+}
+
+function extractArticleId(itemId: string): string {
+	// Cache the result to avoid repeated string operations
+	if (articleIdCache.has(itemId)) {
+		return articleIdCache.get(itemId)!;
+	}
+	
+	const articleId = itemId.split('-')[0];
+	articleIdCache.set(itemId, articleId);
+	return articleId;
+}
+
 export function getVisibleData(): ProcessedItem[] {
+	// Check cache first
+	const currentHash = getFilterHash();
+	if (visibleDataCache && visibleDataCache.hash === currentHash) {
+		return visibleDataCache.data;
+	}
+
 	const items = mapData.allItems;
-	if (!items.length) return [];
+	if (!items.length) {
+		const emptyResult: ProcessedItem[] = [];
+		visibleDataCache = { data: emptyResult, hash: currentHash };
+		return emptyResult;
+	}
 
 	const sel = filters.selected;
 	let filtered = items;
@@ -16,8 +63,8 @@ export function getVisibleData(): ProcessedItem[] {
 		// Get articles that mention this entity
 		const entityArticleIds = new Set(appState.selectedEntity.relatedArticleIds);
 		filtered = filtered.filter((item) => {
-			// Extract article ID from processed item ID (format: "articleId-coordinateIndex")
-			const articleId = item.id.split('-')[0];
+			// Use cached article ID extraction
+			const articleId = extractArticleId(item.id);
 			return entityArticleIds.has(articleId);
 		});
 	}
@@ -56,6 +103,9 @@ export function getVisibleData(): ProcessedItem[] {
 		);
 	}
 
+	// Cache the result
+	visibleDataCache = { data: filtered, hash: currentHash };
+	
 	return filtered;
 }
 
@@ -76,4 +126,13 @@ export function getStats() {
 	}
 	timeline.sort((a, b) => a.date.localeCompare(b.date));
 	return { totalCount: list.length, countryBreakdown, newspaperBreakdown, timeline };
+}
+
+/**
+ * Clear the visible data cache (useful when data structure changes)
+ */
+export function clearVisibleDataCache() {
+	visibleDataCache = null;
+	articleIdCache.clear();
+	console.log('Visible data cache cleared');
 }

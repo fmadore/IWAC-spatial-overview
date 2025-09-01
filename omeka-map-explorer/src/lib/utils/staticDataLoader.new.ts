@@ -1,8 +1,5 @@
-import type { ProcessedItem, TemporalData } from '$lib/types';
+import type { ProcessedItem, TemporalData, LocationEntity } from '$lib/types';
 import { loadLocations } from './entityLoader';
-
-// Global cache for places map to avoid rebuilding on every data load
-let placesMapCache: Map<string, { coords: [number, number]; country: string }> | null = null;
 
 type ArticleRow = {
 	'o:id': string;
@@ -38,18 +35,10 @@ function isValidDate(d: Date): boolean {
 async function buildPlacesMapFromLocations(
 	basePath = 'data'
 ): Promise<Map<string, { coords: [number, number]; country: string }>> {
-	// Return cached map if available
-	if (placesMapCache) {
-		console.log('Using cached places map with', placesMapCache.size, 'entries');
-		return placesMapCache;
-	}
-	
-	console.log('Building places map from locations.json...');
 	const map = new Map<string, { coords: [number, number]; country: string }>();
 	
 	try {
 		const locations = await loadLocations(basePath);
-		console.log('Loaded', locations.length, 'locations for places map');
 		
 		for (const location of locations) {
 			if (location.coordinates) {
@@ -63,10 +52,6 @@ async function buildPlacesMapFromLocations(
 				}
 			}
 		}
-		
-		// Cache the map for future use
-		placesMapCache = map;
-		console.log('Cached places map with', map.size, 'entries');
 	} catch (error) {
 		console.error('Failed to load locations for places map:', error);
 	}
@@ -85,9 +70,10 @@ function groupByMonth(items: ProcessedItem[]): TemporalData[] {
 			const monthDate = new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), 1));
 			groups[key] = { date: monthDate, count: 0, items: [] };
 		}
-		groups[key].count += 1;
+		groups[key].count++;
 		groups[key].items.push(it);
 	}
+
 	return Object.values(groups).sort((a, b) => a.date.getTime() - b.date.getTime());
 }
 
@@ -205,12 +191,4 @@ export async function loadStaticData(basePath = 'data'): Promise<LoadedData> {
 		dateMin,
 		dateMax
 	};
-}
-
-/**
- * Clear the places map cache (useful for testing or data updates)
- */
-export function clearPlacesMapCache() {
-	placesMapCache = null;
-	console.log('Places map cache cleared');
 }
