@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { onMount, onDestroy } from 'svelte';
+	import { mount } from 'svelte';
 	import { mapData } from '$lib/state/mapData.svelte';
 	import { timeData } from '$lib/state/timeData.svelte';
 	import { filters } from '$lib/state/filters.svelte';
@@ -11,6 +12,7 @@
 	} from '$lib/api/geoJsonService';
 	import { browser } from '$app/environment';
 	import ChoroplethLayer from './ChoroplethLayer.svelte';
+	import MapPopup from './MapPopup.svelte';
 
 	// Using any types here to avoid TypeScript errors with Leaflet
 	let mapElement: HTMLDivElement;
@@ -93,6 +95,16 @@
 				try {
 					(layer as any).remove();
 				} catch {}
+			} else if (layer && typeof (layer as any).eachLayer === 'function') {
+				// LayerGroup - cleanup popup components
+				try {
+					(layer as any).eachLayer((childLayer: any) => {
+						if (childLayer._popupComponent && typeof childLayer._popupComponent.unmount === 'function') {
+							childLayer._popupComponent.unmount();
+						}
+					});
+					(layer as any).remove();
+				} catch {}
 			} else if (map && typeof (layer as any) === 'object') {
 				try {
 					map.removeLayer(layer);
@@ -144,7 +156,7 @@
 			// no-op
 		} else if (visibleData.length > 0) {
 			// Aggregate items by coordinate and add circle markers sized by count (much fewer markers)
-			const groups = new Map<string, { lat: number; lng: number; count: number; sample: any }>();
+			const groups = new Map<string, { lat: number; lng: number; count: number; sample: any; items: any[] }>();
 			for (const item of visibleData) {
 				if (!item.coordinates || item.coordinates.length === 0) continue;
 				const [lat, lng] = item.coordinates[0]; // Each item now has exactly one coordinate
@@ -153,8 +165,9 @@
 				const existing = groups.get(key);
 				if (existing) {
 					existing.count += 1;
+					existing.items.push(item);
 				} else {
-					groups.set(key, { lat, lng, count: 1, sample: item });
+					groups.set(key, { lat, lng, count: 1, sample: item, items: [item] });
 				}
 			}
 
@@ -174,10 +187,28 @@
 					fillColor: '#1f78b4',
 					renderer: canvas
 				});
-				circle.bindPopup(`<div style="min-width:160px">
-          <div><strong>Occurrences:</strong> ${g.count}</div>
-          <div><strong>Sample:</strong> ${g.sample?.title ?? 'Untitled'}</div>
-        </div>`);
+
+				// Create a popup container
+				const popupDiv = document.createElement('div');
+				
+				// Create and mount the Svelte component
+				const popup = mount(MapPopup, {
+					target: popupDiv,
+					props: {
+						group: g
+					}
+				});
+
+				circle.bindPopup(popupDiv, {
+					maxWidth: 400,
+					minWidth: 300,
+					closeButton: true,
+					className: 'map-popup-wrapper'
+				});
+
+				// Store the component instance for cleanup
+				circle._popupComponent = popup;
+
 				circle.addTo(layerGroup);
 			}
 
@@ -310,5 +341,23 @@
 
 	:global(.leaflet-container) {
 		font-family: inherit;
+	}
+
+	:global(.map-popup-wrapper .leaflet-popup-content-wrapper) {
+		padding: 0;
+		border-radius: 8px;
+		overflow: hidden;
+		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+	}
+
+	:global(.map-popup-wrapper .leaflet-popup-content) {
+		margin: 0;
+		padding: 0;
+		width: auto !important;
+	}
+
+	:global(.map-popup-wrapper .leaflet-popup-tip) {
+		background: white;
+		border: 1px solid hsl(var(--border, #e2e8f0));
 	}
 </style>
