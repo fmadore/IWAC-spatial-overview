@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { mapData } from '$lib/state/mapData.svelte';
-	import EntityVisualization from '$lib/components/entity-visualization.svelte';
+	import EntityVisualization from './entity-visualization.svelte';
 
 	// Get events data
 	const events = $derived.by(() => mapData.events);

@@ -2,10 +2,10 @@
 	import type { ProcessedItem } from '$lib/types';
 	import { appState } from '$lib/state/appState.svelte';
 	import { getVisibleData } from '$lib/state/derived.svelte';
-	import EntitySelector from '$lib/components/entity-selector.svelte';
-	import EntityStatsCards from '$lib/components/entity-stats-cards.svelte';
-	import EntityLocationsList from '$lib/components/entity-locations-list.svelte';
-	import EntityArticlesTable from '$lib/components/entity-articles-table.svelte';
+	import EntitySelector from './entity-selector.svelte';
+	import EntityStatsCards from './entity-stats-cards.svelte';
+	import EntityLocationsList from './entity-locations-list.svelte';
+	import EntityArticlesTable from './entity-articles-table.svelte';
 	import Map from '$lib/components/maps/Map.svelte';
 	import { Card, CardContent, CardHeader, CardTitle } from '$lib/components/ui/card';
 

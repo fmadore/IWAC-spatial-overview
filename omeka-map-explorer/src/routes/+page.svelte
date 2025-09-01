@@ -21,10 +21,12 @@
 	import SectionCards from '$lib/components/section-cards.svelte';
 	import ChartAreaInteractive from '$lib/components/chart-area-interactive.svelte';
 	import DataTable from '$lib/components/data-table.svelte';
-	import PersonsVisualization from '$lib/components/persons-visualization.svelte';
-	import OrganizationsVisualization from '$lib/components/organizations-visualization.svelte';
-	import EventsVisualization from '$lib/components/events-visualization.svelte';
-	import SubjectsVisualization from '$lib/components/subjects-visualization.svelte';
+	import {
+		PersonsVisualization,
+		OrganizationsVisualization,
+		EventsVisualization,
+		SubjectsVisualization
+	} from '$lib/components/entities';
 
 	// Configuration
 	const countryItemSets: Record<string, number[]> = {

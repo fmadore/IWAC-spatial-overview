@@ -24,11 +24,10 @@ omeka-map-explorer/
 │   ├── lib/
 │   │   ├── api/geoJsonService.ts        # GeoJSON loading & geographic calculations
 │   │   ├── components/
+│   │   │   ├── entities/                # Entity visualization components
 │   │   │   ├── maps/                    # Leaflet map & choropleth components
 │   │   │   ├── filters/                 # Country & year range filters
 │   │   │   ├── timeline/                # D3 timeline with animation controller
-│   │   │   ├── entity-*.svelte          # Modular entity visualization components
-│   │   │   ├── *-visualization.svelte   # Entity-specific views (persons, orgs, etc.)
 │   │   │   └── ui/                      # shadcn-svelte UI components
 │   │   ├── hooks/                       # Svelte hooks (mobile detection)
 │   │   ├── state/                       # Svelte 5 runes stores ($state)
@@ -90,14 +89,11 @@ npm run preview               # Preview production build locally
 
 ### Component Architecture
 - **UI Components**: Located in `src/lib/components/ui/` (shadcn-svelte based)
-- **Feature Components**: Organized by domain (maps, filters, timeline, entity visualizations)
-- **Entity Components**: Modular and reusable components for entity exploration
-  - `entity-selector.svelte`: Generic entity selector with search
-  - `entity-stats-cards.svelte`: Reusable statistics cards
-  - `entity-locations-list.svelte`: Location tags display
-  - `entity-articles-table.svelte`: Related articles table
-  - `entity-visualization.svelte`: Main generic visualization component
-- **Entity-Specific Views**: `*-visualization.svelte` components for persons, organizations, events, subjects
+- **Feature Components**: Organized by domain (maps, filters, timeline)
+- **Entity Components**: Organized in `src/lib/components/entities/` for entity exploration
+  - Generic reusable components: `entity-selector.svelte`, `entity-stats-cards.svelte`, `entity-locations-list.svelte`, `entity-articles-table.svelte`, `entity-visualization.svelte`
+  - Entity-specific views: `persons-visualization.svelte`, `organizations-visualization.svelte`, `events-visualization.svelte`, `subjects-visualization.svelte`
+  - Barrel exports via `index.ts` for clean imports
 - **State**: Global reactive stores using Svelte 5 runes in `src/lib/state/`
 
 ### TypeScript Guidelines
@@ -121,11 +117,11 @@ npm run preview               # Preview production build locally
 - `src/lib/utils/urlManager.svelte.ts`: URL routing and state synchronization
 
 ### Entity Visualization System
-- `src/lib/components/entity-visualization.svelte`: Generic, reusable visualization component
-- `src/lib/components/persons-visualization.svelte`: Person-specific view using generic component
-- `src/lib/components/organizations-visualization.svelte`: Organization-specific view
-- `src/lib/components/events-visualization.svelte`: Event-specific view
-- `src/lib/components/subjects-visualization.svelte`: Subject-specific view
+- `src/lib/components/entities/entity-visualization.svelte`: Generic, reusable visualization component
+- `src/lib/components/entities/persons-visualization.svelte`: Person-specific view using generic component
+- `src/lib/components/entities/organizations-visualization.svelte`: Organization-specific view
+- `src/lib/components/entities/events-visualization.svelte`: Event-specific view
+- `src/lib/components/entities/subjects-visualization.svelte`: Subject-specific view
 
 ### Configuration Files
 - `svelte.config.js`: SvelteKit config with GitHub Pages deployment setup
@@ -175,7 +171,7 @@ npm run preview               # Preview production build locally
 ### Common Patterns
 - **Adding new filters**: Extend `filters.svelte.ts` and create components in `src/lib/components/filters/`
 - **Map features**: Add to `src/lib/components/maps/` and integrate with `mapData.svelte.ts`
-- **Entity visualizations**: Use the generic `entity-visualization.svelte` component pattern
+- **Entity visualizations**: Use the generic components in `src/lib/components/entities/`
 - **UI components**: Use existing shadcn-svelte components from `src/lib/components/ui/`
 - **State management**: Use Svelte 5 runes pattern, avoid legacy stores
 
@@ -270,3 +266,22 @@ Implementation guide:
 3. Create `EntityExplorer.svelte` to list/search entities by type and set `selectedEntity`.
 4. On selection, recompute `mapData.visibleItems` and update the timeline/table accordingly.
 5. Keep components typed and use runes: `$state`, `$derived`, `$props`, `$effect`.
+
+## Recent Updates
+
+### Component Organization (Latest)
+- **Reorganized entity components** into `src/lib/components/entities/` folder for better maintainability
+- **Created barrel exports** via `index.ts` for cleaner imports
+- **Updated all import paths** throughout the codebase to reflect new structure
+- **Maintained full functionality** while improving code organization and reducing visual clutter in main components directory
+
+The entities folder now contains:
+- 5 reusable generic components (`entity-*`)  
+- 4 entity-specific visualization components (`*-visualization`)
+- 1 barrel export file (`index.ts`) for clean imports
+
+This organization makes it easier to:
+- Find and maintain entity-related components
+- Add new entity types following the established pattern
+- Import multiple entity components cleanly
+- Keep the main components directory focused on core functionality

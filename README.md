@@ -12,10 +12,9 @@ IWAC-spatial-overview
 │  │  │  ├─ api/                # GeoJSON utilities (loading, counts)
 │  │  │  ├─ components/
 │  │  │  │  ├─ maps/            # Leaflet map + choropleth layer
+│  │  │  │  ├─ entities/         # Entity visualization components (persons, orgs, etc.)
 │  │  │  │  ├─ filters/         # Country + year range filters
 │  │  │  │  ├─ timeline/        # D3-based timeline and controller
-│  │  │  │  ├─ entity-*.svelte  # Modular entity visualization components
-│  │  │  │  ├─ *-visualization.svelte # Entity-specific views (persons, orgs, etc.)
 │  │  │  │  └─ ui/              # shadcn-svelte UI components
 │  │  │  ├─ hooks/              # e.g., mobile media query
 │  │  │  ├─ state/              # Svelte 5 runes stores ($state)
