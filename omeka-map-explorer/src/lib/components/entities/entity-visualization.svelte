@@ -111,7 +111,7 @@
 	const displayMapTitle = $derived.by(
 		() =>
 			mapTitle ||
-			(selectedEntity ? `Locations Associated with ${selectedEntity.name}` : 'Entity Locations')
+			(selectedEntity ? `Locations associated with ${selectedEntity.name}` : 'Entity Locations')
 	);
 
 	const displayNoSelectionTitle = $derived.by(
