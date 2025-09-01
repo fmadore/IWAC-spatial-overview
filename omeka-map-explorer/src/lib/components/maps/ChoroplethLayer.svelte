@@ -40,7 +40,9 @@
 			// Dynamically import Leaflet
 			L = (await import('leaflet')).default;
 
-			// Create layer
+			console.log('ChoroplethLayer: Initializing with data:', Object.keys(data).length, 'countries');
+
+			// Create layer first
 			createLayer();
 
 			// Add info control
@@ -48,6 +50,14 @@
 
 			// Add legend
 			createLegendControl();
+
+			// Force immediate update if data is available
+			setTimeout(() => {
+				if (Object.keys(data).length > 0) {
+					console.log('ChoroplethLayer: Forcing initial style update');
+					updateLayerStyles();
+				}
+			}, 100);
 		};
 
 		initMap();
@@ -79,8 +89,25 @@
 					mouseout: resetHighlight,
 					click: zoomToFeature
 				});
-			}
+			},
+			// Make choropleth non-interactive for clicks to allow bubbles to be clickable
+			interactive: true,
+			// Lower the pane so bubbles appear on top
+			pane: 'tilePane'
 		}).addTo(map);
+		
+		// Set lower z-index to ensure bubbles appear on top
+		if (layer.getPane) {
+			const pane = layer.getPane();
+			if (pane) {
+				pane.style.zIndex = '200';
+			}
+		}
+		
+		// Immediately apply styles if data is available
+		if (Object.keys(data).length > 0) {
+			updateLayerStyles();
+		}
 	}
 
 	// Create info control
@@ -142,13 +169,23 @@
 
 	// Style function for regions
 	function style(feature: GeoJsonFeature | any) {
-		if (!feature.properties || !feature.properties.name) return {};
+		if (!feature.properties || !feature.properties.name) {
+			return {
+				fillColor: '#f0f0f0',
+				weight: 2,
+				opacity: 1,
+				color: 'white',
+				dashArray: '3',
+				fillOpacity: 0.7
+			};
+		}
 
 		const regionName = feature.properties.name;
 		const value = data[regionName] || 0;
+		const scale = colorScale;
 
 		return {
-			fillColor: colorScale(value),
+			fillColor: scale(value),
 			weight: 2,
 			opacity: 1,
 			color: 'white',
@@ -164,15 +201,16 @@
 		const layer = e.target;
 
 		layer.setStyle({
-			weight: 5,
-			color: '#666',
+			weight: 3,
+			color: '#333',
 			dashArray: '',
-			fillOpacity: 0.7
+			fillOpacity: 0.8
 		});
 
-		if (L.Browser && !L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
-			layer.bringToFront();
-		}
+		// Don't bring to front to avoid layer jumping
+		// if (L.Browser && !L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
+		// 	layer.bringToFront();
+		// }
 
 		if (info) {
 			info.update(layer.feature.properties);
@@ -213,29 +251,41 @@
 		range: string[],
 		mode: 'log' | 'linear' | 'quantile'
 	) {
-		const raw = Object.values(data).filter((v) => Number.isFinite(v) && v >= 0);
+		const raw = Object.values(data).filter((v) => Number.isFinite(v) && v > 0);
+		
+		// If no data, return a default scale
 		if (raw.length === 0) {
-			const scale = scaleQuantize()
-				.domain([0, 1])
-				.range(range as string[]);
-			return (v: number) => scale(v || 0) as string;
+			return (v: number) => range[0] || '#f0f0f0';
 		}
 
 		if (mode === 'quantile') {
 			const scale = scaleQuantile()
 				.domain(raw)
 				.range(range as string[]);
-			return (v: number) => scale(v || 0) as string;
+			return (v: number) => {
+				if (!v || v <= 0) return range[0];
+				return scale(v) as string;
+			};
 		}
 
 		const transform = (v: number) => (mode === 'log' ? Math.log1p(v) : v);
 		const values = raw.map(transform);
 		const min = Math.min(...values);
 		const max = Math.max(...values);
+		
+		// Handle case where min === max
+		if (min === max) {
+			return (v: number) => v > 0 ? range[Math.floor(range.length / 2)] : range[0];
+		}
+		
 		const scale = scaleQuantize()
 			.domain([min, max])
 			.range(range as string[]);
-		return (v: number) => scale(transform(v || 0)) as string;
+			
+		return (v: number) => {
+			if (!v || v <= 0) return range[0];
+			return scale(transform(v)) as string;
+		};
 	}
 
 	function computeLegendBins(
@@ -283,21 +333,45 @@
 		return String(Math.round(v * 10) / 10);
 	}
 
-	// Update when data changes
+	// Watch for changes to data prop and update immediately
 	$effect(() => {
-		if (browser && layer && data) updateLayer();
+		console.log('ChoroplethLayer: Data prop effect triggered:', Object.keys(data).length, 'countries');
+		if (layer && data && Object.keys(data).length > 0) {
+			console.log('ChoroplethLayer: Data available, updating styles immediately');
+			updateLayerStyles();
+		}
+	});
+
+	// Separate effect for browser and layer readiness
+	$effect(() => {
+		if (browser && layer && data && Object.keys(data).length > 0) {
+			console.log('ChoroplethLayer: Browser + layer ready, updating styles');
+			updateLayerStyles();
+		}
 	});
 
 	// Update layer with new data
-	function updateLayer() {
+	function updateLayerStyles() {
 		if (!layer) return;
 
-		layer.setStyle(style);
+		// Force re-style all features
+		layer.eachLayer((featureLayer: any) => {
+			if (featureLayer.feature) {
+				const newStyle = style(featureLayer.feature);
+				featureLayer.setStyle(newStyle);
+			}
+		});
 
+		// Update legend
 		if (legend && map && L) {
 			legend.remove();
 			createLegendControl();
 		}
+	}
+
+	// Legacy update function for backward compatibility
+	function updateLayer() {
+		updateLayerStyles();
 	}
 </script>
 

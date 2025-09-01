@@ -218,8 +218,11 @@
 
 		// Choropleth is rendered by child component; skip adding Leaflet layers here
 		if (mapData.viewMode === 'choropleth' && worldGeo) {
-			// no-op
-		} else if (visibleData.length > 0) {
+			// no-op - choropleth is handled by ChoroplethLayer component
+		} 
+		
+		// Always render bubbles, even in choropleth mode, but with higher z-index
+		if (visibleData.length > 0) {
 			// Aggregate items by coordinate and add circle markers sized by count (much fewer markers)
 			const groups = new Map<string, { lat: number; lng: number; count: number; sample: any; items: any[] }>();
 			for (const item of visibleData) {
@@ -255,10 +258,13 @@
 					color: `hsl(${hue}, ${saturation}%, ${lightness - 15}%)`,
 					weight: 2,
 					opacity: 0.9,
-					fillOpacity: 0.7,
+					fillOpacity: mapData.viewMode === 'choropleth' ? 0.8 : 0.7, // Higher opacity in choropleth mode
 					fillColor: `hsl(${hue}, ${saturation}%, ${lightness}%)`,
 					renderer: canvas,
-					className: 'modern-marker'
+					className: 'modern-marker',
+					// Ensure bubbles are interactive and on top
+					interactive: true,
+					pane: 'markerPane' // Higher z-index than choropleth
 				});
 
 				// Create a popup container
@@ -393,7 +399,9 @@
 		// Debounce the update to avoid excessive calculations
 		choroplethUpdateTimeout = setTimeout(() => {
 			// Use the filtered data from derived state that includes all filters
-			choroplethData = countItemsByCountryHybrid(visibleData, worldGeo);
+			const newData = countItemsByCountryHybrid(visibleData, worldGeo);
+			console.log('Map: Choropleth data calculated:', newData);
+			choroplethData = newData;
 			choroplethUpdateTimeout = null;
 		}, CHOROPLETH_DEBOUNCE_MS);
 	});
@@ -519,5 +527,19 @@
 	:global(.leaflet-interactive:hover) {
 		filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
 		transform: scale(1.1);
+		z-index: 1000 !important;
+	}
+
+	/* Ensure markers stay on top in choropleth mode */
+	:global(.leaflet-marker-pane) {
+		z-index: 600 !important;
+	}
+
+	:global(.leaflet-popup-pane) {
+		z-index: 700 !important;
+	}
+
+	:global(.leaflet-tooltip-pane) {
+		z-index: 650 !important;
 	}
 </style>
