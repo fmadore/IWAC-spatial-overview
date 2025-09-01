@@ -4,6 +4,7 @@ import { goto } from '$app/navigation';
 import { page } from '$app/stores';
 import { get } from 'svelte/store';
 import { base } from '$app/paths';
+import { mapData } from '$lib/state/mapData.svelte';
 
 type ViewType = 'dashboard' | 'map' | 'list' | 'stats';
 type VisualizationType =
@@ -84,14 +85,40 @@ export const urlManager = {
 
 		// Handle entity selection from URL
 		if (entityType && entityId) {
-			// We'll need to load the entity data to get the full entity object
-			// For now, store the basic info and let the entity loader fill in the details
-			appState.selectedEntity = {
-				type: entityType,
-				id: entityId,
-				name: '', // Will be filled when entity data loads
-				relatedArticleIds: [] // Will be filled when entity data loads
-			};
+			// If we already have the same entity selected with details, don't clobber them
+			const prev = appState.selectedEntity;
+			const isSame = prev && prev.type === entityType && prev.id === entityId;
+			if (!isSame) {
+				// Try to hydrate from already-loaded entities
+				const typeMap: Record<string, keyof typeof mapData> = {
+					Personnes: 'persons',
+					Organisations: 'organizations',
+					'Événements': 'events',
+					Sujets: 'subjects'
+				} as const;
+				const collKey = typeMap[entityType as keyof typeof typeMap];
+				let hydrated: { id: string; name: string; relatedArticleIds: string[] } | undefined;
+				if (collKey && Array.isArray((mapData as any)[collKey])) {
+					hydrated = ((mapData as any)[collKey] as Array<any>).find((e) => e.id === entityId);
+				}
+
+				if (hydrated) {
+					appState.selectedEntity = {
+						type: entityType,
+						id: entityId,
+						name: hydrated.name,
+						relatedArticleIds: hydrated.relatedArticleIds ?? []
+					};
+				} else {
+					// Store the basic info; details may be filled by entity loader later
+					appState.selectedEntity = {
+						type: entityType,
+						id: entityId,
+						name: '',
+						relatedArticleIds: []
+					};
+				}
+			}
 		} else {
 			// Clear entity selection if not in URL
 			appState.selectedEntity = null;
@@ -124,12 +151,18 @@ export function initializeUrlManager() {
 	// Watch for state changes and update URL
 	let previousView = appState.activeView;
 	let previousViz = appState.activeVisualization;
+	let previousEntity = appState.selectedEntity;
 
 	function checkForChanges() {
-		if (appState.activeView !== previousView || appState.activeVisualization !== previousViz) {
+		if (
+			appState.activeView !== previousView ||
+			appState.activeVisualization !== previousViz ||
+			appState.selectedEntity !== previousEntity
+		) {
 			urlManager.updateUrl();
 			previousView = appState.activeView;
 			previousViz = appState.activeVisualization;
+			previousEntity = appState.selectedEntity;
 		}
 		requestAnimationFrame(checkForChanges);
 	}

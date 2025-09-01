@@ -27,6 +27,7 @@
 		EventsVisualization,
 		SubjectsVisualization
 	} from '$lib/components/entities';
+	import { getVisibleData } from '$lib/state/derived.svelte';
 
 	// Configuration
 	const countryItemSets: Record<string, number[]> = {
@@ -150,6 +151,13 @@
 				});
 			}
 		}
+	});
+
+	// Keep visible items in sync with filters and entity selection so components update instantly
+	$effect(() => {
+		if (!browser || !appState.dataLoaded) return;
+		const visible = getVisibleData();
+		mapData.visibleItems = visible;
 	});
 
 	// (Removed mock data generation and filter initialization; now using static JSON loader)
