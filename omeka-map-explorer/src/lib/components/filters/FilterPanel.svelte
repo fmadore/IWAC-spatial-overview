@@ -21,9 +21,6 @@
   <Sidebar.Header>
     <Sidebar.Group>
       <Sidebar.GroupLabel>Filters</Sidebar.GroupLabel>
-      <Sidebar.GroupAction>
-        <Sidebar.Trigger />
-      </Sidebar.GroupAction>
     </Sidebar.Group>
   </Sidebar.Header>
   
