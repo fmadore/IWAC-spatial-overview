@@ -21,9 +21,41 @@
 	let L: any; // Will hold the Leaflet library when loaded
 	let worldGeo: any = $state(null); // world countries geojson cache
 	let choroplethData: Record<string, number> = $state({});
+	let currentTileLayer: any = null; // Track current tile layer for switching
+
+	// Modern tile layer options
+	const tileLayerOptions = {
+		cartodb: {
+			url: 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',
+			attribution: '© OpenStreetMap contributors © CARTO',
+			subdomains: 'abcd',
+			name: 'CartoDB Positron'
+		},
+		cartodbDark: {
+			url: 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',
+			attribution: '© OpenStreetMap contributors © CARTO',
+			subdomains: 'abcd',
+			name: 'CartoDB Dark'
+		},
+		stamen: {
+			url: 'https://stamen-tiles-{s}.a.ssl.fastly.net/toner-lite/{z}/{x}/{y}{r}.png',
+			attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, under <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a>. Data by <a href="http://openstreetmap.org">OpenStreetMap</a>, under <a href="http://www.openstreetmap.org/copyright">ODbL</a>.',
+			subdomains: 'abcd',
+			name: 'Stamen Toner Lite'
+		},
+		osm: {
+			url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+			attribution: '© OpenStreetMap contributors',
+			name: 'OpenStreetMap'
+		}
+	};
 
 	// Create local derived state for visible data
 	const visibleData = $derived.by(() => getVisibleData());
+
+	// Loading state for better UX
+	let mapLoading = $state(true);
+	let dataLoading = $state(true);
 
 	// Props
 	let { height = '600px' } = $props();
@@ -46,26 +78,57 @@
 			L = await import('leaflet');
 			await import('leaflet/dist/leaflet.css');
 
-			// Initialize the map
+			// Initialize the map first (fast)
 			map = L.map(mapElement).setView(mapData.center, mapData.zoom);
 
-			// Add base tile layer
-			L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-				attribution: '© OpenStreetMap contributors'
+			// Add modern tile layer - using CartoDB Positron for clean, modern look
+			const tileOptions = tileLayerOptions.cartodb;
+			currentTileLayer = L.tileLayer(tileOptions.url, {
+				attribution: tileOptions.attribution,
+				subdomains: tileOptions.subdomains,
+				maxZoom: 20
 			}).addTo(map);
 
-			// Try to preload world countries for choropleth
-			try {
-				worldGeo = await loadWorldCountries();
-			} catch (e) {
-				console.warn('World countries GeoJSON not available:', e);
-			}
+			// Add layer control for switching between tile layers
+			const baseMaps: Record<string, any> = {};
+			Object.entries(tileLayerOptions).forEach(([key, options]) => {
+				if (key === 'cartodb') {
+					baseMaps[options.name] = currentTileLayer;
+				} else {
+					baseMaps[options.name] = L.tileLayer(options.url, {
+						attribution: options.attribution,
+						subdomains: options.subdomains,
+						maxZoom: 20
+					});
+				}
+			});
 
-			// Load initial data
-			await loadMapData();
+			L.control.layers(baseMaps).addTo(map);
 
 			// Setup event handlers
 			map.on('moveend', handleMapMove);
+			
+			// Map is ready
+			mapLoading = false;
+
+			// Load data asynchronously after map is visible
+			setTimeout(async () => {
+				if (disposed) return;
+				
+				dataLoading = true;
+				
+				// Try to preload world countries for choropleth
+				try {
+					worldGeo = await loadWorldCountries();
+				} catch (e) {
+					console.warn('World countries GeoJSON not available:', e);
+				}
+
+				// Load initial data
+				await loadMapData();
+				
+				dataLoading = false;
+			}, 100); // Small delay to let map render first
 		};
 
 		requestAnimationFrame(actuallyInit);
@@ -82,6 +145,8 @@
 	// Load map data based on current state
 	async function loadMapData() {
 		if (!map || !L) return;
+		
+		dataLoading = true;
 
 		// Clear existing layers
 		Object.entries(layers).forEach(([key, layer]) => {
@@ -177,15 +242,23 @@
 
 			for (const g of groups.values()) {
 				// Radius: base + scaled by sqrt(count) to reduce disparity
-				const radius = 4 + 6 * Math.sqrt(g.count / maxCount);
+				const radius = 6 + 8 * Math.sqrt(g.count / maxCount);
+				
+				// Modern gradient color based on count
+				const intensity = Math.sqrt(g.count / maxCount);
+				const hue = 220 - (intensity * 60); // Blue to purple gradient
+				const saturation = 70 + (intensity * 20); // More saturated for higher counts
+				const lightness = 55 - (intensity * 10); // Darker for higher counts
+				
 				const circle = L.circleMarker([g.lat, g.lng], {
 					radius,
-					color: '#1f78b4',
-					weight: 1,
+					color: `hsl(${hue}, ${saturation}%, ${lightness - 15}%)`,
+					weight: 2,
 					opacity: 0.9,
-					fillOpacity: 0.5,
-					fillColor: '#1f78b4',
-					renderer: canvas
+					fillOpacity: 0.7,
+					fillColor: `hsl(${hue}, ${saturation}%, ${lightness}%)`,
+					renderer: canvas,
+					className: 'modern-marker'
 				});
 
 				// Create a popup container
@@ -215,6 +288,8 @@
 			layerGroup.addTo(map);
 			layers['markers'] = layerGroup;
 		}
+		
+		dataLoading = false;
 	}
 
 	// Handle map movement
@@ -334,33 +409,93 @@
 	}
 </script>
 
-<div
-	class="map-container relative z-0"
-	bind:this={mapElement}
-	style="height: {height};"
-	data-testid="map-container"
-></div>
+<div class="map-wrapper relative">
+	<div
+		class="map-container relative z-0"
+		bind:this={mapElement}
+		style="height: {height};"
+		data-testid="map-container"
+	></div>
+	
+	<!-- Loading overlays -->
+	{#if mapLoading}
+		<div class="absolute inset-0 bg-gray-50 flex items-center justify-center z-10">
+			<div class="flex flex-col items-center gap-3">
+				<div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+				<p class="text-sm text-gray-600">Loading map...</p>
+			</div>
+		</div>
+	{/if}
+	
+	{#if dataLoading && !mapLoading}
+		<div class="absolute top-4 right-4 bg-white/90 backdrop-blur-sm rounded-lg px-3 py-2 shadow-lg z-20">
+			<div class="flex items-center gap-2">
+				<div class="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600"></div>
+				<p class="text-xs text-gray-700">Loading data...</p>
+			</div>
+		</div>
+	{/if}
+</div>
+
 {#if browser && map && worldGeo && mapData.viewMode === 'choropleth'}
 	<ChoroplethLayer {map} geoJson={worldGeo} data={choroplethData} scaleMode="log" />
 {/if}
 
 <style>
+	.map-wrapper {
+		width: 100%;
+	}
+
 	.map-container {
 		width: 100%;
-		background-color: #f5f5f5;
-		border-radius: 4px;
+		background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+		border-radius: 12px;
 		overflow: hidden;
+		box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+		border: 1px solid rgba(255, 255, 255, 0.1);
 	}
 
 	:global(.leaflet-container) {
 		font-family: inherit;
+		border-radius: 12px;
 	}
 
+	/* Modern control styling */
+	:global(.leaflet-control-layers) {
+		border-radius: 8px !important;
+		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+		border: 1px solid rgba(255, 255, 255, 0.2) !important;
+	}
+
+	:global(.leaflet-control-zoom) {
+		border: none !important;
+		border-radius: 8px !important;
+		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+	}
+
+	:global(.leaflet-control-zoom a) {
+		border-radius: 6px !important;
+		border: 1px solid rgba(255, 255, 255, 0.2) !important;
+		background: rgba(255, 255, 255, 0.9) !important;
+		backdrop-filter: blur(8px) !important;
+		color: #374151 !important;
+		font-weight: 600 !important;
+		transition: all 0.2s ease !important;
+	}
+
+	:global(.leaflet-control-zoom a:hover) {
+		background: rgba(255, 255, 255, 1) !important;
+		transform: scale(1.05) !important;
+	}
+
+	/* Popup styling */
 	:global(.map-popup-wrapper .leaflet-popup-content-wrapper) {
 		padding: 0;
-		border-radius: 8px;
+		border-radius: 12px;
 		overflow: hidden;
-		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+		box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+		border: 1px solid rgba(255, 255, 255, 0.1);
+		backdrop-filter: blur(8px);
 	}
 
 	:global(.map-popup-wrapper .leaflet-popup-content) {
@@ -371,6 +506,18 @@
 
 	:global(.map-popup-wrapper .leaflet-popup-tip) {
 		background: white;
-		border: 1px solid hsl(var(--border, #e2e8f0));
+		border: 1px solid rgba(255, 255, 255, 0.2);
+		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+	}
+
+	/* Circle marker styling improvements */
+	:global(.leaflet-interactive) {
+		filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+		transition: all 0.2s ease;
+	}
+
+	:global(.leaflet-interactive:hover) {
+		filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+		transform: scale(1.1);
 	}
 </style>
