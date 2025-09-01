@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { ProcessedItem } from '$lib/types';
-	import { ExternalLink, Calendar, MapPin, Newspaper, Users } from 'lucide-svelte';
+	import { ExternalLink, Calendar, MapPin, Newspaper, Users, ChevronLeft, ChevronRight } from 'lucide-svelte';
 	import { Button } from '$lib/components/ui/button';
 
 	interface LocationGroup {
@@ -44,6 +44,12 @@
 		return Array.from(places).sort();
 	});
 
+	// Get the primary place name (first alphabetically or most common)
+	const primaryPlace = $derived(() => {
+		const places = placeNames();
+		return places.length > 0 ? places[0] : 'Unknown Location';
+	});
+
 	// Get unique countries and newspapers
 	const countries = $derived(() => {
 		const countrySet = new Set<string>();
@@ -64,15 +70,31 @@
 	// Items to display (either just sample or all items)
 	const displayItems = $derived(() => {
 		if (!group.items || group.items.length === 0) return [group.sample];
-		return showAllItems ? group.items : [group.sample];
+		
+		if (showAllItems) {
+			// Show a page of items (10 per page)
+			const startIndex = (currentPage - 1) * itemsPerPage;
+			const endIndex = startIndex + itemsPerPage;
+			return group.items.slice(startIndex, endIndex);
+		}
+		
+		return [group.sample];
 	});
 
 	let showAllItems = $state(false);
+	let currentPage = $state(1);
+	const itemsPerPage = 10;
+	const totalPages = $derived(() => Math.ceil((group.items?.length || 1) / itemsPerPage));
 </script>
 
 <div class="map-popup min-w-80 max-w-96 p-3">
-	<!-- Header with location info -->
+	<!-- Main title with place name -->
 	<div class="border-b pb-3 mb-3">
+		<h3 class="font-semibold text-base text-foreground mb-2 flex items-center gap-2">
+			<MapPin class="h-4 w-4 text-primary" />
+			{primaryPlace()}
+		</h3>
+		
 		<div class="flex items-start justify-between gap-2 mb-2">
 			<div class="flex items-center gap-2">
 				<Users class="h-4 w-4 text-muted-foreground" />
@@ -85,15 +107,15 @@
 			</div>
 		</div>
 
-		<!-- Place names -->
-		{#if placeNames().length > 0}
+		<!-- Additional place names -->
+		{#if placeNames().length > 1}
 			<div class="flex items-start gap-2 mb-2">
 				<MapPin class="h-3 w-3 text-muted-foreground mt-0.5 flex-shrink-0" />
 				<div class="text-xs text-muted-foreground">
-					<span class="font-medium">Places:</span>
-					{placeNames().slice(0, 3).join(', ')}
-					{#if placeNames().length > 3}
-						<span class="opacity-70">+{placeNames().length - 3} more</span>
+					<span class="font-medium">Other places:</span>
+					{placeNames().slice(1, 4).join(', ')}
+					{#if placeNames().length > 4}
+						<span class="opacity-70">+{placeNames().length - 4} more</span>
 					{/if}
 				</div>
 			</div>
@@ -164,26 +186,117 @@
 			</div>
 		{/each}
 
-		<!-- Show all/less toggle for multiple items -->
+		<!-- Show all/pagination for multiple items -->
 		{#if group.count > 1 && group.items && group.items.length > 1}
-			<div class="pt-2 border-t">
+			<div class="pt-3 border-t space-y-2">
 				{#if !showAllItems}
 					<Button
 						variant="ghost"
 						size="sm"
-						onclick={() => showAllItems = true}
+						onclick={() => { showAllItems = true; currentPage = 1; }}
 						class="w-full text-xs"
 					>
-						Show all {group.count} articles
+						Browse all {group.count} articles
 					</Button>
 				{:else}
+					<!-- Pagination info -->
+					<div class="flex items-center justify-between text-xs text-muted-foreground">
+						<span>
+							Page {currentPage} of {totalPages()}
+						</span>
+						<span>
+							{((currentPage - 1) * itemsPerPage) + 1} - {Math.min(currentPage * itemsPerPage, group.count)} of {group.count}
+						</span>
+					</div>
+					
+					<!-- Pagination controls -->
+					<div class="flex items-center justify-between">
+						<Button
+							variant="outline"
+							size="sm"
+							onclick={() => currentPage = Math.max(1, currentPage - 1)}
+							disabled={currentPage === 1}
+							class="text-xs"
+						>
+							<ChevronLeft class="h-3 w-3 mr-1" />
+							Previous
+						</Button>
+						
+						<div class="flex items-center gap-1">
+							{#if totalPages() <= 5}
+								<!-- Show all pages if 5 or fewer -->
+								{#each Array.from({ length: totalPages() }, (_, i) => i + 1) as page}
+									<Button
+										variant={currentPage === page ? "default" : "outline"}
+										size="sm"
+										onclick={() => currentPage = page}
+										class="w-6 h-6 p-0 text-xs"
+									>
+										{page}
+									</Button>
+								{/each}
+							{:else}
+								<!-- Condensed pagination -->
+								<Button
+									variant={currentPage === 1 ? "default" : "outline"}
+									size="sm"
+									onclick={() => currentPage = 1}
+									class="w-6 h-6 p-0 text-xs"
+								>
+									1
+								</Button>
+								
+								{#if currentPage > 3}
+									<span class="text-xs text-muted-foreground">…</span>
+								{/if}
+								
+								{#if currentPage > 2 && currentPage < totalPages() - 1}
+									<Button
+										variant="default"
+										size="sm"
+										class="w-6 h-6 p-0 text-xs"
+									>
+										{currentPage}
+									</Button>
+								{/if}
+								
+								{#if currentPage < totalPages() - 2}
+									<span class="text-xs text-muted-foreground">…</span>
+								{/if}
+								
+								{#if totalPages() > 1}
+									<Button
+										variant={currentPage === totalPages() ? "default" : "outline"}
+										size="sm"
+										onclick={() => currentPage = totalPages()}
+										class="w-6 h-6 p-0 text-xs"
+									>
+										{totalPages()}
+									</Button>
+								{/if}
+							{/if}
+						</div>
+						
+						<Button
+							variant="outline"
+							size="sm"
+							onclick={() => currentPage = Math.min(totalPages(), currentPage + 1)}
+							disabled={currentPage === totalPages()}
+							class="text-xs"
+						>
+							Next
+							<ChevronRight class="h-3 w-3 ml-1" />
+						</Button>
+					</div>
+					
+					<!-- Back to single view -->
 					<Button
 						variant="ghost"
 						size="sm"
-						onclick={() => showAllItems = false}
+						onclick={() => { showAllItems = false; currentPage = 1; }}
 						class="w-full text-xs"
 					>
-						Show less
+						Show single article
 					</Button>
 				{/if}
 			</div>
