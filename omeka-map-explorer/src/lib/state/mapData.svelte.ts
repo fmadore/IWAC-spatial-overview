@@ -13,10 +13,10 @@ interface MapDataState {
 	center: [number, number];
 	countriesData: Record<string, ProcessedItem[]>;
 	// Entity data
-	persons: Array<{ id: string; name: string; relatedArticleIds: string[] }>;
-	organizations: Array<{ id: string; name: string; relatedArticleIds: string[] }>;
-	events: Array<{ id: string; name: string; relatedArticleIds: string[] }>;
-	subjects: Array<{ id: string; name: string; relatedArticleIds: string[] }>;
+	persons: Array<{ id: string; name: string; relatedArticleIds: string[]; articleCount: number }>;
+	organizations: Array<{ id: string; name: string; relatedArticleIds: string[]; articleCount: number }>;
+	events: Array<{ id: string; name: string; relatedArticleIds: string[]; articleCount: number }>;
+	subjects: Array<{ id: string; name: string; relatedArticleIds: string[]; articleCount: number }>;
 }
 
 export const mapData = $state<MapDataState>({

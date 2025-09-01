@@ -3,7 +3,16 @@
 	import { filters } from '$lib/state/filters.svelte';
 	import { mapData } from '$lib/state/mapData.svelte';
 
-	const totalItems = $derived.by(() => mapData.allItems.length);
+	// Count unique articles by ID (since same article can have multiple coordinates)
+	const totalUniqueArticles = $derived.by(() => {
+		const uniqueArticleIds = new Set(
+			mapData.allItems.map(item => {
+				// Extract article ID from processed item ID (format: "articleId-coordinateIndex")
+				return item.id.split('-')[0];
+			})
+		);
+		return uniqueArticleIds.size;
+	});
 	const totalCountries = $derived.by(() => filters.available.countries.length);
 	const dateRangeLabel = $derived.by(() => {
 		const { min, max } = filters.available.dateRange;
@@ -17,8 +26,8 @@
 			<CardTitle class="text-sm">Articles</CardTitle>
 		</CardHeader>
 		<CardContent>
-			<div class="text-3xl font-bold">{totalItems}</div>
-			<p class="text-xs text-muted-foreground mt-1">Total records loaded</p>
+			<div class="text-3xl font-bold">{totalUniqueArticles}</div>
+			<p class="text-xs text-muted-foreground mt-1">Unique articles in dataset</p>
 		</CardContent>
 	</Card>
 

@@ -73,7 +73,8 @@ def extract_entities_by_type(index_data: List[dict], entity_articles: Dict[str, 
                 entities_by_type[file_name].append({
                     'id': entity_id,
                     'name': entity_name,
-                    'relatedArticleIds': related_articles
+                    'relatedArticleIds': related_articles,
+                    'articleCount': len(related_articles)  # Pre-computed count for performance
                 })
     
     # Sort entities by name for consistent output

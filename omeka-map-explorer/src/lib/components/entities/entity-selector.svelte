@@ -11,6 +11,7 @@
 		id: string;
 		name: string;
 		relatedArticleIds: string[];
+		articleCount: number;
 	};
 
 	interface Props {

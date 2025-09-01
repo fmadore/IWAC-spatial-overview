@@ -9,7 +9,7 @@
 	import { mapData } from '$lib/state/mapData.svelte';
 	import { initialize as initAnimationController } from '$lib/components/timeline/AnimationController';
 	import { loadStaticData } from '$lib/utils/staticDataLoader';
-	import { loadEntities, restoreEntityFromUrl } from '$lib/utils/entityLoader';
+	import { loadEntities, restoreEntityFromUrl, preloadAllEntities } from '$lib/utils/entityLoader';
 	import { urlManager, initializeUrlManager } from '$lib/utils/urlManager.svelte';
 	import type { ProcessedItem } from '$lib/types';
 	import { browser } from '$app/environment';
@@ -20,7 +20,7 @@
 	import SiteHeader from '$lib/components/site-header.svelte';
 	import SectionCards from '$lib/components/section-cards.svelte';
 	import ChartAreaInteractive from '$lib/components/chart-area-interactive.svelte';
-	import DataTable from '$lib/components/data-table.svelte';
+	import EntitiesOverview from '$lib/components/entities-overview.svelte';
 	import {
 		PersonsVisualization,
 		OrganizationsVisualization,
@@ -122,6 +122,18 @@
 
 			timeData.data = loaded.timeline;
 
+			// Preload all entity data for the overview dashboard
+			try {
+				const entityData = await preloadAllEntities('data');
+				mapData.persons = entityData.persons;
+				mapData.organizations = entityData.organizations;
+				mapData.events = entityData.events;
+				mapData.subjects = entityData.subjects;
+			} catch (error) {
+				console.error('Failed to preload entity data:', error);
+				// Continue without entity data - they'll be loaded on demand
+			}
+
 			// Mark loading complete
 			appState.loading = false;
 			appState.dataLoaded = true;
@@ -197,9 +209,15 @@
 					<div class="px-4 lg:px-6">
 						<ChartAreaInteractive />
 					</div>
-					<div class="px-4 lg:px-6">
-						<DataTable />
-					</div>
+					{#if mapData.persons && mapData.organizations && mapData.events && mapData.subjects}
+						<EntitiesOverview />
+					{:else}
+						<div class="px-4 lg:px-6">
+							<div class="text-center text-muted-foreground p-8">
+								<p>Loading entity data...</p>
+							</div>
+						</div>
+					{/if}
 				</div>
 			{:else if appState.activeVisualization === 'persons'}
 				<PersonsVisualization />

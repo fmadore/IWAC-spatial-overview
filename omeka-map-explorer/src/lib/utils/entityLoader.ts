@@ -9,6 +9,7 @@ interface Entity {
 	id: string;
 	name: string;
 	relatedArticleIds: string[];
+	articleCount: number;
 }
 
 // Cache for loaded entities
