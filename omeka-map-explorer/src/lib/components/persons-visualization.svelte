@@ -1,4 +1,5 @@
 <script lang="ts">
+  import type { ProcessedItem } from '$lib/types';
   import { mapData } from '$lib/state/mapData.svelte';
   import { appState } from '$lib/state/appState.svelte';
   import { getVisibleData } from '$lib/state/derived.svelte';
@@ -10,6 +11,22 @@
   const persons = $derived.by(() => mapData.persons);
   const visibleData = $derived.by(() => getVisibleData());
   const selectedEntity = $derived.by(() => appState.selectedEntity);
+
+  // Get unique articles (one per article ID, not per coordinate)
+  const uniqueArticles = $derived.by(() => {
+    const seen = new Set<string>();
+    const unique: ProcessedItem[] = [];
+    
+    for (const item of visibleData) {
+      const articleId = item.id.split('-')[0];
+      if (!seen.has(articleId)) {
+        seen.add(articleId);
+        unique.push(item);
+      }
+    }
+    
+    return unique;
+  });
 
   // Get locations from selected person's articles
   const selectedPersonLocations = $derived.by(() => {
@@ -36,7 +53,9 @@
   const personStats = $derived.by(() => {
     if (!selectedEntity) return null;
     
-    const articleCount = visibleData.length;
+    // Use unique articles count
+    const articleCount = uniqueArticles.length;
+    
     const countries = new Set(visibleData.map(item => item.country));
     const newspapers = new Set(visibleData.map(item => item.newspaperSource));
     const dateRange = visibleData.reduce((range, item) => {
@@ -145,10 +164,10 @@
     {/if}
 
     <!-- Articles Table -->
-    {#if visibleData.length > 0}
+    {#if uniqueArticles.length > 0}
       <Card>
         <CardHeader>
-          <CardTitle>Related Articles ({visibleData.length})</CardTitle>
+          <CardTitle>Related Articles ({uniqueArticles.length})</CardTitle>
         </CardHeader>
         <CardContent>
           <div class="overflow-x-auto">
@@ -162,7 +181,7 @@
                 </tr>
               </thead>
               <tbody>
-                {#each visibleData.slice(0, 10) as article}
+                {#each uniqueArticles.slice(0, 10) as article}
                   <tr class="border-t">
                     <td class="px-2 py-1 max-w-xs truncate">{article.title}</td>
                     <td class="px-2 py-1">{article.publishDate?.toISOString?.().slice(0,10) || ''}</td>
@@ -170,10 +189,10 @@
                     <td class="px-2 py-1">{article.newspaperSource}</td>
                   </tr>
                 {/each}
-                {#if visibleData.length > 10}
+                {#if uniqueArticles.length > 10}
                   <tr class="border-t">
                     <td colspan="4" class="px-2 py-1 text-center text-muted-foreground">
-                      ... and {visibleData.length - 10} more articles
+                      ... and {uniqueArticles.length - 10} more articles
                     </td>
                   </tr>
                 {/if}

@@ -15,7 +15,11 @@ export function getVisibleData(): ProcessedItem[] {
   if (appState.selectedEntity) {
     // Get articles that mention this entity
     const entityArticleIds = new Set(appState.selectedEntity.relatedArticleIds);
-    filtered = filtered.filter(item => entityArticleIds.has(item.id));
+    filtered = filtered.filter(item => {
+      // Extract article ID from processed item ID (format: "articleId-coordinateIndex")
+      const articleId = item.id.split('-')[0];
+      return entityArticleIds.has(articleId);
+    });
   }
 
   // Filter by countries
