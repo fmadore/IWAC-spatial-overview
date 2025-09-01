@@ -525,13 +525,6 @@
     "Country": "Mali"
   },
   {
-    "o:id": 358,
-    "Titre": "Manga",
-    "Type": "Lieux",
-    "Coordonnées": "11.66361, -1.07306",
-    "Country": "Burkina Faso"
-  },
-  {
     "o:id": 359,
     "Titre": "Maroc",
     "Type": "Lieux",
@@ -3522,7 +3515,7 @@
   },
   {
     "o:id": 63386,
-    "Titre": "Plateau",
+    "Titre": "Abidjan-Plateau",
     "Type": "Lieux",
     "Coordonnées": "5.32549, -4.02014",
     "Country": "Côte d'Ivoire"
@@ -4275,6 +4268,41 @@
     "Type": "Lieux",
     "Coordonnées": "12.34470328615928, -1.5683851823295623",
     "Country": "Burkina Faso"
+  },
+  {
+    "o:id": 76344,
+    "Titre": "Atacora",
+    "Type": "Lieux",
+    "Coordonnées": "10.3, 1.366667",
+    "Country": "Benin"
+  },
+  {
+    "o:id": 76348,
+    "Titre": "Dantokpa",
+    "Type": "Lieux",
+    "Coordonnées": "6.374473399413714, 2.4310254886739333",
+    "Country": "Benin"
+  },
+  {
+    "o:id": 76352,
+    "Titre": "Palais de la Marina",
+    "Type": "Lieux",
+    "Coordonnées": "6.351194094328522, 2.4090689256130875",
+    "Country": "Benin"
+  },
+  {
+    "o:id": 76353,
+    "Titre": "Agori-Plateau",
+    "Type": "Lieux",
+    "Coordonnées": "",
+    "Country": ""
+  },
+  {
+    "o:id": 76354,
+    "Titre": "Zogbadjè",
+    "Type": "Lieux",
+    "Coordonnées": "",
+    "Country": ""
   },
   {
     "o:id": 855,
@@ -12293,6 +12321,12 @@
     "Coordonnées": ""
   },
   {
+    "o:id": 13907,
+    "Titre": "Ayouba Abdoul Kerim Adéwalé",
+    "Type": "Personnes",
+    "Coordonnées": ""
+  },
+  {
     "o:id": 13925,
     "Titre": "Nadoun S. Coulibaly",
     "Type": "Personnes",
@@ -12521,6 +12555,12 @@
     "Coordonnées": ""
   },
   {
+    "o:id": 15163,
+    "Titre": "Harouna Abdoulaye Nass",
+    "Type": "Personnes",
+    "Coordonnées": ""
+  },
+  {
     "o:id": 15188,
     "Titre": "Idrissou Sakibou Traoré",
     "Type": "Personnes",
@@ -12583,6 +12623,12 @@
   {
     "o:id": 15406,
     "Titre": "José Didier Tonato",
+    "Type": "Personnes",
+    "Coordonnées": ""
+  },
+  {
+    "o:id": 15410,
+    "Titre": "Lydie Déré Chabi Nah",
     "Type": "Personnes",
     "Coordonnées": ""
   },
@@ -15547,12 +15593,6 @@
   {
     "o:id": 61049,
     "Titre": "Sadiya Assouma",
-    "Type": "Personnes",
-    "Coordonnées": ""
-  },
-  {
-    "o:id": 61050,
-    "Titre": "Gafary Badarou",
     "Type": "Personnes",
     "Coordonnées": ""
   },
@@ -20441,6 +20481,60 @@
     "Coordonnées": ""
   },
   {
+    "o:id": 76347,
+    "Titre": "Olushegun Adjadi Bakari",
+    "Type": "Personnes",
+    "Coordonnées": ""
+  },
+  {
+    "o:id": 76359,
+    "Titre": "Birahima Téné Ouattara",
+    "Type": "Personnes",
+    "Coordonnées": ""
+  },
+  {
+    "o:id": 76360,
+    "Titre": "Siandou Fofana",
+    "Type": "Personnes",
+    "Coordonnées": ""
+  },
+  {
+    "o:id": 76363,
+    "Titre": "Aguib Touré",
+    "Type": "Personnes",
+    "Coordonnées": ""
+  },
+  {
+    "o:id": 76368,
+    "Titre": "Mathieu Bledson",
+    "Type": "Personnes",
+    "Coordonnées": ""
+  },
+  {
+    "o:id": 76369,
+    "Titre": "Nandréas Marly",
+    "Type": "Personnes",
+    "Coordonnées": ""
+  },
+  {
+    "o:id": 76370,
+    "Titre": "Diabaté A. Sidick",
+    "Type": "Personnes",
+    "Coordonnées": ""
+  },
+  {
+    "o:id": 76412,
+    "Titre": "Jean-Pierre Vandale",
+    "Type": "Personnes",
+    "Coordonnées": ""
+  },
+  {
+    "o:id": 76413,
+    "Titre": "Watson K.",
+    "Type": "Personnes",
+    "Coordonnées": ""
+  },
+  {
     "o:id": 569,
     "Titre": "Association des Élèves et Étudiants Musulmans au Burkina",
     "Type": "Organisations",
@@ -21426,7 +21520,7 @@
   },
   {
     "o:id": 776,
-    "Titre": "﻿Association pour le Développement de la Culture Islamique",
+    "Titre": "Association pour le Développement de la Culture Islamique",
     "Type": "Organisations",
     "Coordonnées": ""
   },
@@ -22511,6 +22605,12 @@
     "Coordonnées": ""
   },
   {
+    "o:id": 27993,
+    "Titre": "Comité interministériel de prévention et de lutte contre l'extrémisme violent",
+    "Type": "Organisations",
+    "Coordonnées": ""
+  },
+  {
     "o:id": 31350,
     "Titre": "Alliance Nationale pour le Changement",
     "Type": "Organisations",
@@ -22873,6 +22973,24 @@
   {
     "o:id": 76335,
     "Titre": "Ahmadiyya",
+    "Type": "Organisations",
+    "Coordonnées": ""
+  },
+  {
+    "o:id": 76346,
+    "Titre": "Jama'at Islamique Ahmadiyya Bénin",
+    "Type": "Organisations",
+    "Coordonnées": ""
+  },
+  {
+    "o:id": 76358,
+    "Titre": "Association musulmane pour le bien-être familial en Côte d'Ivoire",
+    "Type": "Organisations",
+    "Coordonnées": ""
+  },
+  {
+    "o:id": 76361,
+    "Titre": "Cour pénale internationale",
     "Type": "Organisations",
     "Coordonnées": ""
   },
@@ -24281,6 +24399,12 @@
     "Coordonnées": ""
   },
   {
+    "o:id": 76362,
+    "Titre": "Giga Maoulid",
+    "Type": "Événements",
+    "Coordonnées": ""
+  },
+  {
     "o:id": 5,
     "Titre": "Laïcité",
     "Type": "Sujets",
@@ -25271,8 +25395,20 @@
     "Coordonnées": ""
   },
   {
+    "o:id": 14688,
+    "Titre": "Vodoun",
+    "Type": "Sujets",
+    "Coordonnées": ""
+  },
+  {
     "o:id": 14718,
     "Titre": "Indépendance",
+    "Type": "Sujets",
+    "Coordonnées": ""
+  },
+  {
+    "o:id": 14732,
+    "Titre": "Agriculture",
     "Type": "Sujets",
     "Coordonnées": ""
   },
@@ -27361,6 +27497,12 @@
   {
     "o:id": 76343,
     "Titre": "Médersas",
+    "Type": "Sujets",
+    "Coordonnées": ""
+  },
+  {
+    "o:id": 76345,
+    "Titre": "Orphelins",
     "Type": "Sujets",
     "Coordonnées": ""
   }
