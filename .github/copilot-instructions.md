@@ -27,11 +27,13 @@ omeka-map-explorer/
 │   │   │   ├── maps/                    # Leaflet map & choropleth components
 │   │   │   ├── filters/                 # Country & year range filters
 │   │   │   ├── timeline/                # D3 timeline with animation controller
+│   │   │   ├── entity-*.svelte          # Modular entity visualization components
+│   │   │   ├── *-visualization.svelte   # Entity-specific views (persons, orgs, etc.)
 │   │   │   └── ui/                      # shadcn-svelte UI components
 │   │   ├── hooks/                       # Svelte hooks (mobile detection)
 │   │   ├── state/                       # Svelte 5 runes stores ($state)
 │   │   ├── types/                       # TypeScript type definitions
-│   │   └── utils/staticDataLoader.ts    # Static data loading utilities
+│   │   └── utils/                       # Static data loader, entity loader, URL manager
 │   ├── routes/
 │   │   ├── +layout.svelte               # App layout with sidebar provider
 │   │   ├── +page.svelte                 # Main application page
@@ -39,12 +41,14 @@ omeka-map-explorer/
 │   ├── app.css                          # Tailwind CSS with custom properties
 │   └── app.html                         # HTML shell
 ├── static/data/                         # Static JSON & GeoJSON data files
+│   └── entities/                        # Entity JSON files (persons, organizations, etc.)
 ├── e2e/                                 # Playwright E2E tests
 └── src/**/*.test.ts                     # Vitest unit tests
 ```
 
 ### Data Preparation Scripts (`scripts/`)
 - Python scripts for preparing JSON data from Omeka S API
+- `preprocess_entities.py` for generating entity JSON files from index.json
 - `requirements.txt` for Python dependencies
 
 ## Build & Development Commands
@@ -86,7 +90,14 @@ npm run preview               # Preview production build locally
 
 ### Component Architecture
 - **UI Components**: Located in `src/lib/components/ui/` (shadcn-svelte based)
-- **Feature Components**: Organized by domain (maps, filters, timeline)
+- **Feature Components**: Organized by domain (maps, filters, timeline, entity visualizations)
+- **Entity Components**: Modular and reusable components for entity exploration
+  - `entity-selector.svelte`: Generic entity selector with search
+  - `entity-stats-cards.svelte`: Reusable statistics cards
+  - `entity-locations-list.svelte`: Location tags display
+  - `entity-articles-table.svelte`: Related articles table
+  - `entity-visualization.svelte`: Main generic visualization component
+- **Entity-Specific Views**: `*-visualization.svelte` components for persons, organizations, events, subjects
 - **State**: Global reactive stores using Svelte 5 runes in `src/lib/state/`
 
 ### TypeScript Guidelines
@@ -103,9 +114,18 @@ npm run preview               # Preview production build locally
 ## Key Files & Their Purposes
 
 ### Core Application Files
-- `src/routes/+page.svelte`: Main application entry point with data loading
+- `src/routes/+page.svelte`: Main application entry point with data loading and routing
 - `src/lib/state/`: Reactive state management (appState, mapData, filters, timeData)
 - `src/lib/utils/staticDataLoader.ts`: Loads and processes static JSON data
+- `src/lib/utils/entityLoader.ts`: Lazy loading for entity data
+- `src/lib/utils/urlManager.svelte.ts`: URL routing and state synchronization
+
+### Entity Visualization System
+- `src/lib/components/entity-visualization.svelte`: Generic, reusable visualization component
+- `src/lib/components/persons-visualization.svelte`: Person-specific view using generic component
+- `src/lib/components/organizations-visualization.svelte`: Organization-specific view
+- `src/lib/components/events-visualization.svelte`: Event-specific view
+- `src/lib/components/subjects-visualization.svelte`: Subject-specific view
 
 ### Configuration Files
 - `svelte.config.js`: SvelteKit config with GitHub Pages deployment setup
@@ -117,10 +137,12 @@ npm run preview               # Preview production build locally
 ## Data Flow & State Management
 
 1. **Data Loading**: `staticDataLoader.ts` loads articles.json and index.json
-2. **State Stores**: Data flows through reactive stores in `src/lib/state/`
-3. **Filtering**: `filters.svelte.ts` manages country, date, and other filters
-4. **Map Visualization**: `mapData.svelte.ts` handles geographic data and view modes
-5. **Timeline**: `timeData.svelte.ts` manages temporal data and playback
+2. **Entity Loading**: `entityLoader.ts` lazy loads entity data (persons, organizations, events, subjects)
+3. **State Stores**: Data flows through reactive stores in `src/lib/state/`
+4. **Filtering**: `filters.svelte.ts` manages country, date, and entity filters
+5. **Map Visualization**: `mapData.svelte.ts` handles geographic data and view modes
+6. **Timeline**: `timeData.svelte.ts` manages temporal data and playback
+7. **URL Management**: `urlManager.svelte.ts` handles routing and deep-linking
 
 ## Testing Strategy
 
@@ -153,6 +175,7 @@ npm run preview               # Preview production build locally
 ### Common Patterns
 - **Adding new filters**: Extend `filters.svelte.ts` and create components in `src/lib/components/filters/`
 - **Map features**: Add to `src/lib/components/maps/` and integrate with `mapData.svelte.ts`
+- **Entity visualizations**: Use the generic `entity-visualization.svelte` component pattern
 - **UI components**: Use existing shadcn-svelte components from `src/lib/components/ui/`
 - **State management**: Use Svelte 5 runes pattern, avoid legacy stores
 
@@ -166,6 +189,54 @@ npm run preview               # Preview production build locally
 - This is a **client-side only** application (`ssr = false`)
 - Static data files must be in `static/data/` directory
 - All geographic calculations happen client-side
+- Map and timeline components dynamically import heavy libraries
+- Responsive design uses Tailwind breakpoints and mobile hooks
+
+## Dashboard & Visualizations
+
+We now have a shadcn-svelte "dashboard with sidebar" scaffold to host multiple visualizations:
+
+- Layout: `src/routes/+layout.svelte` wraps the app with `Sidebar.Provider`/`Sidebar.Inset` and includes `AppSidebar`.
+- Entry page: `src/routes/+page.svelte` conditionally renders:
+	- Dashboard (new blocks) when `appState.activeView === 'dashboard'`
+	- Existing Map + Timeline when `appState.activeView === 'map'`
+- State additions in `src/lib/state/appState.svelte.ts`:
+	- `activeView`: 'dashboard' | 'map' | 'list' | 'stats' (defaults to 'dashboard')
+	- `activeVisualization`: 'overview' | 'byCountry' | 'persons' | 'organizations' | 'events' | 'subjects'
+- New components:
+	- `src/lib/components/app-sidebar.svelte`: Sidebar navigation to switch visualizations
+	- `src/lib/components/site-header.svelte`: Sticky header for the dashboard inset
+	- `src/lib/components/section-cards.svelte`: KPI cards (articles, countries, time span)
+	- `src/lib/components/chart-area-interactive.svelte`: Placeholder card for future charts
+	- `src/lib/components/data-table.svelte`: Simple data table of sample records
+
+### Entity Visualization Architecture
+
+Entity types from `index.json` (Type): Lieux (Places), Personnes (Persons), Événements (Events), Organisations (Organizations), Sujets (Subjects).
+
+**Modular Component System:**
+1. **Generic Components** (reusable across all entity types):
+   - `entity-selector.svelte`: Entity selection with search functionality
+   - `entity-stats-cards.svelte`: Statistics cards (articles, countries, newspapers, time period)
+   - `entity-locations-list.svelte`: Location tags display
+   - `entity-articles-table.svelte`: Related articles table
+   - `entity-visualization.svelte`: Main visualization component that combines all above
+
+2. **Entity-Specific Components** (using the generic system):
+   - `persons-visualization.svelte`: Person exploration
+   - `organizations-visualization.svelte`: Organization exploration  
+   - `events-visualization.svelte`: Event exploration
+   - `subjects-visualization.svelte`: Subject exploration
+
+**Implementation Features:**
+- Lazy loading of entity data via `entityLoader.ts`
+- State management with `selectedEntity` in `appState.svelte.ts`
+- Automatic filtering of map data and articles based on selected entity
+- URL routing support for deep-linking to entity views
+- Responsive design with consistent UI patterns
+
+**Usage Pattern:**
+All entity visualizations follow the same pattern - they import the generic `EntityVisualization` component and pass entity-specific props. This eliminates code duplication while maintaining type safety and customization options.
 - Map and timeline components dynamically import heavy libraries
 - Responsive design uses Tailwind breakpoints and mobile hooks
 
@@ -199,5 +270,3 @@ Implementation guide:
 3. Create `EntityExplorer.svelte` to list/search entities by type and set `selectedEntity`.
 4. On selection, recompute `mapData.visibleItems` and update the timeline/table accordingly.
 5. Keep components typed and use runes: `$state`, `$derived`, `$props`, `$effect`.
-
-See `roadmap.md` at the repo root for the full plan and milestones.

@@ -1,6 +1,6 @@
 # IWAC Spatial Overview
 
-SvelteKit application to explore newspaper article locations from an Omeka S collection with filters, a timeline, and choropleth mapping. The runnable app lives in `omeka-map-explorer/`, and helper data-prep scripts live in `scripts/`.
+SvelteKit application to explore newspaper article locations from an Omeka S collection with interactive maps, entity visualizations, timeline controls, and filtering capabilities. Features a dashboard with sidebar navigation for exploring persons, organizations, events, and subjects mentioned in historical newspaper articles.
 
 ## Repository layout
 
@@ -13,19 +13,23 @@ IWAC-spatial-overview
 │  │  │  ├─ components/
 │  │  │  │  ├─ maps/            # Leaflet map + choropleth layer
 │  │  │  │  ├─ filters/         # Country + year range filters
-│  │  │  │  └─ timeline/        # D3-based timeline and controller
+│  │  │  │  ├─ timeline/        # D3-based timeline and controller
+│  │  │  │  ├─ entity-*.svelte  # Modular entity visualization components
+│  │  │  │  ├─ *-visualization.svelte # Entity-specific views (persons, orgs, etc.)
+│  │  │  │  └─ ui/              # shadcn-svelte UI components
 │  │  │  ├─ hooks/              # e.g., mobile media query
 │  │  │  ├─ state/              # Svelte 5 runes stores ($state)
 │  │  │  ├─ types/              # TS types and ambient decls
-│  │  │  └─ utils/              # static data loader
+│  │  │  └─ utils/              # static data loader, entity loader, URL manager
 │  │  ├─ routes/                # +page.svelte (client-only)
 │  │  └─ app.css/html           # Tailwind + app shell
 │  ├─ static/
-│  │  └─ data/                  # Articles, index, and maps/*.geojson
+│  │  └─ data/                  # Articles, index, entities/, and maps/*.geojson
 │  ├─ e2e/ and src/**.test.ts   # Playwright + Vitest tests
 │  └─ package.json              # dev/build/test scripts
 ├─ scripts/                     # Python data-prep helpers
 │  ├─ prepare_json.py           # Export articles.json, index.json
+│  ├─ preprocess_entities.py    # Generate entity JSON files from index.json
 │  ├─ add_countries.py          # Add Country to index.json via polygons
 │  └─ requirements.txt          # Python deps
 └─ README.md (this file)
@@ -58,6 +62,9 @@ pip install -r scripts/requirements.txt
 # Generate articles.json and index.json
 python scripts/prepare_json.py
 
+# Generate entity files (persons.json, organizations.json, events.json, subjects.json)
+python scripts/preprocess_entities.py
+
 # Add Country to each place in index.json using world_countries.geojson
 python scripts/add_countries.py
 ```
@@ -65,16 +72,22 @@ python scripts/add_countries.py
 Data files expected by the app:
 - `omeka-map-explorer/static/data/articles.json`
 - `omeka-map-explorer/static/data/index.json`
+- `omeka-map-explorer/static/data/entities/*.json` (persons, organizations, events, subjects)
 - `omeka-map-explorer/static/data/maps/world_countries.geojson` and regional files (e.g., Benin, Togo)
 
 ## What’s inside the app
 
-- Map (Leaflet) with optional choropleth by country
-- Timeline (D3) with play/pause animation controller
-- Filters: country selection and year range
-- State via Svelte 5 runes (`$state`) in `src/lib/state`
-- Tailwind CSS v4 and a small UI kit for layout
-- Client-only main route (`src/routes/+page.ts` sets `ssr = false`)
+- Map (Leaflet) with optional choropleth by country and bubble visualization
+- Timeline (D3) with play/pause animation controller  
+- Dashboard with sidebar navigation for entity exploration
+- Entity visualizations for persons, organizations, events, and subjects
+- Statistics cards showing article counts, countries, newspapers, and time periods
+- Interactive maps showing locations associated with selected entities
+- Filters: country selection, year range, and entity-based filtering
+- State management via Svelte 5 runes (`$state`) in `src/lib/state`
+- Modular components for reusable entity visualizations
+- URL routing with support for deep-linking to specific views
+- Responsive design with Tailwind CSS v4 and shadcn-svelte UI components
 
 ## Testing and tooling
 
