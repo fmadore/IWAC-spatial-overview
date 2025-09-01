@@ -17,11 +17,11 @@
 		"test:unit": "vitest"
 	},
 	"devDependencies": {
-		"@sveltejs/adapter-static": "^3.0.0",
 		"@internationalized/date": "^3.8.2",
 		"@lucide/svelte": "^0.515.0",
 		"@playwright/test": "^1.54.2",
 		"@sveltejs/adapter-auto": "^4.0.0",
+		"@sveltejs/adapter-static": "^3.0.0",
 		"@sveltejs/kit": "^2.31.1",
 		"@sveltejs/vite-plugin-svelte": "^5.1.1",
 		"@tailwindcss/postcss": "^4.1.12",
@@ -58,6 +58,7 @@
 		"d3-time": "^3.1.0",
 		"d3-time-format": "^4.1.0",
 		"leaflet": "^1.9.4",
+		"lucide-svelte": "^0.542.0",
 		"maplibre-gl": "^5.6.2",
 		"papaparse": "^5.5.3",
 		"svelte-select": "^5.8.3"

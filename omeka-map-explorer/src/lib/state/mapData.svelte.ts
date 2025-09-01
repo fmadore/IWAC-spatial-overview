@@ -12,6 +12,11 @@ interface MapDataState {
   zoom: number;
   center: [number, number];
   countriesData: Record<string, ProcessedItem[]>;
+  // Entity data
+  persons: Array<{ id: string; name: string; relatedArticleIds: string[] }>;
+  organizations: Array<{ id: string; name: string; relatedArticleIds: string[] }>;
+  events: Array<{ id: string; name: string; relatedArticleIds: string[] }>;
+  subjects: Array<{ id: string; name: string; relatedArticleIds: string[] }>;
 }
 
 export const mapData = $state<MapDataState>({
@@ -25,5 +30,10 @@ export const mapData = $state<MapDataState>({
   viewMode: 'bubbles',
   zoom: 5,
   center: [10.0, 0.0],
-  countriesData: {}
+  countriesData: {},
+  // Entity data
+  persons: [],
+  organizations: [],
+  events: [],
+  subjects: []
 });

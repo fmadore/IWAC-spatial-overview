@@ -20,6 +20,7 @@
   import SectionCards from '$lib/components/section-cards.svelte';
   import ChartAreaInteractive from '$lib/components/chart-area-interactive.svelte';
   import DataTable from '$lib/components/data-table.svelte';
+  import PersonsVisualization from '$lib/components/persons-visualization.svelte';
   
   // Configuration
   const countryItemSets: Record<string, number[]> = {
@@ -50,6 +51,11 @@
       mapData.allItems = loaded.items;
       mapData.visibleItems = loaded.items;
       mapData.places = loaded.places; // Raw places data for choropleth
+      // Entity data
+      mapData.persons = loaded.persons;
+      mapData.organizations = loaded.organizations;
+      mapData.events = loaded.events;
+      mapData.subjects = loaded.subjects;
 
       filters.available.countries = loaded.countries;
       filters.available.newspapers = loaded.newspapers;
@@ -112,15 +118,29 @@
     <SiteHeader />
     <div class="flex flex-1 flex-col">
       <div class="@container/main flex flex-1 flex-col gap-2">
-        <div class="flex flex-col gap-4 py-4 md:gap-6 md:py-6">
-          <SectionCards />
-          <div class="px-4 lg:px-6">
-            <ChartAreaInteractive />
+        {#if appState.activeVisualization === 'overview'}
+          <div class="flex flex-col gap-4 py-4 md:gap-6 md:py-6">
+            <SectionCards />
+            <div class="px-4 lg:px-6">
+              <ChartAreaInteractive />
+            </div>
+            <div class="px-4 lg:px-6">
+              <DataTable />
+            </div>
           </div>
-          <div class="px-4 lg:px-6">
-            <DataTable />
+        {:else if appState.activeVisualization === 'persons'}
+          <PersonsVisualization />
+        {:else}
+          <!-- Other visualizations placeholder -->
+          <div class="flex flex-col gap-4 py-4 md:gap-6 md:py-6">
+            <div class="px-4 lg:px-6">
+              <h2 class="text-2xl font-bold">
+                {appState.activeVisualization.charAt(0).toUpperCase() + appState.activeVisualization.slice(1)}
+              </h2>
+              <p class="text-muted-foreground">This visualization is not yet implemented.</p>
+            </div>
           </div>
-        </div>
+        {/if}
       </div>
     </div>
   {:else if appState.activeView === 'map'}

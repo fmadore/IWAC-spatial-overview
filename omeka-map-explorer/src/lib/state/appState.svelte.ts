@@ -9,6 +9,13 @@ interface AppState {
   selectedItem: ProcessedItem | null;
   // Which visualization inside dashboard is active
   activeVisualization: 'overview' | 'byCountry' | 'persons' | 'organizations' | 'events' | 'subjects';
+  // Selected entity for filtering
+  selectedEntity: {
+    type: string;
+    id: string;
+    name: string;
+    relatedArticleIds: string[];
+  } | null;
 }
 
 export const appState = $state<AppState>({
@@ -18,7 +25,8 @@ export const appState = $state<AppState>({
   activeView: 'dashboard',
   sidebarOpen: true,
   selectedItem: null,
-  activeVisualization: 'overview'
+  activeVisualization: 'overview',
+  selectedEntity: null
 });
 
 export function setError(message: string) {

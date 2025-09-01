@@ -2,6 +2,7 @@ import type { ProcessedItem } from '$lib/types';
 import { timeData } from './timeData.svelte';
 import { filters } from './filters.svelte';
 import { mapData } from './mapData.svelte';
+import { appState } from './appState.svelte';
 
 export function getVisibleData(): ProcessedItem[] {
   const items = mapData.allItems;
@@ -9,6 +10,13 @@ export function getVisibleData(): ProcessedItem[] {
 
   const sel = filters.selected;
   let filtered = items;
+
+  // Filter by selected entity (persons, organizations, etc.)
+  if (appState.selectedEntity) {
+    // Get articles that mention this entity
+    const entityArticleIds = new Set(appState.selectedEntity.relatedArticleIds);
+    filtered = filtered.filter(item => entityArticleIds.has(item.id));
+  }
 
   // Filter by countries
   if (sel.countries.length) {

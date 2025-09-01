@@ -29,6 +29,7 @@ export interface ProcessedItem {
   prefecture: string | null;
   newspaperSource: string;
   keywords: string[];
+  spatial: string[]; // Spatial locations mentioned in the article
 }
 
 // Temporal data for timeline visualization
