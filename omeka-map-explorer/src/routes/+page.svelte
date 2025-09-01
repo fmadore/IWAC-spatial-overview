@@ -1,5 +1,7 @@
 <script lang="ts">
   import { onMount } from 'svelte';
+  import { page } from '$app/stores';
+  
   // Rune state modules (Svelte 5)
   import { appState } from '$lib/state/appState.svelte';
   import { timeData } from '$lib/state/timeData.svelte';
@@ -7,13 +9,12 @@
   import { mapData } from '$lib/state/mapData.svelte';
   import { initialize as initAnimationController } from '$lib/components/timeline/AnimationController';
   import { loadStaticData } from '$lib/utils/staticDataLoader';
-  import { get } from 'svelte/store';
+  import { urlManager, initializeUrlManager } from '$lib/utils/urlManager.svelte';
   import type { ProcessedItem } from '$lib/types';
   import { browser } from '$app/environment';
   
   import Map from '$lib/components/maps/Map.svelte';
   import Timeline from '$lib/components/timeline/Timeline.svelte';
-  import FilterPanel from '$lib/components/filters/FilterPanel.svelte';
   import * as Sidebar from '$lib/components/ui/sidebar';
   import SiteHeader from '$lib/components/site-header.svelte';
   import SectionCards from '$lib/components/section-cards.svelte';
@@ -32,12 +33,18 @@
     if (!browser) return;
     
     try {
+      // Initialize URL manager
+      initializeUrlManager();
+      
+      // Parse current URL search parameters and set initial state
+      urlManager.parseUrlAndUpdateState($page.url.searchParams);
+
       // Initialize animation controller
       initAnimationController();
       
       // Start loading data
       appState.loading = true;
-  const loaded = await loadStaticData('data');
+      const loaded = await loadStaticData('data');
 
       // Populate stores from static data
       mapData.allItems = loaded.items;
@@ -63,6 +70,13 @@
       
       appState.loading = false;
       appState.error = error instanceof Error ? error.message : 'Failed to initialize application';
+    }
+  });
+
+  // Watch for page changes and update state accordingly
+  $effect(() => {
+    if (browser && $page.url.searchParams) {
+      urlManager.parseUrlAndUpdateState($page.url.searchParams);
     }
   });
   
@@ -94,7 +108,7 @@
   </div>
 {:else}
   {#if appState.activeView === 'dashboard'}
-    <!-- Dashboard blocks -->
+    <!-- Dashboard view -->
     <SiteHeader />
     <div class="flex flex-1 flex-col">
       <div class="@container/main flex flex-1 flex-col gap-2">
@@ -109,45 +123,33 @@
         </div>
       </div>
     </div>
-  {:else}
+  {:else if appState.activeView === 'map'}
     <!-- Map view -->
-    <div class="flex h-screen w-screen overflow-hidden">
-      <FilterPanel />
+    <SiteHeader />
+    <div class="flex flex-1 flex-col overflow-hidden">
+      <div class="flex-1 relative z-0">
+        <Map />
+      </div>
       
-      <main class="flex flex-col flex-1 overflow-hidden">
-        <header class="flex h-16 items-center justify-between px-4 border-b bg-background relative z-40">
-          <div class="flex items-center gap-3">
-            <Sidebar.Trigger />
-            <h1 class="text-xl font-bold">Newspaper Article Locations</h1>
-          </div>
-        </header>
-        
-        <div class="flex flex-col flex-1 overflow-hidden relative z-0">
-          <div class="flex-1 relative z-0">
-            <Map />
-          </div>
-          
-          <div class="border-t bg-muted/30 p-4 relative z-10">
-            <Timeline 
-              data={timeData.data}
-              height="120px"
-            />
-          </div>
-          
-          {#if appState.selectedItem}
-            <div class="border-t p-4 bg-background">
-              <div class="bg-card rounded-lg p-4 shadow-sm">
-                <h3 class="font-semibold text-lg mb-2">{appState.selectedItem.title}</h3>
-                <div class="space-y-1 text-sm text-muted-foreground">
-                  <p>Date: {appState.selectedItem.publishDate?.toLocaleDateString()}</p>
-                  <p>Country: {appState.selectedItem.country}</p>
-                  <p>Source: {appState.selectedItem.newspaperSource}</p>
-                </div>
-              </div>
+      <div class="border-t bg-muted/30 p-4 relative z-10">
+        <Timeline 
+          data={timeData.data}
+          height="120px"
+        />
+      </div>
+      
+      {#if appState.selectedItem}
+        <div class="border-t p-4 bg-background">
+          <div class="bg-card rounded-lg p-4 shadow-sm">
+            <h3 class="font-semibold text-lg mb-2">{appState.selectedItem.title}</h3>
+            <div class="space-y-1 text-sm text-muted-foreground">
+              <p>Date: {appState.selectedItem.publishDate?.toLocaleDateString()}</p>
+              <p>Country: {appState.selectedItem.country}</p>
+              <p>Source: {appState.selectedItem.newspaperSource}</p>
             </div>
-          {/if}
+          </div>
         </div>
-      </main>
+      {/if}
     </div>
   {/if}
 {/if}
