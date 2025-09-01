@@ -89,20 +89,37 @@
 					mouseout: resetHighlight,
 					click: zoomToFeature
 				});
+
+				// Bind a lightweight tooltip for quick glance info
+				try {
+					const name = feature?.properties?.name ?? 'Unknown';
+					const count = Number.isFinite(data[name]) ? data[name] : 0;
+					layer.bindTooltip(
+						`<strong>${name}</strong><br/>${count} ${count === 1 ? 'article' : 'articles'}`,
+						{ sticky: true, direction: 'auto', opacity: 0.95, className: 'choropleth-tooltip' }
+					);
+				} catch {}
+
+				// Bind a popup with a bit more detail on click
+				try {
+					layer.bindPopup(() => {
+						const name = feature?.properties?.name ?? 'Unknown';
+						const count = Number.isFinite(data[name]) ? data[name] : 0;
+						return `
+							<div class="choropleth-popup">
+								<h4>${name}</h4>
+								<p><strong>${count}</strong> ${count === 1 ? 'article' : 'articles'}</p>
+							</div>
+						`;
+					}, { maxWidth: 280, className: 'choropleth-popup-wrapper' });
+				} catch {}
 			},
-			// Make choropleth non-interactive for clicks to allow bubbles to be clickable
-			interactive: true,
-			// Lower the pane so bubbles appear on top
-			pane: 'tilePane'
+			// Keep choropleth interactive but in a stable pane
+			interactive: true
 		}).addTo(map);
 		
-		// Set lower z-index to ensure bubbles appear on top
-		if (layer.getPane) {
-			const pane = layer.getPane();
-			if (pane) {
-				pane.style.zIndex = '200';
-			}
-		}
+		// Remove any z-index manipulation that might cause issues
+		// Let Leaflet handle the layer ordering naturally
 		
 		// Immediately apply styles if data is available
 		if (Object.keys(data).length > 0) {
@@ -124,10 +141,10 @@
 
 		info.update = function (props?: any) {
 			this._div.innerHTML =
-				'<h4>Region Data</h4>' +
+				'<h4>Country Data</h4>' +
 				(props
-					? '<b>' + props.name + '</b><br />' + (data[props.name] || 0) + ' articles'
-					: 'Hover over a region');
+					? '<b>' + props.name + '</b><br />' + (data[props.name] || 0) + ' articles (including cities)'
+					: 'Hover over a country');
 		};
 
 		info.addTo(map);
@@ -172,11 +189,10 @@
 		if (!feature.properties || !feature.properties.name) {
 			return {
 				fillColor: '#f0f0f0',
-				weight: 2,
-				opacity: 1,
+				weight: 1,
+				opacity: 0.8,
 				color: 'white',
-				dashArray: '3',
-				fillOpacity: 0.7
+				fillOpacity: 0.8
 			};
 		}
 
@@ -186,11 +202,10 @@
 
 		return {
 			fillColor: scale(value),
-			weight: 2,
-			opacity: 1,
+			weight: 1,
+			opacity: 0.8,
 			color: 'white',
-			dashArray: '3',
-			fillOpacity: 0.7
+			fillOpacity: 0.8
 		};
 	}
 
@@ -200,17 +215,15 @@
 
 		const layer = e.target;
 
+		// Keep stroke width constant to avoid visual "jump"
 		layer.setStyle({
-			weight: 3,
+			weight: 1,
 			color: '#333',
-			dashArray: '',
-			fillOpacity: 0.8
+			fillOpacity: 0.9
 		});
 
-		// Don't bring to front to avoid layer jumping
-		// if (L.Browser && !L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
-		// 	layer.bringToFront();
-		// }
+		// Don't bring to front to prevent layer jumping
+		// layer.bringToFront();
 
 		if (info) {
 			info.update(layer.feature.properties);
@@ -359,6 +372,29 @@
 			if (featureLayer.feature) {
 				const newStyle = style(featureLayer.feature);
 				featureLayer.setStyle(newStyle);
+
+				// Update tooltip/popups with latest data
+				try {
+					const name = featureLayer.feature?.properties?.name ?? 'Unknown';
+					const count = Number.isFinite(data[name]) ? data[name] : 0;
+					const tooltipHtml = `<strong>${name}</strong><br/>${count} ${count === 1 ? 'article' : 'articles'}`;
+					if (typeof featureLayer.setTooltipContent === 'function') {
+						featureLayer.setTooltipContent(tooltipHtml);
+					} else if (featureLayer.getTooltip && featureLayer.getTooltip()) {
+						featureLayer.getTooltip().setContent(tooltipHtml);
+					}
+
+					const popupHtml = `
+						<div class="choropleth-popup">
+							<h4>${name}</h4>
+							<p><strong>${count}</strong> ${count === 1 ? 'article' : 'articles'}</p>
+						</div>`;
+					if (typeof featureLayer.setPopupContent === 'function') {
+						featureLayer.setPopupContent(popupHtml);
+					} else if (featureLayer.getPopup && featureLayer.getPopup()) {
+						featureLayer.getPopup().setContent(popupHtml);
+					}
+				} catch {}
 			}
 		});
 
@@ -377,33 +413,45 @@
 
 <style>
 	:global(.info) {
-		padding: 6px 8px;
+		padding: 8px 12px;
 		font:
 			14px/16px Arial,
 			Helvetica,
 			sans-serif;
 		background: white;
-		background: rgba(255, 255, 255, 0.8);
-		box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
-		border-radius: 5px;
+		background: rgba(255, 255, 255, 0.95);
+		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+		border-radius: 8px;
+		border: 1px solid rgba(0, 0, 0, 0.1);
+		min-width: 140px;
+		z-index: 1000 !important;
 	}
 
 	:global(.info h4) {
-		margin: 0 0 5px;
-		color: #777;
+		margin: 0 0 8px;
+		color: #333;
+		font-weight: 600;
+		font-size: 14px;
 	}
 
 	:global(.legend) {
 		text-align: left;
-		line-height: 18px;
-		color: #555;
+		line-height: 20px;
+		color: #333;
+		background: rgba(255, 255, 255, 0.95);
+		padding: 8px 12px;
+		border-radius: 8px;
+		border: 1px solid rgba(0, 0, 0, 0.1);
+		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+		z-index: 1000 !important;
 	}
 
 	:global(.legend i) {
-		width: 18px;
-		height: 18px;
+		width: 20px;
+		height: 16px;
 		float: left;
 		margin-right: 8px;
-		opacity: 0.7;
+		margin-top: 2px;
+		border: 1px solid rgba(0, 0, 0, 0.1);
 	}
 </style>

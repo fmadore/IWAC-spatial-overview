@@ -227,10 +227,11 @@
 		// Choropleth is rendered by child component; skip adding Leaflet layers here
 		if (mapData.viewMode === 'choropleth' && worldGeo) {
 			// no-op - choropleth is handled by ChoroplethLayer component
+			// Don't render bubbles in choropleth mode - only show colored countries
 		} 
 		
-		// Always render bubbles, even in choropleth mode, but with higher z-index
-		if (visibleData.length > 0) {
+		// Only render bubbles when NOT in choropleth mode
+		else if (visibleData.length > 0) {
 			// Aggregate items by coordinate and add circle markers sized by count (much fewer markers)
 			const groups = new Map<string, { lat: number; lng: number; count: number; sample: any; items: any[] }>();
 			for (const item of visibleData) {
@@ -527,12 +528,13 @@
 	}
 
 	/* Circle marker styling improvements */
-	:global(.leaflet-interactive) {
+	/* Only apply hover effects to our point markers, not polygons */
+	:global(.modern-marker.leaflet-interactive) {
 		filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
 		transition: all 0.2s ease;
 	}
 
-	:global(.leaflet-interactive:hover) {
+	:global(.modern-marker.leaflet-interactive:hover) {
 		filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
 		transform: scale(1.1);
 		z-index: 1000 !important;
