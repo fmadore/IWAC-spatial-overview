@@ -9,6 +9,7 @@
   import { mapData } from '$lib/state/mapData.svelte';
   import { initialize as initAnimationController } from '$lib/components/timeline/AnimationController';
   import { loadStaticData } from '$lib/utils/staticDataLoader';
+  import { loadEntities } from '$lib/utils/entityLoader';
   import { urlManager, initializeUrlManager } from '$lib/utils/urlManager.svelte';
   import type { ProcessedItem } from '$lib/types';
   import { browser } from '$app/environment';
@@ -29,6 +30,29 @@
     'Togo': [9458, 25304, 5498, 5499],
     'Côte d\'Ivoire': [43051, 31882, 15845, 45390]
   };
+
+  // Lazy load entities when navigating to entity views
+  async function loadEntityData(entityType: 'persons' | 'organizations' | 'events' | 'subjects') {
+    try {
+      const entities = await loadEntities(entityType, 'data');
+      switch (entityType) {
+        case 'persons':
+          mapData.persons = entities;
+          break;
+        case 'organizations':
+          mapData.organizations = entities;
+          break;
+        case 'events':
+          mapData.events = entities;
+          break;
+        case 'subjects':
+          mapData.subjects = entities;
+          break;
+      }
+    } catch (error) {
+      console.error(`Failed to load ${entityType}:`, error);
+    }
+  }
   
   onMount(async () => {
     if (!browser) return;
@@ -51,11 +75,6 @@
       mapData.allItems = loaded.items;
       mapData.visibleItems = loaded.items;
       mapData.places = loaded.places; // Raw places data for choropleth
-      // Entity data
-      mapData.persons = loaded.persons;
-      mapData.organizations = loaded.organizations;
-      mapData.events = loaded.events;
-      mapData.subjects = loaded.subjects;
 
       filters.available.countries = loaded.countries;
       filters.available.newspapers = loaded.newspapers;
@@ -83,6 +102,16 @@
   $effect(() => {
     if (browser && $page.url.searchParams) {
       urlManager.parseUrlAndUpdateState($page.url.searchParams);
+    }
+  });
+
+  // Load entity data when visualization changes to persons/organizations/events/subjects
+  $effect(() => {
+    if (appState.dataLoaded && browser) {
+      const viz = appState.activeVisualization;
+      if (viz === 'persons' || viz === 'organizations' || viz === 'events' || viz === 'subjects') {
+        loadEntityData(viz);
+      }
     }
   });
   

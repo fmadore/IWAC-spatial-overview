@@ -26,10 +26,6 @@ type LoadedData = {
   dateMin: Date | null;
   dateMax: Date | null;
   places: IndexRow[]; // Raw places data for choropleth counting
-  persons: Array<{ id: string; name: string; relatedArticleIds: string[] }>;
-  organizations: Array<{ id: string; name: string; relatedArticleIds: string[] }>;
-  events: Array<{ id: string; name: string; relatedArticleIds: string[] }>;
-  subjects: Array<{ id: string; name: string; relatedArticleIds: string[] }>;
 };
 
 function parsePipeList(s: string | null | undefined): string[] {
@@ -213,38 +209,6 @@ export async function loadStaticData(basePath = 'data'):
 
   const timeline = groupByMonth(items);
 
-  // Extract entities by type from index.json
-  const entityTypes = ['Personnes', 'Organisations', 'Événements', 'Sujets'];
-  const entities: Record<string, Array<{ id: string; name: string; relatedArticleIds: string[] }>> = {};
-
-  // Initialize empty arrays for each entity type
-  entityTypes.forEach(type => {
-    entities[type] = [];
-  });
-
-  // Process entities from index.json
-  for (const indexRow of indexRows) {
-    if (entityTypes.includes(indexRow.Type)) {
-      // Find articles that mention this entity in their subject field
-      const relatedArticleIds: string[] = [];
-      
-      for (const article of articles) {
-        const subjects = parsePipeList(article.subject);
-        if (subjects.includes(indexRow.Titre)) {
-          relatedArticleIds.push(article['o:id']);
-        }
-      }
-
-      if (relatedArticleIds.length > 0) {
-        entities[indexRow.Type].push({
-          id: indexRow['o:id']?.toString() || '',
-          name: indexRow.Titre,
-          relatedArticleIds
-        });
-      }
-    }
-  }
-
   return {
     items,
     timeline,
@@ -252,10 +216,6 @@ export async function loadStaticData(basePath = 'data'):
     newspapers: Array.from(newspapersSet).sort(),
     dateMin,
     dateMax,
-    places: indexRows, // Include raw places data
-    persons: entities['Personnes'] || [],
-    organizations: entities['Organisations'] || [],
-    events: entities['Événements'] || [],
-    subjects: entities['Sujets'] || []
+    places: indexRows // Include raw places data
   };
 }
