@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Button } from '$lib/components/ui/button';
+	import * as Sidebar from '$lib/components/ui/sidebar';
 	import { appState } from '$lib/state/appState.svelte';
 
 	const getTitle = $derived.by(() => {
@@ -32,13 +32,7 @@
 	<div class="flex h-full items-center justify-between px-4 lg:px-6">
 		<h1 class="text-lg font-semibold tracking-tight">{getTitle}</h1>
 		<div class="flex items-center gap-2">
-			<Button
-				size="sm"
-				variant="outline"
-				onclick={() => (appState.sidebarOpen = !appState.sidebarOpen)}
-			>
-				Toggle Sidebar
-			</Button>
+			<Sidebar.Trigger size="sm" variant="outline" />
 		</div>
 	</div>
 </header>
