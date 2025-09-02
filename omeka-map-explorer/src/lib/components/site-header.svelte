@@ -30,9 +30,13 @@
 	class="sticky top-0 z-10 h-[var(--header-height)] border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60"
 >
 	<div class="flex h-full items-center justify-between px-4 lg:px-6">
-		<h1 class="text-lg font-semibold tracking-tight">{getTitle}</h1>
+		<div class="flex items-center gap-3">
+			<!-- Mobile sidebar trigger on the left for best UX -->
+			<Sidebar.Trigger class="md:hidden" />
+			<h1 class="text-lg font-semibold tracking-tight">{getTitle}</h1>
+		</div>
 		<div class="flex items-center gap-2">
-			<Sidebar.Trigger size="sm" variant="outline" />
+			<!-- Reserved for future header actions -->
 		</div>
 	</div>
 </header>
