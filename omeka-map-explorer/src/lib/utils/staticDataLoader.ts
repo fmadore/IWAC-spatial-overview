@@ -2,7 +2,7 @@ import type { ProcessedItem, TemporalData } from '$lib/types';
 import { loadLocations } from './entityLoader';
 
 // Global cache for places map to avoid rebuilding on every data load
-let placesMapCache: Map<string, { coords: [number, number]; country: string }> | null = null;
+let placesMapCache: Map<string, { coords: [number, number]; country: string; name: string }> | null = null;
 
 type ArticleRow = {
 	'o:id': string;
@@ -37,7 +37,7 @@ function isValidDate(d: Date): boolean {
 
 async function buildPlacesMapFromLocations(
 	basePath = 'data'
-): Promise<Map<string, { coords: [number, number]; country: string }>> {
+): Promise<Map<string, { coords: [number, number]; country: string; name: string }>> {
 	// Return cached map if available
 	if (placesMapCache) {
 		console.log('Using cached places map with', placesMapCache.size, 'entries');
@@ -45,7 +45,7 @@ async function buildPlacesMapFromLocations(
 	}
 	
 	console.log('Building places map from locations.json...');
-	const map = new Map<string, { coords: [number, number]; country: string }>();
+	const map = new Map<string, { coords: [number, number]; country: string; name: string }>();
 	
 	try {
 		const locations = await loadLocations(basePath);
@@ -58,7 +58,8 @@ async function buildPlacesMapFromLocations(
 				if (!map.has(key)) {
 					map.set(key, { 
 						coords: location.coordinates, 
-						country 
+						country,
+						name: location.name
 					});
 				}
 			}
@@ -124,14 +125,16 @@ export async function loadStaticData(basePath = 'data'): Promise<LoadedData> {
 
 		const coordinates: [number, number][] = [];
 		const coordinateCountries: string[] = []; // Track country for each coordinate
+		const coordinateLabels: string[] = []; // Track canonical label for each coordinate
 		let derivedCountry = country; // Start with country from articles data
 
-		for (const label of spatialLabels) {
+	for (const label of spatialLabels) {
 			const key = label.trim().toLowerCase();
 			const placeInfo = places.get(key);
 			if (placeInfo) {
 				coordinates.push(placeInfo.coords);
 				coordinateCountries.push(placeInfo.country || '');
+		coordinateLabels.push(placeInfo.name || label);
 				// If no country in articles data but we have it from places, use it
 				if (!derivedCountry && placeInfo.country) {
 					derivedCountry = placeInfo.country;
@@ -144,6 +147,7 @@ export async function loadStaticData(basePath = 'data'): Promise<LoadedData> {
 			for (let i = 0; i < coordinates.length; i++) {
 				const coord = coordinates[i];
 				const coordCountry = coordinateCountries[i] || derivedCountry;
+				const coordLabel = coordinateLabels[i];
 
 				const processed: ProcessedItem = {
 					id: `${id}-${i}`, // Unique ID per coordinate
@@ -156,7 +160,8 @@ export async function loadStaticData(basePath = 'data'): Promise<LoadedData> {
 					prefecture: null,
 					newspaperSource,
 					keywords,
-					spatial: spatialLabels
+					spatial: spatialLabels,
+					placeLabel: coordLabel
 				};
 
 				if (coordCountry) countriesSet.add(coordCountry);

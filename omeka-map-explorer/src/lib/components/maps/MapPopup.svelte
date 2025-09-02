@@ -9,6 +9,7 @@
 		count: number;
 		sample: ProcessedItem;
 		items: ProcessedItem[];
+		name?: string; // Canonical place label for this coordinate
 	}
 
 	interface Props {
@@ -44,11 +45,8 @@
 		return Array.from(places).sort();
 	});
 
-	// Get the primary place name (first alphabetically or most common)
-	const primaryPlace = $derived(() => {
-		const places = placeNames();
-		return places.length > 0 ? places[0] : 'Unknown Location';
-	});
+	// Determine display name: prefer canonical group.name, else first item's placeLabel, else fallback
+	const displayPlaceName = $derived(() => group.name || group.sample.placeLabel || (placeNames().length > 0 ? placeNames()[0] : 'Unknown Location'));
 
 	// Get unique countries and newspapers
 	const countries = $derived(() => {
@@ -92,7 +90,7 @@
 	<div class="border-b pb-3 mb-3">
 		<h3 class="font-semibold text-base text-foreground mb-2 flex items-center gap-2">
 			<MapPin class="h-4 w-4 text-primary" />
-			{primaryPlace()}
+			{displayPlaceName()}
 		</h3>
 		
 		<div class="flex items-start justify-between gap-2 mb-2">

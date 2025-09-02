@@ -30,6 +30,9 @@ export interface ProcessedItem {
 	newspaperSource: string;
 	keywords: string[];
 	spatial: string[]; // Spatial locations mentioned in the article
+	// Canonical label of the place corresponding to this item's coordinate (from locations.json)
+	// Present when coordinates are available; undefined otherwise
+	placeLabel?: string;
 }
 
 // Temporal data for timeline visualization

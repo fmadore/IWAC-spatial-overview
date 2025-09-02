@@ -233,7 +233,7 @@
 		// Only render bubbles when NOT in choropleth mode
 		else if (visibleData.length > 0) {
 			// Aggregate items by coordinate and add circle markers sized by count (much fewer markers)
-			const groups = new Map<string, { lat: number; lng: number; count: number; sample: any; items: any[] }>();
+	    const groups = new Map<string, { lat: number; lng: number; count: number; sample: any; items: any[]; name?: string }>();
 			for (const item of visibleData) {
 				if (!item.coordinates || item.coordinates.length === 0) continue;
 				const [lat, lng] = item.coordinates[0]; // Each item now has exactly one coordinate
@@ -243,8 +243,10 @@
 				if (existing) {
 					existing.count += 1;
 					existing.items.push(item);
+		    // Prefer keeping the first discovered name; if missing, backfill
+		    if (!existing.name && item.placeLabel) existing.name = item.placeLabel;
 				} else {
-					groups.set(key, { lat, lng, count: 1, sample: item, items: [item] });
+		    groups.set(key, { lat, lng, count: 1, sample: item, items: [item], name: item.placeLabel });
 				}
 			}
 
