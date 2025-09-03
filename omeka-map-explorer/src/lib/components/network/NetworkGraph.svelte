@@ -361,7 +361,11 @@
   }
 </script>
 
-<div bind:this={container} class="relative w-full min-h-[360px] h-[60vh] md:h-[72vh] rounded-md border bg-muted/40 overflow-hidden select-none">
+<div
+  bind:this={container}
+  class="relative w-full rounded-md border bg-muted/40 overflow-hidden select-none"
+  style="height: calc(100vh - var(--header-height) - 2rem)"
+>
   <canvas
     bind:this={canvas}
   class="absolute inset-0 touch-none select-none cursor-grab"
