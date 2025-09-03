@@ -1,0 +1,20 @@
+{
+  "nodes": [
+    { "id": "person:1", "type": "person", "label": "Sample Person", "count": 5 },
+    { "id": "organization:1", "type": "organization", "label": "Sample Org", "count": 3 },
+    { "id": "event:1", "type": "event", "label": "Sample Event", "count": 4 },
+    { "id": "location:1", "type": "location", "label": "Cotonou", "count": 8 },
+    { "id": "subject:1", "type": "subject", "label": "Trade", "count": 6 }
+  ],
+  "edges": [
+    { "source": "person:1", "target": "organization:1", "type": "person-org", "weight": 3, "articleIds": ["1001","1002","1003"] },
+    { "source": "event:1", "target": "location:1", "type": "event-location", "weight": 4, "articleIds": ["1002","1003","1004","1005"] },
+    { "source": "subject:1", "target": "event:1", "type": "subject-event", "weight": 2, "articleIds": ["1006","1007"] }
+  ],
+  "meta": {
+    "generatedAt": "2025-09-03T00:00:00.000Z",
+    "totalNodes": 5,
+    "totalEdges": 3,
+    "supportedTypes": ["person","organization","event","subject","location"]
+  }
+}

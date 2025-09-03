@@ -74,6 +74,17 @@ Data files expected by the app:
 - `omeka-map-explorer/static/data/entities/*.json` (persons, organizations, events, subjects)
 - `omeka-map-explorer/static/data/maps/world_countries.geojson` and regional files (e.g., Benin, Togo)
 
+### Network data (experimental)
+
+For the new Network view, the app expects a dataset at `omeka-map-explorer/static/data/networks/global.json`.
+You can generate a minimal placeholder with:
+
+```powershell
+python scripts/build_networks.py
+```
+
+This will produce a tiny graph just to exercise the UI. See `Roadmap.md` for the full data contract and future steps.
+
 ## What’s inside the app
 
 - Map (Leaflet) with optional choropleth by country and bubble visualization

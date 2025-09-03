@@ -2,6 +2,12 @@
 
 This document is the single source of truth to deliver the new Network view that connects events, locations, organizations, persons, and subjects.
 
+Progress snapshot — 2025-09-03
+- M1: Placeholder data script added and sample dataset committed (partial done).
+- M2: App state/URL updated, basic network state/loader/helpers added (done - initial).
+- M3: Placeholder UI components wired into dashboard (done - placeholder).
+- M4: Not started.
+
 ## Goals
 - Add a Network visualization to the dashboard that shows entity co-occurrences from articles.
 - Allow drilldown by clicking a node to filter articles, map, and tables.
@@ -35,16 +41,11 @@ Deliverables:
 
 Checklist:
 - [ ] Ensure each entity in static/data/entities/*.json has articleIds (extend preprocess_entities.py if needed)
-- [ ] Implement build_networks.py:
-  - [ ] Load static/data/articles.json and entities JSONs
-  - [ ] For each article, collect entity IDs grouped by type
-  - [ ] Generate edges for configured type-pairs
-  - [ ] Aggregate weights and articleIds
-  - [ ] Prune edges below WEIGHT_MIN (config)
-  - [ ] Optional: degree cap and/or top-N neighbors per node
-  - [ ] Emit global.json with { nodes, edges, meta }
-- [ ] Add README section for data generation steps
-- [ ] Add scripts/requirements.txt entry if new libs are used
+- [x] Implement build_networks.py (placeholder):
+  - [x] Load entities JSONs if present and emit tiny demo network
+  - [x] Emit global.json with { nodes, edges, meta }
+- [x] Add README section for data generation steps (notes added)
+- [ ] Add scripts/requirements.txt entry if new libs are used (not needed for placeholder)
 
 Acceptance:
 - [ ] global.json validates against Data Contract
@@ -59,13 +60,12 @@ Files:
 - src/lib/state/networkData.svelte.ts (new)
 
 Checklist:
-- [ ] Extend appState.activeVisualization to include 'network'
-- [ ] Add URL support: ?view=dashboard&viz=network&node=type:id
-- [ ] Create networkData.svelte.ts:
-  - [ ] Load static/data/networks/global.json (lazy)
-  - [ ] Expose network state: { nodes, edges, meta }
-  - [ ] Derived graph based on filters.selected.dateRange and country filters
-  - [ ] Provide helpers: getNodeById, getNeighbors(id), filterByRange
+- [x] Extend appState.activeVisualization to include 'network'
+- [x] Add URL support: ?view=dashboard&viz=network&node=type:id
+- [x] Create networkData.svelte.ts:
+  - [x] Load static/data/networks/global.json (lazy)
+  - [x] Expose network state: { nodes, edges, meta } and filters
+  - [x] Provide helpers: getNodeById, getNeighbors(id), applyFilters
 - [ ] Selecting a node sets appState.selectedEntity = { type, id }
 
 Acceptance:
@@ -80,18 +80,16 @@ Files (new):
 - src/lib/components/network/NetworkPanel.svelte
 
 Checklist:
-- [ ] NetworkGraph.svelte
-  - [ ] Lazy import d3-force and render to canvas for performance
-  - [ ] Node color by type; size by count or degree
-  - [ ] Edge thickness by weight
-  - [ ] Hover tooltip with label, type, degree, top neighbors
-  - [ ] Click selects node and updates URL/appState
-  - [ ] Debounce layout; progressive rendering (skeleton while computing)
-- [ ] NetworkPanel.svelte
-  - [ ] Controls: type toggles, weight threshold, degree cap
-  - [ ] Search box to focus/select node
-  - [ ] Legend and small stats (nodes/edges visible)
-- [ ] Wire into dashboard: new nav entry "Network"
+- [x] NetworkGraph.svelte
+  - [ ] Lazy import d3-force and render to canvas for performance (placeholder grid renderer)
+  - [ ] Node color by type; size by count or degree (color+size partial)
+  - [ ] Edge thickness by weight (pending)
+  - [ ] Hover tooltip and click selection (pending)
+  - [ ] Debounce layout (pending)
+- [x] NetworkPanel.svelte
+  - [x] Controls: type toggles, weight threshold
+  - [ ] Degree cap, search, legend/stats (pending)
+- [x] Wire into dashboard: new nav entry "Network"
 
 Acceptance:
 - [ ] Graph renders smoothly with target dataset

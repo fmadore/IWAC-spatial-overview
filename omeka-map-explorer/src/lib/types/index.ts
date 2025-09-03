@@ -73,3 +73,36 @@ export interface LocationEntity extends Entity {
 	country: string | null;
 	coordinatesRaw: string;
 }
+
+// Network types (for Network view)
+export type NetworkNodeType = 'person' | 'organization' | 'event' | 'subject' | 'location';
+
+export interface NetworkNode {
+	id: string;
+	type: NetworkNodeType;
+	label: string;
+	count: number;
+	degree?: number;
+	countryCounts?: Record<string, number>;
+}
+
+export interface NetworkEdge {
+	source: string; // node id
+	target: string; // node id
+	type?: string; // e.g., 'cooccurrence' | 'person-org' | 'event-location'
+	weight: number;
+	articleIds: string[];
+}
+
+export interface NetworkMeta {
+	generatedAt: string;
+	totalNodes: number;
+	totalEdges: number;
+	supportedTypes: NetworkNodeType[];
+}
+
+export interface NetworkData {
+	nodes: NetworkNode[];
+	edges: NetworkEdge[];
+	meta: NetworkMeta;
+}

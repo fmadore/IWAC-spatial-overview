@@ -20,6 +20,8 @@
 				return 'Events';
 			case 'subjects':
 				return 'Subjects';
+			case 'network':
+				return 'Network';
 			default:
 				return 'Dashboard';
 		}

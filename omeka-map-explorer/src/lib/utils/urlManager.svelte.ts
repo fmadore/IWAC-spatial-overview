@@ -14,7 +14,8 @@ type VisualizationType =
 	| 'organizations'
 	| 'events'
 	| 'subjects'
-	| 'locations';
+	| 'locations'
+	| 'network';
 
 // URL management for navigation state using search parameters
 export const urlManager = {
@@ -25,6 +26,7 @@ export const urlManager = {
 		const view = appState.activeView;
 		const viz = appState.activeVisualization;
 		const selectedEntity = appState.selectedEntity;
+	const networkNode = appState.networkNodeSelected;
 
 		// Create URL search parameters
 		const params = new URLSearchParams();
@@ -45,6 +47,11 @@ export const urlManager = {
 			params.set('entityId', selectedEntity.id);
 		}
 
+		// Add network node selection if present (node=type:id)
+		if (networkNode?.id) {
+			params.set('node', networkNode.id);
+		}
+
 		// Build the URL with proper base path
 		const paramString = params.toString();
 		const url = paramString ? `${base}/?${paramString}` : `${base}/`;
@@ -61,6 +68,7 @@ export const urlManager = {
 		const viz = searchParams.get('viz') as VisualizationType;
 		const entityType = searchParams.get('entityType');
 		const entityId = searchParams.get('entityId');
+        const nodeParam = searchParams.get('node');
 
 		// Set view - default to dashboard
 		if (view && ['dashboard', 'map', 'list', 'stats'].includes(view)) {
@@ -72,7 +80,7 @@ export const urlManager = {
 		// Set visualization - default to overview
 		if (
 			viz &&
-			['overview', 'byCountry', 'persons', 'organizations', 'events', 'subjects', 'locations'].includes(viz)
+			['overview', 'byCountry', 'persons', 'organizations', 'events', 'subjects', 'locations', 'network'].includes(viz)
 		) {
 			appState.activeVisualization = viz;
 
@@ -82,6 +90,13 @@ export const urlManager = {
 			}
 		} else {
 			appState.activeVisualization = 'overview';
+		}
+
+		// Handle network node selection from URL (node=type:id or plain id)
+		if (nodeParam) {
+			appState.networkNodeSelected = { id: nodeParam };
+		} else {
+			appState.networkNodeSelected = null;
 		}
 
 		// Handle entity selection from URL

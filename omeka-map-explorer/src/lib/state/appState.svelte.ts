@@ -15,7 +15,8 @@ interface AppState {
 		| 'organizations'
 		| 'events'
 		| 'subjects'
-		| 'locations';
+		| 'locations'
+		| 'network';
 	// Selected entity for filtering
 	selectedEntity: {
 		type: string;
@@ -23,6 +24,10 @@ interface AppState {
 		name: string;
 		relatedArticleIds: string[];
 	} | null;
+
+	// Network view state
+	networkNodeSelected?: { id: string } | null;
+	networkLoaded?: boolean;
 }
 
 export const appState = $state<AppState>({
@@ -33,7 +38,9 @@ export const appState = $state<AppState>({
 	sidebarOpen: true,
 	selectedItem: null,
 	activeVisualization: 'overview',
-	selectedEntity: null
+	selectedEntity: null,
+	networkNodeSelected: null,
+	networkLoaded: false
 });
 
 export function setError(message: string) {

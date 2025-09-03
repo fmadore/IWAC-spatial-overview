@@ -1,6 +1,6 @@
 # Omeka Map Explorer (SvelteKit)
 
-Interactive SvelteKit app to visualize newspaper article locations from an Omeka S collection. It features a Leaflet map (with optional choropleth), a D3 timeline with playback, and filters for country and year range.
+Interactive SvelteKit app to visualize newspaper article locations from an Omeka S collection. It features a Leaflet map (with optional choropleth), a D3 timeline with playback, filters for country and year range, and a Network view for entity co-occurrences.
 
 ## Tech stack
 
@@ -8,6 +8,7 @@ Interactive SvelteKit app to visualize newspaper article locations from an Omeka
 - Tailwind CSS v4
 - Leaflet for maps
 - D3 (selection/scale/axis/shape/time) for the timeline
+- Network (in progress): canvas-based placeholder with controls; data from static/data/networks/global.json
 - Vitest and Playwright for tests
 
 ## App structure
@@ -43,6 +44,11 @@ npm run lint           # prettier --check
 npm test               # e2e + unit
 npm run test:unit      # unit tests only
 npm run test:e2e       # Playwright tests
+
+# Network data (optional dev placeholder)
+# Run from repo root Python to generate a tiny network dataset
+#
+# python scripts/build_networks.py
 ```
 
 ## Data inputs

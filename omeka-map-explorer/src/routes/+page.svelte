@@ -29,6 +29,9 @@
 		LocationsVisualization
 	} from '$lib/components/entities';
 	import { getVisibleData } from '$lib/state/derived.svelte';
+	import { networkState, loadNetwork, applyFilters } from '$lib/state/networkData.svelte';
+	import NetworkGraph from '$lib/components/network/NetworkGraph.svelte';
+	import NetworkPanel from '$lib/components/network/NetworkPanel.svelte';
 
 	// Configuration
 	const countryItemSets: Record<string, number[]> = {
@@ -168,6 +171,11 @@
 					restoreEntitySelection();
 				});
 			}
+			if (viz === 'network') {
+				loadNetwork('data').then(() => {
+					applyFilters();
+				});
+			}
 		}
 	});
 
@@ -235,6 +243,17 @@
 				<SubjectsVisualization />
 			{:else if appState.activeVisualization === 'locations'}
 				<LocationsVisualization />
+			{:else if appState.activeVisualization === 'network'}
+				<div class="flex flex-col gap-4 py-4 md:gap-6 md:py-6 px-4 lg:px-6">
+					<div class="grid gap-4 md:grid-cols-4">
+						<div class="md:col-span-1">
+							<NetworkPanel />
+						</div>
+						<div class="md:col-span-3">
+							<NetworkGraph data={networkState.filtered} />
+						</div>
+					</div>
+				</div>
 			{:else}
 				<!-- Other visualizations placeholder -->
 				<div class="flex flex-col gap-4 py-4 md:gap-6 md:py-6">
