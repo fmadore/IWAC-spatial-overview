@@ -168,17 +168,20 @@ export function initializeUrlManager() {
 	let previousView = appState.activeView;
 	let previousViz = appState.activeVisualization;
 	let previousEntity = appState.selectedEntity;
+	let previousNode = appState.networkNodeSelected;
 
 	function checkForChanges() {
 		if (
 			appState.activeView !== previousView ||
 			appState.activeVisualization !== previousViz ||
-			appState.selectedEntity !== previousEntity
+			appState.selectedEntity !== previousEntity ||
+			appState.networkNodeSelected !== previousNode
 		) {
 			urlManager.updateUrl();
 			previousView = appState.activeView;
 			previousViz = appState.activeVisualization;
 			previousEntity = appState.selectedEntity;
+			previousNode = appState.networkNodeSelected;
 		}
 		requestAnimationFrame(checkForChanges);
 	}
