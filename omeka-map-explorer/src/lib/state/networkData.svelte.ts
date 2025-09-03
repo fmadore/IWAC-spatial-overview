@@ -59,10 +59,26 @@ export function applyFilters() {
   if (!data) return;
   const enabled = networkState.typesEnabled;
   const wmin = networkState.weightMin;
-  const nodes = data.nodes.filter((n) => enabled[n.type]);
-  const nodeSet = new Set(nodes.map((n) => n.id));
-  const edges = data.edges.filter(
+  let nodes = data.nodes.filter((n) => enabled[n.type]);
+  let nodeSet = new Set(nodes.map((n) => n.id));
+  let edges = data.edges.filter(
     (e) => e.weight >= wmin && nodeSet.has(e.source) && nodeSet.has(e.target)
   );
+
+  // Degree cap (optional)
+  if (networkState.degreeCap && networkState.degreeCap > 0) {
+    const degree = new Map<string, number>();
+    for (const e of edges) {
+      degree.set(e.source, (degree.get(e.source) ?? 0) + 1);
+      degree.set(e.target, (degree.get(e.target) ?? 0) + 1);
+    }
+    const capped = new Set(
+      [...degree.entries()].filter(([, d]) => d <= networkState.degreeCap!).map(([id]) => id)
+    );
+    nodes = nodes.filter((n) => capped.has(n.id));
+    nodeSet = new Set(nodes.map((n) => n.id));
+    edges = edges.filter((e) => nodeSet.has(e.source) && nodeSet.has(e.target));
+  }
+
   networkState.filtered = { nodes, edges, meta: data.meta };
 }
