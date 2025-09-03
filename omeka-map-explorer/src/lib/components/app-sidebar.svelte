@@ -9,6 +9,7 @@
 	import { Home, Globe2, Users, Building2, CalendarRange, Tags, MapPin, Share2 } from '@lucide/svelte';
 	import CountryFilter from '$lib/components/filters/CountryFilter.svelte';
 	import YearRangeFilter from '$lib/components/filters/YearRangeFilter.svelte';
+	import NetworkPanel from '$lib/components/network/NetworkPanel.svelte';
 
 	let { variant = 'inset' } = $props<{ variant?: 'floating' | 'inset' }>();
 
@@ -77,6 +78,15 @@
 			<Sidebar.Group>
 				<Sidebar.GroupContent>
 					<YearRangeFilter range={filters.available.dateRange} />
+				</Sidebar.GroupContent>
+			</Sidebar.Group>
+		{:else if appState.activeVisualization === 'network'}
+			<Sidebar.Separator />
+
+			<Sidebar.Group>
+				<Sidebar.GroupLabel>Network</Sidebar.GroupLabel>
+				<Sidebar.GroupContent>
+					<NetworkPanel />
 				</Sidebar.GroupContent>
 			</Sidebar.Group>
 		{/if}

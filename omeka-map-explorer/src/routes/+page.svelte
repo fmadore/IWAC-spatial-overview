@@ -245,14 +245,7 @@
 				<LocationsVisualization />
 			{:else if appState.activeVisualization === 'network'}
 				<div class="flex flex-col gap-4 py-4 md:gap-6 md:py-6 px-4 lg:px-6">
-					<div class="grid gap-4 md:grid-cols-4">
-						<div class="md:col-span-1">
-							<NetworkPanel />
-						</div>
-						<div class="md:col-span-3">
-							<NetworkGraph data={networkState.filtered} />
-						</div>
-					</div>
+					<NetworkGraph data={networkState.filtered} />
 				</div>
 			{:else}
 				<!-- Other visualizations placeholder -->
