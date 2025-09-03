@@ -22,7 +22,7 @@
   }
 </script>
 
-<Card>
+<Card class="w-full">
   <CardHeader>
     <CardTitle>Network Controls</CardTitle>
   </CardHeader>
@@ -54,7 +54,8 @@
         Visible nodes: {networkState.filtered?.nodes.length ?? 0}
         • edges: {networkState.filtered?.edges.length ?? 0}
       </div>
-      <div class="flex gap-3 items-center">
+      <!-- Wrap legend items so they don't overflow the card width -->
+      <div class="flex flex-wrap gap-3 items-center">
         <span class="inline-flex items-center gap-1"><span class="inline-block w-3 h-3 rounded-full" style="background:#2563eb"></span>Person</span>
         <span class="inline-flex items-center gap-1"><span class="inline-block w-3 h-3 rounded-full" style="background:#7c3aed"></span>Org</span>
         <span class="inline-flex items-center gap-1"><span class="inline-block w-3 h-3 rounded-full" style="background:#059669"></span>Event</span>
