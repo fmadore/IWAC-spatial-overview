@@ -102,6 +102,8 @@
   onMount(() => {
     const ro = new ResizeObserver(() => resizeCanvas());
     if (container) ro.observe(container);
+  // Initialize canvas size immediately so interactions work before ResizeObserver fires
+  resizeCanvas();
     // Lazy import force
     (async () => {
       const mod = await import('d3-force').catch(() => null);
@@ -132,9 +134,10 @@
     if (needsDraw) return;
     needsDraw = true;
     requestAnimationFrame(() => {
-      needsDraw = false;
-      updateHoverPosition();
-      draw();
+  // draw one frame and allow scheduling of the next one
+  updateHoverPosition();
+  draw();
+  needsDraw = false;
     });
   }
 
@@ -150,8 +153,11 @@
   function initLayout() {
     const d = (data ?? networkState.filtered ?? networkState.data) as NetworkData | null;
     if (!d || !canvas) return;
-    if (!container) return;
-    const { width, height } = canvas;
+  if (!container) return;
+  // Use CSS pixel size for logical coordinates; canvas is scaled via DPR transform
+  const rect = container.getBoundingClientRect();
+  const width = rect.width;
+  const height = rect.height;
 
     // Seed positions to a circle/grid if none
     d.nodes.forEach((n, i) => {
@@ -198,6 +204,41 @@
       });
   }
 
+  function centerOnNode(id: string, zoom = 1.6) {
+    if (!canvas || !container) return;
+    const p = positions.get(id);
+    if (!p) return;
+    const rect = container.getBoundingClientRect();
+    const cx = rect.width / 2;
+    const cy = rect.height / 2;
+    k = clamp(zoom, kMin, kMax);
+    tx = cx - p.x * k;
+    ty = cy - p.y * k;
+    updateHoverPosition();
+    scheduleDraw();
+  }
+
+  // Focus when a node is selected via URL/panel
+  $effect(() => {
+    const id = appState.networkNodeSelected?.id;
+    if (!id) return;
+    // If the layout hasn't positioned this node yet, wait briefly
+    if (positions.has(id)) {
+      centerOnNode(id);
+      return;
+    }
+    let tries = 0;
+    const handle = setInterval(() => {
+      tries += 1;
+      if (positions.has(id)) {
+        centerOnNode(id);
+        clearInterval(handle);
+      } else if (tries > 60) {
+        clearInterval(handle);
+      }
+    }, 50);
+  });
+
   function handleClick(e: MouseEvent) {
     const rect = canvas.getBoundingClientRect();
     const x = e.clientX - rect.left;
@@ -243,8 +284,12 @@
   }
 
   function onPointerDown(ev: PointerEvent) {
+  // only react to primary button
+  if (ev.button !== 0) return;
+  ev.preventDefault();
     (ev.target as HTMLElement).setPointerCapture?.(ev.pointerId);
     isDragging = true;
+  if (canvas) canvas.style.cursor = 'grabbing';
     dragStartX = ev.clientX;
     dragStartY = ev.clientY;
     dragStartTx = tx;
@@ -252,6 +297,8 @@
   }
 
   function onPointerMove(ev: PointerEvent) {
+  // prevent page scroll while panning on some browsers
+  if (isDragging) ev.preventDefault();
     const rect = canvas.getBoundingClientRect();
     const mx = ev.clientX - rect.left;
     const my = ev.clientY - rect.top;
@@ -264,6 +311,7 @@
 
   function onPointerUp(ev: PointerEvent) {
     isDragging = false;
+  if (canvas) canvas.style.cursor = hovering.id ? 'pointer' : 'default';
   }
 
   function onWheel(ev: WheelEvent) {
@@ -313,16 +361,18 @@
   }
 </script>
 
-<div bind:this={container} class="relative w-full h-[500px] rounded-md border bg-muted/40 overflow-hidden">
+<div bind:this={container} class="relative w-full min-h-[360px] h-[60vh] md:h-[72vh] rounded-md border bg-muted/40 overflow-hidden select-none">
   <canvas
     bind:this={canvas}
-    class="absolute inset-0"
+  class="absolute inset-0 touch-none select-none cursor-grab"
     onclick={handleClick}
     onpointerdown={onPointerDown}
     onpointermove={onPointerMove}
     onpointerup={onPointerUp}
-    onpointerleave={onPointerUp}
+  onpointercancel={onPointerUp}
+  onpointerleave={onPointerUp}
     onwheel={onWheel}
+  oncontextmenu={(e) => e.preventDefault()}
   ></canvas>
   {#if hovering.id}
     <div

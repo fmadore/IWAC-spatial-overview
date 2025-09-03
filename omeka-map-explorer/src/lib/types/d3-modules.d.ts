@@ -6,3 +6,4 @@ declare module 'd3-shape';
 declare module 'd3-time';
 declare module 'd3-time-format';
 declare module 'd3-force';
+declare module 'd3-array';
