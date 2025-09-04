@@ -84,11 +84,13 @@
 
 	function clearSelection() {
 		selectedEntityId = null;
+		searchValue = '';
+		open = false;
 		if (onClear) {
 			onClear();
 		} else {
 			appState.selectedEntity = null;
-			urlManager.updateUrl();
+			urlManager.updateUrl({ immediate: true });
 		}
 	}
 </script>
@@ -120,23 +122,28 @@
 		<Popover.Content class="w-[400px] p-0">
 			<Command.Root>
 				<Command.Input bind:value={searchValue} placeholder={`Search ${displayType}s...`} />
-				<Command.Empty>No {displayType} found.</Command.Empty>
-				<Command.Group>
-					{#each filteredEntities as entity}
-						<Command.Item value={entity.name} onSelect={() => selectEntity(entity)}>
-							<Check
-								class={cn(
-									'mr-2 h-4 w-4',
-									selectedEntityId === entity.id ? 'opacity-100' : 'opacity-0'
-								)}
-							/>
-							{entity.name}
-							<span class="ml-auto text-xs text-muted-foreground">
-								{entity.articleCount ?? entity.relatedArticleIds.length} articles
-							</span>
-						</Command.Item>
-					{/each}
-				</Command.Group>
+				<Command.List>
+					{#if filteredEntities.length === 0}
+						<div class="p-4 text-sm text-muted-foreground">No {displayType} found.</div>
+					{:else}
+						<Command.Group>
+							{#each filteredEntities as entity}
+								<Command.Item value={entity.name} onSelect={() => selectEntity(entity)}>
+									<Check
+										class={cn(
+											'mr-2 h-4 w-4',
+											selectedEntityId === entity.id ? 'opacity-100' : 'opacity-0'
+										)}
+									/>
+									{entity.name}
+									<span class="ml-auto text-xs text-muted-foreground">
+										{entity.articleCount ?? entity.relatedArticleIds.length} articles
+									</span>
+								</Command.Item>
+							{/each}
+						</Command.Group>
+					{/if}
+				</Command.List>
 			</Command.Root>
 		</Popover.Content>
 	</Popover.Root>

@@ -32,10 +32,9 @@
 		clearFilters();
 		appState.selectedEntity = null;
 		appState.networkNodeSelected = null;
-		
-		if (item.view) appState.activeView = item.view;
-		appState.activeVisualization = item.id;
-		urlManager.updateUrl();
+
+		// Use centralized navigator to update state + URL immediately
+		urlManager.navigateTo(item.view ?? 'dashboard', item.id);
 	}
 </script>
 

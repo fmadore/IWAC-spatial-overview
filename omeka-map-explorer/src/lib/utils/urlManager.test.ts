@@ -28,6 +28,24 @@ describe('URL Manager', () => {
 		hoisted.goto.mockClear();
 	});
 
+	test('navigateTo excludes entity params when going to overview', () => {
+		// Start from an entity-selected state
+		appState.activeView = 'dashboard';
+		appState.activeVisualization = 'persons';
+		appState.selectedEntity = { type: 'Personnes', id: '123', name: 'Alice', relatedArticleIds: [] };
+
+		// Navigate to overview using the helper (should update immediately)
+		urlManager.navigateTo('dashboard', 'overview');
+
+		const calls = hoisted.goto.mock.calls.map((c) => c[0] as string);
+		const last = calls[calls.length - 1];
+		expect(last).toMatch(/\/IWAC-spatial-overview\/?(\?|$)/);
+		expect(last).not.toContain('entityType=');
+		expect(last).not.toContain('entityId=');
+		// And state should reflect overview
+		expect(appState.activeVisualization).toBe('overview');
+	});
+
 	test('parse empty params -> dashboard/overview', () => {
 		urlManager.parseUrlAndUpdateState(new URLSearchParams());
 		expect(appState.activeView).toBe('dashboard');

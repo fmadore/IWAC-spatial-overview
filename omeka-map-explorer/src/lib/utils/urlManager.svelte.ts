@@ -61,12 +61,25 @@ export const urlManager = {
 	},
 
 	// Update URL based on current state
-	updateUrl() {
+	updateUrl(options?: { immediate?: boolean }) {
 		if (!browser) return;
 
 		const url = this._buildUrlFromState();
 		// Avoid redundant updates
 		if (url === this._lastUrl && !this._pending) return;
+
+		// For explicit navigations (switching tabs/views), update immediately to avoid UI lag
+		if (options?.immediate) {
+			if (this._pending) {
+				clearTimeout(this._pending);
+				this._pending = 0;
+			}
+			this._lastUrl = url;
+			goto(this._lastUrl, { replaceState: true, noScroll: true });
+			return;
+		}
+
+		// Otherwise use a small debounce to coalesce rapid state changes
 		this._pendingUrl = url;
 		if (this._pending) {
 			clearTimeout(this._pending);
@@ -181,7 +194,7 @@ export const urlManager = {
 				relatedArticleIds: [] // Will be filled when entity data loads
 			};
 		}
-		this.updateUrl();
+		this.updateUrl({ immediate: true });
 	}
 };
 
