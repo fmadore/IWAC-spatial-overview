@@ -1,19 +1,48 @@
 <script lang="ts">
-  import { Card, CardContent, CardHeader, CardTitle } from '$lib/components/ui/card';
+  import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '$lib/components/ui/card';
+  import { Card as CardRoot } from '$lib/components/ui/card';
+  import { default as Button } from '$lib/components/ui/button/button.svelte';
   import { mapData } from '$lib/state/mapData.svelte';
   import { appState } from '$lib/state/appState.svelte';
   import { urlManager } from '$lib/utils/urlManager.svelte';
 
-  // Helper to get top N by articleCount safely
-  function topN<T extends { articleCount?: number }>(arr: T[] | undefined, n = 5): T[] {
-    if (!Array.isArray(arr) || arr.length === 0) return [];
-    return [...arr].sort((a, b) => (b?.articleCount || 0) - (a?.articleCount || 0)).slice(0, n);
-  }
+  // Sorted collections by articleCount desc
+  const personsSorted = $derived.by(() => (mapData.persons ?? []).slice().sort((a, b) => (b?.articleCount || 0) - (a?.articleCount || 0)));
+  const organizationsSorted = $derived.by(() => (mapData.organizations ?? []).slice().sort((a, b) => (b?.articleCount || 0) - (a?.articleCount || 0)));
+  const eventsSorted = $derived.by(() => (mapData.events ?? []).slice().sort((a, b) => (b?.articleCount || 0) - (a?.articleCount || 0)));
+  const subjectsSorted = $derived.by(() => (mapData.subjects ?? []).slice().sort((a, b) => (b?.articleCount || 0) - (a?.articleCount || 0)));
 
-  const topPersons = $derived.by(() => topN(mapData.persons, 5));
-  const topOrganizations = $derived.by(() => topN(mapData.organizations, 5));
-  const topEvents = $derived.by(() => topN(mapData.events, 5));
-  const topSubjects = $derived.by(() => topN(mapData.subjects, 5));
+  // Pagination state per card
+  const PAGE_SIZE = 6;
+  let personsPage = $state(1);
+  let organizationsPage = $state(1);
+  let eventsPage = $state(1);
+  let subjectsPage = $state(1);
+
+  // Total pages and current slice per card
+  const personsTotalPages = $derived.by(() => Math.max(1, Math.ceil(personsSorted.length / PAGE_SIZE)));
+  const organizationsTotalPages = $derived.by(() => Math.max(1, Math.ceil(organizationsSorted.length / PAGE_SIZE)));
+  const eventsTotalPages = $derived.by(() => Math.max(1, Math.ceil(eventsSorted.length / PAGE_SIZE)));
+  const subjectsTotalPages = $derived.by(() => Math.max(1, Math.ceil(subjectsSorted.length / PAGE_SIZE)));
+
+  const personsPageItems = $derived.by(() => personsSorted.slice((personsPage - 1) * PAGE_SIZE, personsPage * PAGE_SIZE));
+  const organizationsPageItems = $derived.by(() => organizationsSorted.slice((organizationsPage - 1) * PAGE_SIZE, organizationsPage * PAGE_SIZE));
+  const eventsPageItems = $derived.by(() => eventsSorted.slice((eventsPage - 1) * PAGE_SIZE, eventsPage * PAGE_SIZE));
+  const subjectsPageItems = $derived.by(() => subjectsSorted.slice((subjectsPage - 1) * PAGE_SIZE, subjectsPage * PAGE_SIZE));
+
+  // Clamp pages when data changes
+  $effect(() => {
+    if (personsPage > personsTotalPages) personsPage = 1;
+  });
+  $effect(() => {
+    if (organizationsPage > organizationsTotalPages) organizationsPage = 1;
+  });
+  $effect(() => {
+    if (eventsPage > eventsTotalPages) eventsPage = 1;
+  });
+  $effect(() => {
+    if (subjectsPage > subjectsTotalPages) subjectsPage = 1;
+  });
 
   // Locale-aware formatter for consistency with KpiCards
   const nf = new Intl.NumberFormat('fr-FR');
@@ -59,7 +88,7 @@
       </CardTitle>
     </CardHeader>
     <CardContent class="space-y-1">
-      {#each topPersons as person}
+      {#each personsPageItems as person}
         <button
           class="flex items-center justify-between w-full px-2 py-1 text-xs rounded hover:bg-muted transition-colors text-left group"
           onclick={() => navigateToEntity('persons', person)}
@@ -69,10 +98,17 @@
           <span class="text-muted-foreground ml-2 flex-shrink-0 text-xs">{formatCount(person.articleCount)}</span>
         </button>
       {/each}
-      {#if topPersons.length === 0}
+      {#if personsSorted.length === 0}
         <div class="text-xs text-muted-foreground p-2 text-center">No persons data</div>
       {/if}
     </CardContent>
+    <CardFooter class="pt-0">
+      <div class="flex items-center justify-between w-full gap-2">
+        <Button variant="outline" size="sm" disabled={personsPage === 1} onclick={() => (personsPage = personsPage - 1)}>Prev</Button>
+        <span class="text-xs text-muted-foreground">Page {personsPage} / {personsTotalPages}</span>
+        <Button variant="outline" size="sm" disabled={personsPage === personsTotalPages} onclick={() => (personsPage = personsPage + 1)}>Next</Button>
+      </div>
+    </CardFooter>
   </Card>
 
   <!-- Organizations -->
@@ -84,7 +120,7 @@
       </CardTitle>
     </CardHeader>
     <CardContent class="space-y-1">
-      {#each topOrganizations as organization}
+      {#each organizationsPageItems as organization}
         <button
           class="flex items-center justify-between w-full px-2 py-1 text-xs rounded hover:bg-muted transition-colors text-left group"
           onclick={() => navigateToEntity('organizations', organization)}
@@ -94,10 +130,17 @@
           <span class="text-muted-foreground ml-2 flex-shrink-0 text-xs">{formatCount(organization.articleCount)}</span>
         </button>
       {/each}
-      {#if topOrganizations.length === 0}
+      {#if organizationsSorted.length === 0}
         <div class="text-xs text-muted-foreground p-2 text-center">No organizations data</div>
       {/if}
     </CardContent>
+    <CardFooter class="pt-0">
+      <div class="flex items-center justify-between w-full gap-2">
+        <Button variant="outline" size="sm" disabled={organizationsPage === 1} onclick={() => (organizationsPage = organizationsPage - 1)}>Prev</Button>
+        <span class="text-xs text-muted-foreground">Page {organizationsPage} / {organizationsTotalPages}</span>
+        <Button variant="outline" size="sm" disabled={organizationsPage === organizationsTotalPages} onclick={() => (organizationsPage = organizationsPage + 1)}>Next</Button>
+      </div>
+    </CardFooter>
   </Card>
 
   <!-- Events -->
@@ -109,7 +152,7 @@
       </CardTitle>
     </CardHeader>
     <CardContent class="space-y-1">
-      {#each topEvents as event}
+      {#each eventsPageItems as event}
         <button
           class="flex items-center justify-between w-full px-2 py-1 text-xs rounded hover:bg-muted transition-colors text-left group"
           onclick={() => navigateToEntity('events', event)}
@@ -119,10 +162,17 @@
           <span class="text-muted-foreground ml-2 flex-shrink-0 text-xs">{formatCount(event.articleCount)}</span>
         </button>
       {/each}
-      {#if topEvents.length === 0}
+      {#if eventsSorted.length === 0}
         <div class="text-xs text-muted-foreground p-2 text-center">No events data</div>
       {/if}
     </CardContent>
+    <CardFooter class="pt-0">
+      <div class="flex items-center justify-between w-full gap-2">
+        <Button variant="outline" size="sm" disabled={eventsPage === 1} onclick={() => (eventsPage = eventsPage - 1)}>Prev</Button>
+        <span class="text-xs text-muted-foreground">Page {eventsPage} / {eventsTotalPages}</span>
+        <Button variant="outline" size="sm" disabled={eventsPage === eventsTotalPages} onclick={() => (eventsPage = eventsPage + 1)}>Next</Button>
+      </div>
+    </CardFooter>
   </Card>
 
   <!-- Subjects -->
@@ -134,7 +184,7 @@
       </CardTitle>
     </CardHeader>
     <CardContent class="space-y-1">
-      {#each topSubjects as subject}
+      {#each subjectsPageItems as subject}
         <button
           class="flex items-center justify-between w-full px-2 py-1 text-xs rounded hover:bg-muted transition-colors text-left group"
           onclick={() => navigateToEntity('subjects', subject)}
@@ -144,9 +194,16 @@
           <span class="text-muted-foreground ml-2 flex-shrink-0 text-xs">{formatCount(subject.articleCount)}</span>
         </button>
       {/each}
-      {#if topSubjects.length === 0}
+      {#if subjectsSorted.length === 0}
         <div class="text-xs text-muted-foreground p-2 text-center">No subjects data</div>
       {/if}
     </CardContent>
+    <CardFooter class="pt-0">
+      <div class="flex items-center justify-between w-full gap-2">
+        <Button variant="outline" size="sm" disabled={subjectsPage === 1} onclick={() => (subjectsPage = subjectsPage - 1)}>Prev</Button>
+        <span class="text-xs text-muted-foreground">Page {subjectsPage} / {subjectsTotalPages}</span>
+        <Button variant="outline" size="sm" disabled={subjectsPage === subjectsTotalPages} onclick={() => (subjectsPage = subjectsPage + 1)}>Next</Button>
+      </div>
+    </CardFooter>
   </Card>
 </div>
