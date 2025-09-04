@@ -2,10 +2,10 @@
 
 This document is the single source of truth to deliver the new Network view that connects events, locations, organizations, persons, and subjects.
 
-Progress snapshot — 2025-09-03
+Progress snapshot — 2025-09-04
 - M1: Placeholder data script added and sample dataset committed (partial done).
-- M2: App state/URL updated, basic network state/loader/helpers added (done - initial).
-- M3: Placeholder UI components wired into dashboard (done - placeholder).
+- M2: URL deep-linking and node selection hooked up; URL updates debounced to prevent flooding (done).
+- M3: Canvas graph with d3-force, weighted edges, hover/click selection, and draw throttling (done, tuning ongoing).
 - M4: Not started.
 
 ## Goals
@@ -66,10 +66,10 @@ Checklist:
   - [x] Load static/data/networks/global.json (lazy)
   - [x] Expose network state: { nodes, edges, meta } and filters
   - [x] Provide helpers: getNodeById, getNeighbors(id), applyFilters
-- [ ] Selecting a node sets appState.selectedEntity = { type, id }
+- [x] Selecting a node sets appState.selectedEntity = { type, id }
 
 Acceptance:
-- [ ] Deep-link opens Network view and focuses selected node if provided
+- [x] Deep-link opens Network view and focuses selected node if provided
 - [ ] Changing timeline or country filter updates derived network slices
 
 ### M3 — UI Components (Network View)
@@ -81,14 +81,16 @@ Files (new):
 
 Checklist:
 - [x] NetworkGraph.svelte
-  - [ ] Lazy import d3-force and render to canvas for performance (placeholder grid renderer)
-  - [ ] Node color by type; size by count or degree (color+size partial)
-  - [ ] Edge thickness by weight (pending)
-  - [ ] Hover tooltip and click selection (pending)
-  - [ ] Debounce layout (pending)
+  - [x] Lazy import d3-force and render to canvas for performance
+  - [x] Node color by type; size by count or degree
+  - [x] Edge thickness by weight
+  - [x] Hover tooltip and click selection
+  - [x] Draw throttling to reduce jank (layout kept, drawing throttled)
 - [x] NetworkPanel.svelte
   - [x] Controls: type toggles, weight threshold
-  - [ ] Degree cap, search, legend/stats (pending)
+  - [x] Degree cap
+  - [x] Legend/stats
+  - [ ] Search
 - [x] Wire into dashboard: new nav entry "Network"
 
 Acceptance:
@@ -125,7 +127,7 @@ Acceptance:
 ## Risks & Mitigations
 - Large graphs cause slowdowns → switch to Graphology + Sigma.js (v1.5), pre-prune, lazy load
 - Sparse articleIds on entities → fix in preprocess_entities.py
-- URL sync edge cases → add unit tests for urlManager
+- URL sync edge cases → added debounced URL updates to avoid history.replaceState flooding; add unit tests for urlManager
 
 ## Nice-to-haves (v1.5+)
 - Community detection (Louvain) precomputed in Python
