@@ -202,7 +202,8 @@ We now have a shadcn-svelte "dashboard with sidebar" scaffold to host multiple v
 - New components:
 	- `src/lib/components/app-sidebar.svelte`: Sidebar navigation to switch visualizations
 	- `src/lib/components/site-header.svelte`: Sticky header for the dashboard inset
-	- `src/lib/components/section-cards.svelte`: KPI cards (articles, countries, time span)
+	- `src/lib/components/overview/Overview.svelte`: Composes overview blocks
+	- `src/lib/components/overview/KpiCards.svelte`: KPI cards (articles, countries, time span; locale-formatted numbers)
 	- `src/lib/components/chart-area-interactive.svelte`: Placeholder card for future charts
 	- `src/lib/components/data-table.svelte`: Simple data table of sample records
 
@@ -250,7 +251,8 @@ We now have a shadcn-svelte “dashboard with sidebar” scaffold to host multip
 - New components:
 	- `src/lib/components/app-sidebar.svelte`: Sidebar navigation to switch visualizations
 	- `src/lib/components/site-header.svelte`: Sticky header for the dashboard inset
-	- `src/lib/components/section-cards.svelte`: KPI cards (articles, countries, time span)
+	- `src/lib/components/overview/Overview.svelte`: Composes overview blocks
+	- `src/lib/components/overview/KpiCards.svelte`: KPI cards (articles, countries, time span; locale-formatted numbers)
 	- `src/lib/components/chart-area-interactive.svelte`: Placeholder card for future charts
 	- `src/lib/components/data-table.svelte`: Simple data table of sample records
 
