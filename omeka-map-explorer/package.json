@@ -14,8 +14,9 @@
 		"lint": "prettier --check .",
 		"build:data:networks": "pwsh -NoLogo -NoProfile -Command if (Get-Command py -ErrorAction SilentlyContinue) { py -3 ../scripts/build_networks.py } elseif (Get-Command python -ErrorAction SilentlyContinue) { python ../scripts/build_networks.py } else { Write-Error 'Python not found. Install Python 3.x or ensure py/python is on PATH.' }",
 		"test:e2e": "playwright test",
-		"test": "npm run test:e2e && npm run test:unit -- --run",
-		"test:unit": "vitest"
+		"test": "npm run test:unit -- --run",
+		"test:unit": "vitest",
+		"test:ci": "vitest --run"
 	},
 	"devDependencies": {
 		"@internationalized/date": "^3.8.2",
