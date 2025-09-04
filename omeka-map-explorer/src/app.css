@@ -118,4 +118,15 @@
 	body {
 		@apply bg-background text-foreground;
 	}
+
+	/* Ensure interactive elements show appropriate cursors */
+	button,
+	[role="button"],
+	.clickable {
+		cursor: pointer;
+	}
+	button:disabled,
+	[aria-disabled="true"] {
+		cursor: not-allowed;
+	}
 }
