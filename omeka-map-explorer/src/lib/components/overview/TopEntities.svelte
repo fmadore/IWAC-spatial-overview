@@ -1,7 +1,7 @@
 <script lang="ts">
   import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '$lib/components/ui/card';
-  import { Card as CardRoot } from '$lib/components/ui/card';
   import { default as Button } from '$lib/components/ui/button/button.svelte';
+  import { Input } from '$lib/components/ui/input';
   import { mapData } from '$lib/state/mapData.svelte';
   import { appState } from '$lib/state/appState.svelte';
   import { urlManager } from '$lib/utils/urlManager.svelte';
@@ -19,6 +19,12 @@
   let eventsPage = $state(1);
   let subjectsPage = $state(1);
 
+  // Input mirrors for page fields
+  let personsPageStr = $state('1');
+  let organizationsPageStr = $state('1');
+  let eventsPageStr = $state('1');
+  let subjectsPageStr = $state('1');
+
   // Total pages and current slice per card
   const personsTotalPages = $derived.by(() => Math.max(1, Math.ceil(personsSorted.length / PAGE_SIZE)));
   const organizationsTotalPages = $derived.by(() => Math.max(1, Math.ceil(organizationsSorted.length / PAGE_SIZE)));
@@ -33,16 +39,26 @@
   // Clamp pages when data changes
   $effect(() => {
     if (personsPage > personsTotalPages) personsPage = 1;
+    personsPageStr = String(personsPage);
   });
   $effect(() => {
     if (organizationsPage > organizationsTotalPages) organizationsPage = 1;
+    organizationsPageStr = String(organizationsPage);
   });
   $effect(() => {
     if (eventsPage > eventsTotalPages) eventsPage = 1;
+    eventsPageStr = String(eventsPage);
   });
   $effect(() => {
     if (subjectsPage > subjectsTotalPages) subjectsPage = 1;
+    subjectsPageStr = String(subjectsPage);
   });
+
+  function applyPageInput(raw: string, total: number): number | null {
+    const n = parseInt(raw, 10);
+    if (!Number.isFinite(n) || isNaN(n)) return null;
+    return Math.min(Math.max(n, 1), total);
+  }
 
   // Locale-aware formatter for consistency with KpiCards
   const nf = new Intl.NumberFormat('fr-FR');
@@ -102,13 +118,37 @@
         <div class="text-xs text-muted-foreground p-2 text-center">No persons data</div>
       {/if}
     </CardContent>
-    <CardFooter class="pt-0">
-      <div class="flex items-center justify-between w-full gap-2">
-        <Button variant="outline" size="sm" disabled={personsPage === 1} onclick={() => (personsPage = personsPage - 1)}>Prev</Button>
-        <span class="text-xs text-muted-foreground">Page {personsPage} / {personsTotalPages}</span>
-        <Button variant="outline" size="sm" disabled={personsPage === personsTotalPages} onclick={() => (personsPage = personsPage + 1)}>Next</Button>
-      </div>
-    </CardFooter>
+        <CardFooter class="pt-0">
+          <div class="w-full flex flex-col items-center gap-2">
+            <div class="flex items-center justify-center gap-2">
+              <Button variant="outline" size="sm" disabled={personsPage === 1} onclick={() => (personsPage = Math.max(1, personsPage - 1))}>Prev</Button>
+              <Button variant="outline" size="sm" disabled={personsPage === personsTotalPages} onclick={() => (personsPage = Math.min(personsTotalPages, personsPage + 1))}>Next</Button>
+            </div>
+            <div class="flex items-center justify-center gap-1 text-xs text-muted-foreground">
+              Page
+              <Input
+                type="number"
+                class="h-8 w-12 px-2 text-xs"
+                min="1"
+                max={personsTotalPages}
+                aria-label="Go to page"
+                title="Go to page"
+                bind:value={personsPageStr}
+                onchange={() => {
+                  const next = applyPageInput(personsPageStr, personsTotalPages);
+                  personsPage = next ?? personsPage;
+                  personsPageStr = String(personsPage);
+                }}
+                onblur={() => {
+                  const next = applyPageInput(personsPageStr, personsTotalPages);
+                  personsPage = next ?? personsPage;
+                  personsPageStr = String(personsPage);
+                }}
+              />
+              / {personsTotalPages}
+            </div>
+          </div>
+        </CardFooter>
   </Card>
 
   <!-- Organizations -->
@@ -134,13 +174,37 @@
         <div class="text-xs text-muted-foreground p-2 text-center">No organizations data</div>
       {/if}
     </CardContent>
-    <CardFooter class="pt-0">
-      <div class="flex items-center justify-between w-full gap-2">
-        <Button variant="outline" size="sm" disabled={organizationsPage === 1} onclick={() => (organizationsPage = organizationsPage - 1)}>Prev</Button>
-        <span class="text-xs text-muted-foreground">Page {organizationsPage} / {organizationsTotalPages}</span>
-        <Button variant="outline" size="sm" disabled={organizationsPage === organizationsTotalPages} onclick={() => (organizationsPage = organizationsPage + 1)}>Next</Button>
-      </div>
-    </CardFooter>
+        <CardFooter class="pt-0">
+          <div class="w-full flex flex-col items-center gap-2">
+            <div class="flex items-center justify-center gap-2">
+              <Button variant="outline" size="sm" disabled={organizationsPage === 1} onclick={() => (organizationsPage = Math.max(1, organizationsPage - 1))}>Prev</Button>
+              <Button variant="outline" size="sm" disabled={organizationsPage === organizationsTotalPages} onclick={() => (organizationsPage = Math.min(organizationsTotalPages, organizationsPage + 1))}>Next</Button>
+            </div>
+            <div class="flex items-center justify-center gap-1 text-xs text-muted-foreground">
+              Page
+              <Input
+                type="number"
+                class="h-8 w-12 px-2 text-xs"
+                min="1"
+                max={organizationsTotalPages}
+                aria-label="Go to page"
+                title="Go to page"
+                bind:value={organizationsPageStr}
+                onchange={() => {
+                  const next = applyPageInput(organizationsPageStr, organizationsTotalPages);
+                  organizationsPage = next ?? organizationsPage;
+                  organizationsPageStr = String(organizationsPage);
+                }}
+                onblur={() => {
+                  const next = applyPageInput(organizationsPageStr, organizationsTotalPages);
+                  organizationsPage = next ?? organizationsPage;
+                  organizationsPageStr = String(organizationsPage);
+                }}
+              />
+              / {organizationsTotalPages}
+            </div>
+          </div>
+        </CardFooter>
   </Card>
 
   <!-- Events -->
@@ -166,13 +230,37 @@
         <div class="text-xs text-muted-foreground p-2 text-center">No events data</div>
       {/if}
     </CardContent>
-    <CardFooter class="pt-0">
-      <div class="flex items-center justify-between w-full gap-2">
-        <Button variant="outline" size="sm" disabled={eventsPage === 1} onclick={() => (eventsPage = eventsPage - 1)}>Prev</Button>
-        <span class="text-xs text-muted-foreground">Page {eventsPage} / {eventsTotalPages}</span>
-        <Button variant="outline" size="sm" disabled={eventsPage === eventsTotalPages} onclick={() => (eventsPage = eventsPage + 1)}>Next</Button>
-      </div>
-    </CardFooter>
+        <CardFooter class="pt-0">
+          <div class="w-full flex flex-col items-center gap-2">
+            <div class="flex items-center justify-center gap-2">
+              <Button variant="outline" size="sm" disabled={eventsPage === 1} onclick={() => (eventsPage = Math.max(1, eventsPage - 1))}>Prev</Button>
+              <Button variant="outline" size="sm" disabled={eventsPage === eventsTotalPages} onclick={() => (eventsPage = Math.min(eventsTotalPages, eventsPage + 1))}>Next</Button>
+            </div>
+            <div class="flex items-center justify-center gap-1 text-xs text-muted-foreground">
+              Page
+              <Input
+                type="number"
+                class="h-8 w-12 px-2 text-xs"
+                min="1"
+                max={eventsTotalPages}
+                aria-label="Go to page"
+                title="Go to page"
+                bind:value={eventsPageStr}
+                onchange={() => {
+                  const next = applyPageInput(eventsPageStr, eventsTotalPages);
+                  eventsPage = next ?? eventsPage;
+                  eventsPageStr = String(eventsPage);
+                }}
+                onblur={() => {
+                  const next = applyPageInput(eventsPageStr, eventsTotalPages);
+                  eventsPage = next ?? eventsPage;
+                  eventsPageStr = String(eventsPage);
+                }}
+              />
+              / {eventsTotalPages}
+            </div>
+          </div>
+        </CardFooter>
   </Card>
 
   <!-- Subjects -->
@@ -198,12 +286,36 @@
         <div class="text-xs text-muted-foreground p-2 text-center">No subjects data</div>
       {/if}
     </CardContent>
-    <CardFooter class="pt-0">
-      <div class="flex items-center justify-between w-full gap-2">
-        <Button variant="outline" size="sm" disabled={subjectsPage === 1} onclick={() => (subjectsPage = subjectsPage - 1)}>Prev</Button>
-        <span class="text-xs text-muted-foreground">Page {subjectsPage} / {subjectsTotalPages}</span>
-        <Button variant="outline" size="sm" disabled={subjectsPage === subjectsTotalPages} onclick={() => (subjectsPage = subjectsPage + 1)}>Next</Button>
-      </div>
-    </CardFooter>
+        <CardFooter class="pt-0">
+          <div class="w-full flex flex-col items-center gap-2">
+            <div class="flex items-center justify-center gap-2">
+              <Button variant="outline" size="sm" disabled={subjectsPage === 1} onclick={() => (subjectsPage = Math.max(1, subjectsPage - 1))}>Prev</Button>
+              <Button variant="outline" size="sm" disabled={subjectsPage === subjectsTotalPages} onclick={() => (subjectsPage = Math.min(subjectsTotalPages, subjectsPage + 1))}>Next</Button>
+            </div>
+            <div class="flex items-center justify-center gap-1 text-xs text-muted-foreground">
+              Page
+              <Input
+                type="number"
+                class="h-8 w-12 px-2 text-xs"
+                min="1"
+                max={subjectsTotalPages}
+                aria-label="Go to page"
+                title="Go to page"
+                bind:value={subjectsPageStr}
+                onchange={() => {
+                  const next = applyPageInput(subjectsPageStr, subjectsTotalPages);
+                  subjectsPage = next ?? subjectsPage;
+                  subjectsPageStr = String(subjectsPage);
+                }}
+                onblur={() => {
+                  const next = applyPageInput(subjectsPageStr, subjectsTotalPages);
+                  subjectsPage = next ?? subjectsPage;
+                  subjectsPageStr = String(subjectsPage);
+                }}
+              />
+              / {subjectsTotalPages}
+            </div>
+          </div>
+        </CardFooter>
   </Card>
 </div>
