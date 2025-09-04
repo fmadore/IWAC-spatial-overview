@@ -19,14 +19,17 @@ type VisualizationType =
 
 // URL management for navigation state using search parameters
 export const urlManager = {
-	// Update URL based on current state
-	updateUrl() {
-		if (!browser) return;
+	// Keep last and pending URL to avoid duplicate replaceState calls
+	_lastUrl: '' as string,
+	_pending: 0 as any,
+	_pendingUrl: '' as string,
+	_debounceMs: 150,
 
+	_buildUrlFromState() {
 		const view = appState.activeView;
 		const viz = appState.activeVisualization;
 		const selectedEntity = appState.selectedEntity;
-	const networkNode = appState.networkNodeSelected;
+		const networkNode = appState.networkNodeSelected;
 
 		// Create URL search parameters
 		const params = new URLSearchParams();
@@ -55,9 +58,28 @@ export const urlManager = {
 		// Build the URL with proper base path
 		const paramString = params.toString();
 		const url = paramString ? `${base}/?${paramString}` : `${base}/`;
+		return url;
+	},
 
-		// Use goto to update URL without causing navigation
-		goto(url, { replaceState: true, noScroll: true });
+	// Update URL based on current state
+	updateUrl() {
+		if (!browser) return;
+
+		const url = this._buildUrlFromState();
+		// Avoid redundant updates
+		if (url === this._lastUrl && !this._pending) return;
+		this._pendingUrl = url;
+		if (this._pending) {
+			clearTimeout(this._pending);
+		}
+		this._pending = setTimeout(() => {
+			this._pending = 0;
+			if (this._pendingUrl !== this._lastUrl) {
+				this._lastUrl = this._pendingUrl;
+				// Use goto to update URL without causing navigation
+				goto(this._lastUrl, { replaceState: true, noScroll: true });
+			}
+		}, this._debounceMs);
 	},
 
 	// Parse URL search parameters and update state
@@ -94,8 +116,10 @@ export const urlManager = {
 
 		// Handle network node selection from URL (node=type:id or plain id)
 		if (nodeParam) {
-			appState.networkNodeSelected = { id: nodeParam };
-		} else {
+			if (!appState.networkNodeSelected || appState.networkNodeSelected.id !== nodeParam) {
+				appState.networkNodeSelected = { id: nodeParam };
+			}
+		} else if (appState.networkNodeSelected) {
 			appState.networkNodeSelected = null;
 		}
 
@@ -170,7 +194,8 @@ export function initializeUrlManager() {
 	let previousEntity = appState.selectedEntity;
 	let previousNode = appState.networkNodeSelected;
 
-	function checkForChanges() {
+	const intervalMs = 200; // lower frequency than rAF to avoid flooding
+	const handle = setInterval(() => {
 		if (
 			appState.activeView !== previousView ||
 			appState.activeVisualization !== previousViz ||
@@ -183,8 +208,10 @@ export function initializeUrlManager() {
 			previousEntity = appState.selectedEntity;
 			previousNode = appState.networkNodeSelected;
 		}
-		requestAnimationFrame(checkForChanges);
-	}
+	}, intervalMs);
 
-	requestAnimationFrame(checkForChanges);
+	// Ensure we clean up if the page reloads; harmless if left running
+	if (typeof window !== 'undefined') {
+		window.addEventListener('beforeunload', () => clearInterval(handle));
+	}
 }

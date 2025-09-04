@@ -24,12 +24,16 @@
   const hovering = $state<{ id: string | null; x: number; y: number; label: string }>({ id: null, x: 0, y: 0, label: '' });
   let dpr = typeof window !== 'undefined' ? window.devicePixelRatio || 1 : 1;
   let needsDraw = false;
+  let lastDrawTs = 0;
+  const drawMinIntervalMs = 16; // ~60fps cap
   // Drag state
   let isDragging = false;
   let dragStartX = 0;
   let dragStartY = 0;
   let dragStartTx = 0;
   let dragStartTy = 0;
+  let userPannedAt = 0; // timestamp of last user pan
+  const panSuppressMs = 800; // time window to suppress auto-centering
   // Hover tooltip state handled via `hovering`
 
   // Draw edges then nodes
@@ -132,13 +136,19 @@
 
   function scheduleDraw() {
     if (needsDraw) return;
+    const now = performance.now();
+    const dt = now - lastDrawTs;
+    const delay = dt >= drawMinIntervalMs ? 0 : (drawMinIntervalMs - dt);
     needsDraw = true;
-    requestAnimationFrame(() => {
-  // draw one frame and allow scheduling of the next one
-  updateHoverPosition();
-  draw();
-  needsDraw = false;
-    });
+    setTimeout(() => {
+      requestAnimationFrame(() => {
+        // draw one frame and allow scheduling of the next one
+        updateHoverPosition();
+        draw();
+        lastDrawTs = performance.now();
+        needsDraw = false;
+      });
+    }, delay);
   }
 
   function updateHoverPosition() {
@@ -224,14 +234,19 @@
     if (!id) return;
     // If the layout hasn't positioned this node yet, wait briefly
     if (positions.has(id)) {
-      centerOnNode(id);
+      // Don't auto-center if the user just panned
+      if (performance.now() - userPannedAt > panSuppressMs && !isDragging) {
+        centerOnNode(id);
+      }
       return;
     }
     let tries = 0;
     const handle = setInterval(() => {
       tries += 1;
       if (positions.has(id)) {
-        centerOnNode(id);
+        if (performance.now() - userPannedAt > panSuppressMs && !isDragging) {
+          centerOnNode(id);
+        }
         clearInterval(handle);
       } else if (tries > 60) {
         clearInterval(handle);
@@ -294,19 +309,21 @@
     dragStartY = ev.clientY;
     dragStartTx = tx;
     dragStartTy = ty;
+  userPannedAt = performance.now();
   }
 
   function onPointerMove(ev: PointerEvent) {
   // prevent page scroll while panning on some browsers
   if (isDragging) ev.preventDefault();
-    const rect = canvas.getBoundingClientRect();
-    const mx = ev.clientX - rect.left;
-    const my = ev.clientY - rect.top;
-    updateHover(mx, my);
-    if (!isDragging) return;
-    tx = dragStartTx + (ev.clientX - dragStartX);
-    ty = dragStartTy + (ev.clientY - dragStartY);
-    scheduleDraw();
+  const rect = canvas.getBoundingClientRect();
+  const mx = ev.clientX - rect.left;
+  const my = ev.clientY - rect.top;
+  updateHover(mx, my);
+  if (!isDragging) { scheduleDraw(); return; }
+  tx = dragStartTx + (ev.clientX - dragStartX);
+  ty = dragStartTy + (ev.clientY - dragStartY);
+  userPannedAt = performance.now();
+  scheduleDraw();
   }
 
   function onPointerUp(ev: PointerEvent) {
@@ -314,19 +331,27 @@
   if (canvas) canvas.style.cursor = hovering.id ? 'pointer' : 'default';
   }
 
+  let wheelAccum = 0;
+  let wheelRAF = 0 as any;
   function onWheel(ev: WheelEvent) {
     ev.preventDefault();
-    const rect = canvas.getBoundingClientRect();
-    const x = ev.clientX - rect.left;
-    const y = ev.clientY - rect.top;
-    const scaleFactor = Math.pow(0.98, ev.deltaY);
-    const nk = clamp(k * scaleFactor, kMin, kMax);
-    const f = nk / k;
-    // zoom around cursor
-    tx = x - (x - tx) * f;
-    ty = y - (y - ty) * f;
-    k = nk;
-    scheduleDraw();
+    wheelAccum += ev.deltaY;
+    if (wheelRAF) return;
+    wheelRAF = requestAnimationFrame(() => {
+      const rect = canvas.getBoundingClientRect();
+      const x = ev.clientX - rect.left;
+      const y = ev.clientY - rect.top;
+      const scaleFactor = Math.pow(0.98, wheelAccum);
+      const nk = clamp(k * scaleFactor, kMin, kMax);
+      const f = nk / k;
+      // zoom around cursor
+      tx = x - (x - tx) * f;
+      ty = y - (y - ty) * f;
+      k = nk;
+      wheelAccum = 0;
+      wheelRAF = 0;
+      scheduleDraw();
+    });
   }
 
   function clamp(v: number, a: number, b: number) {
@@ -353,9 +378,9 @@
       }
     }
     if (hovering.id !== found) {
-  hovering.id = found;
-  if (canvas) canvas.style.cursor = found ? 'pointer' : 'default';
-  updateHoverPosition();
+      hovering.id = found;
+      if (canvas) canvas.style.cursor = found ? 'pointer' : 'default';
+      updateHoverPosition();
       scheduleDraw();
     }
   }
