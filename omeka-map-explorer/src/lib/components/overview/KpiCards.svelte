@@ -11,6 +11,7 @@
   });
 
   const totalCountries = $derived.by(() => filters.available.countries.length);
+  const totalNewspapers = $derived.by(() => filters.available.newspapers.length);
 
   const dateRangeLabel = $derived.by(() => {
     const r = filters.available?.dateRange;
@@ -27,7 +28,7 @@
   }
 </script>
 
-<div class="grid gap-4 px-4 lg:px-6 md:grid-cols-3">
+<div class="grid gap-4 px-4 lg:px-6 md:grid-cols-4">
   <Card>
     <CardHeader class="pb-2">
       <CardTitle class="text-sm">Articles</CardTitle>
@@ -35,6 +36,16 @@
     <CardContent>
       <div class="text-3xl font-bold">{fmt(totalUniqueArticles)}</div>
       <p class="text-xs text-muted-foreground mt-1">Unique articles in dataset</p>
+    </CardContent>
+  </Card>
+
+  <Card>
+    <CardHeader class="pb-2">
+      <CardTitle class="text-sm">Newspapers</CardTitle>
+    </CardHeader>
+    <CardContent>
+      <div class="text-3xl font-bold">{fmt(totalNewspapers)}</div>
+      <p class="text-xs text-muted-foreground mt-1">Sources represented</p>
     </CardContent>
   </Card>
 
@@ -53,8 +64,10 @@
       <CardTitle class="text-sm">Time span</CardTitle>
     </CardHeader>
     <CardContent>
-      <div class="text-3xl font-bold">{dateRangeLabel}</div>
-      <p class="text-xs text-muted-foreground mt-1">From first to last article</p>
+      {#if dateRangeLabel}
+        <div class="text-3xl font-bold">{dateRangeLabel}</div>
+        <p class="text-xs text-muted-foreground mt-1">From first to last article</p>
+      {/if}
     </CardContent>
   </Card>
 </div>
