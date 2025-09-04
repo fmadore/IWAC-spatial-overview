@@ -68,9 +68,10 @@ npm run lint                   # Check code formatting
 
 ### Testing
 ```bash
-npm run test:unit              # Run Vitest unit tests
+npm run test:unit              # Run Vitest unit tests (interactive watch mode)
+npm run test:ci                # Run Vitest unit tests (single run for CI)
 npm run test:e2e              # Run Playwright E2E tests
-npm run test                  # Run both unit and E2E tests
+npm run test                  # Run unit tests in single-run mode
 ```
 
 ### Production Build
@@ -143,14 +144,46 @@ npm run preview               # Preview production build locally
 ## Testing Strategy
 
 ### Unit Tests (Vitest)
-- Component testing with @testing-library/svelte
-- State management testing
-- Utility function testing
+- **Framework**: Vitest with @testing-library/svelte for component testing
+- **Environment**: Dual workspace setup (client/server) with jsdom for browser simulation
+- **Patterns**:
+  - **Component Tests**: Use `render()` from @testing-library/svelte, test accessibility and user interactions
+  - **State Tests**: Test Svelte 5 runes stores and derived state calculations
+  - **Utility Tests**: Test pure functions like URL management, data loaders, and calculations
+- **Mocking Strategy**:
+  - Mock SvelteKit runtime (`$app/environment`, `$app/stores`, `$app/navigation`, `$app/paths`)
+  - Mock data loaders to avoid network/file operations in tests
+  - Use `vi.hoisted()` for mocks that need to be available before module imports
+- **Setup Files**:
+  - `vitest-setup-client.ts`: Browser environment setup with matchMedia, ResizeObserver stubs
+  - `vitest-setup-server.ts`: Node environment setup
+- **File Patterns**:
+  - Component tests: `*.svelte.test.ts` (run in jsdom)
+  - Utility tests: `*.test.ts` (run in Node.js)
+- **Commands**:
+  - `npm run test:unit` - Interactive watch mode
+  - `npm run test:ci` - Single run for CI
+  - `npm run test` - Alias for single run
 
 ### E2E Tests (Playwright)
-- Full application workflow testing
-- Map interaction testing
-- Filter and timeline functionality
+- **Framework**: Playwright for full browser automation
+- **Scope**: End-to-end user workflows across the full application
+- **Test Areas**:
+  - Navigation and routing between dashboard/map views
+  - Map interactions (zoom, pan, choropleth visualization)
+  - Filter functionality (countries, date ranges, entity selection)
+  - Timeline controls and playback functionality
+  - Entity exploration workflows
+- **Commands**:
+  - `npm run test:e2e` - Run Playwright tests
+- **Configuration**: `playwright.config.ts` with browser matrix testing
+
+### Testing Guidelines
+- **Mock External Dependencies**: Always mock data loaders, SvelteKit runtime, and browser APIs in unit tests
+- **Test User Interactions**: Focus on testing what users can see and interact with, not internal implementation
+- **State Testing**: Test reactive state changes using Svelte 5 runes patterns
+- **Accessibility**: Include accessibility assertions in component tests
+- **CI Integration**: All tests run automatically in GitHub Actions before deployment
 
 ## Deployment
 
