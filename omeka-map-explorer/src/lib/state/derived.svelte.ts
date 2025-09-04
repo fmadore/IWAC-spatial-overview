@@ -25,7 +25,17 @@ function getFilterHash(): string {
 			end: sel.dateRange.end.getTime() 
 		} : null,
 		keywords: sel.keywords.slice().sort(),
-		entityId: entity ? `${entity.type}:${entity.id}` : null,
+	// Include entity identity AND a lightweight signature of its related articles
+	// so the cache invalidates once hydration fills relatedArticleIds.
+	entityId: entity ? `${entity.type}:${entity.id}` : null,
+	entityArticlesSig: entity
+	    ? {
+		    len: entity.relatedArticleIds?.length ?? 0,
+		    // first/last few IDs help detect changes beyond length with minimal payload
+		    head: (entity.relatedArticleIds ?? []).slice(0, 2),
+		    tail: (entity.relatedArticleIds ?? []).slice(-2)
+	      }
+	    : null,
 		dataVersion: mapData.allItems.length // Simple way to detect data changes
 	});
 }
@@ -59,7 +69,8 @@ export function getVisibleData(): ProcessedItem[] {
 	let filtered = items;
 
 	// Filter by selected entity (persons, organizations, etc.)
-	if (appState.selectedEntity) {
+	// Only apply once the entity is hydrated with at least one related article.
+	if (appState.selectedEntity && appState.selectedEntity.relatedArticleIds?.length) {
 		// Get articles that mention this entity
 		const entityArticleIds = new Set(appState.selectedEntity.relatedArticleIds);
 		filtered = filtered.filter((item) => {

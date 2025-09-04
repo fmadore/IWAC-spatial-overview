@@ -30,6 +30,7 @@ export const urlManager = {
 		const viz = appState.activeVisualization;
 		const selectedEntity = appState.selectedEntity;
 		const networkNode = appState.networkNodeSelected;
+		const entityVizSet = new Set(['persons', 'organizations', 'events', 'subjects']);
 
 		// Create URL search parameters
 		const params = new URLSearchParams();
@@ -44,8 +45,8 @@ export const urlManager = {
 			}
 		}
 
-		// Add entity selection if present
-		if (selectedEntity) {
+		// Add entity selection only for entity visualizations
+		if (selectedEntity && entityVizSet.has(viz as any)) {
 			params.set('entityType', selectedEntity.type);
 			params.set('entityId', selectedEntity.id);
 		}
@@ -91,6 +92,7 @@ export const urlManager = {
 		const entityType = searchParams.get('entityType');
 		const entityId = searchParams.get('entityId');
         const nodeParam = searchParams.get('node');
+		const entityVizSet = new Set(['persons', 'organizations', 'events', 'subjects']);
 
 		// Set view - default to dashboard
 		if (view && ['dashboard', 'map', 'list', 'stats'].includes(view)) {
@@ -123,8 +125,9 @@ export const urlManager = {
 			appState.networkNodeSelected = null;
 		}
 
-		// Handle entity selection from URL
-		if (entityType && entityId) {
+		// Handle entity selection from URL (only when on an entity visualization)
+		const isEntityViz = entityVizSet.has(appState.activeVisualization as any);
+		if (isEntityViz && entityType && entityId) {
 			// If we already have the same entity selected with details, don't clobber them
 			const prev = appState.selectedEntity;
 			const isSame = prev && prev.type === entityType && prev.id === entityId;

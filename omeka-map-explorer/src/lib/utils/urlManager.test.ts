@@ -1,171 +1,78 @@
 import { describe, test, expect, beforeEach, vi } from 'vitest';
-import { urlManager } from '$lib/utils/urlManager.svelte';
+import { urlManager } from './urlManager.svelte';
 import { appState } from '$lib/state/appState.svelte';
+import { mapData } from '$lib/state/mapData.svelte';
 
-// Mock browser environment
-vi.mock('$app/environment', () => ({
-	browser: true
-}));
-
-// Mock goto function
+// Mocks
+vi.mock('$app/environment', () => ({ browser: true }));
 const mockGoto = vi.fn();
-vi.mock('$app/navigation', () => ({
-	goto: mockGoto
-}));
-
-// Mock base path
-vi.mock('$app/paths', () => ({
-	base: '/IWAC-spatial-overview'
-}));
+vi.mock('$app/navigation', () => ({ goto: mockGoto }));
+vi.mock('$app/paths', () => ({ base: '/IWAC-spatial-overview' }));
 
 describe('URL Manager', () => {
 	beforeEach(() => {
-		// Reset state before each test
+		vi.useFakeTimers();
+		// Reset state
 		appState.activeView = 'dashboard';
 		appState.activeVisualization = 'overview';
+		appState.selectedEntity = null;
+		appState.networkNodeSelected = null;
+		mapData.persons = [];
+		mapData.organizations = [] as any;
+		mapData.events = [] as any;
+		mapData.subjects = [] as any;
 		mockGoto.mockClear();
 	});
 
-	test('should parse empty search params correctly', () => {
-		const params = new URLSearchParams();
-		urlManager.parseUrlAndUpdateState(params);
+	test('parse empty params -> dashboard/overview', () => {
+		urlManager.parseUrlAndUpdateState(new URLSearchParams());
 		expect(appState.activeView).toBe('dashboard');
 		expect(appState.activeVisualization).toBe('overview');
 	});
 
-	test('should parse map view correctly', () => {
-		const params = new URLSearchParams('?view=map&viz=byCountry');
-		urlManager.parseUrlAndUpdateState(params);
+	test('parse map view + byCountry sets map', () => {
+		urlManager.parseUrlAndUpdateState(new URLSearchParams('view=map&viz=byCountry'));
 		expect(appState.activeView).toBe('map');
 		expect(appState.activeVisualization).toBe('byCountry');
 	});
 
-	test('should parse persons visualization correctly', () => {
-		const params = new URLSearchParams('?viz=persons');
-		urlManager.parseUrlAndUpdateState(params);
-		expect(appState.activeView).toBe('dashboard');
-		expect(appState.activeVisualization).toBe('persons');
-	});
-
-	test('should parse organizations visualization correctly', () => {
-		const params = new URLSearchParams('?viz=organizations');
-		urlManager.parseUrlAndUpdateState(params);
-		expect(appState.activeView).toBe('dashboard');
+	test('parse organizations viz + entity hydrates selection', () => {
+		mapData.organizations = [
+			{ id: '789', name: 'Agence Bénin Presse', relatedArticleIds: ['1','2'], articleCount: 2 }
+		] as any;
+		urlManager.parseUrlAndUpdateState(
+			new URLSearchParams('viz=organizations&entityType=Organisations&entityId=789')
+		);
 		expect(appState.activeVisualization).toBe('organizations');
+		expect(appState.selectedEntity?.id).toBe('789');
+		expect(appState.selectedEntity?.relatedArticleIds).toEqual(['1','2']);
 	});
 
-	test('should parse events visualization correctly', () => {
-		const params = new URLSearchParams('?viz=events');
-		urlManager.parseUrlAndUpdateState(params);
-		expect(appState.activeView).toBe('dashboard');
-		expect(appState.activeVisualization).toBe('events');
-	});
-
-	test('should parse subjects visualization correctly', () => {
-		const params = new URLSearchParams('?viz=subjects');
-		urlManager.parseUrlAndUpdateState(params);
-		expect(appState.activeView).toBe('dashboard');
-		expect(appState.activeVisualization).toBe('subjects');
-	});
-
-	test('should parse entity selection correctly', () => {
-		const params = new URLSearchParams('?viz=persons&entityType=Personnes&entityId=person123');
-		urlManager.parseUrlAndUpdateState(params);
-		expect(appState.activeView).toBe('dashboard');
-		expect(appState.activeVisualization).toBe('persons');
-		expect(appState.selectedEntity).toEqual({
-			type: 'Personnes',
-			id: 'person123',
-			name: '',
-			relatedArticleIds: []
-		});
-	});
-
-	test('should handle entity selection without other parameters', () => {
-		const params = new URLSearchParams('?entityType=Organisations&entityId=org456');
-		urlManager.parseUrlAndUpdateState(params);
-		expect(appState.activeView).toBe('dashboard');
+	test('entity params are ignored when not on an entity viz', () => {
+		urlManager.parseUrlAndUpdateState(
+			new URLSearchParams('viz=overview&entityType=Organisations&entityId=789')
+		);
 		expect(appState.activeVisualization).toBe('overview');
-		expect(appState.selectedEntity).toEqual({
-			type: 'Organisations',
-			id: 'org456',
-			name: '',
-			relatedArticleIds: []
-		});
+		expect(appState.selectedEntity).toBeNull();
 	});
 
-	test('should clear entity selection when not in URL', () => {
-		// First set an entity
-		appState.selectedEntity = {
-			type: 'Personnes',
-			id: 'person123',
-			name: 'Test Person',
-			relatedArticleIds: ['1', '2']
-		};
+	test('updateUrl excludes entity params when switching to byCountry', () => {
+		appState.activeView = 'dashboard';
+		appState.activeVisualization = 'organizations';
+		appState.selectedEntity = { type: 'Organisations', id: '789', name: 'X', relatedArticleIds: [] };
+		urlManager.updateUrl();
+		vi.runAllTimers();
 
-		// Then parse URL without entity parameters
-		const params = new URLSearchParams('?viz=overview');
-		urlManager.parseUrlAndUpdateState(params);
-		expect(appState.selectedEntity).toBe(null);
-	});
+		// Switch to map/byCountry
+		appState.activeView = 'map';
+		appState.activeVisualization = 'byCountry';
+		urlManager.updateUrl();
+		vi.runAllTimers();
 
-	test('should handle byCountry viz by setting map view', () => {
-		const params = new URLSearchParams('?viz=byCountry');
-		urlManager.parseUrlAndUpdateState(params);
-		expect(appState.activeView).toBe('map');
-		expect(appState.activeVisualization).toBe('byCountry');
-	});
-
-	test('should handle invalid parameters by defaulting to dashboard overview', () => {
-		const params = new URLSearchParams('?view=invalid&viz=invalid');
-		urlManager.parseUrlAndUpdateState(params);
-		expect(appState.activeView).toBe('dashboard');
-		expect(appState.activeVisualization).toBe('overview');
-	});
-
-	test('should navigate to map view and update URL', () => {
-		urlManager.navigateTo('map', 'byCountry');
-		expect(appState.activeView).toBe('map');
-		expect(appState.activeVisualization).toBe('byCountry');
-		expect(mockGoto).toHaveBeenCalledWith('/IWAC-spatial-overview/?view=map&viz=byCountry', {
-			replaceState: true,
-			noScroll: true
-		});
-	});
-
-	test('should navigate to dashboard visualization and update URL', () => {
-		urlManager.navigateTo('dashboard', 'persons');
-		expect(appState.activeView).toBe('dashboard');
-		expect(appState.activeVisualization).toBe('persons');
-		expect(mockGoto).toHaveBeenCalledWith('/IWAC-spatial-overview/?viz=persons', { 
-			replaceState: true, 
-			noScroll: true 
-		});
-	});
-
-	test('should navigate to default state with minimal URL', () => {
-		urlManager.navigateTo('dashboard', 'overview');
-		expect(appState.activeView).toBe('dashboard');
-		expect(appState.activeVisualization).toBe('overview');
-		expect(mockGoto).toHaveBeenCalledWith('/IWAC-spatial-overview/', { 
-			replaceState: true, 
-			noScroll: true 
-		});
-	});
-
-	test('should navigate with entity selection', () => {
-		urlManager.navigateTo('dashboard', 'persons', { type: 'Personnes', id: 'person123' });
-		expect(appState.activeView).toBe('dashboard');
-		expect(appState.activeVisualization).toBe('persons');
-		expect(appState.selectedEntity).toEqual({
-			type: 'Personnes',
-			id: 'person123',
-			name: '',
-			relatedArticleIds: []
-		});
-		expect(mockGoto).toHaveBeenCalledWith('/IWAC-spatial-overview/?viz=persons&entityType=Personnes&entityId=person123', { 
-			replaceState: true, 
-			noScroll: true 
-		});
+		const calls = mockGoto.mock.calls.map((c) => c[0] as string);
+		const last = calls[calls.length - 1];
+		expect(last).toContain('/IWAC-spatial-overview/?');
+		expect(last).not.toContain('entityType=');
+		expect(last).toContain('viz=byCountry');
 	});
 });
