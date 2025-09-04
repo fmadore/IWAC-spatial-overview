@@ -18,9 +18,7 @@
 	import Timeline from '$lib/components/timeline/Timeline.svelte';
 	import * as Sidebar from '$lib/components/ui/sidebar';
 	import SiteHeader from '$lib/components/site-header.svelte';
-	import SectionCards from '$lib/components/section-cards.svelte';
-	import ChartAreaInteractive from '$lib/components/chart-area-interactive.svelte';
-	import EntitiesOverview from '$lib/components/entities-overview.svelte';
+	import { Overview } from '$lib/components/overview';
 	import {
 		PersonsVisualization,
 		OrganizationsVisualization,
@@ -218,21 +216,7 @@
 	<div class="flex flex-1 flex-col">
 		<div class="@container/main flex flex-1 flex-col gap-2">
 			{#if appState.activeVisualization === 'overview'}
-				<div class="flex flex-col gap-4 py-4 md:gap-6 md:py-6">
-					<SectionCards />
-					<div class="px-4 lg:px-6">
-						<ChartAreaInteractive />
-					</div>
-					{#if mapData.persons && mapData.organizations && mapData.events && mapData.subjects}
-						<EntitiesOverview />
-					{:else}
-						<div class="px-4 lg:px-6">
-							<div class="text-center text-muted-foreground p-8">
-								<p>Loading entity data...</p>
-							</div>
-						</div>
-					{/if}
-				</div>
+				<Overview />
 			{:else if appState.activeVisualization === 'persons'}
 				<PersonsVisualization />
 			{:else if appState.activeVisualization === 'organizations'}
