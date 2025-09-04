@@ -20,6 +20,9 @@
 		entityType: string; // e.g., 'Personnes', 'Organisations'
 		entityTypeSingular?: string; // e.g., 'person', 'organization' for display
 		placeholder?: string;
+		onSelect?: (entity: Entity) => void;
+		onClear?: () => void;
+		hideSelectionHint?: boolean;
 	}
 
 	let {
@@ -27,7 +30,10 @@
 		selectedEntityId = null,
 		entityType,
 		entityTypeSingular,
-		placeholder
+		placeholder,
+		onSelect,
+		onClear,
+		hideSelectionHint = false
 	}: Props = $props();
 
 	let open = $state(false);
@@ -62,24 +68,28 @@
 		open = false;
 		searchValue = '';
 
-		// Update app state with selected entity
-		appState.selectedEntity = {
-			type: entityType,
-			id: entity.id,
-			name: entity.name,
-			relatedArticleIds: entity.relatedArticleIds
-		};
-
-		// Update URL to reflect the selection
-		urlManager.updateUrl();
+		if (onSelect) {
+			onSelect(entity);
+		} else {
+			// Default behavior: update app selectedEntity
+			appState.selectedEntity = {
+				type: entityType,
+				id: entity.id,
+				name: entity.name,
+				relatedArticleIds: entity.relatedArticleIds
+			};
+			urlManager.updateUrl();
+		}
 	}
 
 	function clearSelection() {
 		selectedEntityId = null;
-		appState.selectedEntity = null;
-		
-		// Update URL to reflect the cleared selection
-		urlManager.updateUrl();
+		if (onClear) {
+			onClear();
+		} else {
+			appState.selectedEntity = null;
+			urlManager.updateUrl();
+		}
 	}
 </script>
 
@@ -122,7 +132,7 @@
 							/>
 							{entity.name}
 							<span class="ml-auto text-xs text-muted-foreground">
-								{entity.relatedArticleIds.length} articles
+								{entity.articleCount ?? entity.relatedArticleIds.length} articles
 							</span>
 						</Command.Item>
 					{/each}
@@ -131,7 +141,7 @@
 		</Popover.Content>
 	</Popover.Root>
 
-	{#if selectedEntity}
+	{#if selectedEntity && !hideSelectionHint}
 		<div class="text-sm text-muted-foreground">
 			Showing locations from {selectedEntity.relatedArticleIds.length} related articles
 		</div>

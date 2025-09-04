@@ -17,6 +17,9 @@ export const networkState = $state<NetworkState>({
   degreeCap: undefined
 });
 
+// Node -> articleIds (union across incident edges)
+export const nodeArticleIds = $state<Record<string, string[]>>({});
+
 export async function loadNetwork(pathPrefix = 'data') {
   if (networkState.data) return networkState.data;
   try {
@@ -25,6 +28,20 @@ export async function loadNetwork(pathPrefix = 'data') {
     const json = (await res.json()) as NetworkData;
     networkState.data = json;
     networkState.filtered = json; // initial
+    // Build node→articleIds map
+    const tmp: Record<string, Set<string>> = {};
+    for (const e of json.edges) {
+      const ids = e.articleIds ?? [];
+      if (!tmp[e.source]) tmp[e.source] = new Set();
+      if (!tmp[e.target]) tmp[e.target] = new Set();
+      for (const id of ids) {
+        tmp[e.source].add(id);
+        tmp[e.target].add(id);
+      }
+    }
+    for (const n of json.nodes) {
+      nodeArticleIds[n.id] = Array.from(tmp[n.id] ?? []);
+    }
     appState.networkLoaded = true;
     return json;
   } catch (e) {
@@ -81,4 +98,8 @@ export function applyFilters() {
   }
 
   networkState.filtered = { nodes, edges, meta: data.meta };
+}
+
+export function getNodeArticleIds(id: string): string[] {
+  return nodeArticleIds[id] ?? [];
 }

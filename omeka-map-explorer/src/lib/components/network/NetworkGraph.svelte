@@ -3,6 +3,7 @@
   import type { NetworkData, NetworkNode, NetworkEdge } from '$lib/types';
   import { networkState, getNodeById, getNeighbors } from '$lib/state/networkData.svelte';
   import { appState } from '$lib/state/appState.svelte';
+  import EntitySelector from '$lib/components/entities/entity-selector.svelte';
   
   // Lazy force layout
   let d3force: any = null;
@@ -22,6 +23,8 @@
   const kMin = 0.25;
   const kMax = 4;
   const hovering = $state<{ id: string | null; x: number; y: number; label: string }>({ id: null, x: 0, y: 0, label: '' });
+  // When true and a node is selected, only draw the selected node + its 1-hop neighbors and incident edges
+  let focusOnSelection = $state(true);
   let dpr = typeof window !== 'undefined' ? window.devicePixelRatio || 1 : 1;
   let needsDraw = false;
   let lastDrawTs = 0;
@@ -46,11 +49,26 @@
     const { width, height } = canvas;
     ctx.clearRect(0, 0, width, height);
 
+    // Compute highlighting sets
+    const selectedId = appState.networkNodeSelected?.id ?? null;
+    const neighborSet = new Set<string>();
+    if (selectedId && d) {
+      for (const e of d.edges) {
+        if (e.source === selectedId) neighborSet.add(e.target);
+        if (e.target === selectedId) neighborSet.add(e.source);
+      }
+    }
+
     // Edges
     ctx.save();
-    ctx.globalAlpha = 0.25;
+    ctx.globalAlpha = 0.22;
     ctx.strokeStyle = '#8888';
     for (const e of d.edges) {
+      // In focus mode, only draw edges that touch the selected node
+      if (selectedId && focusOnSelection) {
+        const incident = e.source === selectedId || e.target === selectedId;
+        if (!incident) continue;
+      }
       const a = positions.get(e.source);
       const b = positions.get(e.target);
       if (!a || !b) continue;
@@ -59,29 +77,64 @@
       const bx = b.x * k + tx;
       const by = b.y * k + ty;
       const w = Math.max(0.5, Math.log2((e.weight || 1) + 1));
-      ctx.lineWidth = w;
+      const isHighlighted = selectedId && (e.source === selectedId || e.target === selectedId);
+      ctx.lineWidth = isHighlighted ? w + 1.25 : w;
+      if (selectedId && !isHighlighted) ctx.globalAlpha = 0.08;
+      if (isHighlighted) {
+        ctx.strokeStyle = '#0ea5e9aa'; // cyan highlight for incident edges
+      } else {
+        ctx.strokeStyle = '#8888';
+      }
       ctx.beginPath();
       ctx.moveTo(ax, ay);
       ctx.lineTo(bx, by);
       ctx.stroke();
+      if (selectedId && !isHighlighted) ctx.globalAlpha = 0.22;
     }
     ctx.restore();
 
     // Nodes
     for (const n of d.nodes) {
+      // In focus mode, skip nodes that are neither selected nor neighbors
+      if (selectedId && focusOnSelection) {
+        if (n.id !== selectedId && !neighborSet.has(n.id)) continue;
+      }
       const p = positions.get(n.id);
       if (!p) continue;
       const nx = p.x * k + tx;
       const ny = p.y * k + ty;
-      const nr = Math.max(2, p.r * Math.sqrt(k));
+      const isSel = selectedId === n.id;
+      const isNbr = neighborSet.has(n.id);
+      const dim = selectedId && !isSel && !isNbr;
+      const nr = Math.max(2, p.r * Math.sqrt(k)) * (isSel ? 1.4 : isNbr ? 1.1 : 1);
       ctx.beginPath();
       ctx.arc(nx, ny, nr, 0, Math.PI * 2);
       ctx.fillStyle = colorFor(n.type);
+      if (dim) ctx.globalAlpha = 0.45;
       ctx.fill();
-  if (hovering.id === n.id) {
-        // simple highlight ring
+      ctx.globalAlpha = 1;
+      if (hovering.id === n.id && !isSel) {
         ctx.lineWidth = 2;
         ctx.strokeStyle = '#111a';
+        ctx.stroke();
+      }
+      if (isSel) {
+        // Stronger selected-ring with glow
+        ctx.save();
+        ctx.lineWidth = 4;
+        ctx.strokeStyle = '#0ea5e9';
+        ctx.shadowColor = '#0ea5e9';
+        ctx.shadowBlur = 12;
+        ctx.beginPath();
+        ctx.arc(nx, ny, nr + 2, 0, Math.PI * 2);
+        ctx.stroke();
+        ctx.restore();
+
+        // White halo outline for contrast
+        ctx.lineWidth = 2;
+        ctx.strokeStyle = '#ffffffcc';
+        ctx.beginPath();
+        ctx.arc(nx, ny, nr + 5, 0, Math.PI * 2);
         ctx.stroke();
       }
     }
@@ -271,6 +324,8 @@
       if (dx * dx + dy * dy <= p.r * p.r) {
         // Set URL node param and selected entity type if applicable
         appState.networkNodeSelected = { id: n.id };
+  // Enable focus mode when user selects by clicking
+  focusOnSelection = true;
         // If node id has the form "type:id", map to entity selection
         const parts = n.id.split(':');
         if (parts.length === 2) {
@@ -365,7 +420,19 @@
     const d = (data ?? networkState.filtered ?? networkState.data) as NetworkData | null;
     let found: string | null = null;
     if (d) {
+      // If focusing on selection, skip non-neighbor nodes for hover to reduce clutter
+      const selectedId = appState.networkNodeSelected?.id ?? null;
+      const neighborSet = new Set<string>();
+      if (selectedId && d && focusOnSelection) {
+        for (const e of d.edges) {
+          if (e.source === selectedId) neighborSet.add(e.target);
+          if (e.target === selectedId) neighborSet.add(e.source);
+        }
+      }
       for (const n of d.nodes) {
+        if (selectedId && focusOnSelection) {
+          if (n.id !== selectedId && !neighborSet.has(n.id)) continue;
+        }
         const p = positions.get(n.id);
         if (!p) continue;
         const dx = p.x - wx;
@@ -391,6 +458,47 @@
   class="relative w-full rounded-md border bg-muted/40 overflow-hidden select-none"
   style="height: calc(100vh - var(--header-height) - 2rem)"
 >
+  {#if networkState.filtered}
+    <div class="absolute left-3 top-3 z-10 w-[340px] max-w-[60vw]">
+      <EntitySelector
+        entities={networkState.filtered.nodes.map((n) => ({ id: n.id, name: n.label, relatedArticleIds: [], articleCount: n.count }))}
+        selectedEntityId={appState.networkNodeSelected?.id ?? null}
+        entityType="Network"
+        entityTypeSingular="entity"
+        placeholder="Search nodes..."
+        hideSelectionHint={true}
+        onSelect={(e) => {
+          appState.networkNodeSelected = { id: e.id };
+          const parts = e.id.split(':');
+          if (parts.length === 2) {
+            const [t, entityId] = parts as [string, string];
+            const typeMap: Record<string, string> = {
+              person: 'Personnes',
+              organization: 'Organisations',
+              event: 'Événements',
+              subject: 'Sujets',
+              location: 'Lieux'
+            };
+            const entityType = typeMap[t];
+            if (entityType) {
+              appState.selectedEntity = { type: entityType, id: entityId, name: e.name, relatedArticleIds: [] };
+            }
+          }
+          // When a new node is explicitly selected, default to focus mode
+          focusOnSelection = true;
+        }}
+        onClear={() => {
+          appState.networkNodeSelected = null;
+          appState.selectedEntity = null;
+          focusOnSelection = false;
+        }}
+      />
+      <div class="mt-2 flex items-center gap-2 text-xs text-foreground/80">
+        <input id="focusSel" type="checkbox" bind:checked={focusOnSelection} disabled={!appState.networkNodeSelected} />
+        <label for="focusSel" class="select-none">Focus on selection (hide unrelated)</label>
+      </div>
+    </div>
+  {/if}
   <canvas
     bind:this={canvas}
   class="absolute inset-0 touch-none select-none cursor-grab"

@@ -10,6 +10,8 @@
 	import CountryFilter from '$lib/components/filters/CountryFilter.svelte';
 	import YearRangeFilter from '$lib/components/filters/YearRangeFilter.svelte';
 	import NetworkPanel from '$lib/components/network/NetworkPanel.svelte';
+	import EntitySelector from '$lib/components/entities/entity-selector.svelte';
+	import { networkState, getNodeById } from '$lib/state/networkData.svelte';
 
 	let { variant = 'inset' } = $props<{ variant?: 'floating' | 'inset' }>();
 
@@ -89,6 +91,8 @@
 					<NetworkPanel />
 				</Sidebar.GroupContent>
 			</Sidebar.Group>
+
+
 		{/if}
 	</Sidebar.Content>
 	<Sidebar.Footer>
