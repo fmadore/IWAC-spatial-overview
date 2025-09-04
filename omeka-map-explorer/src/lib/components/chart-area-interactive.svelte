@@ -136,6 +136,27 @@
 		void timeData.data;
 		render();
 	});
+
+		// Tooltip helpers
+		const monthYear = $derived.by(() =>
+			timeFormatFn
+				? (d: Date) => timeFormatFn('%B %Y')(d)
+				: (d: Date) => d.toLocaleDateString(undefined, { month: 'long', year: 'numeric' })
+		);
+
+		const tipX = $derived.by(() => {
+			// Keep tooltip within card horizontally
+			const desired = hover.x + 8;
+			const maxX = Math.max(0, dims.width - 180);
+			return Math.max(8, Math.min(desired, maxX));
+		});
+
+		const tipY = $derived.by(() => {
+			// Keep tooltip within card vertically
+			const desired = hover.y + 8;
+			const maxY = Math.max(0, dims.height - 56);
+			return Math.max(8, Math.min(desired, maxY));
+		});
 </script>
 
 <Card>
@@ -162,12 +183,12 @@
 					{/if}
 				</g>
 			</svg>
-	    {#if hover.ix >= 0 && hover.date}
-				<div class="pointer-events-none absolute px-2 py-1 text-xs rounded bg-background/90 border shadow" style={`transform: translate(${hover.x + 8}px, ${hover.y + 8}px);`}>
-		    <div class="font-medium">{(timeFormatFn && hover.date) ? timeFormatFn('%Y-%m-%d')(hover.date) : String(hover.date)}</div>
-					<div class="text-muted-foreground">{hover.count} articles</div>
-				</div>
-			{/if}
+			{#if hover.ix >= 0 && hover.date}
+					<div class="pointer-events-none absolute left-0 top-0 px-2 py-1 text-xs rounded bg-background/90 border shadow" style={`transform: translate(${tipX}px, ${tipY}px);`}>
+						<div class="font-medium">{monthYear(hover.date)}</div>
+						<div class="text-muted-foreground">{hover.count} articles</div>
+					</div>
+				{/if}
 		</div>
 	</CardContent>
 </Card>
