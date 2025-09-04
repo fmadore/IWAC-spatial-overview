@@ -1,8 +1,6 @@
 import { browser } from '$app/environment';
 import { appState } from '$lib/state/appState.svelte';
 import { goto } from '$app/navigation';
-import { page } from '$app/stores';
-import { get } from 'svelte/store';
 import { base } from '$app/paths';
 import { mapData } from '$lib/state/mapData.svelte';
 

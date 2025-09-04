@@ -1,13 +1,17 @@
 import { describe, test, expect, beforeEach, vi } from 'vitest';
+
+// Declare mocks first (hoisted) BEFORE importing the module under test
+const hoisted = vi.hoisted(() => ({
+	goto: vi.fn()
+}));
+
+vi.mock('$app/environment', () => ({ browser: true }));
+vi.mock('$app/navigation', () => ({ goto: hoisted.goto }));
+vi.mock('$app/paths', () => ({ base: '/IWAC-spatial-overview' }));
+
 import { urlManager } from './urlManager.svelte';
 import { appState } from '$lib/state/appState.svelte';
 import { mapData } from '$lib/state/mapData.svelte';
-
-// Mocks
-vi.mock('$app/environment', () => ({ browser: true }));
-const mockGoto = vi.fn();
-vi.mock('$app/navigation', () => ({ goto: mockGoto }));
-vi.mock('$app/paths', () => ({ base: '/IWAC-spatial-overview' }));
 
 describe('URL Manager', () => {
 	beforeEach(() => {
@@ -21,7 +25,7 @@ describe('URL Manager', () => {
 		mapData.organizations = [] as any;
 		mapData.events = [] as any;
 		mapData.subjects = [] as any;
-		mockGoto.mockClear();
+		hoisted.goto.mockClear();
 	});
 
 	test('parse empty params -> dashboard/overview', () => {
@@ -69,7 +73,7 @@ describe('URL Manager', () => {
 		urlManager.updateUrl();
 		vi.runAllTimers();
 
-		const calls = mockGoto.mock.calls.map((c) => c[0] as string);
+		const calls = hoisted.goto.mock.calls.map((c) => c[0] as string);
 		const last = calls[calls.length - 1];
 		expect(last).toContain('/IWAC-spatial-overview/?');
 		expect(last).not.toContain('entityType=');
