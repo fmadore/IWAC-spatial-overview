@@ -33,7 +33,7 @@
     <CardHeader class="pb-2">
       <CardTitle class="text-sm">Articles</CardTitle>
     </CardHeader>
-    <CardContent>
+    <CardContent class="pt-0">
       <div class="text-3xl font-bold">{fmt(totalUniqueArticles)}</div>
       <p class="text-xs text-muted-foreground mt-1">Unique articles in dataset</p>
     </CardContent>
@@ -43,7 +43,7 @@
     <CardHeader class="pb-2">
       <CardTitle class="text-sm">Newspapers</CardTitle>
     </CardHeader>
-    <CardContent>
+    <CardContent class="pt-0">
       <div class="text-3xl font-bold">{fmt(totalNewspapers)}</div>
       <p class="text-xs text-muted-foreground mt-1">Sources represented</p>
     </CardContent>
@@ -53,7 +53,7 @@
     <CardHeader class="pb-2">
       <CardTitle class="text-sm">Countries</CardTitle>
     </CardHeader>
-    <CardContent>
+    <CardContent class="pt-0">
       <div class="text-3xl font-bold">{fmt(totalCountries)}</div>
       <p class="text-xs text-muted-foreground mt-1">Available in dataset</p>
     </CardContent>
@@ -63,7 +63,7 @@
     <CardHeader class="pb-2">
       <CardTitle class="text-sm">Time span</CardTitle>
     </CardHeader>
-    <CardContent>
+    <CardContent class="pt-0">
       {#if dateRangeLabel}
         <div class="text-3xl font-bold">{dateRangeLabel}</div>
         <p class="text-xs text-muted-foreground mt-1">From first to last article</p>

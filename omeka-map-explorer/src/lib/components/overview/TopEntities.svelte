@@ -15,6 +15,9 @@
   const topEvents = $derived.by(() => topN(mapData.events, 5));
   const topSubjects = $derived.by(() => topN(mapData.subjects, 5));
 
+  // Locale-aware formatter for consistency with KpiCards
+  const nf = new Intl.NumberFormat('fr-FR');
+
   type Kind = 'persons' | 'organizations' | 'events' | 'subjects';
   const typeMap: Record<Kind, string> = {
     persons: 'Personnes',
@@ -35,97 +38,114 @@
     appState.activeVisualization = kind;
     urlManager.navigateTo('dashboard', kind, { type: typeLabel, id: entity.id });
   }
+
+  function formatCount(count: number | undefined): string {
+    return nf.format(count || 0);
+  }
+
+  function truncateName(name: string, maxLength = 22): string {
+    if (name.length <= maxLength) return name;
+    return name.substring(0, maxLength - 3) + '...';
+  }
 </script>
 
 <div class="grid gap-4 px-4 lg:px-6 md:grid-cols-2 lg:grid-cols-4">
   <!-- Persons -->
   <Card>
-    <CardHeader class="pb-3">
+    <CardHeader class="pb-2">
       <CardTitle class="text-sm flex items-center justify-between">
-        <span>Top Persons</span>
-        <span class="text-xs text-muted-foreground">{mapData.persons?.length ?? 0} total</span>
+        Top Persons
+        <span class="text-xs text-muted-foreground font-normal">{formatCount(mapData.persons?.length || 0)} total</span>
       </CardTitle>
     </CardHeader>
-    <CardContent class="space-y-2">
+    <CardContent class="space-y-1">
       {#each topPersons as person}
-        <button class="w-full text-left rounded-md hover:bg-muted px-2 py-1.5" on:click={() => navigateToEntity('persons', person)}>
-          <div class="flex items-center justify-between gap-2">
-            <span class="truncate">{person.name}</span>
-            <span class="text-xs text-muted-foreground">{person.articleCount}</span>
-          </div>
+        <button
+          class="flex items-center justify-between w-full px-2 py-1 text-xs rounded hover:bg-muted transition-colors text-left group"
+          onclick={() => navigateToEntity('persons', person)}
+          title={person.name}
+        >
+          <span class="truncate">{truncateName(person.name)}</span>
+          <span class="text-muted-foreground ml-2 flex-shrink-0 text-xs">{formatCount(person.articleCount)}</span>
         </button>
       {/each}
       {#if topPersons.length === 0}
-        <div class="text-xs text-muted-foreground p-2">No persons data available</div>
+        <div class="text-xs text-muted-foreground p-2 text-center">No persons data</div>
       {/if}
     </CardContent>
   </Card>
 
   <!-- Organizations -->
   <Card>
-    <CardHeader class="pb-3">
+    <CardHeader class="pb-2">
       <CardTitle class="text-sm flex items-center justify-between">
-        <span>Top Organizations</span>
-        <span class="text-xs text-muted-foreground">{mapData.organizations?.length ?? 0} total</span>
+        Top Organizations
+        <span class="text-xs text-muted-foreground font-normal">{formatCount(mapData.organizations?.length || 0)} total</span>
       </CardTitle>
     </CardHeader>
-    <CardContent class="space-y-2">
+    <CardContent class="space-y-1">
       {#each topOrganizations as organization}
-        <button class="w-full text-left rounded-md hover:bg-muted px-2 py-1.5" on:click={() => navigateToEntity('organizations', organization)}>
-          <div class="flex items-center justify-between gap-2">
-            <span class="truncate">{organization.name}</span>
-            <span class="text-xs text-muted-foreground">{organization.articleCount}</span>
-          </div>
+        <button
+          class="flex items-center justify-between w-full px-2 py-1 text-xs rounded hover:bg-muted transition-colors text-left group"
+          onclick={() => navigateToEntity('organizations', organization)}
+          title={organization.name}
+        >
+          <span class="truncate">{truncateName(organization.name)}</span>
+          <span class="text-muted-foreground ml-2 flex-shrink-0 text-xs">{formatCount(organization.articleCount)}</span>
         </button>
       {/each}
       {#if topOrganizations.length === 0}
-        <div class="text-xs text-muted-foreground p-2">No organizations data available</div>
+        <div class="text-xs text-muted-foreground p-2 text-center">No organizations data</div>
       {/if}
     </CardContent>
   </Card>
 
   <!-- Events -->
   <Card>
-    <CardHeader class="pb-3">
+    <CardHeader class="pb-2">
       <CardTitle class="text-sm flex items-center justify-between">
-        <span>Top Events</span>
-        <span class="text-xs text-muted-foreground">{mapData.events?.length ?? 0} total</span>
+        Top Events
+        <span class="text-xs text-muted-foreground font-normal">{formatCount(mapData.events?.length || 0)} total</span>
       </CardTitle>
     </CardHeader>
-    <CardContent class="space-y-2">
+    <CardContent class="space-y-1">
       {#each topEvents as event}
-        <button class="w-full text-left rounded-md hover:bg-muted px-2 py-1.5" on:click={() => navigateToEntity('events', event)}>
-          <div class="flex items-center justify-between gap-2">
-            <span class="truncate">{event.name}</span>
-            <span class="text-xs text-muted-foreground">{event.articleCount}</span>
-          </div>
+        <button
+          class="flex items-center justify-between w-full px-2 py-1 text-xs rounded hover:bg-muted transition-colors text-left group"
+          onclick={() => navigateToEntity('events', event)}
+          title={event.name}
+        >
+          <span class="truncate">{truncateName(event.name)}</span>
+          <span class="text-muted-foreground ml-2 flex-shrink-0 text-xs">{formatCount(event.articleCount)}</span>
         </button>
       {/each}
       {#if topEvents.length === 0}
-        <div class="text-xs text-muted-foreground p-2">No events data available</div>
+        <div class="text-xs text-muted-foreground p-2 text-center">No events data</div>
       {/if}
     </CardContent>
   </Card>
 
   <!-- Subjects -->
   <Card>
-    <CardHeader class="pb-3">
+    <CardHeader class="pb-2">
       <CardTitle class="text-sm flex items-center justify-between">
-        <span>Top Subjects</span>
-        <span class="text-xs text-muted-foreground">{mapData.subjects?.length ?? 0} total</span>
+        Top Subjects
+        <span class="text-xs text-muted-foreground font-normal">{formatCount(mapData.subjects?.length || 0)} total</span>
       </CardTitle>
     </CardHeader>
-    <CardContent class="space-y-2">
+    <CardContent class="space-y-1">
       {#each topSubjects as subject}
-        <button class="w-full text-left rounded-md hover:bg-muted px-2 py-1.5" on:click={() => navigateToEntity('subjects', subject)}>
-          <div class="flex items-center justify-between gap-2">
-            <span class="truncate">{subject.name}</span>
-            <span class="text-xs text-muted-foreground">{subject.articleCount}</span>
-          </div>
+        <button
+          class="flex items-center justify-between w-full px-2 py-1 text-xs rounded hover:bg-muted transition-colors text-left group"
+          onclick={() => navigateToEntity('subjects', subject)}
+          title={subject.name}
+        >
+          <span class="truncate">{truncateName(subject.name)}</span>
+          <span class="text-muted-foreground ml-2 flex-shrink-0 text-xs">{formatCount(subject.articleCount)}</span>
         </button>
       {/each}
       {#if topSubjects.length === 0}
-        <div class="text-xs text-muted-foreground p-2">No subjects data available</div>
+        <div class="text-xs text-muted-foreground p-2 text-center">No subjects data</div>
       {/if}
     </CardContent>
   </Card>
