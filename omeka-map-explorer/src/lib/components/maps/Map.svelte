@@ -334,8 +334,11 @@
 		else if (visibleData.length > 0 || cacheAvailable) {
 			let coordinateGroups: Map<string, { lat: number; lng: number; count: number; sample: any; items: any[]; name?: string }> | null = null;
 			
-			// Try to use cached coordinate clusters for better performance
-			if (cacheAvailable) {
+			// Only try to use cached coordinate clusters if no specific entity is selected
+			// Entity-specific cache files don't exist yet, so fall back to real-time for entities
+			const shouldUseCache = cacheAvailable && !appState.selectedEntity;
+			
+			if (shouldUseCache) {
 				try {
 					// Build comprehensive cache options based on current filters
 					const cacheOptions: {
@@ -343,7 +346,6 @@
 						countries?: string[];
 						dateRange?: { start: Date; end: Date };
 						year?: number;
-						entityType?: string;
 					} = {};
 					
 					// Add country filters for efficient cache filtering
@@ -356,24 +358,12 @@
 						cacheOptions.dateRange = filters.selected.dateRange;
 					}
 					
-					// Add entity filter
-					if (appState.selectedEntity?.type) {
-						const entityTypeMap: Record<string, string> = {
-							'Personnes': 'persons',
-							'Organisations': 'organizations',
-							'Événements': 'events',
-							'Sujets': 'subjects'
-						};
-						cacheOptions.entityType = entityTypeMap[appState.selectedEntity.type];
-					}
-					
 					// Load cached coordinates with comprehensive filters
 					const cachedClusters = await loadCoordinateCache(cacheOptions);
 					if (cachedClusters && cachedClusters.length > 0) {
 						console.log('✅ Using cached coordinate clusters for map markers with filters:', {
 							clusters: cachedClusters.length,
 							countries: cacheOptions.countries?.length || 'all',
-							entityType: cacheOptions.entityType || 'none',
 							dateRange: cacheOptions.dateRange ? 'yes' : 'no'
 						});
 						
@@ -407,7 +397,11 @@
 
 			// Fall back to real-time aggregation if cache is not available or failed
 			if (coordinateGroups === null && visibleData.length > 0) {
-				console.log('⚠️ Falling back to real-time coordinate aggregation');
+				if (appState.selectedEntity) {
+					console.log('🔍 Using real-time coordinate aggregation for entity view:', appState.selectedEntity.type, appState.selectedEntity.name);
+				} else {
+					console.log('⚠️ Falling back to real-time coordinate aggregation');
+				}
 				// Aggregate items by coordinate and add circle markers sized by count (much fewer markers)
 				coordinateGroups = new Map<string, { lat: number; lng: number; count: number; sample: any; items: any[]; name?: string }>();
 				for (const item of visibleData) {
