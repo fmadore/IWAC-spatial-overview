@@ -176,7 +176,7 @@ describe('URL Manager', () => {
 
 	test('updateUrl includes Country Focus facets only on countryFocus viz', () => {
 		// Set Country Focus facets
-		appState.countryFocus = { country: 'Burkina Faso', level: 'prefectures' };
+		appState.countryFocus = { country: 'Burkina Faso', level: 'prefectures', scaleType: 'linear' };
 		
 		// Not on countryFocus -> should NOT include facets
 		urlManager.updateUrl();
@@ -198,13 +198,14 @@ describe('URL Manager', () => {
 		u = new URL('http://x' + last);
 		expect(u.searchParams.get('focusCountry')).toBe('Burkina Faso');
 		expect(u.searchParams.get('focusLevel')).toBe('prefectures');
+		expect(u.searchParams.get('focusScale')).toBe('linear');
 	});
 
 	test('updateUrl excludes default Country Focus facets', () => {
 		// Set default values -> should not appear in URL
 		appState.activeView = 'dashboard';
 		appState.activeVisualization = 'countryFocus';
-		appState.countryFocus = { country: 'Benin', level: 'regions' };
+		appState.countryFocus = { country: 'Benin', level: 'regions', scaleType: 'quantile' };
 		urlManager.updateUrl();
 		vi.runAllTimers();
 		const calls = hoisted.goto.mock.calls.map((c) => c[0] as string);
@@ -212,6 +213,7 @@ describe('URL Manager', () => {
 		const u = new URL('http://x' + last);
 		expect(u.searchParams.get('focusCountry')).toBeNull();
 		expect(u.searchParams.get('focusLevel')).toBeNull();
+		expect(u.searchParams.get('focusScale')).toBeNull();
 		expect(last).toContain('viz=countryFocus');
 	});
 
@@ -234,7 +236,7 @@ describe('URL Manager', () => {
 		// Start on countryFocus with non-default facets
 		appState.activeView = 'dashboard';
 		appState.activeVisualization = 'countryFocus';
-		appState.countryFocus = { country: 'Togo', level: 'prefectures' };
+		appState.countryFocus = { country: 'Togo', level: 'prefectures', scaleType: 'sqrt' };
 		urlManager.updateUrl();
 		vi.runAllTimers();
 		let calls = hoisted.goto.mock.calls.map((c) => c[0] as string);
@@ -242,6 +244,7 @@ describe('URL Manager', () => {
 		let u = new URL('http://x' + last);
 		expect(u.searchParams.get('focusCountry')).toBe('Togo');
 		expect(u.searchParams.get('focusLevel')).toBe('prefectures');
+		expect(u.searchParams.get('focusScale')).toBe('sqrt');
 
 		// Now simulate clicking Overview
 		hoisted.goto.mockClear();

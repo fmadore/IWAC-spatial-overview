@@ -1,18 +1,21 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import { browser } from '$app/environment';
-  import { scaleQuantize } from 'd3-scale';
+  import { scaleQuantize, scaleThreshold, scaleSqrt } from 'd3-scale';
   import { schemeBlues } from 'd3-scale-chromatic';
+  import { quantile } from 'd3-array';
 
   // Props
   let {
     geoJson,
     data = {},
-    height = 520
+    height = 520,
+    scaleType = 'quantile'
   } = $props<{
     geoJson: any;
     data?: Record<string, number>;
     height?: number;
+    scaleType?: 'quantile' | 'linear' | 'sqrt';
   }>();
 
   // Local state
@@ -22,21 +25,126 @@
   let legend: any = null;
   let L: any;
 
-  // Color scale
+  // Color scale with better distribution handling
   const colorScale = $derived.by(() => {
     const values = Object.values(data).filter((v): v is number => typeof v === 'number' && v > 0);
     if (values.length === 0) return (v: number) => '#f0f0f0';
     
-    const min = Math.min(...values);
-    const max = Math.max(...values);
+    if (values.length === 1) return (v: number) => v > 0 ? schemeBlues[4] : '#f0f0f0';
     
+    // Sort values for statistical analysis
+    const sortedValues = [...values].sort((a, b) => a - b);
+    const min = sortedValues[0];
+    const max = sortedValues[sortedValues.length - 1];
+    
+    // If all values are the same
     if (min === max) return (v: number) => v > 0 ? schemeBlues[4] : '#f0f0f0';
     
-    const scale = scaleQuantize()
-      .domain([min, max])
-      .range(schemeBlues[7]);
+    const colors = schemeBlues[7];
     
-    return (v: number) => v > 0 ? scale(v) : '#f0f0f0';
+    switch (scaleType) {
+      case 'sqrt': {
+        // Square root scale - good for data with a few very large outliers
+        const scale = scaleSqrt()
+          .domain([min, max])
+          .range([0, colors.length - 1]);
+        
+        return (v: number) => {
+          if (v <= 0) return '#f0f0f0';
+          const index = Math.min(Math.floor(scale(v)), colors.length - 1);
+          return colors[index];
+        };
+      }
+      
+      case 'linear': {
+        // Linear quantize scale - equal intervals
+        const scale = scaleQuantize()
+          .domain([min, max])
+          .range(colors);
+        return (v: number) => v > 0 ? scale(v) : '#f0f0f0';
+      }
+      
+      case 'quantile':
+      default: {
+        // Quantile-based thresholds - equal number of regions per color
+        const thresholds = [];
+        for (let i = 1; i < colors.length; i++) {
+          const q = i / colors.length;
+          const threshold = quantile(sortedValues, q);
+          if (threshold !== undefined) {
+            thresholds.push(threshold);
+          }
+        }
+        
+        // Remove duplicates and ensure proper ordering
+        const uniqueThresholds = [...new Set(thresholds)].sort((a, b) => a - b);
+        
+        // If we don't have enough unique thresholds, fall back to linear scale
+        if (uniqueThresholds.length < 2) {
+          const scale = scaleQuantize()
+            .domain([min, max])
+            .range(colors);
+          return (v: number) => v > 0 ? scale(v) : '#f0f0f0';
+        }
+        
+        // Create threshold scale
+        const scale = scaleThreshold()
+          .domain(uniqueThresholds)
+          .range(colors);
+        
+        return (v: number) => v > 0 ? scale(v) : '#f0f0f0';
+      }
+    }
+  });
+
+  // Helper function to get thresholds for legend (depends on scale type)
+  const legendThresholds = $derived.by(() => {
+    const values = Object.values(data).filter((v): v is number => typeof v === 'number' && v > 0);
+    if (values.length === 0) return [];
+    
+    const sortedValues = [...values].sort((a, b) => a - b);
+    const min = sortedValues[0];
+    const max = sortedValues[sortedValues.length - 1];
+    const colors = schemeBlues[7];
+    
+    switch (scaleType) {
+      case 'sqrt': {
+        // For square root scale, create equal intervals in sqrt space
+        const sqrtScale = scaleSqrt().domain([min, max]).range([0, colors.length - 1]);
+        const thresholds = [];
+        for (let i = 1; i < colors.length; i++) {
+          // Find the value that maps to this color index
+          const targetIndex = i - 0.5;
+          const threshold = sqrtScale.invert(targetIndex);
+          thresholds.push(Math.round(threshold));
+        }
+        return [...new Set(thresholds)].sort((a, b) => a - b);
+      }
+      
+      case 'linear': {
+        // Linear intervals
+        const thresholds = [];
+        for (let i = 1; i < colors.length; i++) {
+          const threshold = min + (max - min) * i / colors.length;
+          thresholds.push(Math.round(threshold));
+        }
+        return thresholds;
+      }
+      
+      case 'quantile':
+      default: {
+        // Quantile thresholds
+        const thresholds = [];
+        for (let i = 1; i < colors.length; i++) {
+          const q = i / colors.length;
+          const threshold = quantile(sortedValues, q);
+          if (threshold !== undefined) {
+            thresholds.push(Math.round(threshold));
+          }
+        }
+        return [...new Set(thresholds)].sort((a, b) => a - b);
+      }
+    }
   });
 
   function getColor(value: number): string {
@@ -95,7 +203,7 @@
   function createLegend() {
     if (!L || !map) return;
     
-    const values = Object.values(data).filter((v): v is number => typeof v === 'number' && v > 0).sort((a, b) => a - b);
+    const values = Object.values(data).filter((v): v is number => typeof v === 'number' && v > 0);
     if (values.length === 0) return;
     
     legend = new L.Control({ position: 'bottomright' });
@@ -107,20 +215,52 @@
       div.style.borderRadius = '4px';
       div.style.border = '1px solid #ccc';
       
-      const min = Math.min(...values);
-      const max = Math.max(...values);
-      const steps = 5;
+      const colors = schemeBlues[7];
+      const thresholds = legendThresholds;
       
-      let labels = ['<strong>Articles</strong>'];
+      const scaleLabels: Record<string, string> = {
+        quantile: 'Articles (Quantile)',
+        linear: 'Articles (Linear)', 
+        sqrt: 'Articles (√ Scale)'
+      };
       
-      for (let i = 0; i < steps; i++) {
-        const from = Math.round(min + (max - min) * i / steps);
-        const to = Math.round(min + (max - min) * (i + 1) / steps);
-        const color = getColor(from + (to - from) / 2);
-        
+      let labels = [`<strong>${scaleLabels[scaleType] || 'Articles'}</strong>`];
+      
+      if (thresholds.length === 0) {
+        // Single color for all values
+        const color = getColor(Math.max(...values));
         labels.push(
-          `<i style="background:${color}; width: 18px; height: 18px; display: inline-block; margin-right: 8px;"></i> ${from}${i < steps - 1 ? `–${to}` : '+'}`
+          `<i style="background:${color}; width: 18px; height: 18px; display: inline-block; margin-right: 8px;"></i> All regions`
         );
+      } else {
+        // Create ranges based on quantile thresholds
+        const sortedValues = [...values].sort((a, b) => a - b);
+        const min = Math.min(...values);
+        const max = Math.max(...values);
+        
+        // First range: min to first threshold
+        if (thresholds.length > 0) {
+          const color = getColor(min);
+          labels.push(
+            `<i style="background:${color}; width: 18px; height: 18px; display: inline-block; margin-right: 8px;"></i> ${min}–${thresholds[0]}`
+          );
+        }
+        
+        // Middle ranges: between thresholds
+        for (let i = 0; i < thresholds.length - 1; i++) {
+          const color = getColor(thresholds[i] + 1);
+          labels.push(
+            `<i style="background:${color}; width: 18px; height: 18px; display: inline-block; margin-right: 8px;"></i> ${thresholds[i] + 1}–${thresholds[i + 1]}`
+          );
+        }
+        
+        // Last range: last threshold to max
+        if (thresholds.length > 0) {
+          const color = getColor(max);
+          labels.push(
+            `<i style="background:${color}; width: 18px; height: 18px; display: inline-block; margin-right: 8px;"></i> ${thresholds[thresholds.length - 1] + 1}–${max}`
+          );
+        }
       }
       
       div.innerHTML = labels.join('<br>');
@@ -181,11 +321,13 @@
     updateMap();
   });
 
-  // Update when geoJson or data changes
+  // Update when geoJson, data, or scaleType changes
   $effect(() => {
     if (geoJson && data) {
       updateMap();
     }
+    // Include scaleType in dependencies to trigger updates
+    void scaleType;
   });
 </script>
 

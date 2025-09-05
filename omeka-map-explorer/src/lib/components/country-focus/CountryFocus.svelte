@@ -19,6 +19,7 @@
   // Use app state for facets, with fallback to props for initial values
   const country = $derived(appState.countryFocus?.country || initialCountry);
   const level = $derived(appState.countryFocus?.level || 'regions');
+  const scaleType = $derived(appState.countryFocus?.scaleType || 'quantile');
 
   // Local state for data loading
   let geoJson: any = $state(null);
@@ -38,7 +39,7 @@
 
   function setCountry(newCountry: Country) {
     if (!appState.countryFocus) {
-      appState.countryFocus = { country: newCountry, level: 'regions' };
+      appState.countryFocus = { country: newCountry, level: 'regions', scaleType: 'quantile' };
     } else {
       appState.countryFocus.country = newCountry;
       // Reset to regions if switching to Côte d'Ivoire and currently on prefectures
@@ -51,9 +52,18 @@
 
   function setLevel(newLevel: AdminLevel) {
     if (!appState.countryFocus) {
-      appState.countryFocus = { country: 'Benin', level: newLevel };
+      appState.countryFocus = { country: 'Benin', level: newLevel, scaleType: 'quantile' };
     } else {
       appState.countryFocus.level = newLevel;
+    }
+    urlManager.updateUrl();
+  }
+
+  function setScaleType(newScaleType: 'quantile' | 'linear' | 'sqrt') {
+    if (!appState.countryFocus) {
+      appState.countryFocus = { country: 'Benin', level: 'regions', scaleType: newScaleType };
+    } else {
+      appState.countryFocus.scaleType = newScaleType;
     }
     urlManager.updateUrl();
   }
@@ -133,6 +143,37 @@
             Prefectures
           </Button>
         {/if}
+        
+        <div class="w-px h-6 bg-border mx-1"></div>
+        
+        <!-- Scale type buttons -->
+        <Button 
+          variant={scaleType === 'quantile' ? 'default' : 'outline'} 
+          size="sm" 
+          onclick={() => setScaleType('quantile')}
+          disabled={loading}
+          title="Quantile scale: Each color represents the same number of regions"
+        >
+          Quantile
+        </Button>
+        <Button 
+          variant={scaleType === 'linear' ? 'default' : 'outline'} 
+          size="sm" 
+          onclick={() => setScaleType('linear')}
+          disabled={loading}
+          title="Linear scale: Colors represent equal intervals"
+        >
+          Linear
+        </Button>
+        <Button 
+          variant={scaleType === 'sqrt' ? 'default' : 'outline'} 
+          size="sm" 
+          onclick={() => setScaleType('sqrt')}
+          disabled={loading}
+          title="Square root scale: Better for data with outliers"
+        >
+          √ Scale
+        </Button>
       </div>
 
       <!-- Map or loading/error state -->
@@ -154,7 +195,7 @@
           </div>
         </div>
       {:else if geoJson}
-        <ChoroplethMap {geoJson} data={counts} />
+        <ChoroplethMap {geoJson} data={counts} {scaleType} />
       {:else}
         <div class="h-[520px] w-full rounded-md border flex items-center justify-center">
           <p class="text-sm text-muted-foreground">No data available</p>

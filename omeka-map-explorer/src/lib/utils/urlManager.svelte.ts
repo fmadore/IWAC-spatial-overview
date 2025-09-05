@@ -78,6 +78,9 @@ export const urlManager = {
 			if (countryFocus?.level && countryFocus.level !== 'regions') {
 				params.set('focusLevel', countryFocus.level);
 			}
+			if (countryFocus?.scaleType && countryFocus.scaleType !== 'quantile') {
+				params.set('focusScale', countryFocus.scaleType);
+			}
 		}
 
 		// Build the URL with proper base path
@@ -235,9 +238,11 @@ export const urlManager = {
 		if (appState.activeVisualization === 'countryFocus') {
 			const focusCountryParam = searchParams.get('focusCountry');
 			const focusLevelParam = searchParams.get('focusLevel');
+			const focusScaleParam = searchParams.get('focusScale');
 			
 			const validCountries = ['Benin', 'Burkina Faso', 'Cote_dIvoire', 'Togo'];
 			const validLevels = ['regions', 'prefectures'];
+			const validScales = ['quantile', 'linear', 'sqrt'];
 			
 			appState.countryFocus = {
 				country: (focusCountryParam && validCountries.includes(focusCountryParam)) 
@@ -245,13 +250,17 @@ export const urlManager = {
 					: 'Benin',
 				level: (focusLevelParam && validLevels.includes(focusLevelParam)) 
 					? focusLevelParam as any 
-					: 'regions'
+					: 'regions',
+				scaleType: (focusScaleParam && validScales.includes(focusScaleParam)) 
+					? focusScaleParam as any 
+					: 'quantile'
 			};
 		} else if (!appState.countryFocus) {
 			// Initialize with defaults if not set
 			appState.countryFocus = {
 				country: 'Benin',
-				level: 'regions'
+				level: 'regions',
+				scaleType: 'quantile'
 			};
 		}
 	},
@@ -270,7 +279,8 @@ export const urlManager = {
 			if (prevViz === 'countryFocus') {
 				appState.countryFocus = {
 					country: 'Benin',
-					level: 'regions'
+					level: 'regions',
+					scaleType: 'quantile'
 				};
 			}
 		}

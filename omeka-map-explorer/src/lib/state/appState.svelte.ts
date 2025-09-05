@@ -34,6 +34,7 @@ interface AppState {
 	countryFocus?: {
 		country: 'Benin' | 'Burkina Faso' | 'Cote_dIvoire' | 'Togo';
 		level: 'regions' | 'prefectures';
+		scaleType: 'quantile' | 'linear' | 'sqrt';
 	} | null;
 }
 
@@ -50,7 +51,8 @@ export const appState = $state<AppState>({
 	networkLoaded: false,
 	countryFocus: {
 		country: 'Benin',
-		level: 'regions'
+		level: 'regions',
+		scaleType: 'quantile'
 	}
 });
 
