@@ -69,6 +69,17 @@ export const urlManager = {
 			}
 		}
 
+		// Encode Country Focus facets for deep-linking ONLY on countryFocus viz
+		if (viz === 'countryFocus') {
+			const countryFocus = appState.countryFocus;
+			if (countryFocus?.country && countryFocus.country !== 'Benin') {
+				params.set('focusCountry', countryFocus.country);
+			}
+			if (countryFocus?.level && countryFocus.level !== 'regions') {
+				params.set('focusLevel', countryFocus.level);
+			}
+		}
+
 		// Build the URL with proper base path
 		const paramString = params.toString();
 		const url = paramString ? `${base}/?${paramString}` : `${base}/`;
@@ -219,6 +230,30 @@ export const urlManager = {
 		} else {
 			clearFilters();
 		}
+
+		// Apply Country Focus facets from URL only for countryFocus; otherwise use defaults
+		if (appState.activeVisualization === 'countryFocus') {
+			const focusCountryParam = searchParams.get('focusCountry');
+			const focusLevelParam = searchParams.get('focusLevel');
+			
+			const validCountries = ['Benin', 'Burkina Faso', 'Cote_dIvoire', 'Togo'];
+			const validLevels = ['regions', 'prefectures'];
+			
+			appState.countryFocus = {
+				country: (focusCountryParam && validCountries.includes(focusCountryParam)) 
+					? focusCountryParam as any 
+					: 'Benin',
+				level: (focusLevelParam && validLevels.includes(focusLevelParam)) 
+					? focusLevelParam as any 
+					: 'regions'
+			};
+		} else if (!appState.countryFocus) {
+			// Initialize with defaults if not set
+			appState.countryFocus = {
+				country: 'Benin',
+				level: 'regions'
+			};
+		}
 	},
 
 	// Navigate to a specific view/visualization
@@ -231,6 +266,13 @@ export const urlManager = {
 		// Reset all facets on any visualization change
 		if (visualization && visualization !== prevViz) {
 			clearFilters();
+			// Reset Country Focus facets to defaults when switching away from countryFocus
+			if (prevViz === 'countryFocus') {
+				appState.countryFocus = {
+					country: 'Benin',
+					level: 'regions'
+				};
+			}
 		}
 		if (entitySelection) {
 			// We'll need to load the full entity details, but set basic info for now
@@ -255,6 +297,7 @@ export function initializeUrlManager() {
 	let previousEntity = appState.selectedEntity;
 	let previousNode = appState.networkNodeSelected;
 	let previousFiltersSig = '';
+	let previousCountryFocusSig = '';
 
 	const getFiltersSig = () => {
 		const sel = filters.selected;
@@ -265,7 +308,13 @@ export function initializeUrlManager() {
 				: null
 		});
 	};
+	
+	const getCountryFocusSig = () => {
+		return JSON.stringify(appState.countryFocus);
+	};
+	
 	previousFiltersSig = getFiltersSig();
+	previousCountryFocusSig = getCountryFocusSig();
 
 	const intervalMs = 200; // lower frequency than rAF to avoid flooding
 	const handle = setInterval(() => {
@@ -274,7 +323,8 @@ export function initializeUrlManager() {
 			appState.activeVisualization !== previousViz ||
 			appState.selectedEntity !== previousEntity ||
 			appState.networkNodeSelected !== previousNode ||
-			getFiltersSig() !== previousFiltersSig
+			getFiltersSig() !== previousFiltersSig ||
+			getCountryFocusSig() !== previousCountryFocusSig
 		) {
 			urlManager.updateUrl();
 			previousView = appState.activeView;
@@ -282,6 +332,7 @@ export function initializeUrlManager() {
 			previousEntity = appState.selectedEntity;
 			previousNode = appState.networkNodeSelected;
 			previousFiltersSig = getFiltersSig();
+			previousCountryFocusSig = getCountryFocusSig();
 		}
 	}, intervalMs);
 

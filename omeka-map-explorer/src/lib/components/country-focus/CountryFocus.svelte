@@ -5,6 +5,8 @@
   import { loadCountryAdminGeoJson } from '$lib/api/geoJsonService';
   import { loadAdminCounts } from '$lib/api/countryFocusService';
   import type { AdminLevel } from '$lib/api/countryFocusService';
+  import { appState } from '$lib/state/appState.svelte';
+  import { urlManager } from '$lib/utils/urlManager.svelte';
   import ChoroplethMap from './ChoroplethMap.svelte';
 
   type Country = 'Benin' | 'Burkina Faso' | 'Cote_dIvoire' | 'Togo';
@@ -14,9 +16,11 @@
     initialCountry?: Country 
   }>();
 
-  // State
-  let country = $state<Country>(initialCountry);
-  let level = $state<AdminLevel>('regions');
+  // Use app state for facets, with fallback to props for initial values
+  const country = $derived(appState.countryFocus?.country || initialCountry);
+  const level = $derived(appState.countryFocus?.level || 'regions');
+
+  // Local state for data loading
   let geoJson: any = $state(null);
   let counts: Record<string, number> = $state({});
   let loading = $state(false);
@@ -31,6 +35,28 @@
 
   // Côte d'Ivoire only has regions, no prefectures
   const hasPrefectures = $derived(country !== 'Cote_dIvoire');
+
+  function setCountry(newCountry: Country) {
+    if (!appState.countryFocus) {
+      appState.countryFocus = { country: newCountry, level: 'regions' };
+    } else {
+      appState.countryFocus.country = newCountry;
+      // Reset to regions if switching to Côte d'Ivoire and currently on prefectures
+      if (newCountry === 'Cote_dIvoire' && appState.countryFocus.level === 'prefectures') {
+        appState.countryFocus.level = 'regions';
+      }
+    }
+    urlManager.updateUrl();
+  }
+
+  function setLevel(newLevel: AdminLevel) {
+    if (!appState.countryFocus) {
+      appState.countryFocus = { country: 'Benin', level: newLevel };
+    } else {
+      appState.countryFocus.level = newLevel;
+    }
+    urlManager.updateUrl();
+  }
 
   async function loadData() {
     loading = true;
@@ -58,10 +84,6 @@
   // Load data when country or level changes
   $effect(() => {
     void country; void level;
-    // Reset to regions if switching to Côte d'Ivoire and currently on prefectures
-    if (country === 'Cote_dIvoire' && level === 'prefectures') {
-      level = 'regions';
-    }
     loadData();
   });
 
@@ -83,7 +105,7 @@
           <Button 
             variant={country === key ? 'default' : 'outline'} 
             size="sm" 
-            onclick={() => country = key}
+            onclick={() => setCountry(key)}
             disabled={loading}
           >
             {label}
@@ -96,7 +118,7 @@
         <Button 
           variant={level === 'regions' ? 'default' : 'outline'} 
           size="sm" 
-          onclick={() => level = 'regions'}
+          onclick={() => setLevel('regions')}
           disabled={loading}
         >
           Regions
@@ -105,7 +127,7 @@
           <Button 
             variant={level === 'prefectures' ? 'default' : 'outline'} 
             size="sm" 
-            onclick={() => level = 'prefectures'}
+            onclick={() => setLevel('prefectures')}
             disabled={loading}
           >
             Prefectures

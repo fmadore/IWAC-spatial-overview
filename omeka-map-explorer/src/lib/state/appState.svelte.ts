@@ -29,6 +29,12 @@ interface AppState {
 	// Network view state
 	networkNodeSelected?: { id: string } | null;
 	networkLoaded?: boolean;
+
+	// Country Focus facets
+	countryFocus?: {
+		country: 'Benin' | 'Burkina Faso' | 'Cote_dIvoire' | 'Togo';
+		level: 'regions' | 'prefectures';
+	} | null;
 }
 
 export const appState = $state<AppState>({
@@ -41,7 +47,11 @@ export const appState = $state<AppState>({
 	activeVisualization: 'overview',
 	selectedEntity: null,
 	networkNodeSelected: null,
-	networkLoaded: false
+	networkLoaded: false,
+	countryFocus: {
+		country: 'Benin',
+		level: 'regions'
+	}
 });
 
 export function setError(message: string) {
