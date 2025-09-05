@@ -11,6 +11,7 @@
 	import { loadStaticData } from '$lib/utils/staticDataLoader';
 	import { loadEntities, loadLocations, restoreEntityFromUrl, preloadAllEntities } from '$lib/utils/entityLoader';
 	import { urlManager, initializeUrlManager } from '$lib/utils/urlManager.svelte';
+	import { initFullScreenListener } from '$lib/state/appState.svelte';
 	import type { ProcessedItem } from '$lib/types';
 	import { browser } from '$app/environment';
 
@@ -103,6 +104,9 @@
 		try {
 			// Initialize URL manager
 			initializeUrlManager();
+
+			// Initialize full screen listener
+			initFullScreenListener();
 
 			// Parse current URL search parameters and set initial state
 			urlManager.parseUrlAndUpdateState($page.url.searchParams);

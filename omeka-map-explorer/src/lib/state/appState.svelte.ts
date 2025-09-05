@@ -36,6 +36,9 @@ interface AppState {
 		level: 'regions' | 'prefectures';
 		scaleType: 'quantile' | 'linear' | 'sqrt';
 	} | null;
+
+	// Full screen state
+	isFullScreen: boolean;
 }
 
 export const appState = $state<AppState>({
@@ -53,7 +56,8 @@ export const appState = $state<AppState>({
 		country: 'Benin',
 		level: 'regions',
 		scaleType: 'quantile'
-	}
+	},
+	isFullScreen: false
 });
 
 export function setError(message: string) {
@@ -63,4 +67,36 @@ export function setError(message: string) {
 
 export function setSelectedItem(item: ProcessedItem | null) {
 	appState.selectedItem = item;
+}
+
+export function toggleFullScreen() {
+	if (!document.fullscreenElement) {
+		document.documentElement.requestFullscreen().then(() => {
+			appState.isFullScreen = true;
+		}).catch((err) => {
+			console.error(`Error attempting to enable full-screen: ${err.message}`);
+		});
+	} else {
+		document.exitFullscreen().then(() => {
+			appState.isFullScreen = false;
+		}).catch((err) => {
+			console.error(`Error attempting to exit full-screen: ${err.message}`);
+		});
+	}
+}
+
+export function initFullScreenListener() {
+	if (typeof document !== 'undefined') {
+		const handleFullScreenChange = () => {
+			appState.isFullScreen = !!document.fullscreenElement;
+		};
+		
+		document.addEventListener('fullscreenchange', handleFullScreenChange);
+		
+		// Return cleanup function
+		return () => {
+			document.removeEventListener('fullscreenchange', handleFullScreenChange);
+		};
+	}
+	return () => {};
 }

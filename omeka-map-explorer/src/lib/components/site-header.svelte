@@ -1,6 +1,8 @@
 <script lang="ts">
 	import * as Sidebar from '$lib/components/ui/sidebar';
-	import { appState } from '$lib/state/appState.svelte';
+	import * as Button from '$lib/components/ui/button';
+	import * as Tooltip from '$lib/components/ui/tooltip';
+	import { appState, toggleFullScreen } from '$lib/state/appState.svelte';
 
 	const getTitle = $derived.by(() => {
 		if (appState.activeView === 'map') {
@@ -40,7 +42,62 @@
 			<h1 class="text-lg font-semibold tracking-tight">{getTitle}</h1>
 		</div>
 		<div class="flex items-center gap-2">
-			<!-- Reserved for future header actions -->
+			<Tooltip.Provider>
+				<Tooltip.Root>
+					<Tooltip.Trigger>
+						<Button.Button
+							variant="ghost"
+							size="icon"
+							onclick={toggleFullScreen}
+							class="h-8 w-8"
+							aria-label={appState.isFullScreen ? 'Exit full screen' : 'Enter full screen'}
+						>
+							{#if appState.isFullScreen}
+								<!-- Minimize/Exit Full Screen Icon -->
+								<svg
+									xmlns="http://www.w3.org/2000/svg"
+									width="16"
+									height="16"
+									viewBox="0 0 24 24"
+									fill="none"
+									stroke="currentColor"
+									stroke-width="2"
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									class="lucide lucide-minimize-2"
+								>
+									<polyline points="4,14 10,14 10,20" />
+									<polyline points="20,10 14,10 14,4" />
+									<line x1="14" y1="10" x2="21" y2="3" />
+									<line x1="3" y1="21" x2="10" y2="14" />
+								</svg>
+							{:else}
+								<!-- Maximize/Full Screen Icon -->
+								<svg
+									xmlns="http://www.w3.org/2000/svg"
+									width="16"
+									height="16"
+									viewBox="0 0 24 24"
+									fill="none"
+									stroke="currentColor"
+									stroke-width="2"
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									class="lucide lucide-maximize-2"
+								>
+									<polyline points="15,3 21,3 21,9" />
+									<polyline points="9,21 3,21 3,15" />
+									<line x1="21" y1="3" x2="14" y2="10" />
+									<line x1="3" y1="21" x2="10" y2="14" />
+								</svg>
+							{/if}
+						</Button.Button>
+					</Tooltip.Trigger>
+					<Tooltip.Content side="bottom">
+						<p>{appState.isFullScreen ? 'Exit full screen' : 'Enter full screen'}</p>
+					</Tooltip.Content>
+				</Tooltip.Root>
+			</Tooltip.Provider>
 		</div>
 	</div>
 </header>
