@@ -2267,6 +2267,13 @@
     "Prefecture": "Nayala"
   },
   {
+    "o:id": 14522,
+    "Titre": "Mina",
+    "Type": "Lieux",
+    "Coordonnées": "21.413333, 39.893333",
+    "Country": "Saudi Arabia"
+  },
+  {
     "o:id": 14604,
     "Titre": "Mosquée centrale de Kandi",
     "Type": "Lieux",
@@ -2309,6 +2316,13 @@
     "Type": "Lieux",
     "Coordonnées": "",
     "Country": ""
+  },
+  {
+    "o:id": 15084,
+    "Titre": "Éthiopie",
+    "Type": "Lieux",
+    "Coordonnées": "9, 40",
+    "Country": "Ethiopia"
   },
   {
     "o:id": 15204,
@@ -3793,7 +3807,7 @@
     "o:id": 61325,
     "Titre": "Mosquée Bilal",
     "Type": "Lieux",
-    "Coordonnées": "",
+    "Coordonnées": "5.249081568964093, -3.9182779270167036",
     "Country": ""
   },
   {
@@ -4911,6 +4925,512 @@
   {
     "o:id": 76354,
     "Titre": "Zogbadjè",
+    "Type": "Lieux",
+    "Coordonnées": "",
+    "Country": ""
+  },
+  {
+    "o:id": 76443,
+    "Titre": "Williamsville",
+    "Type": "Lieux",
+    "Coordonnées": "5.372656157414483, -4.0202704387950305",
+    "Country": "Côte d'Ivoire",
+    "Region": "District Autonome D'Abidjan"
+  },
+  {
+    "o:id": 76444,
+    "Titre": "Mosquée Sénégalaise",
+    "Type": "Lieux",
+    "Coordonnées": "5.302210132319611, -3.954733641173595",
+    "Country": "Côte d'Ivoire",
+    "Region": "District Autonome D'Abidjan"
+  },
+  {
+    "o:id": 76445,
+    "Titre": "Grande Mosquée de Koumassi",
+    "Type": "Lieux",
+    "Coordonnées": "5.291817878819392, -3.96656169628797",
+    "Country": "Côte d'Ivoire",
+    "Region": "District Autonome D'Abidjan"
+  },
+  {
+    "o:id": 76446,
+    "Titre": "Aéroport International Félix Houphouët-Boigny",
+    "Type": "Lieux",
+    "Coordonnées": "5.261417, -3.925778",
+    "Country": "Côte d'Ivoire",
+    "Region": "District Autonome D'Abidjan"
+  },
+  {
+    "o:id": 76447,
+    "Titre": "Worodougou",
+    "Type": "Lieux",
+    "Coordonnées": "8.5, -6.333333",
+    "Country": "Côte d'Ivoire",
+    "Region": "Bere"
+  },
+  {
+    "o:id": 76448,
+    "Titre": "Grande Mosquée de Williamsville",
+    "Type": "Lieux",
+    "Coordonnées": "5.364913926999096, -4.020681656463771",
+    "Country": "Côte d'Ivoire",
+    "Region": "District Autonome D'Abidjan"
+  },
+  {
+    "o:id": 76449,
+    "Titre": "Boundiali",
+    "Type": "Lieux",
+    "Coordonnées": "9.516667, -6.483333",
+    "Country": "Côte d'Ivoire",
+    "Region": "Bagoue"
+  },
+  {
+    "o:id": 76450,
+    "Titre": "Grande Mosquée de l'Avenue 8",
+    "Type": "Lieux",
+    "Coordonnées": "",
+    "Country": ""
+  },
+  {
+    "o:id": 76453,
+    "Titre": "Palais de la Culture de Treichville",
+    "Type": "Lieux",
+    "Coordonnées": "5.311792930011962, -4.012379174255093",
+    "Country": "Côte d'Ivoire",
+    "Region": "District Autonome D'Abidjan"
+  },
+  {
+    "o:id": 76454,
+    "Titre": "Grande Mosquée de Bouaké",
+    "Type": "Lieux",
+    "Coordonnées": "7.695784756725776, -5.025757353982737",
+    "Country": "Côte d'Ivoire",
+    "Region": "Gbeke"
+  },
+  {
+    "o:id": 76455,
+    "Titre": "École régionale de Treichville",
+    "Type": "Lieux",
+    "Coordonnées": "",
+    "Country": ""
+  },
+  {
+    "o:id": 76456,
+    "Titre": "Riviera Palmeraie",
+    "Type": "Lieux",
+    "Coordonnées": "5.36992, -3.95658",
+    "Country": "Côte d'Ivoire",
+    "Region": "District Autonome D'Abidjan"
+  },
+  {
+    "o:id": 76457,
+    "Titre": "Cocody Angré",
+    "Type": "Lieux",
+    "Coordonnées": "5.386217444874156, -3.9826822579490044",
+    "Country": "Côte d'Ivoire",
+    "Region": "District Autonome D'Abidjan"
+  },
+  {
+    "o:id": 76458,
+    "Titre": "Mosquée du CHU de Treichville",
+    "Type": "Lieux",
+    "Coordonnées": "5.291784471629551, -4.001046644807476",
+    "Country": ""
+  },
+  {
+    "o:id": 76459,
+    "Titre": "Mosquée de la Paix",
+    "Type": "Lieux",
+    "Coordonnées": "",
+    "Country": ""
+  },
+  {
+    "o:id": 76460,
+    "Titre": "Chu de Treichville",
+    "Type": "Lieux",
+    "Coordonnées": "5.293477682375166, -4.003772668120945",
+    "Country": ""
+  },
+  {
+    "o:id": 76461,
+    "Titre": "Riviéra 2",
+    "Type": "Lieux",
+    "Coordonnées": "5.347059329725747, -3.977945412685864",
+    "Country": "Côte d'Ivoire",
+    "Region": "District Autonome D'Abidjan"
+  },
+  {
+    "o:id": 76462,
+    "Titre": "Maison d'Arrêt et de Correction d'Abidjan",
+    "Type": "Lieux",
+    "Coordonnées": "5.390278, -4.076111",
+    "Country": "Côte d'Ivoire",
+    "Region": "District Autonome D'Abidjan"
+  },
+  {
+    "o:id": 76463,
+    "Titre": "Fès",
+    "Type": "Lieux",
+    "Coordonnées": "34.043333, -5.003333",
+    "Country": "Morocco"
+  },
+  {
+    "o:id": 76464,
+    "Titre": "Vatican",
+    "Type": "Lieux",
+    "Coordonnées": "41.904, 12.453",
+    "Country": "Italy"
+  },
+  {
+    "o:id": 76465,
+    "Titre": "Denguélé",
+    "Type": "Lieux",
+    "Coordonnées": "9.5, -7.416667",
+    "Country": "Côte d'Ivoire",
+    "Region": "Kabadougou"
+  },
+  {
+    "o:id": 76466,
+    "Titre": "Zanzan",
+    "Type": "Lieux",
+    "Coordonnées": "8.5, -3.25",
+    "Country": "Côte d'Ivoire",
+    "Region": "Bounkani"
+  },
+  {
+    "o:id": 76467,
+    "Titre": "Koffikro-Afféma",
+    "Type": "Lieux",
+    "Coordonnées": "5.583031388533375, -2.978311728764035",
+    "Country": "Côte d'Ivoire",
+    "Region": "Sud-Comoe"
+  },
+  {
+    "o:id": 76468,
+    "Titre": "Goulia",
+    "Type": "Lieux",
+    "Coordonnées": "10.019144689457782, -7.200250689201636",
+    "Country": "Côte d'Ivoire",
+    "Region": "Folon"
+  },
+  {
+    "o:id": 76469,
+    "Titre": "Bouna",
+    "Type": "Lieux",
+    "Coordonnées": "9.26666667, -3",
+    "Country": "Côte d'Ivoire",
+    "Region": "Bounkani"
+  },
+  {
+    "o:id": 76470,
+    "Titre": "Issia",
+    "Type": "Lieux",
+    "Coordonnées": "6.4922222222222, -6.5855555555556",
+    "Country": "Côte d'Ivoire",
+    "Region": "Haut-Sassandra"
+  },
+  {
+    "o:id": 76471,
+    "Titre": "Sinfra",
+    "Type": "Lieux",
+    "Coordonnées": "6.62103, -5.91144",
+    "Country": "Côte d'Ivoire",
+    "Region": "Marahoue"
+  },
+  {
+    "o:id": 76472,
+    "Titre": "Katiola",
+    "Type": "Lieux",
+    "Coordonnées": "8.13333333, -5.1",
+    "Country": "Côte d'Ivoire",
+    "Region": "Hambol"
+  },
+  {
+    "o:id": 76473,
+    "Titre": "Vridi",
+    "Type": "Lieux",
+    "Coordonnées": "5.262737152410359, -3.983876435364998",
+    "Country": ""
+  },
+  {
+    "o:id": 76474,
+    "Titre": "Kabadougou",
+    "Type": "Lieux",
+    "Coordonnées": "9.5, -7.56666667",
+    "Country": "Côte d'Ivoire",
+    "Region": "Kabadougou"
+  },
+  {
+    "o:id": 76475,
+    "Titre": "Soubré",
+    "Type": "Lieux",
+    "Coordonnées": "5.7836111111111, -6.5938888888889",
+    "Country": "Côte d'Ivoire",
+    "Region": "Nawa"
+  },
+  {
+    "o:id": 76476,
+    "Titre": "Toumodi",
+    "Type": "Lieux",
+    "Coordonnées": "6.5557, -5.017",
+    "Country": "Côte d'Ivoire",
+    "Region": "Belier"
+  },
+  {
+    "o:id": 76477,
+    "Titre": "Agnéby",
+    "Type": "Lieux",
+    "Coordonnées": "6, -4",
+    "Country": "Côte d'Ivoire",
+    "Region": "Me"
+  },
+  {
+    "o:id": 76478,
+    "Titre": "Dimbokro",
+    "Type": "Lieux",
+    "Coordonnées": "6.6466666666667, -4.705",
+    "Country": "Côte d'Ivoire",
+    "Region": "N'Zi"
+  },
+  {
+    "o:id": 76479,
+    "Titre": "Dabakala",
+    "Type": "Lieux",
+    "Coordonnées": "8.3666666666667, -4.4333333333333",
+    "Country": "Côte d'Ivoire",
+    "Region": "Hambol"
+  },
+  {
+    "o:id": 76480,
+    "Titre": "Sinématiali",
+    "Type": "Lieux",
+    "Coordonnées": "9.5833333333333, -5.3833333333333",
+    "Country": "Côte d'Ivoire",
+    "Region": "Poro"
+  },
+  {
+    "o:id": 76481,
+    "Titre": "Muzdalifa",
+    "Type": "Lieux",
+    "Coordonnées": "21.3925, 39.937777777778",
+    "Country": "Saudi Arabia"
+  },
+  {
+    "o:id": 76482,
+    "Titre": "Tiébissou",
+    "Type": "Lieux",
+    "Coordonnées": "7.15, -5.2333333333333",
+    "Country": "Côte d'Ivoire",
+    "Region": "Belier"
+  },
+  {
+    "o:id": 76483,
+    "Titre": "Gbêkê",
+    "Type": "Lieux",
+    "Coordonnées": "7.68333333, -5.01666667",
+    "Country": "Côte d'Ivoire",
+    "Region": "Gbeke"
+  },
+  {
+    "o:id": 76484,
+    "Titre": "Danané",
+    "Type": "Lieux",
+    "Coordonnées": "7.26666667, -8.16666667",
+    "Country": "Côte d'Ivoire",
+    "Region": "Tonkpi"
+  },
+  {
+    "o:id": 76485,
+    "Titre": "Conakry",
+    "Type": "Lieux",
+    "Coordonnées": "9.5091666666667, -13.712222222222",
+    "Country": ""
+  },
+  {
+    "o:id": 76486,
+    "Titre": "M'Bahiakro",
+    "Type": "Lieux",
+    "Coordonnées": "7.4666666666667, -4.3333333333333",
+    "Country": "Côte d'Ivoire",
+    "Region": "Iffou"
+  },
+  {
+    "o:id": 76487,
+    "Titre": "Tiassalé",
+    "Type": "Lieux",
+    "Coordonnées": "5.89839, -4.82293",
+    "Country": "Côte d'Ivoire",
+    "Region": "Agneby-Tiassa"
+  },
+  {
+    "o:id": 76488,
+    "Titre": "Sakassou",
+    "Type": "Lieux",
+    "Coordonnées": "7.447222, -5.294444",
+    "Country": "Côte d'Ivoire",
+    "Region": "Gbeke"
+  },
+  {
+    "o:id": 76489,
+    "Titre": "Addis-Abeba",
+    "Type": "Lieux",
+    "Coordonnées": "9.0272222222222, 38.736944444444",
+    "Country": "Ethiopia"
+  },
+  {
+    "o:id": 76490,
+    "Titre": "Bonoua",
+    "Type": "Lieux",
+    "Coordonnées": "5.2666666666667, -3.6",
+    "Country": "Côte d'Ivoire",
+    "Region": "Sud-Comoe"
+  },
+  {
+    "o:id": 76491,
+    "Titre": "Bonon",
+    "Type": "Lieux",
+    "Coordonnées": "6.9333333333333, -6.05",
+    "Country": "Côte d'Ivoire",
+    "Region": "Marahoue"
+  },
+  {
+    "o:id": 76492,
+    "Titre": "Ségou",
+    "Type": "Lieux",
+    "Coordonnées": "13.45, -6.2666666666667",
+    "Country": "Mali"
+  },
+  {
+    "o:id": 76493,
+    "Titre": "Ouragahio",
+    "Type": "Lieux",
+    "Coordonnées": "6.41667, -5.91667",
+    "Country": "Côte d'Ivoire",
+    "Region": "Goh"
+  },
+  {
+    "o:id": 76494,
+    "Titre": "Agnibilékrou",
+    "Type": "Lieux",
+    "Coordonnées": "7.1311111111111, -3.2038888888889",
+    "Country": "Côte d'Ivoire",
+    "Region": "Indenie-Djuablin"
+  },
+  {
+    "o:id": 76495,
+    "Titre": "Indénié",
+    "Type": "Lieux",
+    "Coordonnées": "6.73333333, -3.48333333",
+    "Country": "Côte d'Ivoire",
+    "Region": "Indenie-Djuablin"
+  },
+  {
+    "o:id": 76496,
+    "Titre": "Tienko",
+    "Type": "Lieux",
+    "Coordonnées": "10.216666666667, -7.4833333333333",
+    "Country": "Côte d'Ivoire",
+    "Region": "Folon"
+  },
+  {
+    "o:id": 76497,
+    "Titre": "Vavoua",
+    "Type": "Lieux",
+    "Coordonnées": "7.38333333, -6.48333333",
+    "Country": "Côte d'Ivoire",
+    "Region": "Haut-Sassandra"
+  },
+  {
+    "o:id": 76498,
+    "Titre": "Gbon",
+    "Type": "Lieux",
+    "Coordonnées": "9.8333333333333, -6.45",
+    "Country": "Côte d'Ivoire",
+    "Region": "Bagoue"
+  },
+  {
+    "o:id": 76499,
+    "Titre": "Bongouanou",
+    "Type": "Lieux",
+    "Coordonnées": "6.65, -4.2",
+    "Country": "Côte d'Ivoire",
+    "Region": "Moronou"
+  },
+  {
+    "o:id": 76500,
+    "Titre": "Biétry",
+    "Type": "Lieux",
+    "Coordonnées": "5.274939, -3.974712",
+    "Country": ""
+  },
+  {
+    "o:id": 76501,
+    "Titre": "Biankouma",
+    "Type": "Lieux",
+    "Coordonnées": "7.7333333333333, -7.6166666666667",
+    "Country": "Côte d'Ivoire",
+    "Region": "Tonkpi"
+  },
+  {
+    "o:id": 76502,
+    "Titre": "Akoupé",
+    "Type": "Lieux",
+    "Coordonnées": "6.3811111111111, -3.8872222222222",
+    "Country": "Côte d'Ivoire",
+    "Region": "Me"
+  },
+  {
+    "o:id": 76503,
+    "Titre": "Bocanda",
+    "Type": "Lieux",
+    "Coordonnées": "7.0666666666667, -4.5",
+    "Country": "Côte d'Ivoire",
+    "Region": "N'Zi"
+  },
+  {
+    "o:id": 76504,
+    "Titre": "Ganhoué",
+    "Type": "Lieux",
+    "Coordonnées": "8.1833333333333, -7.85",
+    "Country": "Côte d'Ivoire",
+    "Region": "Bafing"
+  },
+  {
+    "o:id": 76505,
+    "Titre": "Guiglo",
+    "Type": "Lieux",
+    "Coordonnées": "6.5436111111111, -7.4933333333333",
+    "Country": "Côte d'Ivoire",
+    "Region": "Cavally"
+  },
+  {
+    "o:id": 76506,
+    "Titre": "Adiaké",
+    "Type": "Lieux",
+    "Coordonnées": "5.2833333333333, -3.3",
+    "Country": "Côte d'Ivoire",
+    "Region": "Sud-Comoe"
+  },
+  {
+    "o:id": 76507,
+    "Titre": "Adjouffou",
+    "Type": "Lieux",
+    "Coordonnées": "5.25103333, -3.91063889",
+    "Country": "Côte d'Ivoire",
+    "Region": "District Autonome D'Abidjan"
+  },
+  {
+    "o:id": 76508,
+    "Titre": "Sud Comoé",
+    "Type": "Lieux",
+    "Coordonnées": "5.5, -3.25",
+    "Country": "Côte d'Ivoire",
+    "Region": "Sud-Comoe"
+  },
+  {
+    "o:id": 76519,
+    "Titre": "Centre Islamique Aç Habul Kahaf",
     "Type": "Lieux",
     "Coordonnées": "",
     "Country": ""
@@ -13214,6 +13734,12 @@
     "Coordonnées": ""
   },
   {
+    "o:id": 15285,
+    "Titre": "Mirza Ghulam Ahmad",
+    "Type": "Personnes",
+    "Coordonnées": ""
+  },
+  {
     "o:id": 15323,
     "Titre": "Inoussa Izi Chérif",
     "Type": "Personnes",
@@ -21146,6 +21672,84 @@
     "Coordonnées": ""
   },
   {
+    "o:id": 76452,
+    "Titre": "Sanogo Mamadou",
+    "Type": "Personnes",
+    "Coordonnées": ""
+  },
+  {
+    "o:id": 76511,
+    "Titre": "Seydou Diarra",
+    "Type": "Personnes",
+    "Coordonnées": ""
+  },
+  {
+    "o:id": 76512,
+    "Titre": "Adama Toungara",
+    "Type": "Personnes",
+    "Coordonnées": ""
+  },
+  {
+    "o:id": 76513,
+    "Titre": "Mamadou Koulibaly",
+    "Type": "Personnes",
+    "Coordonnées": ""
+  },
+  {
+    "o:id": 76516,
+    "Titre": "Honoré Guié",
+    "Type": "Personnes",
+    "Coordonnées": ""
+  },
+  {
+    "o:id": 76517,
+    "Titre": "Gaoussou Touré",
+    "Type": "Personnes",
+    "Coordonnées": ""
+  },
+  {
+    "o:id": 76518,
+    "Titre": "Abdul Rashid Anwar",
+    "Type": "Personnes",
+    "Coordonnées": ""
+  },
+  {
+    "o:id": 76520,
+    "Titre": "Germain Coffi Gadeau",
+    "Type": "Personnes",
+    "Coordonnées": ""
+  },
+  {
+    "o:id": 76521,
+    "Titre": "Seydou Sylla",
+    "Type": "Personnes",
+    "Coordonnées": ""
+  },
+  {
+    "o:id": 76522,
+    "Titre": "Mouathier Diakité",
+    "Type": "Personnes",
+    "Coordonnées": ""
+  },
+  {
+    "o:id": 76523,
+    "Titre": "Matié Diakité",
+    "Type": "Personnes",
+    "Coordonnées": ""
+  },
+  {
+    "o:id": 76526,
+    "Titre": "Pierre Kipré",
+    "Type": "Personnes",
+    "Coordonnées": ""
+  },
+  {
+    "o:id": 76529,
+    "Titre": "Kandia Camara",
+    "Type": "Personnes",
+    "Coordonnées": ""
+  },
+  {
     "o:id": 569,
     "Titre": "Association des Élèves et Étudiants Musulmans au Burkina",
     "Type": "Organisations",
@@ -23247,7 +23851,7 @@
   },
   {
     "o:id": 43053,
-    "Titre": "Cercle d’études et de recherches islamiques en Côte d'Ivoire",
+    "Titre": "Cercle d'études et de recherches islamiques en Côte d'Ivoire",
     "Type": "Organisations",
     "Coordonnées": ""
   },
@@ -23602,6 +24206,12 @@
   {
     "o:id": 76361,
     "Titre": "Cour pénale internationale",
+    "Type": "Organisations",
+    "Coordonnées": ""
+  },
+  {
+    "o:id": 76515,
+    "Titre": "Communauté Islamique Mouhammadiyyat",
     "Type": "Organisations",
     "Coordonnées": ""
   },
@@ -25946,6 +26556,12 @@
     "Coordonnées": ""
   },
   {
+    "o:id": 13446,
+    "Titre": "Science",
+    "Type": "Sujets",
+    "Coordonnées": ""
+  },
+  {
     "o:id": 13610,
     "Titre": "Colonialisme",
     "Type": "Sujets",
@@ -25984,6 +26600,12 @@
   {
     "o:id": 14044,
     "Titre": "Projet de loi interdiction prières espace public (2017)",
+    "Type": "Sujets",
+    "Coordonnées": ""
+  },
+  {
+    "o:id": 14294,
+    "Titre": "Sorcellerie",
     "Type": "Sujets",
     "Coordonnées": ""
   },
@@ -28114,6 +28736,48 @@
   {
     "o:id": 76345,
     "Titre": "Orphelins",
+    "Type": "Sujets",
+    "Coordonnées": ""
+  },
+  {
+    "o:id": 76509,
+    "Titre": "Xénophobie",
+    "Type": "Sujets",
+    "Coordonnées": ""
+  },
+  {
+    "o:id": 76510,
+    "Titre": "Immigration",
+    "Type": "Sujets",
+    "Coordonnées": ""
+  },
+  {
+    "o:id": 76514,
+    "Titre": "Constitution",
+    "Type": "Sujets",
+    "Coordonnées": ""
+  },
+  {
+    "o:id": 76524,
+    "Titre": "Colonisation",
+    "Type": "Sujets",
+    "Coordonnées": ""
+  },
+  {
+    "o:id": 76525,
+    "Titre": "Zikr",
+    "Type": "Sujets",
+    "Coordonnées": ""
+  },
+  {
+    "o:id": 76527,
+    "Titre": "Spiritualité",
+    "Type": "Sujets",
+    "Coordonnées": ""
+  },
+  {
+    "o:id": 76528,
+    "Titre": "Tidjaniya",
     "Type": "Sujets",
     "Coordonnées": ""
   }

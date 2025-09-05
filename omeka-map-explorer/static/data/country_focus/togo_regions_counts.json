@@ -1,12 +1,19 @@
 {
   "country": "Togo",
   "level": "regions",
-  "counts": {
-    "Centre": 12,
-    "Kara": 28,
-    "Maritime": 37,
-    "Plateaux": 24,
-    "Savanes": 13
+  "countsMentions": {
+    "Centre": 1753,
+    "Kara": 657,
+    "Maritime": 1463,
+    "Plateaux": 536,
+    "Savanes": 330
   },
-  "updatedAt": "2025-09-05T07:50:46.976392"
+  "countsArticles": {
+    "Centre": 1753,
+    "Kara": 657,
+    "Maritime": 1463,
+    "Plateaux": 536,
+    "Savanes": 330
+  },
+  "updatedAt": "2025-09-05T08:28:13.040755"
 }

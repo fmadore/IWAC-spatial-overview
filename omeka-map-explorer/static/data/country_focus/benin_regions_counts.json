@@ -1,19 +1,33 @@
 {
   "country": "Benin",
   "level": "regions",
-  "counts": {
-    "Alibori": 8,
-    "Atakora": 6,
-    "Atlantique": 13,
-    "Borgou": 7,
-    "Collines": 3,
-    "Donga": 3,
-    "Kouffo": 4,
-    "Littoral": 5,
-    "Mono": 6,
-    "Ouémé": 5,
-    "Plateau": 3,
-    "Zou": 6
+  "countsMentions": {
+    "Alibori": 209,
+    "Atakora": 193,
+    "Atlantique": 294,
+    "Borgou": 2065,
+    "Collines": 57,
+    "Donga": 184,
+    "Kouffo": 42,
+    "Littoral": 952,
+    "Mono": 142,
+    "Ouémé": 506,
+    "Plateau": 50,
+    "Zou": 245
   },
-  "updatedAt": "2025-09-05T07:50:46.976392"
+  "countsArticles": {
+    "Alibori": 209,
+    "Atakora": 193,
+    "Atlantique": 294,
+    "Borgou": 2065,
+    "Collines": 57,
+    "Donga": 184,
+    "Kouffo": 42,
+    "Littoral": 952,
+    "Mono": 142,
+    "Ouémé": 506,
+    "Plateau": 50,
+    "Zou": 245
+  },
+  "updatedAt": "2025-09-05T08:28:13.040755"
 }
