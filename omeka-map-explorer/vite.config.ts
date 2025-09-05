@@ -7,7 +7,6 @@ export default defineConfig({
 	test: {
 		projects: [
 			{
-				extends: './vite.config.ts',
 				plugins: [svelteTesting()],
 				test: {
 					name: 'client',
@@ -19,7 +18,6 @@ export default defineConfig({
 				}
 			},
 			{
-				extends: './vite.config.ts',
 				test: {
 					name: 'server',
 					environment: 'node',
