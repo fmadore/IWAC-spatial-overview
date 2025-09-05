@@ -10,7 +10,7 @@ interface AppState {
 	// Which visualization inside dashboard is active
 	activeVisualization:
 		| 'overview'
-		| 'byCountry'
+		| 'worldMap'
 		| 'countryFocus'
 		| 'persons'
 		| 'organizations'

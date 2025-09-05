@@ -470,9 +470,9 @@
 			// Toggle single-country selection: click same country again to clear
 			const current = filters.selected.countries;
 			filters.selected.countries = current.length === 1 && current[0] === name ? [] : [name];
-			// Ensure map remains in choropleth/byCountry context and reflect in URL
-			appState.activeView = 'map';
-			appState.activeVisualization = 'byCountry';
+			// Ensure map remains in choropleth/worldMap context and reflect in URL
+			appState.activeView = 'dashboard';
+			appState.activeVisualization = 'worldMap';
 			urlManager.updateUrl();
 		}}
 	/>

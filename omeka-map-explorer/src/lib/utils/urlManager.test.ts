@@ -49,8 +49,8 @@ describe('URL Manager', () => {
 		expect(appState.activeVisualization).toBe('overview');
 	});
 
-	test('updateUrl includes countries only on byCountry viz', () => {
-		// Not on byCountry -> should NOT include countries
+	test('updateUrl includes countries only on worldMap viz', () => {
+		// Not on worldMap -> should NOT include countries
 		filters.selected.countries = ['Benin', "Côte d'Ivoire"]; // includes diacritics and apostrophe
 		urlManager.updateUrl();
 		vi.runAllTimers();
@@ -59,10 +59,10 @@ describe('URL Manager', () => {
 		let u = new URL('http://x' + last);
 		expect(u.searchParams.get('countries')).toBeNull();
 
-		// Switch to byCountry -> now include countries
+		// Switch to worldMap -> now include countries
 		hoisted.goto.mockClear();
-		appState.activeView = 'map';
-		appState.activeVisualization = 'byCountry';
+		appState.activeView = 'dashboard';
+		appState.activeVisualization = 'worldMap';
 		urlManager.updateUrl();
 		vi.runAllTimers();
 		calls = hoisted.goto.mock.calls.map((c) => c[0] as string);
@@ -71,9 +71,9 @@ describe('URL Manager', () => {
 		expect(u.searchParams.get('countries')).toBe("Benin,Côte d'Ivoire");
 	});
 
-	test('updateUrl includes years only on byCountry viz', () => {
+	test('updateUrl includes years only on worldMap viz', () => {
 		filters.selected.dateRange = { start: new Date(1905, 0, 1), end: new Date(1912, 11, 31) } as any;
-		// Not on byCountry -> excluded
+		// Not on worldMap -> excluded
 		urlManager.updateUrl();
 		vi.runAllTimers();
 		let calls = hoisted.goto.mock.calls.map((c) => c[0] as string);
@@ -81,10 +81,10 @@ describe('URL Manager', () => {
 		let u = new URL('http://x' + last);
 		expect(u.searchParams.get('years')).toBeNull();
 
-		// On byCountry -> included
+		// On worldMap -> included
 		hoisted.goto.mockClear();
-		appState.activeView = 'map';
-		appState.activeVisualization = 'byCountry';
+		appState.activeView = 'dashboard';
+		appState.activeVisualization = 'worldMap';
 		urlManager.updateUrl();
 		vi.runAllTimers();
 		calls = hoisted.goto.mock.calls.map((c) => c[0] as string);
@@ -93,8 +93,8 @@ describe('URL Manager', () => {
 		expect(u.searchParams.get('years')).toBe('1905-1912');
 	});
 
-	test('parse countries and years into filters only when viz=byCountry', () => {
-		// Without viz=byCountry -> should not apply
+	test('parse countries and years into filters only when viz=worldMap', () => {
+		// Without viz=worldMap -> should not apply
 		let params = new URLSearchParams(
 			'countries=Benin%2CBurkina%20Faso%2CC%C3%B4te%20d%27Ivoire&years=1901-1910'
 		);
@@ -102,13 +102,13 @@ describe('URL Manager', () => {
 		expect(filters.selected.countries).toEqual([]);
 		expect(filters.selected.dateRange).toBeNull();
 
-		// With viz=byCountry -> should apply and set map view automatically
+		// With viz=worldMap -> should apply and stay in dashboard view
 		params = new URLSearchParams(
-			'view=map&viz=byCountry&countries=Benin%2CBurkina%20Faso%2CC%C3%B4te%20d%27Ivoire&years=1901-1910'
+			'viz=worldMap&countries=Benin%2CBurkina%20Faso%2CC%C3%B4te%20d%27Ivoire&years=1901-1910'
 		);
 		urlManager.parseUrlAndUpdateState(params);
-		expect(appState.activeView).toBe('map');
-		expect(appState.activeVisualization).toBe('byCountry');
+		expect(appState.activeView).toBe('dashboard');
+		expect(appState.activeVisualization).toBe('worldMap');
 		expect(filters.selected.countries).toEqual([
 			'Benin',
 			'Burkina Faso',
@@ -118,10 +118,10 @@ describe('URL Manager', () => {
 		expect(filters.selected.dateRange?.end.getFullYear()).toBe(1910);
 	});
 
-	test('switching from byCountry with countries to persons clears facets and excludes them from URL', () => {
-		// Start on byCountry with a country selected
-		appState.activeView = 'map';
-		appState.activeVisualization = 'byCountry';
+	test('switching from worldMap with countries to persons clears facets and excludes them from URL', () => {
+		// Start on worldMap with a country selected
+		appState.activeView = 'dashboard';
+		appState.activeVisualization = 'worldMap';
 		filters.selected.countries = ['Burkina Faso'];
 		urlManager.updateUrl();
 		vi.runAllTimers();
@@ -148,10 +148,10 @@ describe('URL Manager', () => {
 		expect(appState.activeVisualization).toBe('overview');
 	});
 
-	test('parse map view + byCountry sets map', () => {
-		urlManager.parseUrlAndUpdateState(new URLSearchParams('view=map&viz=byCountry'));
-		expect(appState.activeView).toBe('map');
-		expect(appState.activeVisualization).toBe('byCountry');
+	test('parse dashboard view + worldMap stays in dashboard', () => {
+		urlManager.parseUrlAndUpdateState(new URLSearchParams('viz=worldMap'));
+		expect(appState.activeView).toBe('dashboard');
+		expect(appState.activeVisualization).toBe('worldMap');
 	});
 
 	test('parse organizations viz + entity hydrates selection', () => {
@@ -259,16 +259,16 @@ describe('URL Manager', () => {
 		expect(appState.countryFocus?.level).toBe('regions'); // reset to default
 	});
 
-	test('updateUrl excludes entity params when switching to byCountry', () => {
+	test('updateUrl excludes entity params when switching to worldMap', () => {
 		appState.activeView = 'dashboard';
 		appState.activeVisualization = 'organizations';
 		appState.selectedEntity = { type: 'Organisations', id: '789', name: 'X', relatedArticleIds: [] };
 		urlManager.updateUrl();
 		vi.runAllTimers();
 
-		// Switch to map/byCountry
-		appState.activeView = 'map';
-		appState.activeVisualization = 'byCountry';
+		// Switch to dashboard/worldMap
+		appState.activeView = 'dashboard';
+		appState.activeVisualization = 'worldMap';
 		urlManager.updateUrl();
 		vi.runAllTimers();
 
@@ -276,6 +276,6 @@ describe('URL Manager', () => {
 		const last = calls[calls.length - 1];
 		expect(last).toContain('/IWAC-spatial-overview/?');
 		expect(last).not.toContain('entityType=');
-		expect(last).toContain('viz=byCountry');
+		expect(last).toContain('viz=worldMap');
 	});
 });

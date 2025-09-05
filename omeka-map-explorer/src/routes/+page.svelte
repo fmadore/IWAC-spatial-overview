@@ -17,6 +17,7 @@
 
 	import Map from '$lib/components/maps/Map.svelte';
 	import { CountryFocus } from '$lib/components/country-focus';
+	import { WorldMapVisualization } from '$lib/components/world-map';
 	import Timeline from '$lib/components/timeline/Timeline.svelte';
 	import * as Sidebar from '$lib/components/ui/sidebar';
 	import SiteHeader from '$lib/components/site-header.svelte';
@@ -222,6 +223,8 @@
 		<div class="@container/main flex flex-1 flex-col gap-2">
 			{#if appState.activeVisualization === 'overview'}
 				<Overview />
+			{:else if appState.activeVisualization === 'worldMap'}
+				<WorldMapVisualization />
 			{:else if appState.activeVisualization === 'persons'}
 				<PersonsVisualization />
 			{:else if appState.activeVisualization === 'organizations'}
@@ -237,17 +240,6 @@
 			{:else if appState.activeVisualization === 'network'}
 				<div class="flex flex-col gap-4 py-4 md:gap-6 md:py-6 px-4 lg:px-6">
 					<NetworkGraph data={networkState.filtered} />
-				</div>
-			{:else}
-				<!-- Other visualizations placeholder -->
-				<div class="flex flex-col gap-4 py-4 md:gap-6 md:py-6">
-					<div class="px-4 lg:px-6">
-						<h2 class="text-2xl font-bold">
-							{appState.activeVisualization.charAt(0).toUpperCase() +
-								appState.activeVisualization.slice(1)}
-						</h2>
-						<p class="text-muted-foreground">This visualization is not yet implemented.</p>
-					</div>
 				</div>
 			{/if}
 		</div>

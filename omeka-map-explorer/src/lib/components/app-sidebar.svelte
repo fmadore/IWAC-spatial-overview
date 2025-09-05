@@ -15,10 +15,10 @@
 
 	let { variant = 'inset' } = $props<{ variant?: 'floating' | 'inset' }>();
 
-	type Viz = 'overview' | 'byCountry' | 'countryFocus' | 'persons' | 'organizations' | 'events' | 'subjects' | 'locations' | 'network';
+	type Viz = 'overview' | 'worldMap' | 'countryFocus' | 'persons' | 'organizations' | 'events' | 'subjects' | 'locations' | 'network';
 	const nav: Array<{ id: Viz; label: string; icon: any; view?: 'dashboard' | 'map' }> = [
 		{ id: 'overview', label: 'Overview', icon: Home, view: 'dashboard' },
-		{ id: 'byCountry', label: 'By Country (Map)', icon: Globe2, view: 'map' },
+		{ id: 'worldMap', label: 'World Map', icon: Globe2, view: 'dashboard' },
 		{ id: 'countryFocus', label: 'Country Focus', icon: MapPin, view: 'dashboard' },
 		{ id: 'persons', label: 'Persons', icon: Users, view: 'dashboard' },
 		{ id: 'organizations', label: 'Organizations', icon: Building2, view: 'dashboard' },
@@ -64,7 +64,7 @@
 			</Sidebar.GroupContent>
 		</Sidebar.Group>
 
-		{#if appState.activeView === 'map' && appState.activeVisualization === 'byCountry'}
+		{#if appState.activeVisualization === 'worldMap'}
 			<Sidebar.Separator />
 
 			<Sidebar.Group>
@@ -98,7 +98,7 @@
 		{/if}
 	</Sidebar.Content>
 	<Sidebar.Footer>
-		{#if appState.activeView === 'map' && appState.activeVisualization === 'byCountry'}
+		{#if appState.activeVisualization === 'worldMap'}
 			<div class="p-4">
 				<div class="mb-3 text-xs text-muted-foreground">Map view</div>
 				<div class="flex items-center gap-2 mb-4">
@@ -125,7 +125,7 @@
 				</button>
 			</div>
 		{:else}
-			<div class="p-4 text-xs text-muted-foreground">v0 • Dashboard</div>
+			<div class="p-4 text-xs text-muted-foreground">v1 • Dashboard</div>
 		{/if}
 	</Sidebar.Footer>
 </Sidebar.Root>

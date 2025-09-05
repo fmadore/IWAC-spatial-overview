@@ -12,8 +12,8 @@
 		switch (appState.activeVisualization) {
 			case 'overview':
 				return 'Dashboard';
-			case 'byCountry':
-				return 'By Country (Map)';
+			case 'worldMap':
+				return 'World Map';
 			case 'countryFocus':
 				return 'Country Focus';
 			case 'persons':

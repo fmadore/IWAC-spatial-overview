@@ -8,7 +8,7 @@ import { filters, clearFilters } from '$lib/state/filters.svelte';
 type ViewType = 'dashboard' | 'map' | 'list' | 'stats';
 type VisualizationType =
 	| 'overview'
-	| 'byCountry'
+	| 'worldMap'
 	| 'countryFocus'
 	| 'persons'
 	| 'organizations'
@@ -56,8 +56,8 @@ export const urlManager = {
 			params.set('node', networkNode.id);
 		}
 
-		// Encode filters (countries, years) for deep-linking ONLY on byCountry viz
-		if (viz === 'byCountry') {
+		// Encode filters (countries, years) for deep-linking ONLY on worldMap viz
+		if (viz === 'worldMap') {
 			const sel = filters.selected;
 			if (sel.countries.length) {
 				params.set('countries', sel.countries.join(','));
@@ -144,14 +144,11 @@ export const urlManager = {
 		// Set visualization - default to overview
 		if (
 			viz &&
-			['overview', 'byCountry', 'countryFocus', 'persons', 'organizations', 'events', 'subjects', 'locations', 'network'].includes(viz)
+			['overview', 'worldMap', 'countryFocus', 'persons', 'organizations', 'events', 'subjects', 'locations', 'network'].includes(viz)
 		) {
 			appState.activeVisualization = viz;
 
-			// If byCountry is selected, ensure we're in map view
-			if (viz === 'byCountry') {
-				appState.activeView = 'map';
-			}
+			// worldMap stays in dashboard view (no longer needs special map view)
 		} else {
 			appState.activeVisualization = 'overview';
 		}
@@ -207,8 +204,8 @@ export const urlManager = {
 			appState.selectedEntity = null;
 		}
 
-		// Apply filters from URL only for byCountry; otherwise clear them
-		if (appState.activeVisualization === 'byCountry') {
+		// Apply filters from URL only for worldMap; otherwise clear them
+		if (appState.activeVisualization === 'worldMap') {
 			const countriesParam = searchParams.get('countries');
 			if (countriesParam !== null) {
 				filters.selected.countries = countriesParam
