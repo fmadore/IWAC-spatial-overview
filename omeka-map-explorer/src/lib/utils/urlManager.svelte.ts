@@ -3,7 +3,7 @@ import { appState } from '$lib/state/appState.svelte';
 import { goto } from '$app/navigation';
 import { base } from '$app/paths';
 import { mapData } from '$lib/state/mapData.svelte';
-import { filters } from '$lib/state/filters.svelte';
+import { filters, clearFilters } from '$lib/state/filters.svelte';
 
 type ViewType = 'dashboard' | 'map' | 'list' | 'stats';
 type VisualizationType =
@@ -55,15 +55,17 @@ export const urlManager = {
 			params.set('node', networkNode.id);
 		}
 
-		// Encode filters (countries, years) for deep-linking
-		const sel = filters.selected;
-		if (sel.countries.length) {
-			params.set('countries', sel.countries.join(','));
-		}
-		if (sel.dateRange) {
-			const y0 = sel.dateRange.start.getFullYear();
-			const y1 = sel.dateRange.end.getFullYear();
-			params.set('years', `${y0}-${y1}`);
+		// Encode filters (countries, years) for deep-linking ONLY on byCountry viz
+		if (viz === 'byCountry') {
+			const sel = filters.selected;
+			if (sel.countries.length) {
+				params.set('countries', sel.countries.join(','));
+			}
+			if (sel.dateRange) {
+				const y0 = sel.dateRange.start.getFullYear();
+				const y1 = sel.dateRange.end.getFullYear();
+				params.set('years', `${y0}-${y1}`);
+			}
 		}
 
 		// Build the URL with proper base path
@@ -190,36 +192,44 @@ export const urlManager = {
 			appState.selectedEntity = null;
 		}
 
-		// Apply filters from URL if present
-		const countriesParam = searchParams.get('countries');
-		if (countriesParam !== null) {
-			// Empty string clears; otherwise split by comma
-			filters.selected.countries = countriesParam
-				.split(',')
-				.map((s) => decodeURIComponent(s.trim()))
-				.filter(Boolean);
-		}
-		const yearsParam = searchParams.get('years');
-		if (yearsParam !== null) {
-			const m = yearsParam.match(/^(\d{4})-(\d{4})$/);
-			if (m) {
-				const y0 = parseInt(m[1], 10);
-				const y1 = parseInt(m[2], 10);
-				filters.selected.dateRange = {
-					start: new Date(y0, 0, 1),
-					end: new Date(y1, 11, 31)
-				};
-			} else {
-				filters.selected.dateRange = null;
+		// Apply filters from URL only for byCountry; otherwise clear them
+		if (appState.activeVisualization === 'byCountry') {
+			const countriesParam = searchParams.get('countries');
+			if (countriesParam !== null) {
+				filters.selected.countries = countriesParam
+					.split(',')
+					.map((s) => decodeURIComponent(s.trim()))
+					.filter(Boolean);
 			}
+			const yearsParam = searchParams.get('years');
+			if (yearsParam !== null) {
+				const m = yearsParam.match(/^(\d{4})-(\d{4})$/);
+				if (m) {
+					const y0 = parseInt(m[1], 10);
+					const y1 = parseInt(m[2], 10);
+					filters.selected.dateRange = {
+						start: new Date(y0, 0, 1),
+						end: new Date(y1, 11, 31)
+					};
+				} else {
+					filters.selected.dateRange = null;
+				}
+			}
+		} else {
+			clearFilters();
 		}
 	},
 
 	// Navigate to a specific view/visualization
 	navigateTo(view: ViewType, visualization?: VisualizationType, entitySelection?: { type: string; id: string }) {
+		const prevViz = appState.activeVisualization;
 		appState.activeView = view;
 		if (visualization) {
 			appState.activeVisualization = visualization;
+		}
+		// Reset all facets on any visualization change
+		if (visualization && visualization !== prevViz) {
+			clearFilters();
 		}
 		if (entitySelection) {
 			// We'll need to load the full entity details, but set basic info for now

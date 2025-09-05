@@ -6,6 +6,7 @@
 	import CountryFilter from './CountryFilter.svelte';
 	import YearRangeFilter from './YearRangeFilter.svelte';
 	import * as Sidebar from '$lib/components/ui/sidebar';
+	import { urlManager } from '$lib/utils/urlManager.svelte';
 
 	// Reset all filters
 	function resetFilters() {
@@ -14,6 +15,8 @@
 		filters.selected.newspapers = [];
 		filters.selected.dateRange = null;
 		filters.selected.keywords = [];
+	// Immediately reflect in URL
+	urlManager.updateUrl({ immediate: true });
 	}
 </script>
 

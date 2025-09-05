@@ -32,6 +32,8 @@
 		clearFilters();
 		appState.selectedEntity = null;
 		appState.networkNodeSelected = null;
+		// Immediately reflect cleared filters in the URL
+		urlManager.updateUrl({ immediate: true });
 
 		// Use centralized navigator to update state + URL immediately
 		urlManager.navigateTo(item.view ?? 'dashboard', item.id);
@@ -116,7 +118,7 @@
 				</div>
 				<button
 					class="w-full px-4 py-2 text-sm font-medium text-foreground bg-background border border-input rounded-md hover:bg-accent hover:text-accent-foreground transition-colors"
-					onclick={clearFilters}
+					onclick={() => { clearFilters(); urlManager.updateUrl({ immediate: true }); }}
 				>
 					Reset All Filters
 				</button>
