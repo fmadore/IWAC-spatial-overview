@@ -1,4 +1,5 @@
 import type { GeoJsonData, GeoJsonFeature, ProcessedItem, LocationEntity } from '$lib/types';
+import { base } from '$app/paths';
 
 // Cache for GeoJSON files
 const geoJsonCache = new Map<string, GeoJsonData>();
@@ -25,7 +26,7 @@ export async function loadGeoJson(country: string, level = 'regions'): Promise<G
 
 	// Create filename
 	const fileName = `${country.toLowerCase().replace(/\s+/g, '_')}_${level}.geojson`;
-	const url = `data/geojson/${fileName}`;
+	const url = `${base}/data/geojson/${fileName}`;
 
 	try {
 		const response = await fetch(url);
@@ -52,7 +53,7 @@ export async function loadGeoJson(country: string, level = 'regions'): Promise<G
  * Load a raw GeoJSON file by filename from /data/geojson
  */
 export async function loadGeoJsonFile(fileName: string): Promise<GeoJsonData> {
-	const url = `data/geojson/${fileName}`;
+	const url = `${base}/data/geojson/${fileName}`;
 	const response = await fetch(url);
 	if (!response.ok) {
 		throw new Error(`Failed to load GeoJSON file ${fileName}: ${response.statusText}`);
@@ -71,7 +72,7 @@ export async function loadWorldCountries(): Promise<GeoJsonData> {
 		return geoJsonCache.get(cacheKey) as GeoJsonData;
 	}
 
-	const url = `data/maps/world_countries.geojson`;
+	const url = `${base}/data/maps/world_countries.geojson`;
 	const response = await fetch(url);
 	if (!response.ok) {
 		throw new Error(`Failed to load world countries GeoJSON: ${response.statusText}`);
@@ -103,7 +104,7 @@ export async function loadCountryAdminGeoJson(
 		.replace(/\s+/g, '_')
 		.toLowerCase();
 	const fileName = `${norm}_${level}.geojson`;
-	const url = `data/maps/${fileName}`;
+	const url = `${base}/data/maps/${fileName}`;
 
 	const response = await fetch(url);
 	if (!response.ok) {

@@ -1,4 +1,5 @@
 import type { ProcessedItem } from '$lib/types';
+import { base } from '$app/paths';
 
 // Cache for precomputed data
 const worldMapCache = new Map<string, any>();
@@ -13,7 +14,7 @@ async function loadCacheMetadata() {
 	if (cacheMetadata) return cacheMetadata;
 	
 	try {
-		const url = '/data/world_cache/metadata.json';
+		const url = `${base}/data/world_cache/metadata.json`;
 		console.log(`Checking cache metadata at: ${url}`);
 		const response = await fetch(url);
 		if (response.ok) {
@@ -59,7 +60,7 @@ export async function loadChoroplethCache(options: {
 		}
 		
 		// Load from file
-		const url = `/data/world_cache/${cacheFile}`;
+		const url = `${base}/data/world_cache/${cacheFile}`;
 		console.log(`Fetching cache from: ${url}`);
 		const response = await fetch(url);
 		if (!response.ok) {
@@ -101,7 +102,9 @@ export async function loadCoordinateCache(options: {
 		if (options.year) {
 			cacheFile = `coordinates/by_year/${options.year}.json`;
 		} else if (options.entityType) {
-			cacheFile = `coordinates/by_entity/${options.entityType}.json`;
+			// Entity-specific cache files don't exist yet, return null to trigger fallback
+			console.log(`Entity-specific coordinate cache not available for: ${options.entityType}`);
+			return null;
 		} else if (options.country) {
 			cacheFile = `coordinates/by_country/${normalizeCountryFilename(options.country)}.json`;
 		} else {
@@ -118,7 +121,7 @@ export async function loadCoordinateCache(options: {
 		console.log(`Loading coordinate cache from: ${cacheFile}`);
 		
 		// Load base data from file
-		const response = await fetch(`/data/world_cache/${cacheFile}`);
+		const response = await fetch(`${base}/data/world_cache/${cacheFile}`);
 		if (!response.ok) {
 			console.warn(`Coordinate cache file not found: ${cacheFile}`);
 			return null;
