@@ -398,17 +398,15 @@
 							});
 						}
 						console.log(`Applied filters to cached clusters: ${coordinateGroups.size} remaining`);
-					} else {
-						throw new Error('No cached clusters available');
 					}
 				} catch (e) {
 					console.warn('Failed to load cached coordinates, falling back to real-time aggregation:', e);
-					coordinateGroups = null;
+					// coordinateGroups remains null - will trigger fallback below
 				}
 			}
 
 			// Fall back to real-time aggregation if cache is not available or failed
-			if (!coordinateGroups && visibleData.length > 0) {
+			if (coordinateGroups === null && visibleData.length > 0) {
 				console.log('⚠️ Falling back to real-time coordinate aggregation');
 				// Aggregate items by coordinate and add circle markers sized by count (much fewer markers)
 				coordinateGroups = new Map<string, { lat: number; lng: number; count: number; sample: any; items: any[]; name?: string }>();
@@ -431,7 +429,7 @@
 			}
 
 			// Only render markers if we have coordinate groups
-			if (coordinateGroups && coordinateGroups.size > 0) {
+			if (coordinateGroups !== null && coordinateGroups.size > 0) {
 				const maxCount = Array.from(coordinateGroups.values()).reduce((m, g) => Math.max(m, g.count), 1);
 				const canvas = L.canvas({ padding: 0.5 });
 				const layerGroup = L.layerGroup();
