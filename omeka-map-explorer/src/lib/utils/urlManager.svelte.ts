@@ -9,6 +9,7 @@ type ViewType = 'dashboard' | 'map' | 'list' | 'stats';
 type VisualizationType =
 	| 'overview'
 	| 'byCountry'
+	| 'countryFocus'
 	| 'persons'
 	| 'organizations'
 	| 'events'
@@ -129,7 +130,7 @@ export const urlManager = {
 		// Set visualization - default to overview
 		if (
 			viz &&
-			['overview', 'byCountry', 'persons', 'organizations', 'events', 'subjects', 'locations', 'network'].includes(viz)
+			['overview', 'byCountry', 'countryFocus', 'persons', 'organizations', 'events', 'subjects', 'locations', 'network'].includes(viz)
 		) {
 			appState.activeVisualization = viz;
 

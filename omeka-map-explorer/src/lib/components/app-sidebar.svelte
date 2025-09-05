@@ -15,10 +15,11 @@
 
 	let { variant = 'inset' } = $props<{ variant?: 'floating' | 'inset' }>();
 
-	type Viz = 'overview' | 'byCountry' | 'persons' | 'organizations' | 'events' | 'subjects' | 'locations' | 'network';
+	type Viz = 'overview' | 'byCountry' | 'countryFocus' | 'persons' | 'organizations' | 'events' | 'subjects' | 'locations' | 'network';
 	const nav: Array<{ id: Viz; label: string; icon: any; view?: 'dashboard' | 'map' }> = [
 		{ id: 'overview', label: 'Overview', icon: Home, view: 'dashboard' },
 		{ id: 'byCountry', label: 'By Country (Map)', icon: Globe2, view: 'map' },
+		{ id: 'countryFocus', label: 'Country Focus', icon: MapPin, view: 'dashboard' },
 		{ id: 'persons', label: 'Persons', icon: Users, view: 'dashboard' },
 		{ id: 'organizations', label: 'Organizations', icon: Building2, view: 'dashboard' },
 		{ id: 'events', label: 'Events', icon: CalendarRange, view: 'dashboard' },

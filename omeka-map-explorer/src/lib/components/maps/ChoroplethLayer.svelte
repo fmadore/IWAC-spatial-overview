@@ -37,8 +37,8 @@
 		if (!browser || !map || !geoJson) return undefined;
 
 		const initMap = async () => {
-			// Dynamically import Leaflet
-			L = (await import('leaflet')).default;
+			// Dynamically import Leaflet (ESM namespace)
+			L = await import('leaflet');
 
 			console.log('ChoroplethLayer: Initializing with data:', Object.keys(data).length, 'countries');
 

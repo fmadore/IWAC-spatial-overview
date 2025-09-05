@@ -12,6 +12,8 @@
 				return 'Dashboard';
 			case 'byCountry':
 				return 'By Country (Map)';
+			case 'countryFocus':
+				return 'Country Focus';
 			case 'persons':
 				return 'Persons';
 			case 'organizations':

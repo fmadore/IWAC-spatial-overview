@@ -11,6 +11,7 @@ interface AppState {
 	activeVisualization:
 		| 'overview'
 		| 'byCountry'
+		| 'countryFocus'
 		| 'persons'
 		| 'organizations'
 		| 'events'

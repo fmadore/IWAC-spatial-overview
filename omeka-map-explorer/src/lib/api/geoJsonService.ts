@@ -83,6 +83,39 @@ export async function loadWorldCountries(): Promise<GeoJsonData> {
 }
 
 /**
+ * Load country administrative GeoJSON (regions or prefectures) from /data/maps
+ * Example files: benin_regions.geojson, benin_prefectures.geojson
+ */
+export async function loadCountryAdminGeoJson(
+	country: string,
+	level: 'regions' | 'prefectures'
+): Promise<GeoJsonData> {
+	const key = `maps_${country}_${level}`;
+	if (geoJsonCache.has(key)) {
+		return geoJsonCache.get(key) as GeoJsonData;
+	}
+
+	// Normalize: remove diacritics and punctuation to match static filenames
+	const norm = country
+		.normalize('NFD')
+		.replace(/\p{Diacritic}/gu, '')
+		.replace(/['’`]/g, '')
+		.replace(/\s+/g, '_')
+		.toLowerCase();
+	const fileName = `${norm}_${level}.geojson`;
+	const url = `data/maps/${fileName}`;
+
+	const response = await fetch(url);
+	if (!response.ok) {
+		throw new Error(`Failed to load admin GeoJSON for ${country} (${level}): ${response.statusText}`);
+	}
+	const geoJson = (await response.json()) as GeoJsonData;
+	normalizeGeoJson(geoJson);
+	geoJsonCache.set(key, geoJson);
+	return geoJson;
+}
+
+/**
  * Normalize GeoJSON to ensure it has a 'name' property
  * @param {GeoJsonData} geoJson - GeoJSON object
  */
