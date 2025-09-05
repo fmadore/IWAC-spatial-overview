@@ -1,6 +1,6 @@
 <script lang="ts">
   import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '$lib/components/ui/card';
-  import Timeline from '$lib/components/timeline/Timeline.svelte';
+  import { Timeline } from './timeline';
   import { timeData } from '$lib/state/timeData.svelte';
 
   // Allow height override for reuse

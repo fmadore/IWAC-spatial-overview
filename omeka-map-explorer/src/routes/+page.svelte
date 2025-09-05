@@ -7,7 +7,6 @@
 	import { timeData } from '$lib/state/timeData.svelte';
 	import { filters } from '$lib/state/filters.svelte';
 	import { mapData } from '$lib/state/mapData.svelte';
-	import { initialize as initAnimationController } from '$lib/components/timeline/AnimationController';
 	import { loadStaticData } from '$lib/utils/staticDataLoader';
 	import { loadEntities, loadLocations, restoreEntityFromUrl, preloadAllEntities } from '$lib/utils/entityLoader';
 	import { urlManager, initializeUrlManager } from '$lib/utils/urlManager.svelte';
@@ -18,7 +17,6 @@
 	import Map from '$lib/components/maps/Map.svelte';
 	import { CountryFocus } from '$lib/components/country-focus';
 	import { WorldMapVisualization } from '$lib/components/world-map';
-	import Timeline from '$lib/components/timeline/Timeline.svelte';
 	import * as Sidebar from '$lib/components/ui/sidebar';
 	import SiteHeader from '$lib/components/site-header.svelte';
 	import { Overview } from '$lib/components/overview';
@@ -111,9 +109,6 @@
 
 			// Parse current URL search parameters and set initial state
 			urlManager.parseUrlAndUpdateState($page.url.searchParams);
-
-			// Initialize animation controller
-			initAnimationController();
 
 			// Start loading data
 			appState.loading = true;
@@ -250,10 +245,6 @@
 	<div class="flex flex-1 flex-col overflow-hidden">
 		<div class="flex-1 relative z-0">
 			<Map />
-		</div>
-
-		<div class="border-t bg-muted/30 p-4 relative z-10">
-			<Timeline data={timeData.data} height="120px" />
 		</div>
 
 		{#if appState.selectedItem}
