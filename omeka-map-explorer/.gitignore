@@ -1,8 +1,6 @@
 test-results
 node_modules
 
-scripts/__pycache__
-
 # Output
 .output
 .vercel
