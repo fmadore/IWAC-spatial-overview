@@ -56,17 +56,17 @@
     };
   }
 
-  function onEachFeature(feature: any, layer: any) {
+  function onEachFeature(feature: any, featureLayer: any) {
     const name = feature.properties?.name || 'Unknown';
     const count = data[name] || 0;
     
     // Tooltip
-    layer.bindTooltip(`<strong>${name}</strong><br/>${count} articles`, {
+    featureLayer.bindTooltip(`<strong>${name}</strong><br/>${count} articles`, {
       sticky: true
     });
     
     // Popup
-    layer.bindPopup(`
+    featureLayer.bindPopup(`
       <div style="text-align: center;">
         <h4 style="margin: 0 0 8px 0;">${name}</h4>
         <p style="margin: 0;"><strong>${count}</strong> articles</p>
@@ -74,17 +74,18 @@
     `);
     
     // Hover effects
-    layer.on({
+    featureLayer.on({
       mouseover: (e: any) => {
-        const layer = e.target;
-        layer.setStyle({
+        const targetLayer = e.target;
+        targetLayer.setStyle({
           weight: 2,
           color: '#333',
           fillOpacity: 0.9
         });
       },
       mouseout: (e: any) => {
-        if (layer) {
+        // Reset to original style using the parent layer's resetStyle method
+        if (layer && layer.resetStyle) {
           layer.resetStyle(e.target);
         }
       }
