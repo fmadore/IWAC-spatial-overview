@@ -40,8 +40,6 @@
 			// Dynamically import Leaflet (ESM namespace)
 			L = await import('leaflet');
 
-			console.log('ChoroplethLayer: Initializing with data:', Object.keys(data).length, 'countries');
-
 			// Create layer first
 			createLayer();
 
@@ -365,9 +363,7 @@
 
 	// Watch for changes to data prop and update immediately
 	$effect(() => {
-		console.log('ChoroplethLayer: Data prop effect triggered:', Object.keys(data).length, 'countries');
 		if (layer && data && Object.keys(data).length > 0) {
-			console.log('ChoroplethLayer: Data available, updating styles immediately');
 			updateLayerStyles();
 		}
 	});
@@ -375,7 +371,6 @@
 	// Separate effect for browser and layer readiness
 	$effect(() => {
 		if (browser && layer && data && Object.keys(data).length > 0) {
-			console.log('ChoroplethLayer: Browser + layer ready, updating styles');
 			updateLayerStyles();
 		}
 	});

@@ -3,7 +3,8 @@ export type AdminLevel = 'regions' | 'prefectures';
 export interface CountryAdminCounts {
   country: string;
   level: AdminLevel;
-  counts: Record<string, number>;
+  countsMentions?: Record<string, number>;
+  countsArticles?: Record<string, number>;
   updatedAt?: string;
 }
 
@@ -23,7 +24,7 @@ export async function loadAdminCounts(country: string, level: AdminLevel): Promi
     const res = await fetch(file, { cache: 'no-cache' });
     if (!res.ok) return null;
     const json = (await res.json()) as CountryAdminCounts;
-    if (!json || !json.counts) return null;
+  if (!json || (!json.countsMentions && !json.countsArticles)) return null;
     return json;
   } catch {
     return null;

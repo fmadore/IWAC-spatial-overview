@@ -15,7 +15,7 @@
 	import { browser } from '$app/environment';
 
 	import Map from '$lib/components/maps/Map.svelte';
-	import CountryFocus from '$lib/components/maps/CountryFocus.svelte';
+	import { CountryFocus } from '$lib/components/country-focus';
 	import Timeline from '$lib/components/timeline/Timeline.svelte';
 	import * as Sidebar from '$lib/components/ui/sidebar';
 	import SiteHeader from '$lib/components/site-header.svelte';
