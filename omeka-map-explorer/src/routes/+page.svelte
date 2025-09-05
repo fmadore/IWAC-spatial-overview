@@ -189,7 +189,7 @@
 </script>
 
 <svelte:head>
-	<title>Omeka S Map Explorer</title>
+	<title>Islam West Africa Collection Map Explorer</title>
 </svelte:head>
 
 <!-- Ensure an accessible page heading is always present (helps tests too) -->
