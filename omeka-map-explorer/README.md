@@ -1,75 +1,109 @@
 # Omeka Map Explorer (SvelteKit)
 
-Interactive SvelteKit app to visualize newspaper article locations from an Omeka S collection. It features a Leaflet map (with optional choropleth), a D3 timeline with playback, filters for country and year range, and a Network view for entity co-occurrences.
+Developer documentation for the IWAC Spatial Overview app. For the dashboard’s purpose and audience, see the root `README.md`.
 
-## Tech stack
+This SvelteKit application renders an exploratory dashboard over the Islam West Africa Collection (IWAC) newspapers: interactive maps (Leaflet), time exploration (D3 timeline), filters, and entity views. It ships as a static site (SPA) and loads JSON/GeoJSON from `static/data/`.
 
-- SvelteKit (Svelte 5, TypeScript)
-- Tailwind CSS v4
-- Leaflet for maps
-- D3 (selection/scale/axis/shape/time) for the timeline
-- Network (in progress): canvas-based placeholder with controls; data from static/data/networks/global.json
-- Vitest and Playwright for tests
+## Requirements
 
-## App structure
+- Node.js 18+ (CI uses Node 20)
+- npm (repo uses npm scripts)
+- Local data files under `static/data/` (see Data section)
 
-Key folders under `src/`:
+SSR is disabled for the main route to avoid Leaflet/D3 SSR issues (`export const ssr = false`).
 
-- `lib/api/geoJsonService.ts` – load world/country GeoJSON and compute counts
-- `lib/components/` – UI
-  - `maps/Map.svelte`, `maps/ChoroplethLayer.svelte`
-  - `filters/CountryFilter.svelte`, `filters/YearRangeFilter.svelte`
-  - `timeline/Timeline.svelte`, `timeline/AnimationController.ts`
-  - `ui/*` – small UI kit (sidebar, card, inputs, etc.)
-- `lib/state/` – Svelte 5 runes stores (`$state`) for app, map, filters, time
-- `lib/types/` – TS models and ambient declarations for D3/Leaflet
-- `lib/utils/staticDataLoader.ts` – loads `static/data/*.json`
-- `routes/+page.svelte` – main page; `routes/+page.ts` sets `export const ssr = false`
-- `static/data/` – inputs: `articles.json`, `index.json`, `maps/*.geojson`
-
-## Scripts
+## Quick start
 
 Run from this folder:
 
 ```powershell
-npm install            # install deps
-npm run dev            # start dev server
-npm run build          # production build
-npm run preview        # preview build
+npm install            # install dependencies
+npm run dev            # start dev server (SPA)
+npm run build          # static production build
+npm run preview        # preview built site
 
-npm run check          # svelte-check (types)
+npm run check          # type and Svelte checks
 npm run format         # prettier --write
 npm run lint           # prettier --check
 
-npm test               # e2e + unit
-npm run test:unit      # unit tests only
-npm run test:e2e       # Playwright tests
-
-# Network data (optional dev placeholder)
-# Run from repo root Python to generate a tiny network dataset
-#
-# python scripts/build_networks.py
+npm test               # unit + e2e (where configured)
+npm run test:unit      # Vitest only
+npm run test:e2e       # Playwright only
 ```
 
-## Data inputs
+## Data inputs (static)
 
-Place these files under `static/data/`:
+Place these under `static/data/`:
 
-- `articles.json` – article metadata (id, title, newspaper, country, date, etc.)
-- `index.json` – places index with coordinates and optional `Country`
-- `maps/world_countries.geojson` – world polygons
-- Optional country/regional GeoJSON files (e.g., `benin_regions.geojson`)
+- `articles.json` — article metadata (id, title, newspaper, country, date, etc.)
+- `index.json` — places index with coordinates and (optionally) `Country`
+- `entities/` — entity JSON files (persons, organizations, events, subjects)
+- `maps/world_countries.geojson` — world polygons; optional regional files (e.g., `benin_regions.geojson`)
+- Optional: `networks/global.json` — experimental network dataset
 
-You can generate `articles.json` and `index.json` using the Python scripts at the repo root (`scripts/prepare_json.py` and `scripts/add_countries.py`). By default they write to `static/data/` here.
+Data can be prepared via Python scripts at the repo root (see `scripts/`):
 
-## SSR and browser-only libs
+- `scripts/prepare_json.py` — export `articles.json`, `index.json`
+- `scripts/preprocess_entities.py` — generate `entities/*.json`
+- `scripts/add_countries.py` — add Country to places using polygons
+- `scripts/build_networks.py` — tiny network placeholder
 
-The main route disables SSR via `export const ssr = false` to avoid Leaflet/D3 SSR issues. Components also guard on `browser` before using window-bound APIs.
+The app reads these files at runtime using `lib/utils/staticDataLoader.ts`.
+
+## Project structure
+
+Key areas under `src/`:
+
+- `lib/api/geoJsonService.ts` — load world/country GeoJSON and compute counts
+- `lib/components/` — UI components
+  - `maps/Map.svelte`, `maps/ChoroplethLayer.svelte`
+  - `filters/*` — country/year range and related filters
+  - `timeline/Timeline.svelte`, `timeline/AnimationController.ts`
+  - `entities/*` — generic + entity-specific views (persons, orgs, events, subjects)
+  - `ui/*` — shadcn-svelte styled primitives (sidebar, card, inputs)
+- `lib/state/` — Svelte 5 runes stores (`$state`) for app, filters, map, time
+- `lib/types/` — TS models and ambient declarations for D3/Leaflet
+- `lib/utils/` — static data loader, entity loader, URL manager
+- `routes/+page.svelte` — entry page; `routes/+page.ts` sets `export const ssr = false`
+- `static/data/` — JSON/GeoJSON inputs
+
+## State and architecture
+
+- Svelte 5 runes are used throughout (`$state`, `$derived`, `$props`, `$effect`).
+- Global app state lives in `lib/state/` (active view, selected entity, filters, timeline, map).
+- Heavy libraries (Leaflet, D3) are used client-side only; components gate on `browser` where needed.
+- Entity visualizations are modular: generic building blocks + entity-specific wrappers.
 
 ## Testing
 
-- Unit tests: Vitest under `src/**.test.ts`
-- E2E tests: Playwright under `e2e/`
+- Unit tests: Vitest in `src/**/*.test.ts`
+  - Setup files: `vitest-setup-client.ts` (jsdom) and `vitest-setup-server.ts`
+  - Mock SvelteKit runtime and browser APIs as needed
+- E2E: Playwright under `e2e/`
+
+Useful commands (from this folder):
+
+```powershell
+npm run test:unit
+npm run test:e2e
+```
+
+## Styling
+
+- Tailwind CSS v4 with shadcn-svelte components
+- Prefer Tailwind utility classes; keep custom CSS minimal
+
+## Deployment
+
+- Static build via `npm run build` produces `build/`
+- Deployed with GitHub Pages through the repo workflow
+- Base path is configured for `/IWAC-spatial-overview` in `svelte.config.js`
+
+## Troubleshooting
+
+- Blank map or missing data: confirm JSON/GeoJSON files exist under `static/data/` and paths match
+- SSR errors: ensure `export const ssr = false` remains set in `routes/+page.ts`
+- Type or module issues: run `npm run check` and review `vitest-setup-*.ts`
 
 ## License
 
