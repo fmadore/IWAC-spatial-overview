@@ -507,10 +507,14 @@ def step_entities(data_dir: Path, entities_dir: Path, *, compact: bool = False) 
         with index_path.open("r", encoding="utf-8") as fi:
             index_data: List[Dict[str, Any]] = json.load(fi)
 
-        # Build entity -> article IDs map (from article subjects)
+        # Build entity -> article IDs map (from article spatial and subject fields)
         entity_articles: Dict[str, set[str]] = {}
         for a in articles:
             aid = str(a.get("o:id", ""))
+            # Add spatial entities (locations)
+            for spatial in parse_pipe_list(a.get("spatial", "")):
+                entity_articles.setdefault(spatial, set()).add(aid)
+            # Add subject entities (persons, organizations, events, subjects)
             for subj in parse_pipe_list(a.get("subject", "")):
                 entity_articles.setdefault(subj, set()).add(aid)
 

@@ -1,10 +1,18 @@
 #!/usr/bin/env python3
 """
-Build precomputed per-admin counts for Country Focus.
+Build precomputed per-admin counts for Country Focus (FAST + ACCURATE).
 
-Reads:
-- omeka-map-explorer/static/data/articles.json
-- omeka-map-explorer/static/data/index.json
+Reads location entities data from:
+- omeka-map-explorer/static/data/entities/locations.json
+
+This provides accurate article counts per location since the entities file
+contains the actual relationships between locations and articles, unlike
+index.json which only contains raw location mentions.
+
+What this script does:
+- For the four focus countries, aggregate article counts per Region and per Prefecture from location entities.
+- Use the articleCount field from each location entity for accurate totals.
+- Write compact JSONs to static/data/country_focus/ matching frontend loader naming.
 
 Outputs (to omeka-map-explorer/static/data/country_focus/):
 - benin_regions_counts.json
@@ -15,9 +23,6 @@ Outputs (to omeka-map-explorer/static/data/country_focus/):
 - cote_divoire_prefectures_counts.json
 - togo_regions_counts.json
 - togo_prefectures_counts.json
-
-Counts are by mention: an article contributes +1 to a region/prefecture if any of its locations in index.json
-have that region/prefecture, scoped to a target country to avoid cross-country collisions on names.
 """
 from __future__ import annotations
 import json
@@ -46,70 +51,51 @@ def load_json(path: Path):
     with path.open('r', encoding='utf-8') as f:
         return json.load(f)
 
-
 def main():
-    articles = load_json(DATA_DIR / 'articles.json')
-    index = load_json(DATA_DIR / 'index.json')
+    # Load location entities which have the accurate article counts
+    locations_data = load_json(DATA_DIR / 'entities' / 'locations.json')
 
-    # Build quick lookup: article id -> list of locations with country/region/prefecture
-    # The preprocess should have added these fields.
-    # Expect entries with: { 'o:id': int|str, 'Country': str, 'Region': Optional[str], 'Prefecture': Optional[str] }
-    locs_by_article = defaultdict(list)
-    for row in index:
-        try:
-            aid = row.get('o:id')
-            # Use numeric if present else string
-            if isinstance(aid, str) and aid.isdigit():
-                aid = int(aid)
-            country = (row.get('Country') or row.get('country') or '').strip()
-            region = (row.get('Region') or row.get('region') or None)
-            if isinstance(region, str):
-                region = region.strip() or None
-            prefecture = (row.get('Prefecture') or row.get('prefecture') or None)
-            if isinstance(prefecture, str):
-                prefecture = prefecture.strip() or None
-            if not country:
-                continue
-            locs_by_article[aid].append({
-                'country': country,
-                'region': region,
-                'prefecture': prefecture
-            })
-        except Exception:
+    # Prepare counters:
+    # - articles: count from relatedArticleIds
+    # - mentions: use articleCount from entities (more accurate)
+    reg_articles = {c: defaultdict(int) for c in COUNTRIES}  # name -> article count
+    pre_articles = {c: defaultdict(int) for c in COUNTRIES}
+    reg_mentions = {c: defaultdict(int) for c in COUNTRIES}  # name -> article count (same as articles for entities)
+    pre_mentions = {c: defaultdict(int) for c in COUNTRIES}
+
+    for location in locations_data:
+        country = location.get('country', '')
+        if country not in COUNTRIES:
             continue
+        
+        region = location.get('region', '')
+        prefecture = location.get('prefecture', '')
+        article_count = location.get('articleCount', 0)
+        
+        if region:
+            reg_articles[country][region] += article_count
+            reg_mentions[country][region] += article_count
+        if prefecture:
+            pre_articles[country][prefecture] += article_count
+            pre_mentions[country][prefecture] += article_count
 
-    # Deduplicate by article id within a name to avoid overcount when an article mentions same region multiple times
     now = datetime.utcnow().isoformat()
     for country in COUNTRIES:
         norm = norm_country_for_file(country)
-        # Regions
-        reg_counts = defaultdict(set)  # name -> set(article_id)
-        # Prefectures
-        pre_counts = defaultdict(set)
-
-        for aid, places in locs_by_article.items():
-            # Check if the article has at least one place in this country
-            for p in places:
-                if p['country'] != country:
-                    continue
-                if p['region']:
-                    reg_counts[p['region']].add(aid)
-                if p['prefecture']:
-                    pre_counts[p['prefecture']].add(aid)
-
         reg_out = {
             'country': country,
             'level': 'regions',
-            'counts': {k: len(v) for k, v in sorted(reg_counts.items())},
+            'countsMentions': {k: v for k, v in sorted(reg_mentions[country].items())},
+            'countsArticles': {k: v for k, v in sorted(reg_articles[country].items())},
             'updatedAt': now,
         }
         pre_out = {
             'country': country,
             'level': 'prefectures',
-            'counts': {k: len(v) for k, v in sorted(pre_counts.items())},
+            'countsMentions': {k: v for k, v in sorted(pre_mentions[country].items())},
+            'countsArticles': {k: v for k, v in sorted(pre_articles[country].items())},
             'updatedAt': now,
         }
-
         with (OUT_DIR / f"{norm}_regions_counts.json").open('w', encoding='utf-8') as f:
             json.dump(reg_out, f, ensure_ascii=False, indent=2)
         with (OUT_DIR / f"{norm}_prefectures_counts.json").open('w', encoding='utf-8') as f:
