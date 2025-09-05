@@ -1,0 +1,12 @@
+{
+  "country": "Togo",
+  "level": "regions",
+  "counts": {
+    "Centre": 12,
+    "Kara": 28,
+    "Maritime": 37,
+    "Plateaux": 24,
+    "Savanes": 13
+  },
+  "updatedAt": "2025-09-05T07:50:46.976392"
+}

@@ -1,0 +1,20 @@
+{
+  "country": "Burkina Faso",
+  "level": "regions",
+  "counts": {
+    "Boucle du Mouhoun": 12,
+    "Central-East": 6,
+    "Central-North": 6,
+    "Central-Plateau": 4,
+    "Central-South": 2,
+    "Central-West": 6,
+    "Centre": 17,
+    "East": 4,
+    "North": 8,
+    "Sahel": 7,
+    "Southwest": 3,
+    "Upper-Basins": 7,
+    "Waterfalls": 8
+  },
+  "updatedAt": "2025-09-05T07:50:46.976392"
+}

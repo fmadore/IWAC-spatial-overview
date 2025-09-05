@@ -1,0 +1,19 @@
+{
+  "country": "Benin",
+  "level": "regions",
+  "counts": {
+    "Alibori": 8,
+    "Atakora": 6,
+    "Atlantique": 13,
+    "Borgou": 7,
+    "Collines": 3,
+    "Donga": 3,
+    "Kouffo": 4,
+    "Littoral": 5,
+    "Mono": 6,
+    "Ouémé": 5,
+    "Plateau": 3,
+    "Zou": 6
+  },
+  "updatedAt": "2025-09-05T07:50:46.976392"
+}
