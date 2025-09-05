@@ -62,6 +62,10 @@ This project is published as a static site via GitHub Pages:
 
 ## For developers
 
+This repository is a monorepo containing:
+1.  **`omeka-map-explorer/`**: A SvelteKit application for the frontend dashboard.
+2.  **`scripts/`**: Python scripts for data preprocessing.
+
 Technical setup, build instructions, and testing details are documented in `omeka-map-explorer/README.md`.
 
 ## License

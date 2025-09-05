@@ -1,4 +1,4 @@
-# Omeka Map Explorer (SvelteKit)
+# IWAC Spatial Overview (SvelteKit App)
 
 Developer documentation for the IWAC Spatial Overview app. For the dashboard’s purpose and audience, see the root `README.md`.
 
@@ -43,10 +43,10 @@ Place these under `static/data/`:
 
 Data can be prepared via Python scripts at the repo root (see `scripts/`):
 
-- `scripts/prepare_json.py` — export `articles.json`, `index.json`
-- `scripts/preprocess_entities.py` — generate `entities/*.json`
-- `scripts/add_countries.py` — add Country to places using polygons
-- `scripts/build_networks.py` — tiny network placeholder
+- `scripts/preprocess_all.py` — unified script to export, enrich, and build all data files.
+- `scripts/build_country_focus_counts.py` — generates regional/prefecture counts for specific countries.
+- `scripts/build_networks.py` — creates a network graph from entity relationships.
+- `scripts/build_world_map_cache.py` — pre-computes data for the world map visualization.
 
 The app reads these files at runtime using `lib/utils/staticDataLoader.ts`.
 
@@ -54,18 +54,20 @@ The app reads these files at runtime using `lib/utils/staticDataLoader.ts`.
 
 Key areas under `src/`:
 
-- `lib/api/geoJsonService.ts` — load world/country GeoJSON and compute counts
-- `lib/components/` — UI components
-  - `maps/Map.svelte`, `maps/ChoroplethLayer.svelte`
-  - `filters/*` — country/year range and related filters
-  - `timeline/Timeline.svelte`, `timeline/AnimationController.ts`
-  - `entities/*` — generic + entity-specific views (persons, orgs, events, subjects)
-  - `ui/*` — shadcn-svelte styled primitives (sidebar, card, inputs)
-- `lib/state/` — Svelte 5 runes stores (`$state`) for app, filters, map, time
-- `lib/types/` — TS models and ambient declarations for D3/Leaflet
-- `lib/utils/` — static data loader, entity loader, URL manager
-- `routes/+page.svelte` — entry page; `routes/+page.ts` sets `export const ssr = false`
-- `static/data/` — JSON/GeoJSON inputs
+- `lib/api/` — services for loading external data (GeoJSON, country focus counts, world map cache).
+- `lib/components/` — UI components organized by feature:
+  - `world-map/WorldMapVisualization.svelte` — main world map view.
+  - `country-focus/CountryFocus.svelte` — detailed view for a selected country.
+  - `entities/*` — generic and specific views for exploring entities (persons, organizations, etc.).
+  - `network/*` — components for network graph visualization.
+  - `overview/*` — dashboard overview components.
+  - `filters/*` — filtering UI components.
+  - `ui/*` — shadcn-svelte styled primitives (sidebar, card, inputs).
+- `lib/state/` — Svelte 5 runes stores (`$state`) for managing global app state.
+- `lib/types/` — TypeScript models and ambient declarations.
+- `lib/utils/` — data loaders, URL manager, and other utilities.
+- `routes/+page.svelte` — the main entry page for the application.
+- `static/data/` — static JSON/GeoJSON data files.
 
 ## State and architecture
 
