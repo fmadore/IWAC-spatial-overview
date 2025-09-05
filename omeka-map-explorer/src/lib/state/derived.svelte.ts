@@ -81,10 +81,18 @@ export function getVisibleData(): ProcessedItem[] {
 	}
 
 	// Filter by countries
+	// Keep an item when either the LOCATION country or the ARTICLE's country
+	// matches a selected country. This aligns the choropleth (location-based)
+	// with the country facet semantics users expect.
 	if (sel.countries.length) {
-		filtered = filtered.filter((i) =>
-			sel.countries.includes((i as any).articleCountry || i.country)
-		);
+		filtered = filtered.filter((i) => {
+			const locCountry = i.country;
+			const articleCountry = (i as any).articleCountry;
+			return (
+				sel.countries.includes(locCountry) ||
+				(!!articleCountry && sel.countries.includes(articleCountry))
+			);
+		});
 	}
 
 	// Filter by regions

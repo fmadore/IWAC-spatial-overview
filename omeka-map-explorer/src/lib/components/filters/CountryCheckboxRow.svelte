@@ -11,6 +11,8 @@
 	function toggle() {
 		const list = filters.selected.countries;
 		filters.selected.countries = isChecked ? list.filter((c) => c !== name) : [...list, name];
+		// Push to URL immediately for deep-linking
+		import('$lib/utils/urlManager.svelte').then(({ urlManager }) => urlManager.updateUrl());
 	}
 
 	function idFor(country: string) {

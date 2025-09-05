@@ -87,7 +87,13 @@
 				layer.on({
 					mouseover: highlightFeature,
 					mouseout: resetHighlight,
-					click: zoomToFeature
+					click: (e: any) => {
+						// Close tooltip before opening popup to prevent duplication
+						try {
+							if (e.target && e.target.closeTooltip) e.target.closeTooltip();
+						} catch {}
+						zoomToFeature(e);
+					}
 				});
 
 				// Bind a lightweight tooltip for quick glance info
@@ -98,6 +104,13 @@
 						`<strong>${name}</strong><br/>${count} ${count === 1 ? 'article' : 'articles'}`,
 						{ sticky: true, direction: 'auto', opacity: 0.95, className: 'choropleth-tooltip' }
 					);
+					// Ensure tooltip doesn't clash with popups
+					layer.on('popupopen', () => {
+						try { layer.closeTooltip(); } catch {}
+					});
+					layer.on('popupclose', () => {
+						/* no-op; tooltip will show again on next hover */
+					});
 				} catch {}
 
 				// Bind a popup with a bit more detail on click
@@ -414,63 +427,3 @@
 		updateLayerStyles();
 	}
 </script>
-
-<style>
-	:global(.choropleth-tooltip) {
-		font-size: 12px;
-		padding: 4px 6px;
-		border-radius: 6px;
-	}
-
-	:global(.choropleth-popup-wrapper .leaflet-popup-content-wrapper) {
-		border-radius: 8px;
-	}
-
-	.choropleth-popup h4 {
-		margin: 0 0 6px;
-		font-weight: 600;
-	}
-
-	:global(.info) {
-		padding: 8px 12px;
-		font:
-			14px/16px Arial,
-			Helvetica,
-			sans-serif;
-		background: white;
-		background: rgba(255, 255, 255, 0.95);
-		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-		border-radius: 8px;
-		border: 1px solid rgba(0, 0, 0, 0.1);
-		min-width: 140px;
-		z-index: 1000 !important;
-	}
-
-	:global(.info h4) {
-		margin: 0 0 8px;
-		color: #333;
-		font-weight: 600;
-		font-size: 14px;
-	}
-
-	:global(.legend) {
-		text-align: left;
-		line-height: 20px;
-		color: #333;
-		background: rgba(255, 255, 255, 0.95);
-		padding: 8px 12px;
-		border-radius: 8px;
-		border: 1px solid rgba(0, 0, 0, 0.1);
-		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-		z-index: 1000 !important;
-	}
-
-	:global(.legend i) {
-		width: 20px;
-		height: 16px;
-		float: left;
-		margin-right: 8px;
-		margin-top: 2px;
-		border: 1px solid rgba(0, 0, 0, 0.1);
-	}
-</style>

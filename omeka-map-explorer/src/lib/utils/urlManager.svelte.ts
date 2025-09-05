@@ -3,6 +3,7 @@ import { appState } from '$lib/state/appState.svelte';
 import { goto } from '$app/navigation';
 import { base } from '$app/paths';
 import { mapData } from '$lib/state/mapData.svelte';
+import { filters } from '$lib/state/filters.svelte';
 
 type ViewType = 'dashboard' | 'map' | 'list' | 'stats';
 type VisualizationType =
@@ -52,6 +53,17 @@ export const urlManager = {
 		// Add network node selection if present (node=type:id)
 		if (networkNode?.id) {
 			params.set('node', networkNode.id);
+		}
+
+		// Encode filters (countries, years) for deep-linking
+		const sel = filters.selected;
+		if (sel.countries.length) {
+			params.set('countries', sel.countries.join(','));
+		}
+		if (sel.dateRange) {
+			const y0 = sel.dateRange.start.getFullYear();
+			const y1 = sel.dateRange.end.getFullYear();
+			params.set('years', `${y0}-${y1}`);
 		}
 
 		// Build the URL with proper base path
@@ -177,6 +189,30 @@ export const urlManager = {
 			// Clear entity selection if not in URL
 			appState.selectedEntity = null;
 		}
+
+		// Apply filters from URL if present
+		const countriesParam = searchParams.get('countries');
+		if (countriesParam !== null) {
+			// Empty string clears; otherwise split by comma
+			filters.selected.countries = countriesParam
+				.split(',')
+				.map((s) => decodeURIComponent(s.trim()))
+				.filter(Boolean);
+		}
+		const yearsParam = searchParams.get('years');
+		if (yearsParam !== null) {
+			const m = yearsParam.match(/^(\d{4})-(\d{4})$/);
+			if (m) {
+				const y0 = parseInt(m[1], 10);
+				const y1 = parseInt(m[2], 10);
+				filters.selected.dateRange = {
+					start: new Date(y0, 0, 1),
+					end: new Date(y1, 11, 31)
+				};
+			} else {
+				filters.selected.dateRange = null;
+			}
+		}
 	},
 
 	// Navigate to a specific view/visualization
@@ -207,6 +243,18 @@ export function initializeUrlManager() {
 	let previousViz = appState.activeVisualization;
 	let previousEntity = appState.selectedEntity;
 	let previousNode = appState.networkNodeSelected;
+	let previousFiltersSig = '';
+
+	const getFiltersSig = () => {
+		const sel = filters.selected;
+		return JSON.stringify({
+			countries: sel.countries.slice().sort(),
+			years: sel.dateRange
+				? [sel.dateRange.start.getFullYear(), sel.dateRange.end.getFullYear()]
+				: null
+		});
+	};
+	previousFiltersSig = getFiltersSig();
 
 	const intervalMs = 200; // lower frequency than rAF to avoid flooding
 	const handle = setInterval(() => {
@@ -214,13 +262,15 @@ export function initializeUrlManager() {
 			appState.activeView !== previousView ||
 			appState.activeVisualization !== previousViz ||
 			appState.selectedEntity !== previousEntity ||
-			appState.networkNodeSelected !== previousNode
+			appState.networkNodeSelected !== previousNode ||
+			getFiltersSig() !== previousFiltersSig
 		) {
 			urlManager.updateUrl();
 			previousView = appState.activeView;
 			previousViz = appState.activeVisualization;
 			previousEntity = appState.selectedEntity;
 			previousNode = appState.networkNodeSelected;
+			previousFiltersSig = getFiltersSig();
 		}
 	}, intervalMs);
 

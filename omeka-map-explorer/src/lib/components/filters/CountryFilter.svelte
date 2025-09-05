@@ -26,14 +26,17 @@
 		filters.selected.countries =
 			idx === -1 ? [...list, country] : list.filter((c) => c !== country);
 		dispatch('change', { countries: filters.selected.countries });
+		import('$lib/utils/urlManager.svelte').then(({ urlManager }) => urlManager.updateUrl());
 	}
 	function clearAll() {
 		filters.selected.countries = [];
 		dispatch('change', { countries: filters.selected.countries });
+		import('$lib/utils/urlManager.svelte').then(({ urlManager }) => urlManager.updateUrl());
 	}
 	function selectAll() {
 		filters.selected.countries = [...countryList];
 		dispatch('change', { countries: filters.selected.countries });
+		import('$lib/utils/urlManager.svelte').then(({ urlManager }) => urlManager.updateUrl());
 	}
 </script>
 

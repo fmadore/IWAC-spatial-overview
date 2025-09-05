@@ -130,3 +130,60 @@
 		cursor: not-allowed;
 	}
 }
+
+/* Choropleth + Leaflet UI styles (moved out of component for global scope) */
+@layer components {
+	.choropleth-tooltip {
+		font-size: 12px;
+		padding: 4px 6px;
+		border-radius: 6px;
+	}
+
+	.choropleth-popup-wrapper .leaflet-popup-content-wrapper {
+		border-radius: 8px;
+	}
+
+	.choropleth-popup h4 {
+		margin: 0 0 6px;
+		font-weight: 600;
+	}
+
+	.info {
+		padding: 8px 12px;
+		font: 14px/16px Arial, Helvetica, sans-serif;
+		background: rgba(255, 255, 255, 0.95);
+		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+		border-radius: 8px;
+		border: 1px solid rgba(0, 0, 0, 0.1);
+		min-width: 140px;
+		z-index: 1000 !important;
+	}
+
+	.info h4 {
+		margin: 0 0 8px;
+		color: #333;
+		font-weight: 600;
+		font-size: 14px;
+	}
+
+	.legend {
+		text-align: left;
+		line-height: 20px;
+		color: #333;
+		background: rgba(255, 255, 255, 0.95);
+		padding: 8px 12px;
+		border-radius: 8px;
+		border: 1px solid rgba(0, 0, 0, 0.1);
+		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+		z-index: 1000 !important;
+	}
+
+	.legend i {
+		width: 20px;
+		height: 16px;
+		float: left;
+		margin-right: 8px;
+		margin-top: 2px;
+		border: 1px solid rgba(0, 0, 0, 0.1);
+	}
+}

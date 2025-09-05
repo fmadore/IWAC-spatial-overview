@@ -12,6 +12,7 @@ vi.mock('$app/paths', () => ({ base: '/IWAC-spatial-overview' }));
 import { urlManager } from './urlManager.svelte';
 import { appState } from '$lib/state/appState.svelte';
 import { mapData } from '$lib/state/mapData.svelte';
+import { filters } from '$lib/state/filters.svelte';
 
 describe('URL Manager', () => {
 	beforeEach(() => {
@@ -25,6 +26,8 @@ describe('URL Manager', () => {
 		mapData.organizations = [] as any;
 		mapData.events = [] as any;
 		mapData.subjects = [] as any;
+		filters.selected.countries = [];
+		filters.selected.dateRange = null as any;
 		hoisted.goto.mockClear();
 	});
 
@@ -44,6 +47,44 @@ describe('URL Manager', () => {
 		expect(last).not.toContain('entityId=');
 		// And state should reflect overview
 		expect(appState.activeVisualization).toBe('overview');
+	});
+
+	test('updateUrl includes countries when filters change', () => {
+		filters.selected.countries = ['Benin', "Côte d'Ivoire"]; // includes diacritics and apostrophe
+		urlManager.updateUrl();
+		vi.runAllTimers();
+
+		const calls = hoisted.goto.mock.calls.map((c) => c[0] as string);
+		const last = calls[calls.length - 1];
+		// Parse search params safely
+		const u = new URL('http://x' + last);
+		const q = u.searchParams.get('countries');
+		expect(q).toBe("Benin,Côte d'Ivoire");
+	});
+
+	test('updateUrl includes years when dateRange is set', () => {
+		filters.selected.dateRange = { start: new Date(1905, 0, 1), end: new Date(1912, 11, 31) } as any;
+		urlManager.updateUrl();
+		vi.runAllTimers();
+
+		const calls = hoisted.goto.mock.calls.map((c) => c[0] as string);
+		const last = calls[calls.length - 1];
+		const u = new URL('http://x' + last);
+		expect(u.searchParams.get('years')).toBe('1905-1912');
+	});
+
+	test('parse countries and years into filters', () => {
+		const params = new URLSearchParams(
+			'countries=Benin%2CBurkina%20Faso%2CC%C3%B4te%20d%27Ivoire&years=1901-1910'
+		);
+		urlManager.parseUrlAndUpdateState(params);
+		expect(filters.selected.countries).toEqual([
+			'Benin',
+			'Burkina Faso',
+			"Côte d'Ivoire"
+		]);
+		expect(filters.selected.dateRange?.start.getFullYear()).toBe(1901);
+		expect(filters.selected.dateRange?.end.getFullYear()).toBe(1910);
 	});
 
 	test('parse empty params -> dashboard/overview', () => {

@@ -55,6 +55,7 @@
 				filters.selected.dateRange = { start: startDate, end: endDate };
 			}
 			dispatch('change', { dateRange: filters.selected.dateRange });
+			import('$lib/utils/urlManager.svelte').then(({ urlManager }) => urlManager.updateUrl());
 			debounceTimer = null;
 			isUpdating = false;
 		}, DEBOUNCE_DELAY);

@@ -13,6 +13,8 @@
 	import { browser } from '$app/environment';
 	import ChoroplethLayer from './ChoroplethLayer.svelte';
 	import MapPopup from './MapPopup.svelte';
+	import { appState } from '$lib/state/appState.svelte';
+	import { urlManager } from '$lib/utils/urlManager.svelte';
 
 	// Using any types here to avoid TypeScript errors with Leaflet
 	let mapElement: HTMLDivElement;
@@ -457,7 +459,23 @@
 </div>
 
 {#if browser && map && worldGeo && mapData.viewMode === 'choropleth'}
-	<ChoroplethLayer {map} geoJson={worldGeo} data={choroplethData} scaleMode="log" />
+	<ChoroplethLayer
+		{map}
+		geoJson={worldGeo}
+		data={choroplethData}
+		scaleMode="log"
+		on:selectRegion={(e) => {
+			const name = e.detail?.region;
+			if (!name) return;
+			// Toggle single-country selection: click same country again to clear
+			const current = filters.selected.countries;
+			filters.selected.countries = current.length === 1 && current[0] === name ? [] : [name];
+			// Ensure map remains in choropleth/byCountry context and reflect in URL
+			appState.activeView = 'map';
+			appState.activeVisualization = 'byCountry';
+			urlManager.updateUrl();
+		}}
+	/>
 {/if}
 
 <style>
