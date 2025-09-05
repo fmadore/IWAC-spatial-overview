@@ -174,6 +174,88 @@ describe('URL Manager', () => {
 		expect(appState.selectedEntity).toBeNull();
 	});
 
+	test('updateUrl includes Country Focus facets only on countryFocus viz', () => {
+		// Set Country Focus facets
+		appState.countryFocus = { country: 'Burkina Faso', level: 'prefectures' };
+		
+		// Not on countryFocus -> should NOT include facets
+		urlManager.updateUrl();
+		vi.runAllTimers();
+		let calls = hoisted.goto.mock.calls.map((c) => c[0] as string);
+		let last = calls[calls.length - 1];
+		let u = new URL('http://x' + last);
+		expect(u.searchParams.get('focusCountry')).toBeNull();
+		expect(u.searchParams.get('focusLevel')).toBeNull();
+
+		// Switch to countryFocus -> now include facets
+		hoisted.goto.mockClear();
+		appState.activeView = 'dashboard';
+		appState.activeVisualization = 'countryFocus';
+		urlManager.updateUrl();
+		vi.runAllTimers();
+		calls = hoisted.goto.mock.calls.map((c) => c[0] as string);
+		last = calls[calls.length - 1];
+		u = new URL('http://x' + last);
+		expect(u.searchParams.get('focusCountry')).toBe('Burkina Faso');
+		expect(u.searchParams.get('focusLevel')).toBe('prefectures');
+	});
+
+	test('updateUrl excludes default Country Focus facets', () => {
+		// Set default values -> should not appear in URL
+		appState.activeView = 'dashboard';
+		appState.activeVisualization = 'countryFocus';
+		appState.countryFocus = { country: 'Benin', level: 'regions' };
+		urlManager.updateUrl();
+		vi.runAllTimers();
+		const calls = hoisted.goto.mock.calls.map((c) => c[0] as string);
+		const last = calls[calls.length - 1];
+		const u = new URL('http://x' + last);
+		expect(u.searchParams.get('focusCountry')).toBeNull();
+		expect(u.searchParams.get('focusLevel')).toBeNull();
+		expect(last).toContain('viz=countryFocus');
+	});
+
+	test('parse Country Focus facets into state only when viz=countryFocus', () => {
+		// Without viz=countryFocus -> should not apply
+		let params = new URLSearchParams('focusCountry=Togo&focusLevel=prefectures');
+		urlManager.parseUrlAndUpdateState(params);
+		expect(appState.countryFocus?.country).toBe('Benin'); // default
+		expect(appState.countryFocus?.level).toBe('regions'); // default
+
+		// With viz=countryFocus -> should apply
+		params = new URLSearchParams('viz=countryFocus&focusCountry=Togo&focusLevel=prefectures');
+		urlManager.parseUrlAndUpdateState(params);
+		expect(appState.activeVisualization).toBe('countryFocus');
+		expect(appState.countryFocus?.country).toBe('Togo');
+		expect(appState.countryFocus?.level).toBe('prefectures');
+	});
+
+	test('switching from countryFocus with facets to overview clears facets and excludes them from URL', () => {
+		// Start on countryFocus with non-default facets
+		appState.activeView = 'dashboard';
+		appState.activeVisualization = 'countryFocus';
+		appState.countryFocus = { country: 'Togo', level: 'prefectures' };
+		urlManager.updateUrl();
+		vi.runAllTimers();
+		let calls = hoisted.goto.mock.calls.map((c) => c[0] as string);
+		let last = calls[calls.length - 1];
+		let u = new URL('http://x' + last);
+		expect(u.searchParams.get('focusCountry')).toBe('Togo');
+		expect(u.searchParams.get('focusLevel')).toBe('prefectures');
+
+		// Now simulate clicking Overview
+		hoisted.goto.mockClear();
+		urlManager.navigateTo('dashboard', 'overview');
+		calls = hoisted.goto.mock.calls.map((c) => c[0] as string);
+		last = calls[calls.length - 1];
+		u = new URL('http://x' + last);
+		expect(u.searchParams.get('viz')).toBeNull(); // overview is default
+		expect(u.searchParams.get('focusCountry')).toBeNull();
+		expect(u.searchParams.get('focusLevel')).toBeNull();
+		expect(appState.countryFocus?.country).toBe('Benin'); // reset to default
+		expect(appState.countryFocus?.level).toBe('regions'); // reset to default
+	});
+
 	test('updateUrl excludes entity params when switching to byCountry', () => {
 		appState.activeView = 'dashboard';
 		appState.activeVisualization = 'organizations';
