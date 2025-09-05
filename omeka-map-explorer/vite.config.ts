@@ -7,7 +7,7 @@ export default defineConfig({
 	test: {
 		projects: [
 			{
-				plugins: [svelteTesting()],
+				plugins: [sveltekit(), svelteTesting()],
 				test: {
 					name: 'client',
 					environment: 'jsdom',
@@ -18,6 +18,7 @@ export default defineConfig({
 				}
 			},
 			{
+				plugins: [sveltekit()],
 				test: {
 					name: 'server',
 					environment: 'node',
