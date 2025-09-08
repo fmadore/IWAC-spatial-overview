@@ -161,14 +161,24 @@
 			L = await import('leaflet');
 			await import('leaflet/dist/leaflet.css');
 
-			// Initialize the map first (fast)
-			map = L.map(mapElement).setView(mapData.center, mapData.zoom);
+			// Initialize the map with bounds to prevent excessive horizontal panning / world duplication
+			// maxBounds limits the visible area; maxBoundsViscosity makes the map "stick" at edges
+			// Using +/-85 latitude to avoid polar tile distortion while still covering all data
+			map = L.map(mapElement, {
+				maxBounds: [
+					[-85, -180],
+					[85, 180]
+				],
+				maxBoundsViscosity: 1.0,
+				worldCopyJump: false // do not create seamless horizontal wrapping duplicating the world
+			}).setView(mapData.center, mapData.zoom);
 
 			// Add modern tile layer - using CartoDB Positron for clean, modern look
 			const tileOptions = tileLayerOptions.cartodb;
 			const layerConfig: any = {
 				attribution: tileOptions.attribution,
-				maxZoom: 20
+				maxZoom: 20,
+				noWrap: true // prevent horizontal world repetition
 			};
 			// Only add subdomains if it exists
 			if ('subdomains' in tileOptions) {
@@ -184,7 +194,8 @@
 				} else {
 					const layerOptions: any = {
 						attribution: options.attribution,
-						maxZoom: 20
+						maxZoom: 20,
+						noWrap: true
 					};
 					// Only add subdomains if it exists
 					if ('subdomains' in options) {
