@@ -69,6 +69,10 @@
 		let currentPage = $state(1);
 		const itemsPerPage = 3; // compact view: show 3 articles per page
 
+		// Expand/collapse state for metadata lists
+		let expandPlaces = $state(false);
+		let expandNewspapers = $state(false);
+
 		// Sort items by most recent publish date (fallback to sample if missing)
 		const sortedItems = $derived(() => {
 			const items = (group.items && group.items.length ? group.items : [group.sample]).slice();
@@ -84,7 +88,16 @@
 		});
 </script>
 
-<div class="map-popup min-w-96 max-w-md p-3" role="dialog" aria-label="Location details">
+<div
+	class="map-popup min-w-96 max-w-md p-3"
+	role="dialog"
+	aria-label="Location details"
+	tabindex="0"
+	onclick={(e) => e.stopPropagation()}
+	onmousedown={(e) => e.stopPropagation()}
+	onmouseup={(e) => e.stopPropagation()}
+	onkeydown={(e) => { /* prevent bubbling for navigation keys */ if (['Enter',' '].includes(e.key)) e.stopPropagation(); }}
+>
 	<!-- Main location title -->
 	<div class="border-b pb-2 mb-2">
 		<h3 class="font-semibold text-lg text-foreground mb-1 flex items-center gap-2 leading-tight">
@@ -114,12 +127,17 @@
 				<MapPin class="h-3 w-3 mt-[2px] text-muted-foreground" />
 				<div class="flex-1">
 					<span class="font-medium text-foreground">Places in these articles ({placeNames().length - 1} other{placeNames().length - 1 === 1 ? '' : 's'}): </span>
-					<span>
-						{placeNames().slice(1, 4).join(', ')}
-						{#if placeNames().length > 4}
-							<span class="text-muted-foreground"> +{placeNames().length - 4} more</span>
-						{/if}
-					</span>
+					{#if expandPlaces}
+						<div class="mt-0.5 max-h-24 overflow-y-auto pr-1 rounded border border-muted/40 bg-muted/20">
+							<!-- Individual tokens for readability -->
+							{#each placeNames().slice(1) as p}
+								<span class="inline-block text-[10px] leading-relaxed bg-background/70 border border-border/50 rounded px-1 py-0.5 m-0.5 whitespace-nowrap">{p}</span>
+							{/each}
+						</div>
+						<button type="button" class="text-blue-600 hover:underline mt-0.5 text-[11px]" onclick={(e) => { e.stopPropagation(); expandPlaces = false; }}>show less</button>
+					{:else}
+						<span>{placeNames().slice(1, 4).join(', ')}{#if placeNames().length > 4} <button type="button" class="text-blue-600 hover:underline" onclick={(e) => { e.stopPropagation(); expandPlaces = true; }}>+{placeNames().length - 4} more</button>{/if}</span>
+					{/if}
 				</div>
 			</div>
 		{/if}
@@ -141,12 +159,16 @@
 				<Newspaper class="h-3 w-3 mt-[2px] text-muted-foreground" />
 				<div class="flex-1">
 					<span class="font-medium text-foreground">Source newspaper{newspapers().length === 1 ? '' : 's'} ({newspapers().length}): </span>
-					<span>
-						{newspapers().slice(0, 2).join(', ')}
-						{#if newspapers().length > 2}
-							<span class="text-muted-foreground"> +{newspapers().length - 2} more</span>
-						{/if}
-					</span>
+					{#if expandNewspapers}
+						<div class="mt-0.5 max-h-24 overflow-y-auto pr-1 rounded border border-muted/40 bg-muted/20">
+							{#each newspapers() as n}
+								<span class="inline-block text-[10px] leading-relaxed bg-background/70 border border-border/50 rounded px-1 py-0.5 m-0.5 whitespace-nowrap">{n}</span>
+							{/each}
+						</div>
+						<button type="button" class="text-blue-600 hover:underline mt-0.5 text-[11px]" onclick={(e) => { e.stopPropagation(); expandNewspapers = false; }}>show less</button>
+					{:else}
+						<span>{newspapers().slice(0, 2).join(', ')}{#if newspapers().length > 2} <button type="button" class="text-blue-600 hover:underline" onclick={(e) => { e.stopPropagation(); expandNewspapers = true; }}>+{newspapers().length - 2} more</button>{/if}</span>
+					{/if}
 				</div>
 			</div>
 		{/if}
@@ -201,13 +223,16 @@
 						max={totalPages()}
 						value={currentPage}
 						class="w-10 h-7 px-1 border rounded text-center bg-background text-foreground focus:outline-none focus:ring focus:ring-primary/40"
+						onclick={(e: any) => e.stopPropagation()}
 						oninput={(e: any) => {
+							e.stopPropagation();
 							const v = parseInt(e.currentTarget.value, 10);
 							if (!isNaN(v)) {
 								currentPage = Math.min(totalPages(), Math.max(1, v));
 							}
 						}}
 						onkeydown={(e: KeyboardEvent) => {
+							e.stopPropagation();
 							if (e.key === 'Enter') {
 								(e.currentTarget as HTMLInputElement).blur();
 							}
