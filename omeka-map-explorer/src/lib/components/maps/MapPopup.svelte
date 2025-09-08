@@ -67,7 +67,7 @@
 
 		// Pagination state (always show a paginated list to avoid layout toggle flicker)
 		let currentPage = $state(1);
-		const itemsPerPage = 5; // show 5 articles at a time as requested
+		const itemsPerPage = 3; // compact view: show 3 articles per page
 
 		// Sort items by most recent publish date (fallback to sample if missing)
 		const sortedItems = $derived(() => {
@@ -84,16 +84,16 @@
 		});
 </script>
 
-<div class="map-popup min-w-96 max-w-md p-4" role="dialog" aria-label="Location details">
+<div class="map-popup min-w-96 max-w-md p-3" role="dialog" aria-label="Location details">
 	<!-- Main location title -->
-	<div class="border-b pb-4 mb-4">
-		<h3 class="font-bold text-xl text-foreground mb-1 flex items-center gap-2">
+	<div class="border-b pb-2 mb-2">
+		<h3 class="font-semibold text-lg text-foreground mb-1 flex items-center gap-2 leading-tight">
 			<MapPin class="h-5 w-5 text-primary" />
 			{displayPlaceName()}
 		</h3>
 		
 		<!-- Article count -->
-		<div class="flex items-center gap-2 mb-2">
+		<div class="flex items-center gap-2 mb-1 text-sm">
 			<Users class="h-4 w-4 text-muted-foreground" />
 			<span class="font-semibold">
 				{group.count} Article{group.count === 1 ? '' : 's'}
@@ -101,13 +101,13 @@
 		</div>
 
 		<!-- Coordinates -->
-		<div class="text-sm text-muted-foreground font-mono mb-2">
+		<div class="text-xs text-muted-foreground font-mono mb-1">
 			{group.lat.toFixed(4)}, {group.lng.toFixed(4)}
 		</div>
 	</div>
 
 	<!-- Additional places, countries, newspapers summary -->
-	<div class="space-y-3 mb-4">
+	<div class="space-y-1 mb-2 text-xs leading-snug">
 		<!-- Other places -->
 		{#if placeNames().length > 1}
 			<div>
@@ -144,27 +144,27 @@
 	</div>
 
 	<!-- Articles list (always visible, paginated) -->
-	<div class="border-t pt-3 space-y-3">
+	<div class="border-t pt-2 space-y-2">
 		<!-- Pagination info -->
-		<div class="flex items-center justify-between text-xs text-muted-foreground">
+		<div class="flex items-center justify-between text-[10px] text-muted-foreground tracking-tight">
 			<span>Page {currentPage} of {totalPages()}</span>
 			<span>{((currentPage - 1) * itemsPerPage) + 1} - {Math.min(currentPage * itemsPerPage, group.count)} of {group.count}</span>
 		</div>
 
 		<!-- Articles list -->
-		<div class="space-y-2 max-h-64 overflow-y-auto pr-1">
+		<div class="space-y-1 max-h-56 overflow-y-auto pr-1">
 			{#each pagedItems() as item}
-				<div class="border rounded p-2 text-sm hover:bg-accent/40 transition-colors">
+				<div class="border rounded p-2 text-[13px] hover:bg-accent/40 transition-colors">
 					<a
 						href={getArticleUrl(item.id)}
 						target="_blank"
 						rel="noopener noreferrer"
-						class="font-medium text-blue-600 hover:text-blue-800 transition-colors block mb-1"
+						class="font-medium text-blue-600 hover:text-blue-800 transition-colors block mb-0.5"
 					>
 						{item.title}
 						<ExternalLink class="h-3 w-3 inline ml-1" />
 					</a>
-					<div class="text-xs text-muted-foreground flex flex-wrap gap-x-1">
+					<div class="text-[11px] text-muted-foreground flex flex-wrap gap-x-1">
 						{formatDate(item.publishDate)} • {item.articleCountry} • {item.newspaperSource}
 					</div>
 				</div>
@@ -173,23 +173,23 @@
 
 		<!-- Pagination controls -->
 		{#if totalPages() > 1}
-			<div class="flex items-center justify-between">
+			<div class="flex items-center justify-between pt-1">
 				<Button
 					variant="outline"
 					size="sm"
 					onclick={() => currentPage = Math.max(1, currentPage - 1)}
 					disabled={currentPage === 1}
-					class="text-xs"
+					class="text-[11px] h-7"
 				>
 					<ChevronLeft class="h-3 w-3 mr-1" /> Previous
 				</Button>
-				<span class="text-xs text-muted-foreground">{currentPage} / {totalPages()}</span>
+				<span class="text-[11px] text-muted-foreground">{currentPage} / {totalPages()}</span>
 				<Button
 					variant="outline"
 					size="sm"
 					onclick={() => currentPage = Math.min(totalPages(), currentPage + 1)}
 					disabled={currentPage === totalPages()}
-					class="text-xs"
+					class="text-[11px] h-7"
 				>
 					Next <ChevronRight class="h-3 w-3 ml-1" />
 				</Button>
