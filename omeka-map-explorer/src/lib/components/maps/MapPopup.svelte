@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { ProcessedItem } from '$lib/types';
-	import { ExternalLink, MapPin, Users, ChevronLeft, ChevronRight } from 'lucide-svelte';
+	import { ExternalLink, MapPin, Users, ChevronLeft, ChevronRight, Globe, Newspaper } from 'lucide-svelte';
 	import { Button } from '$lib/components/ui/button';
 
 	interface LocationGroup {
@@ -107,38 +107,47 @@
 	</div>
 
 	<!-- Additional places, countries, newspapers summary -->
-	<div class="space-y-1 mb-2 text-xs leading-snug">
-		<!-- Other places -->
+	<div class="space-y-1 mb-2 text-[11px] leading-snug">
+		<!-- Associated places -->
 		{#if placeNames().length > 1}
-			<div>
-				<span class="text-sm font-medium text-muted-foreground">Other places: </span>
-				<span class="text-sm">
-					{placeNames().slice(1, 4).join(', ')}
-					{#if placeNames().length > 4}
-						<span class="text-muted-foreground"> +{placeNames().length - 4} more</span>
-					{/if}
-				</span>
+			<div class="flex items-start gap-1">
+				<MapPin class="h-3 w-3 mt-[2px] text-muted-foreground" />
+				<div class="flex-1">
+					<span class="font-medium text-foreground">Places in these articles ({placeNames().length - 1} other{placeNames().length - 1 === 1 ? '' : 's'}): </span>
+					<span>
+						{placeNames().slice(1, 4).join(', ')}
+						{#if placeNames().length > 4}
+							<span class="text-muted-foreground"> +{placeNames().length - 4} more</span>
+						{/if}
+					</span>
+				</div>
 			</div>
 		{/if}
 
-		<!-- Countries -->
+		<!-- Article countries -->
 		{#if countries().length > 0}
-			<div>
-				<span class="text-sm font-medium text-muted-foreground">Countries: </span>
-				<span class="text-sm">{countries().join(', ')}</span>
+			<div class="flex items-start gap-1">
+				<Globe class="h-3 w-3 mt-[2px] text-muted-foreground" />
+				<div class="flex-1">
+					<span class="font-medium text-foreground">Article countr{countries().length === 1 ? 'y' : 'ies'} ({countries().length}): </span>
+					<span>{countries().join(', ')}</span>
+				</div>
 			</div>
 		{/if}
 
-		<!-- Newspapers -->
+		<!-- Source newspapers -->
 		{#if newspapers().length > 0}
-			<div>
-				<span class="text-sm font-medium text-muted-foreground">Newspapers: </span>
-				<span class="text-sm">
-					{newspapers().slice(0, 2).join(', ')}
-					{#if newspapers().length > 2}
-						<span class="text-muted-foreground"> +{newspapers().length - 2} more</span>
-					{/if}
-				</span>
+			<div class="flex items-start gap-1">
+				<Newspaper class="h-3 w-3 mt-[2px] text-muted-foreground" />
+				<div class="flex-1">
+					<span class="font-medium text-foreground">Source newspaper{newspapers().length === 1 ? '' : 's'} ({newspapers().length}): </span>
+					<span>
+						{newspapers().slice(0, 2).join(', ')}
+						{#if newspapers().length > 2}
+							<span class="text-muted-foreground"> +{newspapers().length - 2} more</span>
+						{/if}
+					</span>
+				</div>
 			</div>
 		{/if}
 	</div>
