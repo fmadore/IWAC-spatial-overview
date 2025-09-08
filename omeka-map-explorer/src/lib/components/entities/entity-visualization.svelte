@@ -1,6 +1,7 @@
 <script lang="ts">
 	import type { ProcessedItem } from '$lib/types';
 	import { appState } from '$lib/state/appState.svelte';
+	import { mapData } from '$lib/state/mapData.svelte';
 	import { getVisibleData } from '$lib/state/derived.svelte';
 	import EntitySelector from './entity-selector.svelte';
 	import EntityStatsCards from './entity-stats-cards.svelte';
@@ -36,6 +37,13 @@
 
 	const visibleData = $derived.by(() => getVisibleData());
 	const selectedEntity = $derived.by(() => appState.selectedEntity);
+
+	// Force bubble mode for entity visualizations (choropleth not semantically correct here)
+	$effect(() => {
+		if (appState.selectedEntity && mapData.viewMode === 'choropleth') {
+			mapData.viewMode = 'bubbles';
+		}
+	});
 
 	// Check if the selected entity matches our entity type
 	const isSelectedEntityOfType = $derived.by(

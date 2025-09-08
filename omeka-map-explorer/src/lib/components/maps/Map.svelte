@@ -59,21 +59,17 @@
 	// Create optimized derived state for visible data
 	// Skip expensive getVisibleData() when we can use cache
 	const visibleData = $derived.by(() => {
-		// For world view with minimal filtering, we can skip expensive computation
-		// and let the cache service handle the filtering more efficiently
-		const hasEntityFilter = appState.selectedEntity && appState.selectedEntity.relatedArticleIds?.length;
-		const hasComplexFilters = filters.selected.keywords.length > 0 || 
-			filters.selected.newspapers.length > 0;
-		
-		// If we have entity or complex filters, we need full filtering
-		if (hasEntityFilter || hasComplexFilters) {
-			console.log('Map: Using full getVisibleData() due to complex filters');
+		// If ANY entity is selected we always need real filtered items (never cache shortcut)
+		if (appState.selectedEntity) {
 			return getVisibleData();
 		}
-		
-		// For simple geographic/temporal filters, let cache service handle it
-		// Return empty array - cache service will provide the filtered data
-		console.log('Map: Skipping getVisibleData(), using cache-optimized filtering');
+		// Complex textual filters also require full computation
+		const hasComplexFilters =
+			filters.selected.keywords.length > 0 || filters.selected.newspapers.length > 0;
+		if (hasComplexFilters) {
+			return getVisibleData();
+		}
+		// Otherwise we can skip and rely on coordinate cache (fast path)
 		return [];
 	});
 
@@ -222,7 +218,7 @@
 				// Check if world map cache is available for performance optimization
 				try {
 					cacheAvailable = await isWorldMapCacheAvailable();
-					if (cacheAvailable) {
+					if (cacheAvailable && !appState.selectedEntity) {
 						console.log('World map cache is available - using optimized data loading');
 					}
 				} catch (e) {
@@ -518,7 +514,11 @@
 	// Refresh when view mode changes
 	$effect(() => {
 		if (browser && map) {
-			mapData.viewMode;
+			// If an entity is selected and viewMode is choropleth, force bubbles (entity views need point data)
+			if (appState.selectedEntity && mapData.viewMode === 'choropleth') {
+				mapData.viewMode = 'bubbles';
+			}
+			mapData.viewMode; // dependency
 			loadMapData();
 		}
 	});
@@ -546,7 +546,7 @@
 			usingCachedData = false;
 
 		// Try to use cached data first for better performance
-		if (cacheAvailable) {
+		if (cacheAvailable && !appState.selectedEntity) {
 			try {
 				// Determine cache options based on current filters
 				const cacheOptions: { 
@@ -557,7 +557,7 @@
 				} = {};
 				
 				// Check for entity filter
-				if (appState.selectedEntity?.type) {
+				if ((appState.selectedEntity as any)?.type) {
 					// Map entity types to cache file names
 					const entityTypeMap: Record<string, string> = {
 						'Personnes': 'persons',
@@ -565,7 +565,7 @@
 						'Événements': 'events',
 						'Sujets': 'subjects'
 					};
-					cacheOptions.entityType = entityTypeMap[appState.selectedEntity.type];
+					cacheOptions.entityType = entityTypeMap[(appState.selectedEntity as any).type];
 				}
 				
 				// Add country filters for efficient cache filtering
