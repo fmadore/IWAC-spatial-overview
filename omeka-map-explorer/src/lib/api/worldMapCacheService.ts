@@ -152,6 +152,78 @@ export async function loadCoordinateCache(options: {
 }
 
 /**
+ * Load coordinate clusters grouped by ARTICLE country (articleCountry union semantics).
+ * When multiple article countries are requested, merges clusters by rounded coordinate key.
+ * This matches the semantic: selecting a country includes ALL locations mentioned by articles whose
+ * articleCountry equals that selection (locations can be in other physical countries).
+ */
+export async function loadArticleCountryCoordinateClusters(articleCountries: string[]): Promise<CoordinateCluster[] | null> {
+	try {
+		if (!articleCountries || articleCountries.length === 0) return null;
+		const sorted = [...articleCountries].sort();
+		const cacheKey = `article_country_coordinates_${sorted.join('__')}`;
+		if (worldMapCache.has(cacheKey)) {
+			return worldMapCache.get(cacheKey);
+		}
+
+		// Fetch each article-country union file
+		const fetches = sorted.map(async (c) => {
+			const file = `coordinates/by_article_country/${normalizeCountryFilename(c)}.json`;
+			const url = `${base}/data/world_cache/${file}`;
+			try {
+				const resp = await fetch(url);
+				if (!resp.ok) {
+					console.warn(`Article-country coordinate cache missing for ${c}: ${resp.status}`);
+					return null;
+				}
+				const data = await resp.json();
+				return (data.clusters || []) as CoordinateCluster[];
+			} catch (e) {
+				console.warn(`Failed loading article-country cache for ${c}:`, e);
+				return null;
+			}
+		});
+
+		const results = await Promise.all(fetches);
+		const allClusters = results.filter(Boolean).flat() as CoordinateCluster[];
+		if (allClusters.length === 0) {
+			return null; // nothing loaded -> let caller fallback
+		}
+
+		if (sorted.length === 1) {
+			worldMapCache.set(cacheKey, allClusters);
+			return allClusters;
+		}
+
+		// Merge duplicates across countries by coordinate key (rounded for stability)
+		const merged = new Map<string, CoordinateCluster & { relatedArticleIds: string[] }>();
+		for (const cl of allClusters) {
+			if (!cl || !cl.coordinates) continue;
+			const [lat, lng] = cl.coordinates;
+			const key = `${lat.toFixed(4)},${lng.toFixed(4)}`;
+			const existing = merged.get(key);
+			if (existing) {
+				existing.articleCount += cl.articleCount;
+				// Union relatedArticleIds
+				if (cl.relatedArticleIds && cl.relatedArticleIds.length) {
+					const set = new Set(existing.relatedArticleIds);
+					for (const id of cl.relatedArticleIds) set.add(id);
+					existing.relatedArticleIds = Array.from(set);
+				}
+			} else {
+				merged.set(key, { ...cl, relatedArticleIds: cl.relatedArticleIds ? [...cl.relatedArticleIds] : [] });
+			}
+		}
+		const mergedArr = Array.from(merged.values());
+		worldMapCache.set(cacheKey, mergedArr);
+		return mergedArr;
+	} catch (e) {
+		console.warn('Failed to load article-country coordinate clusters:', e);
+		return null;
+	}
+}
+
+/**
  * Convert cached coordinate clusters to ProcessedItem format for compatibility
  */
 export function coordinateClustersToProcessedItems(clusters: CoordinateCluster[]): ProcessedItem[] {

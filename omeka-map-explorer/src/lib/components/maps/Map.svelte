@@ -14,7 +14,8 @@
 		loadChoroplethCache,
 		loadCoordinateCache,
 		coordinateClustersToProcessedItems,
-		isWorldMapCacheAvailable
+		isWorldMapCacheAvailable,
+		loadArticleCountryCoordinateClusters
 	} from '$lib/api/worldMapCacheService';
 	import { browser } from '$app/environment';
 	import ChoroplethLayer from './ChoroplethLayer.svelte';
@@ -64,8 +65,10 @@
 			return getVisibleData();
 		}
 		// Complex textual filters also require full computation
-		const hasComplexFilters =
-			filters.selected.keywords.length > 0 || filters.selected.newspapers.length > 0;
+		const hasComplexFilters = 
+			filters.selected.keywords.length > 0 || 
+			filters.selected.newspapers.length > 0 || 
+			filters.selected.countries.length > 0; // country filter MUST recompute article-based filtering
 		if (hasComplexFilters) {
 			return getVisibleData();
 		}
@@ -338,9 +341,55 @@
 		if (mapData.viewMode === 'bubbles' && (visibleData.length > 0 || cacheAvailable)) {
 			let coordinateGroups: Map<string, { lat: number; lng: number; count: number; sample: any; items: any[]; name?: string }> | null = null;
 			
-			// Only try to use cached coordinate clusters if no specific entity is selected
-			// Entity-specific cache files don't exist yet, so fall back to real-time for entities
-			const shouldUseCache = cacheAvailable && !appState.selectedEntity;
+			// Only try to use cached coordinate clusters if:
+			//  - cache is available
+			//  - no specific entity is selected
+			//  - NO country filter is active (because country filter semantics are article-based, not location-based)
+			//    Selecting a country means: show ALL locations from articles whose articleCountry matches selection,
+			//    which can include locations in OTHER countries. The coordinate cache is location-country keyed and
+			//    would incorrectly restrict to in-country points. So we must bypass cache when countries are selected.
+			const countryArticleFilterActive = filters.selected.countries.length > 0;
+			const shouldUseCache = cacheAvailable && !appState.selectedEntity && !countryArticleFilterActive;
+
+			// NEW: Fast path using precomputed article-country union coordinate caches
+			if (cacheAvailable && countryArticleFilterActive && !appState.selectedEntity) {
+				try {
+					const countries = filters.selected.countries.slice();
+					const clusters = await loadArticleCountryCoordinateClusters(countries);
+					if (clusters && clusters.length > 0) {
+						coordinateGroups = new Map();
+						for (const cl of clusters) {
+							if (!cl.coordinates) continue;
+							const [lat, lng] = cl.coordinates;
+							const key = `${lat.toFixed(4)},${lng.toFixed(4)}`;
+							const existing = coordinateGroups.get(key);
+							if (existing) {
+								existing.count += cl.articleCount;
+							} else {
+								coordinateGroups.set(key, {
+									lat,
+									lng,
+									count: cl.articleCount,
+									sample: {
+										id: cl.id,
+										title: cl.label,
+										country: cl.country,
+										placeLabel: cl.label
+									},
+									items: [],
+									name: cl.label
+								});
+							}
+						}
+						console.log('✅ Using article-country union coordinate cache', {
+							selectedCountries: countries,
+							clusters: coordinateGroups.size
+						});
+					}
+				} catch (e) {
+					console.warn('Article-country coordinate cache path failed, will fallback:', e);
+				}
+			}
 			
 			if (shouldUseCache) {
 				try {
@@ -352,10 +401,7 @@
 						year?: number;
 					} = {};
 					
-					// Add country filters for efficient cache filtering
-					if (filters.selected.countries.length > 0) {
-						cacheOptions.countries = filters.selected.countries;
-					}
+					// Do NOT pass countries into cacheOptions here because we disabled cache when they are active.
 					
 					// Add date range filter if present
 					if (filters.selected.dateRange) {
@@ -591,60 +637,42 @@
 			let newData: Record<string, number> = {};
 			usingCachedData = false;
 
-		// Try to use cached data first for better performance
-		if (cacheAvailable && !appState.selectedEntity) {
+		// Try to use cached data first for better performance UNLESS a country facet is active
+		// Country facet should re-scale/limit counts to the selected articleCountry subset, which
+		// our current precomputed files (global/by_year/by_entity) cannot represent. So we skip
+		// cache when countries are selected to ensure the choropleth reflects the filtered set.
+		const countryFacetActive = filters.selected.countries.length > 0;
+		if (!countryFacetActive && cacheAvailable && !appState.selectedEntity) {
 			try {
-				// Determine cache options based on current filters
-				const cacheOptions: { 
-					year?: number; 
-					entityType?: string;
-					countries?: string[];
-					dateRange?: { start: Date; end: Date };
-				} = {};
-				
-				// Check for entity filter
+				const cacheOptions: { year?: number; entityType?: string; dateRange?: { start: Date; end: Date } } = {};
+				// Potential future: add per-year filtering; currently using global if no year specified
 				if ((appState.selectedEntity as any)?.type) {
-					// Map entity types to cache file names
 					const entityTypeMap: Record<string, string> = {
 						'Personnes': 'persons',
 						'Organisations': 'organizations',
-						'Événements': 'events',
+						'\u00c9v\u00e9nements': 'events',
 						'Sujets': 'subjects'
 					};
 					cacheOptions.entityType = entityTypeMap[(appState.selectedEntity as any).type];
 				}
-				
-				// Add country filters for efficient cache filtering
-				if (filters.selected.countries.length > 0) {
-					cacheOptions.countries = filters.selected.countries;
-				}
-				
-				// Add date range filter if present
 				if (filters.selected.dateRange) {
-					cacheOptions.dateRange = filters.selected.dateRange;
+					cacheOptions.dateRange = filters.selected.dateRange; // (Not yet supported by cache files; harmless extra key)
 				}
-
-				// Load cached data with comprehensive filters
 				const cachedData = await loadChoroplethCache(cacheOptions);
 				if (cachedData && Object.keys(cachedData).length > 0) {
-					console.log('✅ Using cached choropleth data for world map with filters:', {
-						countries: cacheOptions.countries?.length || 'all',
-						entityType: cacheOptions.entityType || 'none',
-						dateRange: cacheOptions.dateRange ? 'yes' : 'no'
-					});
-					
+					console.log('✅ Using cached choropleth data (no country facet active)');
 					newData = cachedData;
 					usingCachedData = true;
 				}
 			} catch (e) {
 				console.warn('Failed to load cached choropleth data:', e);
 			}
-		}			// Fall back to real-time calculation if cache is not available or failed
+		}
+		// Fall back to real-time calculation if cache is not available, failed, or country facet active
 			if (!usingCachedData || Object.keys(newData).length === 0) {
-				console.log('⚠️ Falling back to real-time choropleth calculation');
-				// Use the filtered data from derived state that includes all filters
+				console.log('⚠️ Real-time choropleth calculation', countryFacetActive ? '(country facet active - cache skipped)' : '(cache unavailable)');
 				newData = countItemsByCountryHybrid(visibleData, worldGeo);
-				console.log('Map: Choropleth data calculated in real-time:', Object.keys(newData).length, 'countries');
+				console.log('Map: Choropleth data (filtered) countries:', Object.keys(newData).length);
 			}
 
 			choroplethData = newData;

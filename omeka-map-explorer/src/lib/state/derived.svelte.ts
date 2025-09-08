@@ -10,6 +10,46 @@ let visibleDataCache: {
 	hash: string;
 } | null = null;
 
+// Fast indices (built lazily) to accelerate articleCountry-based filtering
+let indicesDataVersion = -1; // tracks mapData.allItems.length used to build indices
+let countryArticlesIndex: Map<string, Set<string>> | null = null; // country -> set(articleId)
+let articleItemsIndex: Map<string, ProcessedItem[]> | null = null; // articleId -> items[]
+
+function buildIndices() {
+	const items = mapData.allItems;
+	countryArticlesIndex = new Map();
+	articleItemsIndex = new Map();
+	for (const item of items) {
+		const articleId = extractArticleId(item.id);
+		let arr = articleItemsIndex.get(articleId);
+		if (!arr) {
+			arr = [];
+			articleItemsIndex.set(articleId, arr);
+		}
+		arr.push(item);
+		const articleCountry = (item as any).articleCountry;
+		if (articleCountry) {
+			let set = countryArticlesIndex.get(articleCountry);
+			if (!set) {
+				set = new Set();
+				countryArticlesIndex.set(articleCountry, set);
+			}
+			set.add(articleId);
+		}
+	}
+	indicesDataVersion = items.length;
+	// console.log('✅ Built indices for fast country filtering', {
+	// 	articles: articleItemsIndex.size,
+	// 	countries: countryArticlesIndex.size
+	// });
+}
+
+function ensureIndices() {
+	if (indicesDataVersion !== mapData.allItems.length) {
+		buildIndices();
+	}
+}
+
 // Pre-computed article IDs for faster entity filtering
 let articleIdCache: Map<string, string> = new Map();
 
@@ -80,19 +120,30 @@ export function getVisibleData(): ProcessedItem[] {
 		});
 	}
 
-	// Filter by countries
-	// Keep an item when either the LOCATION country or the ARTICLE's country
-	// matches a selected country. This aligns the choropleth (location-based)
-	// with the country facet semantics users expect.
+	// Filter by countries (ARTICLE-level semantics). Selecting a country means:
+	// Include ALL locations belonging to articles whose articleCountry is in selection.
 	if (sel.countries.length) {
-		filtered = filtered.filter((i) => {
-			const locCountry = i.country;
-			const articleCountry = (i as any).articleCountry;
-			return (
-				sel.countries.includes(locCountry) ||
-				(!!articleCountry && sel.countries.includes(articleCountry))
-			);
-		});
+		ensureIndices();
+		const baseUnfiltered = filtered === items; // no prior narrowing yet
+		const allowedArticleIds = new Set<string>();
+		for (const c of sel.countries) {
+			const set = countryArticlesIndex?.get(c);
+			if (set) {
+				for (const id of set) allowedArticleIds.add(id);
+			}
+		}
+		if (baseUnfiltered && articleItemsIndex) {
+			// Fast path: directly gather items from index (avoids scanning all items)
+			const gathered: ProcessedItem[] = [];
+			for (const articleId of allowedArticleIds) {
+				const its = articleItemsIndex.get(articleId);
+				if (its) gathered.push(...its);
+			}
+			filtered = gathered;
+		} else {
+			// Fallback: filter existing subset (entity/other filters already applied)
+			filtered = filtered.filter((i) => allowedArticleIds.has(extractArticleId(i.id)));
+		}
 	}
 
 	// Filter by regions

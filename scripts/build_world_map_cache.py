@@ -38,6 +38,7 @@ CACHE_DIR = DATA_DIR / 'world_cache'
 (CACHE_DIR / 'choropleth' / 'by_entity').mkdir(parents=True, exist_ok=True)
 (CACHE_DIR / 'coordinates').mkdir(parents=True, exist_ok=True)
 (CACHE_DIR / 'coordinates' / 'by_country').mkdir(parents=True, exist_ok=True)
+(CACHE_DIR / 'coordinates' / 'by_article_country').mkdir(parents=True, exist_ok=True)
 
 def load_json(path: Path):
     """Load JSON file with error handling."""
@@ -320,12 +321,94 @@ def build_coordinates_cache():
     
     print(f"  Saved country coordinates: {len(coordinates_by_country)} countries")
 
+def build_article_country_coordinates_cache():
+    """Build coordinate clusters grouped by ARTICLE country (articleCountry).
+
+    Semantics: For each articleCountry (country field in articles.json), include ALL location
+    coordinates referenced by any article with that articleCountry, regardless of the location's
+    own country. This powers fast multi-country union selection on the client.
+    """
+    print("Building article-country coordinate cache (union semantics)...")
+    articles = load_json(DATA_DIR / 'articles.json')
+    locations = load_json(DATA_DIR / 'entities' / 'locations.json')
+    if not articles or not locations:
+        print("  Skipping article-country cache (missing articles or locations)")
+        return
+
+    # Map article id -> article country
+    article_country: Dict[str, str] = {}
+    for a in articles:
+        aid = str(a.get('o:id', '')).strip()
+        if not aid:
+            continue
+        c = (a.get('country', '') or '').strip()
+        if c:
+            article_country[aid] = c
+
+    # articleCountry -> coordKey -> {lat, lng, articleIds:Set[str], names:Set[str]}
+    from collections import defaultdict
+    per_ac: Dict[str, Dict[str, Dict[str, Any]]] = defaultdict(dict)
+
+    def coord_key(lat: float, lng: float) -> str:
+        return f"{lat:.4f},{lng:.4f}"
+
+    for loc in locations:
+        coords = loc.get('coordinates')
+        if not coords or not isinstance(coords, list) or len(coords) != 2:
+            continue
+        try:
+            lat, lng = float(coords[0]), float(coords[1])
+        except (ValueError, TypeError):
+            continue
+        if lat < -90 or lat > 90 or lng < -180 or lng > 180:
+            continue
+        related = loc.get('relatedArticleIds', []) or []
+        name = (loc.get('name') or '').strip()
+        for ra in related:
+            ra_id = str(ra)
+            ac = article_country.get(ra_id)
+            if not ac:
+                continue
+            bucket = per_ac[ac]
+            k = coord_key(lat, lng)
+            entry = bucket.get(k)
+            if not entry:
+                entry = {'lat': lat, 'lng': lng, 'articleIds': set(), 'names': set()}
+                bucket[k] = entry
+            entry['articleIds'].add(ra_id)
+            if name:
+                entry['names'].add(name)
+
+    total_files = 0
+    for ac, bucket in per_ac.items():
+        clusters = []
+        for k, entry in bucket.items():
+            clusters.append({
+                'id': k.replace(',', '_'),
+                'label': sorted(entry['names'])[0] if entry['names'] else k,
+                'coordinates': [entry['lat'], entry['lng']],
+                'country': 'MIXED',  # location country not relevant for union semantics
+                'region': '',
+                'prefecture': '',
+                'articleCount': len(entry['articleIds']),
+                'relatedArticleIds': sorted(entry['articleIds'])
+            })
+        filename = normalize_country_filename(ac)
+        out = {
+            'type': 'article_country_coordinates',
+            'articleCountry': ac,
+            'clusters': clusters,
+            'total_clusters': len(clusters),
+            'total_articles': sum(c['articleCount'] for c in clusters),
+            'updatedAt': datetime.utcnow().isoformat()
+        }
+        save_json(CACHE_DIR / 'coordinates' / 'by_article_country' / f'{filename}.json', out, compact=True)
+    print(f"  Saved article-country coordinate clusters: {len(per_ac)} countries")
+
 def build_metadata():
-    """Build cache metadata file."""
-    print("Building metadata...")
-    
+    """Rebuild metadata file after generating caches."""
     metadata = {
-        'cache_version': '1.0',
+        'cache_version': '1.1',
         'generated_at': datetime.utcnow().isoformat(),
         'generator': 'build_world_map_cache.py',
         'description': 'Precomputed world map data for fast rendering',
@@ -337,7 +420,8 @@ def build_metadata():
             },
             'coordinates': {
                 'all_locations.json': 'Pre-aggregated coordinate clusters for markers',
-                'by_country/': 'Country-specific coordinate clusters'
+                'by_country/': 'Country-specific coordinate clusters',
+                'by_article_country/': 'Coordinate clusters grouped by article country (union semantics)'
             }
         },
         'usage': {
@@ -345,9 +429,8 @@ def build_metadata():
             'coordinates': 'Load clusters to render map markers without real-time aggregation'
         }
     }
-    
-    save_json(CACHE_DIR / 'metadata.json', metadata)
-    print("  Saved cache metadata")
+    save_json(CACHE_DIR / 'metadata.json', metadata, compact=False)
+    print("  Saved cache metadata (v1.1)")
 
 def main():
     """Main execution function."""
@@ -358,6 +441,7 @@ def main():
     build_choropleth_cache()
     build_entity_choropleth_cache() 
     build_coordinates_cache()
+    build_article_country_coordinates_cache()
     build_metadata()
     
     print("=" * 50)
