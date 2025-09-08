@@ -76,6 +76,8 @@
 	// Loading state for better UX
 	let mapLoading = $state(true);
 	let dataLoading = $state(true);
+	// Incrementing token to cancel stale async loadMapData runs
+	let loadRunId = 0;
 
 	// Function definitions (moved to top to fix hoisting issues)
 	
@@ -256,6 +258,7 @@
 		if (!map || !L) return;
 		
 		dataLoading = true;
+		const runId = ++loadRunId;
 
 		// Clear existing layers
 		Object.entries(layers).forEach(([key, layer]) => {
@@ -325,14 +328,14 @@
 			}
 		}
 
-		// Choropleth is rendered by child component; skip adding Leaflet layers here
-		if (mapData.viewMode === 'choropleth' && worldGeo) {
-			// no-op - choropleth is handled by ChoroplethLayer component
-			// Don't render bubbles in choropleth mode - only show colored countries
-		} 
-		
-		// Only render bubbles when NOT in choropleth mode
-		else if (visibleData.length > 0 || cacheAvailable) {
+		// If choropleth mode active: never render bubbles (even if worldGeo not loaded yet)
+		if (mapData.viewMode === 'choropleth') {
+			dataLoading = false;
+			return; // markers already cleared above
+		}
+
+		// Only render bubbles in non-choropleth mode
+		if (mapData.viewMode === 'bubbles' && (visibleData.length > 0 || cacheAvailable)) {
 			let coordinateGroups: Map<string, { lat: number; lng: number; count: number; sample: any; items: any[]; name?: string }> | null = null;
 			
 			// Only try to use cached coordinate clusters if no specific entity is selected
@@ -425,6 +428,10 @@
 
 			// Only render markers if we have coordinate groups
 			if (coordinateGroups !== null && coordinateGroups.size > 0) {
+				// Before rendering, confirm still bubbles mode and this run is current
+				if (mapData.viewMode !== 'bubbles' || runId !== loadRunId) {
+					coordinateGroups.clear();
+				} else {
 				const maxCount = Array.from(coordinateGroups.values()).reduce((m, g) => Math.max(m, g.count), 1);
 				const canvas = L.canvas({ padding: 0.5 });
 				const layerGroup = L.layerGroup();
@@ -444,7 +451,7 @@
 						color: `hsl(${hue}, ${saturation}%, ${lightness - 15}%)`,
 						weight: 2,
 						opacity: 0.9,
-						fillOpacity: mapData.viewMode === 'choropleth' ? 0.8 : 0.7, // Higher opacity in choropleth mode
+						fillOpacity: 0.7,
 						fillColor: `hsl(${hue}, ${saturation}%, ${lightness}%)`,
 						renderer: canvas,
 						className: 'modern-marker',
@@ -479,6 +486,7 @@
 
 				layerGroup.addTo(map);
 				layers['markers'] = layerGroup;
+			}
 			}
 		}
 		
@@ -520,6 +528,44 @@
 			}
 			mapData.viewMode; // dependency
 			loadMapData();
+		}
+	});
+
+	// Hard guard: whenever we enter choropleth mode, immediately purge any stray marker layer
+	$effect(() => {
+		if (!browser || !map) return;
+		if (mapData.viewMode === 'choropleth') {
+			// Invalidate any running load
+			loadRunId++;
+			const markerLayer = layers['markers'];
+			if (markerLayer) {
+				try {
+					if (typeof markerLayer.eachLayer === 'function') {
+						markerLayer.eachLayer((child: any) => {
+							if (child._popupComponent && typeof child._popupComponent.unmount === 'function') {
+								child._popupComponent.unmount();
+							}
+						});
+					}
+					if (typeof markerLayer.remove === 'function') markerLayer.remove();
+				} catch {}
+				delete (layers as any)['markers'];
+			}
+			// Extra safety: remove any circle marker layers lingering
+			try {
+				map.eachLayer((lyr: any) => {
+					if (lyr && lyr.options && lyr.options.pane === 'markerPane') {
+						try { map.removeLayer(lyr); } catch {}
+					}
+				});
+			} catch {}
+			// Remove residual SVG/Canvas elements for markers
+			try {
+				const el = map.getPanes()?.markerPane;
+				if (el) {
+					el.querySelectorAll('.modern-marker').forEach((n: Element) => n.remove());
+				}
+			} catch {}
 		}
 	});
 
@@ -634,15 +680,6 @@
 		</div>
 	{/if}
 	
-	<!-- Cache optimization indicator -->
-	{#if cacheAvailable && usingCachedData}
-		<div class="absolute top-4 left-4 bg-green-100/90 backdrop-blur-sm rounded-lg px-3 py-2 shadow-lg z-20">
-			<div class="flex items-center gap-2">
-				<div class="w-2 h-2 bg-green-500 rounded-full"></div>
-				<p class="text-xs text-green-800">Using cached data</p>
-			</div>
-		</div>
-	{/if}
 </div>
 
 {#if browser && map && worldGeo && mapData.viewMode === 'choropleth'}

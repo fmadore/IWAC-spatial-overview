@@ -56,7 +56,7 @@ export const urlManager = {
 			params.set('node', networkNode.id);
 		}
 
-		// Encode filters (countries, years) for deep-linking ONLY on worldMap viz
+		// Encode filters (countries, years) and map mode for deep-linking ONLY on worldMap viz
 		if (viz === 'worldMap') {
 			const sel = filters.selected;
 			if (sel.countries.length) {
@@ -66,6 +66,10 @@ export const urlManager = {
 				const y0 = sel.dateRange.start.getFullYear();
 				const y1 = sel.dateRange.end.getFullYear();
 				params.set('years', `${y0}-${y1}`);
+			}
+			// Persist map view mode when not default (bubbles)
+			if (mapData.viewMode && mapData.viewMode !== 'bubbles') {
+				params.set('mode', mapData.viewMode);
 			}
 		}
 
@@ -129,6 +133,7 @@ export const urlManager = {
 
 		const view = searchParams.get('view') as ViewType;
 		const viz = searchParams.get('viz') as VisualizationType;
+		const modeParam = searchParams.get('mode');
 		const entityType = searchParams.get('entityType');
 		const entityId = searchParams.get('entityId');
         const nodeParam = searchParams.get('node');
@@ -204,7 +209,7 @@ export const urlManager = {
 			appState.selectedEntity = null;
 		}
 
-		// Apply filters from URL only for worldMap; otherwise clear them
+		// Apply filters + map mode from URL only for worldMap; otherwise clear them
 		if (appState.activeVisualization === 'worldMap') {
 			const countriesParam = searchParams.get('countries');
 			if (countriesParam !== null) {
@@ -227,8 +232,16 @@ export const urlManager = {
 					filters.selected.dateRange = null;
 				}
 			}
+			// Restore map mode (only allow known values)
+			if (modeParam === 'choropleth') {
+				mapData.viewMode = 'choropleth';
+			} else {
+				mapData.viewMode = 'bubbles';
+			}
 		} else {
 			clearFilters();
+			// Reset mode in non-worldMap contexts to default
+			mapData.viewMode = 'bubbles';
 		}
 
 		// Apply Country Focus facets from URL only for countryFocus; otherwise use defaults
@@ -305,6 +318,7 @@ export function initializeUrlManager() {
 	let previousNode = appState.networkNodeSelected;
 	let previousFiltersSig = '';
 	let previousCountryFocusSig = '';
+	let previousMapMode = mapData.viewMode;
 
 	const getFiltersSig = () => {
 		const sel = filters.selected;
@@ -331,7 +345,8 @@ export function initializeUrlManager() {
 			appState.selectedEntity !== previousEntity ||
 			appState.networkNodeSelected !== previousNode ||
 			getFiltersSig() !== previousFiltersSig ||
-			getCountryFocusSig() !== previousCountryFocusSig
+			getCountryFocusSig() !== previousCountryFocusSig ||
+			mapData.viewMode !== previousMapMode
 		) {
 			urlManager.updateUrl();
 			previousView = appState.activeView;
@@ -340,6 +355,7 @@ export function initializeUrlManager() {
 			previousNode = appState.networkNodeSelected;
 			previousFiltersSig = getFiltersSig();
 			previousCountryFocusSig = getCountryFocusSig();
+			previousMapMode = mapData.viewMode;
 		}
 	}, intervalMs);
 
