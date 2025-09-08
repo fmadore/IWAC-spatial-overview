@@ -290,9 +290,14 @@
       onEachFeature: onEachFeature
     }).addTo(map);
     
-    // Fit to bounds
+    // Fit to bounds & then lock panning so users can't drag far into empty oceans
     try {
-      map.fitBounds(layer.getBounds(), { padding: [20, 20] });
+      const bounds = layer.getBounds();
+      map.fitBounds(bounds, { padding: [20, 20] });
+      // Slightly pad bounds so edge features aren't glued to viewport; then set as max bounds
+      const padded = bounds.pad(0.08);
+      map.setMaxBounds(padded);
+      // Make the map "stick" to bounds (configured via maxBoundsViscosity at init)
     } catch {}
     
     // Create legend
@@ -306,15 +311,18 @@
     L = await import('leaflet');
     await import('leaflet/dist/leaflet.css');
     
-    // Create map
+    // Create map with constrained world wrapping; we'll set dynamic maxBounds after data loads
     map = L.map(mapEl, { 
       zoomControl: true,
-      attributionControl: true
+      attributionControl: true,
+      worldCopyJump: false,
+      maxBoundsViscosity: 1.0 // stickiness at edges once maxBounds applied
     }).setView([9.5, 2.3], 6);
     
-    // Add tiles
+    // Add tiles (noWrap prevents horizontal repetition of the world)
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '© OpenStreetMap contributors'
+      attribution: '© OpenStreetMap contributors',
+      noWrap: true
     }).addTo(map);
     
     // Initial update
