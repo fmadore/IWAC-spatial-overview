@@ -183,7 +183,29 @@
 				>
 					<ChevronLeft class="h-3 w-3 mr-1" /> Previous
 				</Button>
-				<span class="text-[11px] text-muted-foreground">{currentPage} / {totalPages()}</span>
+				<div class="flex items-center gap-1 text-[11px] text-muted-foreground">
+					<label for="page-input" class="sr-only">Current page</label>
+					<input
+						id="page-input"
+						type="number"
+						min="1"
+						max={totalPages()}
+						value={currentPage}
+						class="w-10 h-7 px-1 border rounded text-center bg-background text-foreground focus:outline-none focus:ring focus:ring-primary/40"
+						oninput={(e: any) => {
+							const v = parseInt(e.currentTarget.value, 10);
+							if (!isNaN(v)) {
+								currentPage = Math.min(totalPages(), Math.max(1, v));
+							}
+						}}
+						onkeydown={(e: KeyboardEvent) => {
+							if (e.key === 'Enter') {
+								(e.currentTarget as HTMLInputElement).blur();
+							}
+						}}
+					/>
+					<span class="select-none">/ {totalPages()}</span>
+				</div>
 				<Button
 					variant="outline"
 					size="sm"
