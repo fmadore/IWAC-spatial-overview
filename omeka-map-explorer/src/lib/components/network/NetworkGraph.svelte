@@ -1,7 +1,7 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import type { NetworkData, NetworkNode, NetworkEdge } from '$lib/types';
-  import { networkState, getNodeById, getNeighbors } from '$lib/state/networkData.svelte';
+  import { networkState, getNodeById, getNeighbors, applyFilters } from '$lib/state/networkData.svelte';
   import { appState } from '$lib/state/appState.svelte';
   import EntitySelector from '$lib/components/entities/entity-selector.svelte';
   
@@ -23,8 +23,6 @@
   const kMin = 0.25;
   const kMax = 4;
   const hovering = $state<{ id: string | null; x: number; y: number; label: string }>({ id: null, x: 0, y: 0, label: '' });
-  // When true and a node is selected, only draw the selected node + its 1-hop neighbors and incident edges
-  let focusOnSelection = $state(true);
   let dpr = typeof window !== 'undefined' ? window.devicePixelRatio || 1 : 1;
   let needsDraw = false;
   let lastDrawTs = 0;
@@ -64,11 +62,6 @@
     ctx.globalAlpha = 0.22;
     ctx.strokeStyle = '#8888';
     for (const e of d.edges) {
-      // In focus mode, only draw edges that touch the selected node
-      if (selectedId && focusOnSelection) {
-        const incident = e.source === selectedId || e.target === selectedId;
-        if (!incident) continue;
-      }
       const a = positions.get(e.source);
       const b = positions.get(e.target);
       if (!a || !b) continue;
@@ -95,10 +88,6 @@
 
     // Nodes
     for (const n of d.nodes) {
-      // In focus mode, skip nodes that are neither selected nor neighbors
-      if (selectedId && focusOnSelection) {
-        if (n.id !== selectedId && !neighborSet.has(n.id)) continue;
-      }
       const p = positions.get(n.id);
       if (!p) continue;
       const nx = p.x * k + tx;
@@ -172,6 +161,14 @@
 
   $effect(() => {
     initLayout();
+  });
+
+  // Watch for node selection changes and reapply filters
+  $effect(() => {
+    const selectedId = appState.networkNodeSelected?.id;
+    if (networkState.data) {
+      applyFilters();
+    }
   });
 
   function resizeCanvas() {
@@ -324,8 +321,6 @@
       if (dx * dx + dy * dy <= p.r * p.r) {
         // Set URL node param and selected entity type if applicable
         appState.networkNodeSelected = { id: n.id };
-  // Enable focus mode when user selects by clicking
-  focusOnSelection = true;
         // If node id has the form "type:id", map to entity selection
         const parts = n.id.split(':');
         if (parts.length === 2) {
@@ -420,26 +415,14 @@
     const d = (data ?? networkState.filtered ?? networkState.data) as NetworkData | null;
     let found: string | null = null;
     if (d) {
-      // If focusing on selection, skip non-neighbor nodes for hover to reduce clutter
-      const selectedId = appState.networkNodeSelected?.id ?? null;
-      const neighborSet = new Set<string>();
-      if (selectedId && d && focusOnSelection) {
-        for (const e of d.edges) {
-          if (e.source === selectedId) neighborSet.add(e.target);
-          if (e.target === selectedId) neighborSet.add(e.source);
-        }
-      }
       for (const n of d.nodes) {
-        if (selectedId && focusOnSelection) {
-          if (n.id !== selectedId && !neighborSet.has(n.id)) continue;
-        }
         const p = positions.get(n.id);
         if (!p) continue;
         const dx = p.x - wx;
         const dy = p.y - wy;
         if (dx * dx + dy * dy <= (p.r * p.r)) {
-      found = n.id;
-      hovering.label = n.label;
+          found = n.id;
+          hovering.label = n.label;
           break;
         }
       }
@@ -484,19 +467,12 @@
               appState.selectedEntity = { type: entityType, id: entityId, name: e.name, relatedArticleIds: [] };
             }
           }
-          // When a new node is explicitly selected, default to focus mode
-          focusOnSelection = true;
         }}
         onClear={() => {
           appState.networkNodeSelected = null;
           appState.selectedEntity = null;
-          focusOnSelection = false;
         }}
       />
-      <div class="mt-2 flex items-center gap-2 text-xs text-foreground/80">
-        <input id="focusSel" type="checkbox" bind:checked={focusOnSelection} disabled={!appState.networkNodeSelected} />
-        <label for="focusSel" class="select-none">Focus on selection (hide unrelated)</label>
-      </div>
     </div>
   {/if}
   <canvas

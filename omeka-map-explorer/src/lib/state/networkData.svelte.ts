@@ -97,6 +97,22 @@ export function applyFilters() {
     edges = edges.filter((e) => nodeSet.has(e.source) && nodeSet.has(e.target));
   }
 
+  // Node selection filtering: if a node is selected, only show that node + its neighbors
+  const selectedId = appState.networkNodeSelected?.id;
+  if (selectedId) {
+    const neighborSet = new Set<string>([selectedId]);
+    // Find all neighbors of the selected node
+    for (const e of edges) {
+      if (e.source === selectedId) neighborSet.add(e.target);
+      else if (e.target === selectedId) neighborSet.add(e.source);
+    }
+    // Filter nodes to only include selected + neighbors
+    nodes = nodes.filter((n) => neighborSet.has(n.id));
+    nodeSet = new Set(nodes.map((n) => n.id));
+    // Filter edges to only include those between the filtered nodes
+    edges = edges.filter((e) => nodeSet.has(e.source) && nodeSet.has(e.target));
+  }
+
   networkState.filtered = { nodes, edges, meta: data.meta };
 }
 

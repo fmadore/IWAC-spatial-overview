@@ -1,8 +1,8 @@
 <script lang="ts">
   import { Card, CardContent, CardHeader, CardTitle } from '$lib/components/ui/card';
   import { Label } from '$lib/components/ui/label';
-  // Using native input to avoid strict event typing issues
   import { networkState, applyFilters } from '$lib/state/networkData.svelte';
+  import { appState } from '$lib/state/appState.svelte';
 
   // Runes: derived stats for display
   const stats = $derived.by(() => ({
@@ -57,9 +57,11 @@
 
     <div class="space-y-2 text-xs text-muted-foreground">
       <div>
-        Visible nodes: {stats.nodes}
-        • edges: {stats.edges}
+        Visible nodes: {stats.nodes} • edges: {stats.edges}
       </div>
+      {#if appState.networkNodeSelected}
+        <div>Focused view (selected node + neighbors)</div>
+      {/if}
       <!-- Wrap legend items so they don't overflow the card width -->
       <div class="flex flex-wrap gap-3 items-center">
         <span class="inline-flex items-center gap-1"><span class="inline-block w-3 h-3 rounded-full" style="background:#2563eb"></span>Person</span>
