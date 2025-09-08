@@ -7,7 +7,7 @@
 	import EntityStatsCards from './entity-stats-cards.svelte';
 	import EntityLocationsList from './entity-locations-list.svelte';
 	import EntityArticlesTable from './entity-articles-table.svelte';
-	import Map from '$lib/components/maps/Map.svelte';
+	import EntityMap from './EntityMap.svelte';
 	import { Card, CardContent, CardHeader, CardTitle } from '$lib/components/ui/card';
 
 	type Entity = {
@@ -156,7 +156,7 @@
 					<CardTitle>{displayMapTitle}</CardTitle>
 				</CardHeader>
 				<CardContent class="h-full p-0">
-					<Map height="500px" />
+					<EntityMap items={visibleData} height="500px" />
 				</CardContent>
 			</Card>
 		</div>

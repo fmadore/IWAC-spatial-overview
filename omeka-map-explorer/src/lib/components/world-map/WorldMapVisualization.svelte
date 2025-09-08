@@ -1,5 +1,5 @@
 <script lang="ts">
-	import Map from '$lib/components/maps/Map.svelte';
+	import Map from '$lib/components/world-map/Map.svelte';
 	import { appState } from '$lib/state/appState.svelte';
 	import { Card, CardContent, CardHeader, CardTitle } from '$lib/components/ui/card';
 

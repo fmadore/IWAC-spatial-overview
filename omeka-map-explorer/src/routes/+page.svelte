@@ -14,7 +14,7 @@
 	import type { ProcessedItem } from '$lib/types';
 	import { browser } from '$app/environment';
 
-	import Map from '$lib/components/maps/Map.svelte';
+	import Map from '$lib/components/world-map/Map.svelte';
 	import { CountryFocus } from '$lib/components/country-focus';
 	import { WorldMapVisualization } from '$lib/components/world-map';
 	import * as Sidebar from '$lib/components/ui/sidebar';
