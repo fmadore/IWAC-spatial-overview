@@ -19,7 +19,6 @@ export { default as ModularNetworkGraph } from './ModularNetworkGraph.svelte';
 export { default as ModularNetworkPanel } from './ModularNetworkPanel.svelte';
 
 // Legacy components (for backwards compatibility)
-export { default as NetworkPanel } from './NetworkPanel.svelte';
 export { default as SigmaNetworkGraph } from './SigmaNetworkGraph.svelte';
 
 // Type exports

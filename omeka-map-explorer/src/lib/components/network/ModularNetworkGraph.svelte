@@ -179,7 +179,7 @@
 <div
   bind:this={container}
   class="relative w-full h-full rounded-md border bg-muted/40 overflow-hidden"
-  style="min-height: 500px; max-height: 100%;"
+  style="min-height: 600px; height: 100%;"
 >
   <!-- Error display -->
   {#if error}

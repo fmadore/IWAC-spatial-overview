@@ -235,13 +235,13 @@
 			{:else if appState.activeVisualization === 'countryFocus'}
 				<CountryFocus />
 			{:else if appState.activeVisualization === 'network'}
-				<div class="flex flex-col lg:flex-row gap-4 p-4 md:gap-6 md:p-6 h-full max-h-[calc(100vh-var(--header-height)-2rem)]">
+				<div class="flex flex-col lg:flex-row gap-4 p-4 md:gap-6 md:p-6 h-full min-h-[calc(100vh-var(--header-height))]">
 					<!-- Network controls sidebar -->
-					<div class="lg:w-80 flex-shrink-0 order-2 lg:order-1 overflow-y-auto">
+					<div class="lg:w-80 flex-shrink-0 order-2 lg:order-1 overflow-y-auto max-h-full">
 						<ModularNetworkPanel />
 					</div>
 					<!-- Network graph -->
-					<div class="flex-1 order-1 lg:order-2 min-h-0 overflow-hidden">
+					<div class="flex-1 order-1 lg:order-2 min-h-[600px] lg:min-h-[calc(100vh-var(--header-height)-4rem)] overflow-hidden">
 						<ModularNetworkGraph data={networkState.filtered} />
 					</div>
 				</div>

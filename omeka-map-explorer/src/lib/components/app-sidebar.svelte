@@ -9,7 +9,6 @@
 	import { Home, Globe2, Users, Building2, CalendarRange, Tags, MapPin, Share2 } from '@lucide/svelte';
 	import CountryFilter from '$lib/components/filters/CountryFilter.svelte';
 	import YearRangeFilter from '$lib/components/filters/YearRangeFilter.svelte';
-	import NetworkPanel from '$lib/components/network/NetworkPanel.svelte';
 	import EntitySelector from '$lib/components/entities/entity-selector.svelte';
 	import { networkState, getNodeById } from '$lib/state/networkData.svelte';
 
@@ -85,16 +84,7 @@
 				</Sidebar.GroupContent>
 			</Sidebar.Group>
 		{:else if appState.activeVisualization === 'network'}
-			<Sidebar.Separator />
-
-			<Sidebar.Group>
-				<Sidebar.GroupLabel>Network</Sidebar.GroupLabel>
-				<Sidebar.GroupContent>
-					<NetworkPanel />
-				</Sidebar.GroupContent>
-			</Sidebar.Group>
-
-
+			<!-- Network controls are handled in the main layout, no sidebar controls needed -->
 		{/if}
 	</Sidebar.Content>
 	<Sidebar.Footer>
