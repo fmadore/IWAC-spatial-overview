@@ -29,7 +29,7 @@
 	} from '$lib/components/entities';
 	import { getVisibleData } from '$lib/state/derived.svelte';
 	import { networkState, loadNetwork, applyFilters } from '$lib/state/networkData.svelte';
-	import { ModularNetworkGraph, SigmaNetworkGraph } from '$lib/components/network';
+	import { SigmaNetworkGraph } from '$lib/components/network';
 
 	// Configuration
 	const countryItemSets: Record<string, number[]> = {
@@ -234,11 +234,7 @@
 			{:else if appState.activeVisualization === 'network'}
 				<!-- Network view takes full available space with controls in sidebar -->
 				<div class="flex-1 overflow-hidden p-4 md:p-6">
-					{#if appState.networkRenderer === 'sigma'}
-						<SigmaNetworkGraph data={networkState.filtered} />
-					{:else}
-						<ModularNetworkGraph data={networkState.filtered} />
-					{/if}
+					<SigmaNetworkGraph data={networkState.filtered} />
 				</div>
 			{/if}
 		</div>

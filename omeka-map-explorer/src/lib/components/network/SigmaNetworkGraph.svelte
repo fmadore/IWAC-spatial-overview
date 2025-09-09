@@ -6,7 +6,6 @@
   import { NetworkInteractionHandler } from './modules/NetworkInteractionHandler';
   import { SigmaForceAtlasLayout } from './modules/SigmaForceAtlasLayout';
   import { NoverlapLayoutManager } from './modules/NoverlapLayoutManager';
-  import { NodeDragHandler } from './modules/NodeDragHandler';
 
   // Props - same interface as ModularNetworkGraph
   let { 
@@ -38,7 +37,6 @@
   let graph: any = null;
   let layoutController: SigmaForceAtlasLayout | null = null;
   let noverlapManager: NoverlapLayoutManager | null = null;
-  let dragHandler: NodeDragHandler | null = null;
   let cameraAnimating = false;
 
   // Component state
@@ -360,29 +358,6 @@
     });
 
   // (Edge hover disabled to reduce noise)
-    
-    // Initialize drag handler for node dragging
-    if (!dragHandler) {
-      dragHandler = new NodeDragHandler(sigmaInstance, graph, {
-        onDragStart: (nodeId: string) => {
-          console.log('🫳 Started dragging node:', nodeId);
-          // Temporarily stop layout while dragging
-          if (layoutController && layoutController.isRunning()) {
-            layoutController.stop();
-          }
-        },
-        onDrag: (nodeId: string, x: number, y: number) => {
-          // Optional: Add visual feedback during drag
-        },
-        onDragEnd: (nodeId: string) => {
-          console.log('🫴 Finished dragging node:', nodeId);
-          // Auto-fit to view after dragging to keep nodes visible
-          setTimeout(() => fitToView(), 100);
-        },
-        dragInertia: true,
-        dragPreventLayoutUpdate: true
-      });
-    }
   }
 
   // Run ForceAtlas2 layout
@@ -711,10 +686,6 @@
         layoutController.stop();
         layoutController = null;
       }
-      if (dragHandler) {
-        dragHandler.destroy();
-        dragHandler = null;
-      }
       
       // Clean up highlighting functions from app state
       if (appState.networkHighlightingFunctions) {
@@ -734,10 +705,6 @@
         if (layoutController) {
           layoutController.stop();
           layoutController = null;
-        }
-        if (dragHandler) {
-          dragHandler.destroy();
-          dragHandler = null;
         }
         await initializeSigma();
       }

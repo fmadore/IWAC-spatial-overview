@@ -65,7 +65,7 @@ export class NetworkInteractionHandler {
    */
   static handleNodeDoubleClick(node: NetworkNode) {
     // This could trigger centering animation
-    // The NetworkController handles the actual centering
+    // The sigma.js graph handles the actual centering
   }
 
   /**

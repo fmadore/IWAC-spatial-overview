@@ -1,28 +1,21 @@
 /**
- * Network Components - Modular network visualization system
+ * Network Components - Sigma.js-based network visualization system
  * 
- * This module provides a complete modular network visualization system with:
- * - Clean separation of concerns between rendering, layout, and interaction
- * - Proper edge visibility and node interaction
- * - Performance-optimized Canvas2D rendering
- * - Flexible configuration and extensibility
+ * This module provides a sigma.js-based network visualization system with:
+ * - High-performance WebGL rendering via sigma.js
+ * - Force-directed layout algorithms (ForceAtlas2, Noverlap)
+ * - Interactive node selection and entity integration
+ * - Responsive search and filtering capabilities
  */
 
 // Core modules
-export { NetworkRenderer } from './modules/NetworkRenderer';
-export { NetworkLayout } from './modules/NetworkLayout';
-export { NetworkController } from './modules/NetworkController';
 export { NetworkInteractionHandler } from './modules/NetworkInteractionHandler';
 export { SigmaForceAtlasLayout } from './modules/SigmaForceAtlasLayout';
+export { NoverlapLayoutManager } from './modules/NoverlapLayoutManager';
 
 // Components
-export { default as ModularNetworkGraph } from './ModularNetworkGraph.svelte';
-export { default as ModularNetworkPanel } from './ModularNetworkPanel.svelte';
 export { default as SigmaNetworkGraph } from './SigmaNetworkGraph.svelte';
 export { default as NetworkSearchBar } from './NetworkSearchBar.svelte';
 
 // Type exports
-export type { RenderConfig, Transform, Position } from './modules/NetworkRenderer';
-export type { LayoutConfig } from './modules/NetworkLayout';
-export type { NetworkControllerConfig, ViewState } from './modules/NetworkController';
 export type { EntityMapping } from './modules/NetworkInteractionHandler';
