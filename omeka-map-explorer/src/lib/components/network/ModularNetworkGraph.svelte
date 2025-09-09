@@ -36,6 +36,37 @@
   function initializeController() {
     if (!canvas || controller) return;
 
+    // DEBUG: Log container and canvas dimensions
+    console.log('🔍 DEBUG: Initializing NetworkController');
+    console.log('🔍 DEBUG: Container element:', container);
+    if (container) {
+      const containerRect = container.getBoundingClientRect();
+      console.log('🔍 DEBUG: Container dimensions:', {
+        width: containerRect.width,
+        height: containerRect.height,
+        top: containerRect.top,
+        left: containerRect.left,
+        right: containerRect.right,
+        bottom: containerRect.bottom
+      });
+      console.log('🔍 DEBUG: Container computed styles:', {
+        width: getComputedStyle(container).width,
+        height: getComputedStyle(container).height,
+        position: getComputedStyle(container).position,
+        display: getComputedStyle(container).display
+      });
+    }
+    
+    if (canvas) {
+      const canvasRect = canvas.getBoundingClientRect();
+      console.log('🔍 DEBUG: Canvas dimensions:', {
+        width: canvasRect.width,
+        height: canvasRect.height,
+        clientWidth: canvas.clientWidth,
+        clientHeight: canvas.clientHeight
+      });
+    }
+
     try {
       const config: NetworkControllerConfig = {
         canvas,
@@ -73,9 +104,10 @@
 
       controller = new NetworkController(config);
       error = null;
+      console.log('✅ DEBUG: NetworkController initialized successfully');
     } catch (err) {
       error = `Failed to initialize network: ${err instanceof Error ? err.message : 'Unknown error'}`;
-      console.error('Network initialization error:', err);
+      console.error('❌ DEBUG: Network initialization error:', err);
     }
   }
 
@@ -178,7 +210,7 @@
 <div
   bind:this={container}
   class="relative w-full h-full rounded-md border bg-muted/40 overflow-hidden"
-  style="height: calc(100vh - var(--header-height) - 2rem); min-height: 600px;"
+  style="background-color: red !important; min-height: 500px; width: 100%; height: 100%; display: block;"
 >
   <!-- Error display -->
   {#if error}
@@ -292,8 +324,8 @@
     <!-- Canvas -->
     <canvas
       bind:this={canvas}
-      class="absolute inset-0 touch-none select-none"
-      style="cursor: default;"
+      class="absolute inset-0 touch-none select-none w-full h-full"
+      style="cursor: default; width: 100%; height: 100%;"
     ></canvas>
   {/if}
 </div>

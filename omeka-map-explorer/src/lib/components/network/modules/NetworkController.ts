@@ -34,6 +34,7 @@ export class NetworkController {
   private viewState: ViewState;
   private animationFrame: number | null = null;
   private resizeObserver: ResizeObserver | null = null;
+  private didInitialFit = false;
   
   // Interaction state
   private isDragging = false;
@@ -110,7 +111,11 @@ export class NetworkController {
   }
 
   centerOnNode(nodeId: string) {
-    const center = this.layout.centerOnNode(nodeId, this.canvas.width, this.canvas.height);
+    const center = this.layout.centerOnNode(
+      nodeId,
+      this.canvas.clientWidth,
+      this.canvas.clientHeight
+    );
     if (center) {
       this.viewState.transform.translateX = center.x;
       this.viewState.transform.translateY = center.y;
@@ -119,7 +124,7 @@ export class NetworkController {
   }
 
   fitToView() {
-    const fit = this.layout.fitToView(this.canvas.width, this.canvas.height);
+    const fit = this.layout.fitToView(this.canvas.clientWidth, this.canvas.clientHeight);
     if (fit) {
       this.viewState.transform = {
         scale: fit.scale,
@@ -168,10 +173,43 @@ export class NetworkController {
     const rect = this.canvas.getBoundingClientRect();
     const dpr = window.devicePixelRatio || 1;
     
+    // DEBUG: Log canvas sizing information
+    console.log('🔍 DEBUG: NetworkController.updateCanvasSize()', {
+      rect: {
+        width: rect.width,
+        height: rect.height,
+        top: rect.top,
+        left: rect.left,
+        right: rect.right,
+        bottom: rect.bottom
+      },
+      canvas: {
+        clientWidth: this.canvas.clientWidth,
+        clientHeight: this.canvas.clientHeight,
+        offsetWidth: this.canvas.offsetWidth,
+        offsetHeight: this.canvas.offsetHeight
+      },
+      dpr
+    });
+    
+    // If not laid out yet, skip to avoid setting 0 size and try again on next frame
+    if (rect.width < 2 || rect.height < 2) {
+      console.log('⚠️ DEBUG: Canvas too small, retrying on next frame', { width: rect.width, height: rect.height });
+      requestAnimationFrame(() => this.updateCanvasSize());
+      return;
+    }
+    
     this.canvas.width = rect.width * dpr;
     this.canvas.height = rect.height * dpr;
     this.canvas.style.width = rect.width + 'px';
     this.canvas.style.height = rect.height + 'px';
+    
+    console.log('✅ DEBUG: Canvas size updated', {
+      canvasWidth: this.canvas.width,
+      canvasHeight: this.canvas.height,
+      styleWidth: this.canvas.style.width,
+      styleHeight: this.canvas.style.height
+    });
     
     this.ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     
@@ -184,6 +222,12 @@ export class NetworkController {
       width: rect.width,
       height: rect.height
     });
+
+    // Auto-fit once when we get a real size
+    if (!this.didInitialFit && this.data) {
+      this.fitToView();
+      this.didInitialFit = true;
+    }
   }
 
   private render() {

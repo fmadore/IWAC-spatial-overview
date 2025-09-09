@@ -217,7 +217,7 @@
 	<!-- Dashboard view -->
 	<SiteHeader />
 	<div class="flex flex-1 flex-col min-h-0">
-		<div class="@container/main flex flex-1 flex-col gap-2 min-h-0">
+		<div class="@container/main flex flex-1 flex-col gap-2 min-h-0 relative">
 			{#if appState.activeVisualization === 'overview'}
 				<Overview />
 			{:else if appState.activeVisualization === 'worldMap'}
@@ -235,13 +235,14 @@
 			{:else if appState.activeVisualization === 'countryFocus'}
 				<CountryFocus />
 			{:else if appState.activeVisualization === 'network'}
-				<div class="flex flex-col lg:flex-row gap-4 p-4 md:gap-6 md:p-6 h-full min-h-[calc(100vh-var(--header-height))]">
+				<!-- Network view takes full available height -->
+				<div class="absolute inset-0 flex flex-col lg:flex-row gap-4 p-4 md:gap-6 md:p-6">
 					<!-- Network controls sidebar -->
-					<div class="lg:w-80 flex-shrink-0 order-2 lg:order-1 overflow-y-auto max-h-full">
+					<div class="lg:w-80 flex-shrink-0 order-2 lg:order-1 overflow-y-auto">
 						<ModularNetworkPanel />
 					</div>
 					<!-- Network graph -->
-					<div class="flex-1 order-1 lg:order-2 min-h-[600px] lg:min-h-[calc(100vh-var(--header-height)-4rem)] overflow-hidden">
+					<div class="flex-1 order-1 lg:order-2 overflow-hidden">
 						<ModularNetworkGraph data={networkState.filtered} />
 					</div>
 				</div>

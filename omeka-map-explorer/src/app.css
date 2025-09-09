@@ -5,6 +5,9 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
+	/* Ensure spacing scale exists early to avoid undefined var fallbacks */
+	--spacing: 4px;
+	--header-height: 56px;
 	--radius: 0.625rem;
 	--background: oklch(1 0 0);
 	--foreground: oklch(0.129 0.042 264.695);
