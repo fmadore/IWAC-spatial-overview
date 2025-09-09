@@ -53,6 +53,7 @@
 	"dependencies": {
 		"@sigma/node-border": "^3.0.0",
 		"@sigma/node-square": "^3.0.0",
+		"@sigma/utils": "^3.0.0",
 		"axios": "^1.11.0",
 		"d3-array": "^3.2.4",
 		"d3-axis": "^3.0.0",

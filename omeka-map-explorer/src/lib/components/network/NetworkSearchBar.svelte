@@ -95,7 +95,8 @@
     highlightTimeout = setTimeout(() => {
       if (onHighlight && searchResults.length > 0) {
         onHighlight(searchResults.map(node => node.id));
-      } else if (onClearHighlight && searchResults.length === 0 && searchQuery.trim()) {
+      } else if (onClearHighlight && (searchResults.length === 0 || !searchQuery.trim())) {
+        // Clear highlights when no results OR when search is completely empty
         onClearHighlight();
       }
     }, 300); // 300ms debounce

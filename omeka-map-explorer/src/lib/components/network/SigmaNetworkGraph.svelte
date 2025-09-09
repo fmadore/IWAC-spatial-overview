@@ -31,6 +31,7 @@
   let Noverlap: any = null;
   let NodeBorderProgram: any = null;
   let NodeSquareProgram: any = null;
+  let SigmaUtils: any = null; // Store utils reference
 
   // Component instances
   let sigmaInstance: any = null;
@@ -76,13 +77,14 @@
   // Lazy load sigma.js modules
   async function loadSigmaModules() {
     try {
-      const [sigmaModule, graphModule, fa2Module, noverlapModule, borderModule, squareModule] = await Promise.all([
+      const [sigmaModule, graphModule, fa2Module, noverlapModule, borderModule, squareModule, utilsModule] = await Promise.all([
         import('sigma'),
         import('graphology'),
         import('graphology-layout-forceatlas2'),
         import('graphology-layout-noverlap'),
         import('@sigma/node-border'),
-        import('@sigma/node-square')
+        import('@sigma/node-square'),
+        import('@sigma/utils')
       ]);
       
       Sigma = sigmaModule.default;
@@ -91,6 +93,7 @@
       Noverlap = noverlapModule.default;
       NodeBorderProgram = borderModule.NodeBorderProgram;
       NodeSquareProgram = squareModule.NodeSquareProgram;
+      SigmaUtils = utilsModule; // Store utils reference
       
       return true;
     } catch (err) {
@@ -509,6 +512,28 @@
     noverlapManager = null;
   }
 
+  // Reset view to show all nodes using Sigma.js utils
+  function resetToFullView() {
+    if (!sigmaInstance || !graph) return;
+    
+    try {
+      // Use Sigma.js utils to properly fit all nodes
+      const allNodes = graph.nodes();
+      if (allNodes.length === 0) return;
+      
+      // Check if we have access to sigma utils
+      if (SigmaUtils && SigmaUtils.fitViewportToNodes) {
+        SigmaUtils.fitViewportToNodes(sigmaInstance, allNodes);
+      } else {
+        // Fallback to manual fitToView if utils not available
+        fitToView();
+      }
+    } catch (err) {
+      console.warn('Reset to full view failed, using fallback:', err);
+      fitToView();
+    }
+  }
+
   // Enhanced fit graph to view with padding and smooth animation
   function fitToView() {
     if (!sigmaInstance) return;
@@ -597,11 +622,14 @@
     throttledRefresh();
   }
 
-  // Clear node highlighting
+  // Clear node highlighting and return to full graph overview
   function clearHighlight() {
     highlightedNodeIds = [];
     highlightedNodeSet = new Set();
     throttledRefresh();
+    
+    // Return to full view showing all nodes
+    setTimeout(() => resetToFullView(), 100);
   }
 
   // Focus on highlighted node (center camera)
