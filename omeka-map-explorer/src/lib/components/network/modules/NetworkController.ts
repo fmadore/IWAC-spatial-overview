@@ -110,29 +110,73 @@ export class NetworkController {
     }
   }
 
-  centerOnNode(nodeId: string) {
+  centerOnNode(nodeId: string, animated: boolean = true) {
     const center = this.layout.centerOnNode(
       nodeId,
       this.canvas.clientWidth,
       this.canvas.clientHeight
     );
     if (center) {
-      this.viewState.transform.translateX = center.x;
-      this.viewState.transform.translateY = center.y;
-      this.render();
+      if (animated) {
+        this.animateToTransform({
+          scale: Math.max(this.viewState.transform.scale, 1.2), // Ensure reasonable zoom level
+          translateX: center.x,
+          translateY: center.y
+        });
+      } else {
+        this.viewState.transform.translateX = center.x;
+        this.viewState.transform.translateY = center.y;
+        this.render();
+      }
     }
   }
 
-  fitToView() {
+  fitToView(animated: boolean = true) {
     const fit = this.layout.fitToView(this.canvas.clientWidth, this.canvas.clientHeight);
     if (fit) {
-      this.viewState.transform = {
-        scale: fit.scale,
-        translateX: fit.x,
-        translateY: fit.y
-      };
-      this.render();
+      if (animated) {
+        this.animateToTransform({
+          scale: fit.scale,
+          translateX: fit.x,
+          translateY: fit.y
+        });
+      } else {
+        this.viewState.transform = {
+          scale: fit.scale,
+          translateX: fit.x,
+          translateY: fit.y
+        };
+        this.render();
+      }
     }
+  }
+
+  // Add smooth animation support for transforms
+  private animateToTransform(targetTransform: Transform, duration: number = 800) {
+    const startTransform = { ...this.viewState.transform };
+    const startTime = performance.now();
+
+    const animate = (currentTime: number) => {
+      const elapsed = currentTime - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      
+      // Use easeOutCubic for smooth animation
+      const easeProgress = 1 - Math.pow(1 - progress, 3);
+      
+      this.viewState.transform = {
+        scale: startTransform.scale + (targetTransform.scale - startTransform.scale) * easeProgress,
+        translateX: startTransform.translateX + (targetTransform.translateX - startTransform.translateX) * easeProgress,
+        translateY: startTransform.translateY + (targetTransform.translateY - startTransform.translateY) * easeProgress
+      };
+      
+      this.render();
+      
+      if (progress < 1) {
+        requestAnimationFrame(animate);
+      }
+    };
+    
+    requestAnimationFrame(animate);
   }
 
   updateRenderConfig(config: Partial<RenderConfig>) {

@@ -21,6 +21,11 @@
   let layoutProgress = $state(0);
   let error = $state<string | null>(null);
 
+  // Tooltip state
+  let hoveredNode = $state<any>(null);
+  let tooltipPosition = $state({ x: 0, y: 0 });
+  let showTooltip = $state(false);
+
   // Reactive data
   const currentData = $derived(data ?? networkState.filtered ?? networkState.data);
 
@@ -73,10 +78,10 @@
         renderConfig: {
           width: canvas.clientWidth,
           height: canvas.clientHeight,
-          nodeMinSize: 3,
-          nodeMaxSize: 12,
-          edgeMinWidth: 0.5,
-          edgeMaxWidth: 3,
+          nodeMinSize: 4,        // Slightly larger minimum for better visibility
+          nodeMaxSize: 16,       // Larger maximum for better scaling
+          edgeMinWidth: 0.8,     // Slightly thicker minimum edges
+          edgeMaxWidth: 4,       // Thicker maximum for better highlighting
           nodeColors,
           backgroundColor: 'hsl(var(--muted))',
           selectedNodeId: appState.networkNodeSelected?.id || null,
@@ -84,17 +89,28 @@
         layoutConfig: {
           width: canvas.clientWidth,
           height: canvas.clientHeight,
-          iterations: 100, // Reduced from 300 for faster layout
-          nodeRepulsion: 200,
-          linkStrength: 0.1,
-          centerForce: 0.05,
-          minNodeSize: 3,
-          maxNodeSize: 12,
+          iterations: 120,       // Optimal balance of quality and speed
+          nodeRepulsion: 250,    // Slightly stronger repulsion for better spacing
+          linkStrength: 0.08,    // Slightly weaker for more natural clustering
+          centerForce: 0.03,     // Weaker center force for more organic layout
+          minNodeSize: 4,
+          maxNodeSize: 16,
         },
         onNodeClick: (node) => {
           NetworkInteractionHandler.handleNodeSelection(node);
         },
         onNodeHover: (node) => {
+          hoveredNode = node;
+          showTooltip = !!node;
+          if (node && canvas) {
+            // Get mouse position for tooltip placement
+            const rect = canvas.getBoundingClientRect();
+            // We'll update this when mouse moves, for now use center
+            tooltipPosition = { 
+              x: rect.width / 2, 
+              y: rect.height / 2 
+            };
+          }
           NetworkInteractionHandler.handleNodeHover(node);
         },
         onSelectionChange: (nodeId) => {
@@ -139,12 +155,12 @@
 
   function centerOnSelectedNode() {
     if (!controller || !appState.networkNodeSelected?.id) return;
-    controller.centerOnNode(appState.networkNodeSelected.id);
+    controller.centerOnNode(appState.networkNodeSelected.id, true); // Enable animation
   }
 
   function fitToView() {
     if (!controller) return;
-    controller.fitToView();
+    controller.fitToView(true); // Enable animation
   }
 
   function clearSelection() {
@@ -201,6 +217,17 @@
           centerOnSelectedNode();
         }
         break;
+    }
+  }
+
+  // Mouse tracking for tooltip positioning
+  function handleMouseMove(event: MouseEvent) {
+    if (canvas && showTooltip) {
+      const rect = canvas.getBoundingClientRect();
+      tooltipPosition = {
+        x: event.clientX - rect.left + 10, // Small offset to avoid cursor overlap
+        y: event.clientY - rect.top - 10
+      };
     }
   }
 </script>
@@ -297,9 +324,17 @@
           <div>• Then click nodes to explore</div>
           <div class="pt-1 border-t mt-2">
             <div class="font-medium">Controls:</div>
+            <div>• Hover over nodes for details</div>
+            <div>• Click nodes to select and highlight connections</div>
             <div>• Mouse wheel to zoom</div>
             <div>• Drag to pan view</div>
-            <div>• Press F to fit, R to relayout</div>
+          </div>
+          <div class="pt-1 border-t mt-2">
+            <div class="font-medium">Keyboard:</div>
+            <div>• <kbd class="px-1 py-0.5 bg-muted rounded text-xs">F</kbd> Fit to view</div>
+            <div>• <kbd class="px-1 py-0.5 bg-muted rounded text-xs">R</kbd> Run layout</div>
+            <div>• <kbd class="px-1 py-0.5 bg-muted rounded text-xs">C</kbd> Center on selection</div>
+            <div>• <kbd class="px-1 py-0.5 bg-muted rounded text-xs">Esc</kbd> Clear selection</div>
           </div>
           {#if appState.networkNodeSelected?.id}
             <div class="mt-2 pt-2 border-t">
@@ -326,7 +361,30 @@
       bind:this={canvas}
       class="absolute inset-0 touch-none select-none w-full h-full"
       style="cursor: default; width: 100%; height: 100%;"
+      onmousemove={handleMouseMove}
     ></canvas>
+
+    <!-- Hover Tooltip -->
+    {#if showTooltip && hoveredNode}
+      <div 
+        class="absolute z-20 pointer-events-none transition-opacity duration-200"
+        style="left: {tooltipPosition.x}px; top: {tooltipPosition.y}px;"
+      >
+        <div class="bg-background/95 backdrop-blur border rounded-lg shadow-lg p-3 max-w-xs">
+          <div class="font-semibold text-sm text-foreground">{hoveredNode.label}</div>
+          <div class="text-xs text-muted-foreground mt-1">
+            <div>Type: {NetworkInteractionHandler.getEntityTypeDisplayName(hoveredNode.type || hoveredNode.id.split(':')[0])}</div>
+            <div>Articles: {hoveredNode.count}</div>
+            {#if hoveredNode.degree !== undefined}
+              <div>Connections: {hoveredNode.degree}</div>
+            {/if}
+            {#if hoveredNode.id}
+              <div class="text-xs opacity-70 mt-1 font-mono truncate">ID: {hoveredNode.id}</div>
+            {/if}
+          </div>
+        </div>
+      </div>
+    {/if}
   {/if}
 </div>
 
