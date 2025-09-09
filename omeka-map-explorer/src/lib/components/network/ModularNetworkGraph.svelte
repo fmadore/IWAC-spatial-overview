@@ -122,7 +122,6 @@
   // Lifecycle
   onMount(() => {
     initializeController();
-
     return () => {
       controller?.destroy();
       controller = null;
@@ -179,7 +178,7 @@
 <div
   bind:this={container}
   class="relative w-full h-full rounded-md border bg-muted/40 overflow-hidden"
-  style="min-height: 600px; height: 100%;"
+  style="height: calc(100vh - var(--header-height) - 2rem); min-height: 600px;"
 >
   <!-- Error display -->
   {#if error}

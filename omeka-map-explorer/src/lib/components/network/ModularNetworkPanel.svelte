@@ -9,8 +9,9 @@
 
   // Reactive stats
   const stats = $derived.by(() => {
-    if (!networkState.filtered) return { nodes: 0, edges: 0, types: {} };
-    
+    if (!networkState.filtered) {
+      return { nodes: 0, edges: 0, types: {} as Record<string, number>, totalArticles: 0, avgArticles: 0 };
+    }
     const nodeStats = NetworkInteractionHandler.getNodeStatistics(networkState.filtered.nodes);
     return {
       nodes: networkState.filtered.nodes.length,
@@ -22,7 +23,7 @@
   });
 
   const availableTypes = $derived.by(() => {
-    if (!networkState.data) return [];
+    if (!networkState.data) return [] as string[];
     return NetworkInteractionHandler.getAvailableTypes(networkState.data.nodes);
   });
 
@@ -37,22 +38,23 @@
 
   function onDegreeCapChange(e: Event) {
     const value = Number((e.target as HTMLInputElement).value);
-    networkState.degreeCap = value > 0 ? value : undefined;
+    networkState.degreeCap = Number.isFinite(value) && value > 0 ? value : undefined;
     applyFilters();
   }
 
   function toggleType(type: string) {
-    if (type in networkState.typesEnabled) {
-      networkState.typesEnabled[type] = !networkState.typesEnabled[type];
-      applyFilters();
+    if (!(type in networkState.typesEnabled)) {
+      networkState.typesEnabled[type] = true;
     }
+    networkState.typesEnabled[type] = !networkState.typesEnabled[type];
+    applyFilters();
   }
 
   function resetFilters() {
     networkState.weightMin = 2;
     networkState.degreeCap = undefined;
-    Object.keys(networkState.typesEnabled).forEach(type => {
-      networkState.typesEnabled[type] = true;
+    Object.keys(networkState.typesEnabled).forEach((t) => {
+      networkState.typesEnabled[t] = true;
     });
     applyFilters();
   }
@@ -73,13 +75,13 @@
   const typeLabels: Record<string, string> = {
     person: 'Persons',
     organization: 'Organizations',
-    event: 'Events', 
+    event: 'Events',
     subject: 'Subjects',
     location: 'Locations',
   };
 </script>
 
-<Card class="w-full">
+<Card class="w-full h-full">
   <CardHeader>
     <CardTitle class="flex items-center justify-between">
       <span>Network Controls</span>
@@ -136,14 +138,13 @@
     <div class="space-y-3">
       <div class="flex items-center justify-between">
         <Label class="text-sm font-medium">Entity types</Label>
-        <Button
-          variant="ghost"
-          size="sm"
+        <button
+          type="button"
           onclick={resetFilters}
-          class="h-6 px-2 text-xs"
+          class="h-6 px-2 text-xs rounded-md border bg-background hover:bg-accent transition-colors"
         >
           Reset
-        </Button>
+        </button>
       </div>
       
       <div class="grid grid-cols-1 gap-2">
@@ -182,14 +183,13 @@
       <div class="space-y-2 p-3 bg-accent/20 rounded-md border">
         <div class="flex items-center justify-between">
           <Label class="text-sm font-medium">Selected Node</Label>
-          <Button
-            variant="ghost"
-            size="sm"
+          <button
+            type="button"
             onclick={clearSelection}
-            class="h-6 px-2 text-xs"
+            class="h-6 px-2 text-xs rounded-md border bg-background hover:bg-accent transition-colors"
           >
             Clear
-          </Button>
+          </button>
         </div>
         <div class="text-sm text-muted-foreground">
           <div class="font-mono text-xs break-all">
