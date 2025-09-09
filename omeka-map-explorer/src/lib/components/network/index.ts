@@ -16,6 +16,7 @@ export { NoverlapLayoutManager } from './modules/NoverlapLayoutManager';
 // Components
 export { default as SigmaNetworkGraph } from './SigmaNetworkGraph.svelte';
 export { default as NetworkSearchBar } from './NetworkSearchBar.svelte';
+export { default as NetworkSidebar } from './NetworkSidebar.svelte';
 
 // Type exports
 export type { EntityMapping } from './modules/NetworkInteractionHandler';
