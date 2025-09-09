@@ -5,6 +5,7 @@
   import { appState } from '$lib/state/appState.svelte';
   import { NetworkInteractionHandler } from './modules/NetworkInteractionHandler';
   import { SigmaForceAtlasLayout } from './modules/SigmaForceAtlasLayout';
+  import { NoverlapLayoutManager } from './modules/NoverlapLayoutManager';
 
   // Props - same interface as ModularNetworkGraph
   let { data = null } = $props<{ data?: NetworkData | null }>();
@@ -24,6 +25,7 @@
   let sigmaInstance: any = null;
   let graph: any = null;
   let layoutController: SigmaForceAtlasLayout | null = null;
+  let noverlapManager: NoverlapLayoutManager | null = null;
   let cameraAnimating = false;
 
   // Component state
@@ -301,22 +303,38 @@
     layoutProgress = 0;
 
     try {
-      const totalIterations = graph.order > 1000 ? 700 : graph.order > 500 ? 520 : 360;
-      const batchSize = graph.order > 2000 ? 4 : graph.order > 1000 ? 6 : graph.order > 500 ? 10 : 14;
+      const nodeCount = graph.order;
+      const totalIterations = nodeCount > 1000 ? 700 : nodeCount > 500 ? 520 : 360;
+      const batchSize = nodeCount > 2000 ? 4 : nodeCount > 1000 ? 6 : nodeCount > 500 ? 10 : 14;
 
-      // ForceAtlas2 tuned for a less "sphere" look and lower density at global view
+      // Use ForceAtlas2 inferSettings for better defaults, then override specific settings
+      const inferredSettings = (ForceAtlas2.inferSettings && typeof ForceAtlas2.inferSettings === 'function') 
+        ? ForceAtlas2.inferSettings(nodeCount) 
+        : {};
+      
+      // Enhanced ForceAtlas2 settings based on Context7 research
       const settings = {
-        barnesHutOptimize: graph.order > 400,
+        ...inferredSettings,
+        // Optimization for large graphs
+        barnesHutOptimize: nodeCount > 400,
+        barnesHutTheta: 0.5,
+        
+        // Reduced gravity and increased scaling for less dense, non-spherical layout
         strongGravityMode: false,
-        gravity: graph.order > 1000 ? 0.012 : 0.016,
-        scalingRatio: graph.order > 2000 ? 56 : graph.order > 1000 ? 44 : graph.order > 500 ? 36 : 28,
-        slowDown: 1.15,
+        gravity: nodeCount > 1000 ? 0.008 : 0.012,
+        scalingRatio: nodeCount > 2000 ? 72 : nodeCount > 1000 ? 58 : nodeCount > 500 ? 45 : 35,
+        
+        // LinLog mode for better cluster separation
         linLogMode: true,
         outboundAttractionDistribution: true,
         adjustSizes: true,
+        
+        // Fine-tuning for stability and spread
+        slowDown: 1.2,
         edgeWeightInfluence: 0.8,
-        barnesHutTheta: 0.5,
       } as any;
+
+      console.log('🚀 Starting ForceAtlas2 with optimized settings:', { nodeCount, settings });
 
       layoutController = new SigmaForceAtlasLayout(ForceAtlas2, graph, {
         totalIterations,
@@ -347,42 +365,31 @@
     }
   }
 
-  // Apply Noverlap layout to reduce density and overlaps
+  // Apply Noverlap layout using the dedicated manager
   async function applyNoverlapLayout() {
     if (!graph || !Noverlap || !sigmaInstance) return;
 
     try {
-      // Calculate appropriate margin based on node sizes
-      const nodeCount = graph.order;
-      const avgNodeSize = nodeCount > 0 ? 
-        graph.nodes().reduce((sum: number, nodeId: string) => {
-          const attrs = graph.getNodeAttributes(nodeId);
-          return sum + (attrs.size || 10);
-        }, 0) / nodeCount : 10;
+      // Create or reuse Noverlap manager
+      if (!noverlapManager) {
+        noverlapManager = new NoverlapLayoutManager(Noverlap, graph, sigmaInstance, {
+          debug: true, // Enable debug logging
+          onComplete: () => {
+            // Fit to view after Noverlap completes
+            setTimeout(() => fitToView(), 150);
+          }
+        });
+      }
 
-      // Settings for Noverlap - spreads out dense clusters
-      const noverlapSettings = {
-        margin: Math.max(avgNodeSize * 0.8, 8), // Adaptive margin based on node size
-        ratio: 1.2, // Scaling factor for node sizes during collision detection
-        expansion: 1.05, // Slight expansion of the layout space
-        gridSize: Math.min(Math.max(Math.floor(Math.sqrt(nodeCount) / 2), 8), 40), // Adaptive grid
-        speed: 2, // Moderate speed for smooth spreading
-      };
-
-      console.log('🔧 Applying Noverlap with settings:', noverlapSettings);
-
-      // Apply Noverlap directly to the graph
-      Noverlap.assign(graph, {
-        maxIterations: Math.min(nodeCount, 200), // Adaptive iterations
-        settings: noverlapSettings
-      });
-
-      // Refresh sigma and fit to view
-      sigmaInstance.refresh();
-      setTimeout(() => fitToView(), 100); // Small delay to ensure positions are updated
+      // Apply the layout
+      const success = await noverlapManager.apply();
+      if (!success) {
+        console.warn('⚠️ Noverlap layout failed, falling back to fit view');
+        setTimeout(() => fitToView(), 100);
+      }
 
     } catch (err) {
-      console.warn('Noverlap layout failed:', err);
+      console.error('❌ Noverlap layout error:', err);
       // Fallback to just fitting the view
       setTimeout(() => fitToView(), 100);
     }
@@ -395,6 +402,8 @@
       layoutController.stop();
       layoutController = null;
     }
+    // Clean up Noverlap manager
+    noverlapManager = null;
   }
 
   // Enhanced fit graph to view with padding and smooth animation
