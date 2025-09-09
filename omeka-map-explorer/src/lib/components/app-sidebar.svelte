@@ -16,7 +16,7 @@
 	// Reference to NetworkSidebar for accessing its methods
 	let networkSidebarRef = $state<any>();
 
-	type Viz = 'overview' | 'worldMap' | 'countryFocus' | 'persons' | 'organizations' | 'events' | 'subjects' | 'locations' | 'network';
+	type Viz = 'overview' | 'worldMap' | 'countryFocus' | 'persons' | 'organizations' | 'events' | 'subjects' | 'locations' | 'network' | 'spatialNetwork';
 	const nav: Array<{ id: Viz; label: string; icon: any; view?: 'dashboard' | 'map' }> = [
 		{ id: 'overview', label: 'Overview', icon: Home, view: 'dashboard' },
 		{ id: 'worldMap', label: 'World Map', icon: Globe2, view: 'dashboard' },
@@ -26,7 +26,8 @@
 		{ id: 'events', label: 'Events', icon: CalendarRange, view: 'dashboard' },
 		{ id: 'subjects', label: 'Subjects', icon: Tags, view: 'dashboard' },
 		{ id: 'locations', label: 'Locations', icon: MapPin, view: 'dashboard' },
-		{ id: 'network', label: 'Network', icon: Share2, view: 'dashboard' }
+		{ id: 'network', label: 'Network', icon: Share2, view: 'dashboard' },
+		{ id: 'spatialNetwork', label: 'Spatial Network', icon: Globe2, view: 'dashboard' }
 	];
 
 	function switchTo(item: { id: Viz; view?: 'dashboard' | 'map' }) {
@@ -34,6 +35,7 @@
 		clearFilters();
 		appState.selectedEntity = null;
 		appState.networkNodeSelected = null;
+		appState.spatialNetworkNodeSelected = null;
 		// Immediately reflect cleared filters in the URL
 		urlManager.updateUrl({ immediate: true });
 

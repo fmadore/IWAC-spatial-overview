@@ -15,7 +15,8 @@ type VisualizationType =
 	| 'events'
 	| 'subjects'
 	| 'locations'
-	| 'network';
+	| 'network'
+	| 'spatialNetwork';
 
 // URL management for navigation state using search parameters
 export const urlManager = {
@@ -149,7 +150,7 @@ export const urlManager = {
 		// Set visualization - default to overview
 		if (
 			viz &&
-			['overview', 'worldMap', 'countryFocus', 'persons', 'organizations', 'events', 'subjects', 'locations', 'network'].includes(viz)
+			['overview', 'worldMap', 'countryFocus', 'persons', 'organizations', 'events', 'subjects', 'locations', 'network', 'spatialNetwork'].includes(viz)
 		) {
 			appState.activeVisualization = viz;
 

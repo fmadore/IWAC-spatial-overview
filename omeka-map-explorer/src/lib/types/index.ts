@@ -106,3 +106,33 @@ export interface NetworkData {
 	edges: NetworkEdge[];
 	meta: NetworkMeta;
 }
+
+// Spatial Network types (for Leaflet + Sigma.js visualization)
+export interface SpatialNetworkNode extends NetworkNode {
+	coordinates: [number, number]; // [lat, lng] - required for spatial networks
+	country: string;
+	strength?: number; // sum of incident edge weights
+}
+
+export interface SpatialNetworkEdge extends NetworkEdge {
+	weightNorm?: number; // normalized weight for visualization
+}
+
+export interface GeographicBounds {
+	north: number;
+	south: number;
+	east: number;
+	west: number;
+}
+
+export interface SpatialNetworkData {
+	nodes: SpatialNetworkNode[];
+	edges: SpatialNetworkEdge[];
+	bounds: GeographicBounds | null;
+	meta: NetworkMeta & {
+		geocodedLocations: number;
+		totalLocationsInData: number;
+		geocodingSuccessRate: number;
+		articlesWithMultipleLocations: number;
+	};
+}

@@ -1,0 +1,662 @@
+{
+  "abengourou|côte d'ivoire": {
+    "coordinates": [
+      6.7269042,
+      -3.4968431
+    ],
+    "display_name": "Abengourou, Indénié-Djuablin, Comoé, Côte d’Ivoire",
+    "type": "city",
+    "importance": 0.39922583565050845,
+    "geocoded_at": "2025-09-09T20:01:59.506902"
+  },
+  "abidjan|burkina faso": {
+    "coordinates": [
+      12.954947,
+      -1.113262
+    ],
+    "display_name": "Chemins de fer Abidjan-Niger, N 3, Sanmatenga, Centre-Nord, Burkina Faso",
+    "type": "disused",
+    "importance": 5.0759899290409975e-05,
+    "geocoded_at": "2025-09-09T20:02:01.645006"
+  },
+  "abidjan-plateau|benin": {
+    "coordinates": null,
+    "error": "not_found_status_200",
+    "attempted_at": "2025-09-09T20:02:03.843325"
+  },
+  "abobo|burkina faso": {
+    "coordinates": null,
+    "error": "not_found_status_200",
+    "attempted_at": "2025-09-09T20:02:06.106758"
+  },
+  "abobo banco|côte d'ivoire": {
+    "coordinates": [
+      5.4169219,
+      -4.0063157
+    ],
+    "display_name": "Amifa CI Abobo, Route d'Abobo Baoulé, Samake, Abobo, Abidjan, Côte d’Ivoire",
+    "type": "bank",
+    "importance": 6.766536964975994e-05,
+    "geocoded_at": "2025-09-09T20:02:08.276343"
+  },
+  "aboisso|côte d'ivoire": {
+    "coordinates": [
+      5.712626,
+      -3.2076104
+    ],
+    "display_name": "Aboisso, Sud-Comoé, Comoé, Côte d’Ivoire",
+    "type": "administrative",
+    "importance": 0.3900071407325413,
+    "geocoded_at": "2025-09-09T20:02:10.227221"
+  },
+  "abomey|benin": {
+    "coordinates": [
+      7.1820012,
+      1.993632
+    ],
+    "display_name": "Abomey, Zou, Bénin",
+    "type": "city",
+    "importance": 0.4847849127721316,
+    "geocoded_at": "2025-09-09T20:02:12.608904"
+  },
+  "abomey-calavi|benin": {
+    "coordinates": [
+      6.4538637,
+      2.354245
+    ],
+    "display_name": "Abomey-Calavi, Atlantique, Bénin",
+    "type": "city",
+    "importance": 0.44299649603790975,
+    "geocoded_at": "2025-09-09T20:02:15.769256"
+  },
+  "abou dhabi|benin": {
+    "coordinates": null,
+    "error": "not_found_status_200",
+    "attempted_at": "2025-09-09T20:02:17.886801"
+  },
+  "accra|burkina faso": {
+    "coordinates": [
+      5.5998732,
+      -0.1869306
+    ],
+    "display_name": "Burkina Faso’s Ambassador’s Residence, Agostinho Neto Road, Roman Ridge, Dzorwulu, Accra, Ayawaso West Municipal District, Greater Accra Region, Ghana",
+    "type": "diplomatic",
+    "importance": 6.96429388875718e-05,
+    "geocoded_at": "2025-09-09T20:02:19.944958"
+  },
+  "addis-abeba|côte d'ivoire": {
+    "coordinates": [
+      7.6901803,
+      -5.0401443
+    ],
+    "display_name": "Rue d'Addis-Abeba, Koko, Bouaké, Gbêkê, Vallée du Bandama, Côte d’Ivoire",
+    "type": "residential",
+    "importance": 0.05338516899366747,
+    "geocoded_at": "2025-09-09T20:02:21.752640"
+  },
+  "adiaké|côte d'ivoire": {
+    "coordinates": [
+      5.2318902,
+      -3.2582479
+    ],
+    "display_name": "Adiaké, Sud-Comoé, Comoé, Côte d’Ivoire",
+    "type": "administrative",
+    "importance": 0.3886201624950686,
+    "geocoded_at": "2025-09-09T20:02:23.634239"
+  },
+  "adidogomé|togo": {
+    "coordinates": [
+      6.2101419,
+      1.1547474
+    ],
+    "display_name": "Adidogomé, Région Maritime, Togo",
+    "type": "suburb",
+    "importance": 0.14670416800183103,
+    "geocoded_at": "2025-09-09T20:02:25.507189"
+  },
+  "adjamé|burkina faso": {
+    "coordinates": null,
+    "error": "not_found_status_200",
+    "attempted_at": "2025-09-09T20:02:27.326014"
+  },
+  "adjarra|benin": {
+    "coordinates": [
+      6.493028,
+      2.6933383
+    ],
+    "display_name": "Adjarra, Ouémé, Bénin",
+    "type": "administrative",
+    "importance": 0.415799664785045,
+    "geocoded_at": "2025-09-09T20:02:29.122293"
+  },
+  "adjengré|togo": {
+    "coordinates": [
+      8.6612897,
+      1.0168191
+    ],
+    "display_name": "Adjengré, Sotouboua, Région Centrale, Togo",
+    "type": "town",
+    "importance": 0.16004000076295108,
+    "geocoded_at": "2025-09-09T20:02:30.915084"
+  },
+  "adjouffou|côte d'ivoire": {
+    "coordinates": [
+      5.243664,
+      -3.9209133
+    ],
+    "display_name": "Adjouffou, Port-Bouët, Abidjan, Côte d’Ivoire",
+    "type": "neighbourhood",
+    "importance": 0.1334009987029831,
+    "geocoded_at": "2025-09-09T20:02:32.595770"
+  },
+  "adougba|togo": {
+    "coordinates": [
+      6.2279445,
+      1.2229213
+    ],
+    "display_name": "École Primaire Publique Adougba, ss, Agoè-Kitidjan, Région Maritime, Togo",
+    "type": "school",
+    "importance": 3.750133516437045e-05,
+    "geocoded_at": "2025-09-09T20:02:34.592917"
+  },
+  "adzopé|côte d'ivoire": {
+    "coordinates": [
+      6.1058336,
+      -3.8640409
+    ],
+    "display_name": "Adzopé, Mé, Lagunes, Côte d’Ivoire",
+    "type": "city",
+    "importance": 0.35583158511934737,
+    "geocoded_at": "2025-09-09T20:02:36.344941"
+  },
+  "adéta|togo": {
+    "coordinates": [
+      7.1295587,
+      0.7326511
+    ],
+    "display_name": "Adéta, Région des Plateaux, Togo",
+    "type": "village",
+    "importance": 0.14670416800183103,
+    "geocoded_at": "2025-09-09T20:02:38.160094"
+  },
+  "adétikopé|togo": {
+    "coordinates": [
+      6.3222342,
+      1.2191744
+    ],
+    "display_name": "Marché d'Adétikopé, Lomé - Cinkassé, Agondavi, Région Maritime, Togo",
+    "type": "marketplace",
+    "importance": 3.9608606088304224e-05,
+    "geocoded_at": "2025-09-09T20:02:40.240940"
+  },
+  "afagnan|togo": {
+    "coordinates": [
+      6.4956971,
+      1.6225727
+    ],
+    "display_name": "Lycée et CEG d'Afagnan Gblétat, Région Maritime, Togo",
+    "type": "education",
+    "importance": 0.10670416800183105,
+    "geocoded_at": "2025-09-09T20:02:42.110258"
+  },
+  "afghanistan|burkina faso": {
+    "coordinates": null,
+    "error": "not_found_status_200",
+    "attempted_at": "2025-09-09T20:02:44.958270"
+  },
+  "afrique du sud|burkina faso": {
+    "coordinates": [
+      -26.1010733,
+      28.1192774
+    ],
+    "display_name": "South Africa Loop, Johannesburg Ward 105, Sandton, City of Johannesburg Metropolitan Municipality, Gauteng, 2065, South Africa",
+    "type": "residential",
+    "importance": 0.05340755550469212,
+    "geocoded_at": "2025-09-09T20:02:47.293935"
+  },
+  "agbalépédogan|togo": {
+    "coordinates": [
+      6.1919046,
+      1.199603
+    ],
+    "display_name": "Agbalépédogan, 5e Arrondissement, Lomé, Région Maritime, Togo",
+    "type": "administrative",
+    "importance": 0.14673069886320284,
+    "geocoded_at": "2025-09-09T20:02:49.073009"
+  },
+  "agbandi|togo": {
+    "coordinates": [
+      8.2248255,
+      1.1333187
+    ],
+    "display_name": "Agbandi, Sotouboua, Région Centrale, Togo",
+    "type": "village",
+    "importance": 0.14670416800183103,
+    "geocoded_at": "2025-09-09T20:02:50.890763"
+  },
+  "agbonou|togo": {
+    "coordinates": [
+      7.5160711,
+      1.1503901
+    ],
+    "display_name": "Agbonou, Atakpamé, Région des Plateaux, Togo",
+    "type": "suburb",
+    "importance": 0.14671219882505526,
+    "geocoded_at": "2025-09-09T20:02:52.667894"
+  },
+  "agboville|côte d'ivoire": {
+    "coordinates": [
+      5.9307328,
+      -4.2131327
+    ],
+    "display_name": "Agboville, Agnéby-Tiassa, Côte d’Ivoire",
+    "type": "city",
+    "importance": 0.37924734712974556,
+    "geocoded_at": "2025-09-09T20:02:54.587359"
+  },
+  "aghien|côte d'ivoire": {
+    "coordinates": [
+      5.3881243,
+      -3.9999677
+    ],
+    "display_name": "Aghien, Cocody, Abidjan, Côte d’Ivoire",
+    "type": "administrative",
+    "importance": 0.16006766536964978,
+    "geocoded_at": "2025-09-09T20:02:56.675986"
+  },
+  "agnibilékrou|côte d'ivoire": {
+    "coordinates": [
+      7.0648415,
+      -3.3287147
+    ],
+    "display_name": "Agnibilékrou, Indénié-Djuablin, Comoé, Côte d’Ivoire",
+    "type": "administrative",
+    "importance": 0.38672320214146405,
+    "geocoded_at": "2025-09-09T20:02:58.373696"
+  },
+  "agnéby|côte d'ivoire": {
+    "coordinates": [
+      6.0018416,
+      -4.2063589
+    ],
+    "display_name": "Agnéby, Côte d’Ivoire",
+    "type": "river",
+    "importance": 0.23949569842218532,
+    "geocoded_at": "2025-09-09T20:03:00.194668"
+  },
+  "agou|togo": {
+    "coordinates": [
+      6.8546202,
+      0.7291427
+    ],
+    "display_name": "Agou, Kebo KPETA, Région des Plateaux, Togo",
+    "type": "residential",
+    "importance": 0.1067099374380102,
+    "geocoded_at": "2025-09-09T20:03:01.921894"
+  },
+  "agou-gadzépé|togo": {
+    "coordinates": [
+      6.843817,
+      0.7141023
+    ],
+    "display_name": "Agou Gadzépé, Région des Plateaux, Togo",
+    "type": "village",
+    "importance": 0.14670993743801017,
+    "geocoded_at": "2025-09-09T20:03:03.868827"
+  },
+  "agoulou|togo": {
+    "coordinates": [
+      9.1208253,
+      1.3242765
+    ],
+    "display_name": "Agoulou, Tchaoudjo, Région Centrale, Togo",
+    "type": "village",
+    "importance": 0.14670416800183103,
+    "geocoded_at": "2025-09-09T20:03:06.370008"
+  },
+  "agoè-zongo|togo": {
+    "coordinates": [
+      6.2544491,
+      1.2079169
+    ],
+    "display_name": "Marché d'Agoè Zongo, N1, Agoè-Démakpoè, Région Maritime, Togo",
+    "type": "marketplace",
+    "importance": 3.750133516437045e-05,
+    "geocoded_at": "2025-09-09T20:03:09.198622"
+  },
+  "agoé-nyivé|togo": {
+    "coordinates": [
+      6.224265,
+      1.2101671
+    ],
+    "display_name": "Agoè-Nyivé, Agoè-Kitidjan, Région Maritime, Togo",
+    "type": "quarter",
+    "importance": 0.13337083466849772,
+    "geocoded_at": "2025-09-09T20:03:11.092743"
+  },
+  "akodesséwa|togo": {
+    "coordinates": [
+      6.153642,
+      1.2673391
+    ],
+    "display_name": "Akodésséwa, Bè-Hédjé, 3e Arrondissement, Lomé, Région Maritime, Togo",
+    "type": "suburb",
+    "importance": 0.14673069886320284,
+    "geocoded_at": "2025-09-09T20:03:12.837856"
+  },
+  "akoupé|côte d'ivoire": {
+    "coordinates": [
+      6.3815237,
+      -3.8859041
+    ],
+    "display_name": "Akoupé, Mé, Lagunes, Côte d’Ivoire",
+    "type": "town",
+    "importance": 0.3119015040685218,
+    "geocoded_at": "2025-09-09T20:03:14.905565"
+  },
+  "akpakpa|benin": {
+    "coordinates": [
+      9.3425778,
+      1.4537435
+    ],
+    "display_name": "Akpakpa, Aledjo-Koura, Bassila, Donga, Bénin",
+    "type": "hamlet",
+    "importance": 0.13337241550316623,
+    "geocoded_at": "2025-09-09T20:03:16.894020"
+  },
+  "akébou|togo": {
+    "coordinates": [
+      7.8009867,
+      0.6596978
+    ],
+    "display_name": "Plateaux Akébou, Aka, Région des Plateaux, Togo",
+    "type": "locality",
+    "importance": 0.06667666666666666,
+    "geocoded_at": "2025-09-09T20:03:18.706186"
+  },
+  "alger|burkina faso": {
+    "coordinates": [
+      36.7604718,
+      3.0280212
+    ],
+    "display_name": "سفارة بوركينا فاسو, Rue Mohamed Khoudi, El Biar ⵍⴻⴱⵢⴰⵔ الأبيار, Bouzaréah, Alger, 16030, Algérie ⵍⵣⵣⴰⵢⴻⵔ الجزائر",
+    "type": "diplomatic",
+    "importance": 7.809948882272095e-05,
+    "geocoded_at": "2025-09-09T20:03:21.717987"
+  },
+  "algérie|burkina faso": {
+    "coordinates": [
+      36.7604718,
+      3.0280212
+    ],
+    "display_name": "سفارة بوركينا فاسو, Rue Mohamed Khoudi, El Biar ⵍⴻⴱⵢⴰⵔ الأبيار, Bouzaréah, Alger, 16030, Algérie ⵍⵣⵣⴰⵢⴻⵔ الجزائر",
+    "type": "diplomatic",
+    "importance": 7.809948882272095e-05,
+    "geocoded_at": "2025-09-09T20:03:23.508048"
+  },
+  "alibori|benin": {
+    "coordinates": [
+      11.4649482,
+      2.7938798
+    ],
+    "display_name": "Alibori, Bénin",
+    "type": "administrative",
+    "importance": 0.46967985104959603,
+    "geocoded_at": "2025-09-09T20:03:25.326479"
+  },
+  "allada|benin": {
+    "coordinates": [
+      6.6658411,
+      2.1511876
+    ],
+    "display_name": "Allada, Atlantique, Bénin",
+    "type": "administrative",
+    "importance": 0.4443235387921593,
+    "geocoded_at": "2025-09-09T20:03:28.569819"
+  },
+  "allemagne|burkina faso": {
+    "coordinates": [
+      12.3786266,
+      -1.5076267
+    ],
+    "display_name": "Ambassade de la République fédérale d'Allemagne, 14, Rue Kafando Romuald, Ouagadougou, Kadiogo, Centre, Burkina Faso",
+    "type": "diplomatic",
+    "importance": 0.3341835968599259,
+    "geocoded_at": "2025-09-09T20:03:30.563385"
+  },
+  "aléhéridè|togo": {
+    "coordinates": [
+      9.2049849,
+      1.201532
+    ],
+    "display_name": "Aléhéridé, Tchaoudjo, Région Centrale, Togo",
+    "type": "village",
+    "importance": 0.14670416800183103,
+    "geocoded_at": "2025-09-09T20:03:32.329907"
+  },
+  "amlamé|togo": {
+    "coordinates": [
+      7.461778,
+      0.904235
+    ],
+    "display_name": "Amlamé, Région des Plateaux, Togo",
+    "type": "town",
+    "importance": 0.16004000076295108,
+    "geocoded_at": "2025-09-09T20:03:34.235785"
+  },
+  "amou|togo": {
+    "coordinates": [
+      7.3431616,
+      1.1708104
+    ],
+    "display_name": "Amou, Région des Plateaux, Togo",
+    "type": "river",
+    "importance": 0.1600375013351644,
+    "geocoded_at": "2025-09-09T20:03:36.172252"
+  },
+  "amou-oblo|togo": {
+    "coordinates": [
+      7.3893019,
+      0.8688643
+    ],
+    "display_name": "Amou Oblo, Région des Plateaux, Togo",
+    "type": "town",
+    "importance": 0.16004000076295108,
+    "geocoded_at": "2025-09-09T20:03:38.242384"
+  },
+  "angleterre|burkina faso": {
+    "coordinates": [
+      51.5027118,
+      -0.0014575
+    ],
+    "display_name": "Burkina Faso, Blackwall Tunnel, Blackwall Reach, Greenwich Peninsula, Royal Borough of Greenwich, London, Greater London, England, E14 9PB, United Kingdom",
+    "type": "memorial",
+    "importance": 9.307927061870783e-05,
+    "geocoded_at": "2025-09-09T20:03:40.092467"
+  },
+  "angola|burkina faso": {
+    "coordinates": null,
+    "error": "not_found_status_200",
+    "attempted_at": "2025-09-09T20:03:45.282050"
+  },
+  "anié|togo": {
+    "coordinates": [
+      7.7594052,
+      1.1965329
+    ],
+    "display_name": "Anié, Région des Plateaux, Togo",
+    "type": "town",
+    "importance": 0.1600375013351644,
+    "geocoded_at": "2025-09-09T20:03:47.241111"
+  },
+  "anvers|burkina faso": {
+    "coordinates": null,
+    "error": "not_found_status_200",
+    "attempted_at": "2025-09-09T20:03:49.150497"
+  },
+  "anyama|côte d'ivoire": {
+    "coordinates": [
+      5.4960537,
+      -4.0512414
+    ],
+    "display_name": "Anyama, Abidjan, Côte d’Ivoire",
+    "type": "administrative",
+    "importance": 0.3722117944282256,
+    "geocoded_at": "2025-09-09T20:03:51.261788"
+  },
+  "aného|togo": {
+    "coordinates": [
+      6.2288772,
+      1.5938066
+    ],
+    "display_name": "Aného, Région Maritime, Togo",
+    "type": "town",
+    "importance": 0.38672320214146405,
+    "geocoded_at": "2025-09-09T20:03:53.400419"
+  },
+  "aouda|togo": {
+    "coordinates": [
+      8.7305932,
+      1.0509284
+    ],
+    "display_name": "Aouda, Sotouboua, Région Centrale, Togo",
+    "type": "village",
+    "importance": 0.14670666742961772,
+    "geocoded_at": "2025-09-09T20:03:55.715780"
+  },
+  "aplahoué|benin": {
+    "coordinates": [
+      6.9396098,
+      1.6751946
+    ],
+    "display_name": "Aplahoué, Kouffo, Bénin",
+    "type": "administrative",
+    "importance": 0.42221530004176194,
+    "geocoded_at": "2025-09-09T20:03:57.849943"
+  },
+  "apégamé|togo": {
+    "coordinates": [
+      7.5461583,
+      1.0251351
+    ],
+    "display_name": "EVOU APEGAME, Région des Plateaux, Togo",
+    "type": "village",
+    "importance": 0.14671219882505526,
+    "geocoded_at": "2025-09-09T20:04:00.099657"
+  },
+  "arabie saoudite|burkina faso": {
+    "coordinates": [
+      24.6767086,
+      46.6197956
+    ],
+    "display_name": "سفارة بوركينا فاسو, ابن الطفيل, السفارات, حي السفارات, بلدية عرقة, محافظة الرياض, منطقة الرياض, 12521, السعودية",
+    "type": "diplomatic",
+    "importance": 0.07085170629346904,
+    "geocoded_at": "2025-09-09T20:04:02.339221"
+  },
+  "assahoun|togo": {
+    "coordinates": [
+      6.4546171,
+      0.9096065
+    ],
+    "display_name": "Assahoun, Région Maritime, Togo",
+    "type": "village",
+    "importance": 0.14670416800183103,
+    "geocoded_at": "2025-09-09T20:04:04.587440"
+  },
+  "assoli|togo": {
+    "coordinates": [
+      9.3358244,
+      1.1872874
+    ],
+    "display_name": "Assoli, Région de la Kara, Togo",
+    "type": "administrative",
+    "importance": 0.3186964146910553,
+    "geocoded_at": "2025-09-09T20:04:06.741588"
+  },
+  "atacora|benin": {
+    "coordinates": [
+      10.7160515,
+      1.5331527
+    ],
+    "display_name": "Atakora, Bénin",
+    "type": "administrative",
+    "importance": 0.46896673249315834,
+    "geocoded_at": "2025-09-09T20:04:08.534818"
+  },
+  "atakpamé|togo": {
+    "coordinates": [
+      7.5320603,
+      1.1219479
+    ],
+    "display_name": "Atakpamé, Région des Plateaux, Togo",
+    "type": "city",
+    "importance": 0.18671219882505527,
+    "geocoded_at": "2025-09-09T20:04:10.358802"
+  },
+  "atalotè|togo": {
+    "coordinates": [
+      9.9409447,
+      0.9459871
+    ],
+    "display_name": "Atalote, Kéran, Région de la Kara, Togo",
+    "type": "village",
+    "importance": 0.14670416800183103,
+    "geocoded_at": "2025-09-09T20:04:12.109229"
+  },
+  "athiémé|benin": {
+    "coordinates": [
+      6.5322971,
+      1.7414349
+    ],
+    "display_name": "Athiémé, Mono, Bénin",
+    "type": "administrative",
+    "importance": 0.40763900363452515,
+    "geocoded_at": "2025-09-09T20:04:14.319541"
+  },
+  "attogon|benin": {
+    "coordinates": [
+      6.7283347,
+      2.1595636
+    ],
+    "display_name": "Attogon, Allada, Atlantique, Bénin",
+    "type": "village",
+    "importance": 0.3645403454506537,
+    "geocoded_at": "2025-09-09T20:04:17.126748"
+  },
+  "attécoubé|côte d'ivoire": {
+    "coordinates": [
+      5.3481717,
+      -4.034076
+    ],
+    "display_name": "Attécoubé, Abidjan, Côte d’Ivoire",
+    "type": "administrative",
+    "importance": 0.2872697762609895,
+    "geocoded_at": "2025-09-09T20:04:19.382123"
+  },
+  "avéta|togo": {
+    "coordinates": [
+      6.2724926,
+      1.2894049
+    ],
+    "display_name": "Aveta, Région Maritime, Togo",
+    "type": "village",
+    "importance": 0.14670416800183103,
+    "geocoded_at": "2025-09-09T20:04:21.529248"
+  },
+  "azerbaïdjan|burkina faso": {
+    "coordinates": null,
+    "error": "not_found_status_200",
+    "attempted_at": "2025-09-09T20:04:23.432251"
+  },
+  "azovè|benin": {
+    "coordinates": [
+      6.9471178,
+      1.7038129
+    ],
+    "display_name": "Azovè, Aplahoué, Kouffo, Bénin",
+    "type": "village",
+    "importance": 0.332717806438208,
+    "geocoded_at": "2025-09-09T20:04:25.622245"
+  }
+}

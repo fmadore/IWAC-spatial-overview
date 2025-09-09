@@ -17,7 +17,8 @@ interface AppState {
 		| 'events'
 		| 'subjects'
 		| 'locations'
-		| 'network';
+		| 'network'
+		| 'spatialNetwork';
 	// Selected entity for filtering
 	selectedEntity: {
 		type: string;
@@ -36,6 +37,10 @@ interface AppState {
 		clearHighlight: () => void;
 		focusOnNode: (nodeId: string) => void;
 	} | null;
+
+	// Spatial network state
+	spatialNetworkNodeSelected?: { id: string } | null;
+	spatialNetworkLoaded?: boolean;
 
 	// Country Focus facets
 	countryFocus?: {
