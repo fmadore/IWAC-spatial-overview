@@ -1,26 +1,43 @@
 #!/usr/bin/env python3
-"""
-Build co-occurrence networks from static entity files for IWAC Spatial Overview.
+"""build_networks.py
+Generate co-occurrence network data for IWAC Spatial Overview (Sigma.js powered).
 
-Reads omeka-map-explorer/static/data/entities/*.json which each contain:
-  [{ id, name, relatedArticleIds: string[], articleCount, ... }]
+INPUT  (static JSON): omeka-map-explorer/static/data/entities/*.json
+    Each file: [{ id, name, relatedArticleIds: string[], articleCount, ... }]
 
-Emits omeka-map-explorer/static/data/networks/global.json following the Data Contract:
-  - nodes: [{ id: 'type:entityId', type, label, count, degree? }]
-  - edges: [{ source, target, type, weight, articleIds }]
-  - meta: { generatedAt, totalNodes, totalEdges, supportedTypes }
+OUTPUT (JSON): omeka-map-explorer/static/data/networks/global.json
+    nodes: [
+        { id, type, label, count, degree, strength, labelPriority }
+    ]
+    edges: [
+        { source, target, type, weight, weightNorm, articleIds }
+    ]
+    meta: {
+        generatedAt, totalNodes, totalEdges, supportedTypes,
+        weightMinConfigured, weightMinActual, weightMax,
+        degree: { min, max, mean },
+        strength: { min, max, mean },
+        topLabelCount, typePairs
+    }
 
-Configuration is at the top of this file.
+WHY CHANGES (Sigma integration):
+    * Pre-compute node "strength" (sum of incident edge weights) for advanced sizing/coloring.
+    * Provide normalized edge weight (weightNorm) to avoid recomputing on client.
+    * Provide labelPriority so the client can show top-N labels without scanning.
+    * Include statistical metadata (degree/strength distributions) for UI scaling heuristics.
+
+CLI OPTIONS (run `python build_networks.py -h`):
+    --weight-min, --top-labels, --pairs, --no-cross-only
 """
 from __future__ import annotations
 import json
 from pathlib import Path
 from datetime import datetime
-from itertools import product
+from statistics import fmean
+import argparse
 
 # ------------------ Configuration ------------------
-# Cross-type pairs only to reduce density (Roadmap default)
-TYPE_PAIRS = [
+DEFAULT_TYPE_PAIRS = [
     ("person", "organization"),
     ("event", "location"),
     ("person", "event"),
@@ -28,7 +45,8 @@ TYPE_PAIRS = [
     ("subject", "event"),
 ]
 
-WEIGHT_MIN = 2  # prune weak edges
+DEFAULT_WEIGHT_MIN = 2  # prune weak edges (configurable)
+DEFAULT_TOP_LABELS = 60
 
 # ------------------ Paths ------------------
 ROOT = Path(__file__).resolve().parents[1]
@@ -68,6 +86,24 @@ def build_article_index(entities: list[dict], type_key: str,
             bucket.setdefault(type_key, set()).add(node_id)
 
 # ------------------ Load ------------------
+def parse_args():
+    p = argparse.ArgumentParser(description="Build co-occurrence network JSON for IWAC")
+    p.add_argument("--weight-min", type=int, default=DEFAULT_WEIGHT_MIN, help="Minimum edge weight to keep")
+    p.add_argument("--top-labels", type=int, default=DEFAULT_TOP_LABELS, help="How many high-priority node labels to pre-compute")
+    p.add_argument("--pairs", type=str, default="", help="Comma-separated type pairs 'a-b,c-d' (override defaults)")
+    p.add_argument("--no-cross-only", action="store_true", help="If set, also build same-type co-occurrence edges")
+    return p.parse_args()
+
+ARGS = parse_args()
+
+if ARGS.pairs:
+    TYPE_PAIRS = [tuple(x.split("-", 1)) for x in ARGS.pairs.split(",") if "-" in x]
+else:
+    TYPE_PAIRS = DEFAULT_TYPE_PAIRS
+
+WEIGHT_MIN = ARGS.weight_min
+TOP_LABELS = ARGS.top_labels
+
 print("Loading entity files...")
 persons = load_entities('persons.json')
 organizations = load_entities('organizations.json')
@@ -91,38 +127,62 @@ build_article_index(locations, 'location', article_to_entities, node_info)
 
 print(f"Indexed {len(article_to_entities)} articles with at least one entity.")
 
-# ------------------ Build edges ------------------
+def accumulate_edge(aid: str, t1: str, t2: str, a_nodes: set[str], b_nodes: set[str], acc: dict):
+    for n1 in a_nodes:
+        for n2 in b_nodes:
+            s, t = (n1, n2) if n1 < n2 else (n2, n1)
+            key = (s, t)
+            rec = acc.get(key)
+            if not rec:
+                acc[key] = {
+                    'source': s,
+                    'target': t,
+                    'type': f"{t1}-{t2}",
+                    'weight': 1,
+                    'articleIds': [aid],
+                }
+            else:
+                rec['weight'] += 1
+                if not rec['articleIds'] or rec['articleIds'][-1] != aid:
+                    rec['articleIds'].append(aid)
+
 edge_acc: dict[tuple[str, str], dict] = {}
 
 for aid, by_type in article_to_entities.items():
+    # cross-type pairs
     for t1, t2 in TYPE_PAIRS:
         a = by_type.get(t1)
         b = by_type.get(t2)
-        if not a or not b:
-            continue
-        # accumulate all cross pairs for this article
-        for n1 in a:
-            for n2 in b:
-                # consistent ordering per edge key
-                s, t = (n1, n2) if n1 < n2 else (n2, n1)
-                key = (s, t)
-                rec = edge_acc.get(key)
-                if not rec:
-                    edge_acc[key] = {
-                        'source': s,
-                        'target': t,
-                        'type': f"{t1}-{t2}",
-                        'weight': 1,
-                        'articleIds': [aid],
-                    }
-                else:
-                    rec['weight'] += 1
-                    # avoid duplicates if the same article could be seen twice
-                    if not rec['articleIds'] or rec['articleIds'][-1] != aid:
-                        rec['articleIds'].append(aid)
+        if a and b:
+            accumulate_edge(aid, t1, t2, a, b, edge_acc)
+    # optional same-type pairs if requested
+    if ARGS.no_cross_only:
+        for t, nodeset in by_type.items():
+            if len(nodeset) < 2:
+                continue
+            # all unordered pairs inside nodeset
+            lst = sorted(nodeset)
+            for i in range(len(lst)):
+                for j in range(i + 1, len(lst)):
+                    s, t2 = lst[i], lst[j]
+                    key = (s, t2)
+                    rec = edge_acc.get(key)
+                    if not rec:
+                        edge_acc[key] = {
+                            'source': s,
+                            'target': t2,
+                            'type': f"{t}-{t}",
+                            'weight': 1,
+                            'articleIds': [aid],
+                        }
+                    else:
+                        rec['weight'] += 1
+                        if rec['articleIds'][-1] != aid:
+                            rec['articleIds'].append(aid)
 
 # Prune weak edges
 edges = [e for e in edge_acc.values() if e['weight'] >= WEIGHT_MIN]
+edges.sort(key=lambda r: r['weight'], reverse=True)
 
 # ------------------ Build nodes subset ------------------
 used_ids: set[str] = set()
@@ -132,26 +192,67 @@ for e in edges:
 
 nodes = [node_info[nid] for nid in used_ids]
 
-# Degree
+# Degree & strength (sum of incident edge weights)
 degree = {nid: 0 for nid in used_ids}
+strength = {nid: 0 for nid in used_ids}
 for e in edges:
     degree[e['source']] += 1
     degree[e['target']] += 1
+    strength[e['source']] += e['weight']
+    strength[e['target']] += e['weight']
 for n in nodes:
-    n['degree'] = degree.get(n['id'], 0)
+    nid = n['id']
+    n['degree'] = degree.get(nid, 0)
+    n['strength'] = strength.get(nid, 0)
+
+# Edge weight normalization
+if edges:
+    max_w = max(e['weight'] for e in edges)
+    min_w = min(e['weight'] for e in edges)
+else:
+    max_w = min_w = 1
+for e in edges:
+    e['weightNorm'] = round(e['weight'] / max_w, 6) if max_w else 0
+
+# Label priority (higher = more important) used by client for top labels
+nodes.sort(key=lambda x: (x['degree'] * 3 + x['count']), reverse=True)
+for idx, n in enumerate(nodes):
+    n['labelPriority'] = idx + 1
+
+# Truncate top labels list length (still store priority for all)
+top_label_slice = nodes[:TOP_LABELS]
+
+deg_vals = [n['degree'] for n in nodes] or [0]
+str_vals = [n['strength'] for n in nodes] or [0]
 
 output = {
-    'nodes': sorted(nodes, key=lambda x: x['degree'], reverse=True),
+    'nodes': nodes,  # already sorted by label priority importance
     'edges': edges,
     'meta': {
         'generatedAt': datetime.utcnow().isoformat() + 'Z',
         'totalNodes': len(nodes),
         'totalEdges': len(edges),
         'supportedTypes': ['person', 'organization', 'event', 'subject', 'location'],
-        'weightMin': WEIGHT_MIN,
+        'weightMinConfigured': WEIGHT_MIN,
+        'weightMinActual': min_w,
+        'weightMax': max_w,
+        'degree': {
+            'min': min(deg_vals),
+            'max': max(deg_vals),
+            'mean': round(fmean(deg_vals), 3),
+        },
+        'strength': {
+            'min': min(str_vals),
+            'max': max(str_vals),
+            'mean': round(fmean(str_vals), 3),
+        },
+        'topLabelCount': TOP_LABELS,
         'typePairs': TYPE_PAIRS,
+        'labelPriorityTop': [n['id'] for n in top_label_slice],
     },
 }
 
 (OUT_DIR / 'global.json').write_text(json.dumps(output, ensure_ascii=False, indent=2), encoding='utf-8')
-print(f"Wrote {OUT_DIR / 'global.json'} ({len(nodes)} nodes, {len(edges)} edges)")
+print(
+    f"Wrote {OUT_DIR / 'global.json'} (nodes={len(nodes)}, edges={len(edges)}, maxW={max_w}, topLabels={TOP_LABELS})"
+)

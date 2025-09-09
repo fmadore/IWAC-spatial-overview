@@ -29,8 +29,10 @@
 	} from '$lib/components/entities';
 	import { getVisibleData } from '$lib/state/derived.svelte';
 	import { networkState, loadNetwork, applyFilters } from '$lib/state/networkData.svelte';
-	import NetworkGraph from '$lib/components/network/NetworkGraph.svelte';
-	import NetworkPanel from '$lib/components/network/NetworkPanel.svelte';
+	import { ModularNetworkGraph, ModularNetworkPanel } from '$lib/components/network';
+	// Keep legacy imports for comparison (can be removed after testing)
+	// import SigmaNetworkGraph from '$lib/components/network/SigmaNetworkGraph.svelte';
+	// import NetworkPanel from '$lib/components/network/NetworkPanel.svelte';
 
 	// Configuration
 	const countryItemSets: Record<string, number[]> = {
@@ -214,8 +216,8 @@
 {:else if appState.activeView === 'dashboard'}
 	<!-- Dashboard view -->
 	<SiteHeader />
-	<div class="flex flex-1 flex-col">
-		<div class="@container/main flex flex-1 flex-col gap-2">
+	<div class="flex flex-1 flex-col min-h-0">
+		<div class="@container/main flex flex-1 flex-col gap-2 min-h-0">
 			{#if appState.activeVisualization === 'overview'}
 				<Overview />
 			{:else if appState.activeVisualization === 'worldMap'}
@@ -233,8 +235,15 @@
 			{:else if appState.activeVisualization === 'countryFocus'}
 				<CountryFocus />
 			{:else if appState.activeVisualization === 'network'}
-				<div class="flex flex-col gap-4 py-4 md:gap-6 md:py-6 px-4 lg:px-6">
-					<NetworkGraph data={networkState.filtered} />
+				<div class="flex flex-col lg:flex-row gap-4 p-4 md:gap-6 md:p-6 h-full max-h-[calc(100vh-var(--header-height)-2rem)]">
+					<!-- Network controls sidebar -->
+					<div class="lg:w-80 flex-shrink-0 order-2 lg:order-1 overflow-y-auto">
+						<ModularNetworkPanel />
+					</div>
+					<!-- Network graph -->
+					<div class="flex-1 order-1 lg:order-2 min-h-0 overflow-hidden">
+						<ModularNetworkGraph data={networkState.filtered} />
+					</div>
 				</div>
 			{/if}
 		</div>
