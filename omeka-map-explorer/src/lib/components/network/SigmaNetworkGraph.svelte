@@ -4,6 +4,7 @@
   import { networkState } from '$lib/state/networkData.svelte';
   import { appState } from '$lib/state/appState.svelte';
   import { NetworkInteractionHandler } from './modules/NetworkInteractionHandler';
+  import { SigmaForceAtlasLayout } from './modules/SigmaForceAtlasLayout';
 
   // Props - same interface as ModularNetworkGraph
   let { data = null } = $props<{ data?: NetworkData | null }>();
@@ -21,6 +22,8 @@
   // Component instances
   let sigmaInstance: any = null;
   let graph: any = null;
+  let layoutController: SigmaForceAtlasLayout | null = null;
+  let cameraAnimating = false;
 
   // Component state
   let isLayoutRunning = $state(false);
@@ -269,15 +272,19 @@
   async function runLayout() {
     if (!graph || !ForceAtlas2 || isLayoutRunning) return;
 
+    // Stop previous controller if any
+    if (layoutController) {
+      layoutController.stop();
+      layoutController = null;
+    }
+
     isLayoutRunning = true;
     layoutProgress = 0;
 
     try {
-      // Enhanced ForceAtlas2 layout with better parameters
-  const totalIterations = graph.order > 1000 ? 600 : graph.order > 500 ? 450 : 300;
-      let currentIteration = 0;
+      const totalIterations = graph.order > 1000 ? 600 : graph.order > 500 ? 450 : 300;
+      const batchSize = graph.order > 2000 ? 4 : graph.order > 1000 ? 6 : graph.order > 500 ? 10 : 14;
 
-      // Prepare settings once per run; adapt to graph size
       const settings = {
         barnesHutOptimize: graph.order > 400,
         strongGravityMode: false,
@@ -286,51 +293,30 @@
         slowDown: 1.1,
         linLogMode: false,
         outboundAttractionDistribution: graph.order > 200,
-        adjustSizes: true, // Account for node sizes
+        adjustSizes: true,
         edgeWeightInfluence: 1.0,
-        barnesHutTheta: 0.5
+        barnesHutTheta: 0.5,
       } as any;
 
-      const runStep = () => {
-        if (currentIteration < totalIterations && isLayoutRunning) {
-          // Adaptive batch size based on graph size
-          const batchSize = graph.order > 2000 ? 4 : graph.order > 1000 ? 6 : graph.order > 500 ? 10 : 14;
-          
-          for (let i = 0; i < batchSize && currentIteration < totalIterations; i++) {
-            // Each assign call performs the requested number of iterations (1 here)
-            ForceAtlas2.assign(graph, { iterations: 1, settings });
-            currentIteration++;
-          }
-
-          layoutProgress = Math.round((currentIteration / totalIterations) * 100);
-          
-          // Refresh sigma with throttling for performance
-          if (sigmaInstance && currentIteration % 4 === 0) {
+      layoutController = new SigmaForceAtlasLayout(ForceAtlas2, graph, {
+        totalIterations,
+        batchSize,
+        settings,
+        onProgress: (p: number) => {
+          layoutProgress = Math.round(p * 100);
+          if (sigmaInstance && layoutProgress % 4 === 0) sigmaInstance.refresh();
+        },
+        onFinish: () => {
+          isLayoutRunning = false;
+          layoutProgress = 0;
+          if (sigmaInstance) {
             sigmaInstance.refresh();
+            fitToView();
           }
-
-          // Continue if not finished
-          if (currentIteration < totalIterations) {
-            requestAnimationFrame(runStep);
-          } else {
-            finishLayout();
-          }
-        } else {
-          finishLayout();
         }
-      };
+      });
 
-      const finishLayout = () => {
-        isLayoutRunning = false;
-        layoutProgress = 0;
-        if (sigmaInstance) {
-          sigmaInstance.refresh();
-          fitToView();
-        }
-      };
-
-      // Start the layout
-      runStep();
+      layoutController.start();
 
     } catch (err) {
       error = `Layout failed: ${err instanceof Error ? err.message : 'Unknown error'}`;
@@ -343,6 +329,10 @@
   // Stop layout
   function stopLayout() {
     isLayoutRunning = false;
+    if (layoutController) {
+      layoutController.stop();
+      layoutController = null;
+    }
   }
 
   // Enhanced fit graph to view with padding and smooth animation
@@ -350,6 +340,7 @@
     if (!sigmaInstance) return;
     
     try {
+  if (cameraAnimating) return; // prevent stacking animations
       const camera = sigmaInstance.getCamera();
       const nodes = graph.nodes();
       if (nodes.length === 0) return;
@@ -376,7 +367,8 @@
         // Add padding based on graph size
     const padding = span * 0.2; // 20% padding
         
-        camera.animate(
+  cameraAnimating = true;
+  camera.animate(
           { 
             x: centerX, 
             y: centerY, 
@@ -384,6 +376,8 @@
           },
           { duration: 600, easing: 'quadInOut' }
         );
+  // best-effort flag reset after animation time
+  setTimeout(() => { cameraAnimating = false; }, 650);
       }
     } catch (err) {
       console.warn('Fit to view failed:', err);
@@ -456,6 +450,10 @@
         sigmaInstance.kill();
         sigmaInstance = null;
       }
+      if (layoutController) {
+        layoutController.stop();
+        layoutController = null;
+      }
     };
   });
 
@@ -466,6 +464,10 @@
       if (currentData && Sigma && Graph && container) {
         if (sigmaInstance) {
           sigmaInstance.kill();
+        }
+        if (layoutController) {
+          layoutController.stop();
+          layoutController = null;
         }
         await initializeSigma();
       }

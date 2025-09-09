@@ -13,6 +13,7 @@ export { NetworkRenderer } from './modules/NetworkRenderer';
 export { NetworkLayout } from './modules/NetworkLayout';
 export { NetworkController } from './modules/NetworkController';
 export { NetworkInteractionHandler } from './modules/NetworkInteractionHandler';
+export { SigmaForceAtlasLayout } from './modules/SigmaForceAtlasLayout';
 
 // Components
 export { default as ModularNetworkGraph } from './ModularNetworkGraph.svelte';
