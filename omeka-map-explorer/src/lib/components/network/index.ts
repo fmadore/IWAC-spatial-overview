@@ -19,6 +19,7 @@ export { SigmaForceAtlasLayout } from './modules/SigmaForceAtlasLayout';
 export { default as ModularNetworkGraph } from './ModularNetworkGraph.svelte';
 export { default as ModularNetworkPanel } from './ModularNetworkPanel.svelte';
 export { default as SigmaNetworkGraph } from './SigmaNetworkGraph.svelte';
+export { default as NetworkSearchBar } from './NetworkSearchBar.svelte';
 
 // Type exports
 export type { RenderConfig, Transform, Position } from './modules/NetworkRenderer';

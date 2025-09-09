@@ -30,6 +30,13 @@ interface AppState {
 	networkNodeSelected?: { id: string } | null;
 	networkLoaded?: boolean;
 	networkRenderer: 'modular' | 'sigma';
+	
+	// Network highlighting functions (set by network components)
+	networkHighlightingFunctions?: {
+		highlightNodes: (nodeIds: string[]) => void;
+		clearHighlight: () => void;
+		focusOnNode: (nodeId: string) => void;
+	} | null;
 
 	// Country Focus facets
 	countryFocus?: {
@@ -54,6 +61,7 @@ export const appState = $state<AppState>({
 	networkNodeSelected: null,
 	networkLoaded: false,
 	networkRenderer: 'sigma', // Default to new sigma.js implementation
+	networkHighlightingFunctions: null,
 	countryFocus: {
 		country: 'Benin',
 		level: 'regions',

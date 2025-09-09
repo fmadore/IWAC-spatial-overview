@@ -6,6 +6,18 @@
   import { networkState, applyFilters } from '$lib/state/networkData.svelte';
   import { appState } from '$lib/state/appState.svelte';
   import { NetworkInteractionHandler } from './modules/NetworkInteractionHandler';
+  import NetworkSearchBar from './NetworkSearchBar.svelte';
+
+  // Props for network highlighting functions
+  let {
+    highlightNodes,
+    clearHighlight,
+    focusOnNode
+  } = $props<{
+    highlightNodes?: (nodeIds: string[]) => void;
+    clearHighlight?: () => void;
+    focusOnNode?: (nodeId: string) => void;
+  }>();
 
   // Reactive stats
   const stats = $derived.by(() => {
@@ -119,6 +131,21 @@
           : 'Custom Canvas2D with D3 force simulation'
         }
       </div>
+    </div>
+    
+    <!-- Node Search -->
+    <div class="space-y-2">
+      <Label class="text-sm font-medium">Search Nodes</Label>
+      <NetworkSearchBar
+        placeholder="Search by name or ID..."
+        onHighlight={highlightNodes}
+        onClearHighlight={clearHighlight}
+        onNodeSelect={(node: import('$lib/types').NetworkNode) => {
+          if (focusOnNode) {
+            focusOnNode(node.id);
+          }
+        }}
+      />
     </div>
     
     <!-- Filter Controls -->

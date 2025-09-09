@@ -6,9 +6,20 @@
   import { NetworkInteractionHandler } from './modules/NetworkInteractionHandler';
   import { SigmaForceAtlasLayout } from './modules/SigmaForceAtlasLayout';
   import { NoverlapLayoutManager } from './modules/NoverlapLayoutManager';
+  import { NodeDragHandler } from './modules/NodeDragHandler';
 
   // Props - same interface as ModularNetworkGraph
-  let { data = null } = $props<{ data?: NetworkData | null }>();
+  let { 
+    data = null,
+    onHighlightNodes,
+    onClearHighlight,
+    onFocusNode
+  } = $props<{ 
+    data?: NetworkData | null;
+    onHighlightNodes?: (highlightFn: (nodeIds: string[]) => void) => void;
+    onClearHighlight?: (clearFn: () => void) => void;
+    onFocusNode?: (focusFn: (nodeId: string) => void) => void;
+  }>();
 
   // DOM elements
   let container: HTMLDivElement;
@@ -26,6 +37,7 @@
   let graph: any = null;
   let layoutController: SigmaForceAtlasLayout | null = null;
   let noverlapManager: NoverlapLayoutManager | null = null;
+  let dragHandler: NodeDragHandler | null = null;
   let cameraAnimating = false;
 
   // Component state
@@ -34,6 +46,11 @@
   let error = $state<string | null>(null);
   let isInitialized = $state(false);
   let cameraRatio = $state(1);
+  let highlightedNodeIds = $state<string[]>([]);
+  let highlightedNodeSet = $state(new Set<string>()); // For O(1) lookups in nodeReducer
+  
+  // Throttle sigma refresh calls to improve performance
+  let refreshTimeout: number | undefined;
 
   // Reactive data
   const currentData = $derived(data ?? networkState.filtered ?? networkState.data);
@@ -104,17 +121,21 @@
         while (v === 0) v = Math.random();
         return Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v);
       }
-      const SEED_STDDEV = 250; // controls initial spread
+      // Increased spread for better spacing - larger graphs need more space
+      const nodeCount = networkData.nodes.length;
+      const SEED_STDDEV = nodeCount > 500 ? 400 : nodeCount > 200 ? 350 : 300;
+      
       networkData.nodes.forEach(node => {
         const nodeType = node.id.split(':')[0] || 'unknown';
         const typeConfig = nodeTypeConfig[nodeType as keyof typeof nodeTypeConfig] || nodeTypeConfig.subject;
         const baseColor = nodeColors[nodeType as keyof typeof nodeColors] || '#6b7280';
         
-        // Enhanced size calculation with better scaling
+        // Enhanced size calculation with better scaling for better spacing
         const normalizedCount = (node.count - minCount) / countRange;
-        const baseSize = 8 + (30 - 8) * normalizedCount; // 8-30 size range for better visibility
+        // Increased minimum size for better visibility and spacing
+        const baseSize = 10 + (35 - 10) * normalizedCount; // 10-35 size range for better visibility
 
-  // Non-radial initial position (gaussian around origin)
+  // Non-radial initial position (gaussian around origin) with adaptive spread
   const seedX = gaussianRand() * SEED_STDDEV;
   const seedY = gaussianRand() * SEED_STDDEV;
         
@@ -199,9 +220,9 @@
   labelGridCellSize: 100,
   labelRenderedSizeThreshold: 9,
         
-        // Enhanced size settings with better scaling
-  minNodeSize: 5,
-  maxNodeSize: 30,
+        // Enhanced size settings optimized for better spacing
+  minNodeSize: 6,   // Increased minimum for better visibility
+  maxNodeSize: 40,  // Increased maximum to match our 10-35 base size range
         minEdgeSize: 0.3,    // Much thinner minimum edge size
         maxEdgeSize: 2.5,    // Reduced maximum edge size
         
@@ -233,6 +254,41 @@
         
         // WebGL optimizations
         webglOversamplingRatio: window.devicePixelRatio || 1,
+        
+        // Node highlighting reducer (optimized for performance)
+        nodeReducer: (node: string, data: any) => {
+          const isHighlighted = highlightedNodeSet.has(node);
+          const isSelected = appState.networkNodeSelected?.id === node;
+          
+          if (isSelected) {
+            return {
+              ...data,
+              size: Math.max(data.size * 1.5, 12),
+              color: '#ff6b35', // Orange for selected
+              zIndex: 10
+            };
+          }
+          
+          if (isHighlighted) {
+            return {
+              ...data,
+              size: Math.max(data.size * 1.2, 10),
+              color: '#ffd60a', // Yellow for highlighted
+              zIndex: 5
+            };
+          }
+          
+          // Dim non-highlighted nodes when there are highlighted nodes
+          if (highlightedNodeSet.size > 0) {
+            return {
+              ...data,
+              color: data.color + '60', // Add transparency
+              zIndex: 1
+            };
+          }
+          
+          return data;
+        },
       });
 
   // Set up event listeners
@@ -240,6 +296,18 @@
 
       isInitialized = true;
       error = null;
+
+      // Expose highlighting functions to app state for sidebar access
+      appState.networkHighlightingFunctions = {
+        highlightNodes,
+        clearHighlight,
+        focusOnNode
+      };
+
+      // Also call props if provided (for backwards compatibility)
+      if (onHighlightNodes) onHighlightNodes(highlightNodes);
+      if (onClearHighlight) onClearHighlight(clearHighlight);
+      if (onFocusNode) onFocusNode(focusOnNode);
 
   // Warm-up layout once to avoid initial square cloud
   runLayout();
@@ -289,6 +357,29 @@
     });
 
   // (Edge hover disabled to reduce noise)
+    
+    // Initialize drag handler for node dragging
+    if (!dragHandler) {
+      dragHandler = new NodeDragHandler(sigmaInstance, graph, {
+        onDragStart: (nodeId: string) => {
+          console.log('🫳 Started dragging node:', nodeId);
+          // Temporarily stop layout while dragging
+          if (layoutController && layoutController.isRunning()) {
+            layoutController.stop();
+          }
+        },
+        onDrag: (nodeId: string, x: number, y: number) => {
+          // Optional: Add visual feedback during drag
+        },
+        onDragEnd: (nodeId: string) => {
+          console.log('🫴 Finished dragging node:', nodeId);
+          // Auto-fit to view after dragging to keep nodes visible
+          setTimeout(() => fitToView(), 100);
+        },
+        dragInertia: true,
+        dragPreventLayoutUpdate: true
+      });
+    }
   }
 
   // Run ForceAtlas2 layout
@@ -314,26 +405,29 @@
         ? ForceAtlas2.inferSettings(nodeCount) 
         : {};
       
-      // Enhanced ForceAtlas2 settings based on Context7 research
+      // Enhanced ForceAtlas2 settings optimized for better spacing
       const settings = {
         ...inferredSettings,
         // Optimization for large graphs
         barnesHutOptimize: nodeCount > 400,
         barnesHutTheta: 0.5,
         
-        // Reduced gravity and increased scaling for less dense, non-spherical layout
+        // Reduced gravity and increased scaling for much better spacing
         strongGravityMode: false,
-        gravity: nodeCount > 1000 ? 0.008 : 0.012,
-        scalingRatio: nodeCount > 2000 ? 72 : nodeCount > 1000 ? 58 : nodeCount > 500 ? 45 : 35,
+        gravity: nodeCount > 1000 ? 0.005 : nodeCount > 500 ? 0.008 : 0.01, // Reduced gravity for more spread
+        scalingRatio: nodeCount > 2000 ? 95 : nodeCount > 1000 ? 75 : nodeCount > 500 ? 60 : 50, // Increased scaling ratio for more space
         
-        // LinLog mode for better cluster separation
+        // LinLog mode for better cluster separation and spacing
         linLogMode: true,
         outboundAttractionDistribution: true,
         adjustSizes: true,
         
-        // Fine-tuning for stability and spread
-        slowDown: 1.2,
-        edgeWeightInfluence: 0.8,
+        // Fine-tuning for stability and better spread
+        slowDown: 1.0, // Reduced slowdown for more dynamic layout
+        edgeWeightInfluence: 0.6, // Reduced edge influence for looser clustering
+        
+        // Additional spacing improvements
+        preventOverlap: true, // Prevent nodes from overlapping
       } as any;
 
       console.log('🚀 Starting ForceAtlas2 with optimized settings:', { nodeCount, settings });
@@ -376,6 +470,13 @@
       if (!noverlapManager) {
         noverlapManager = new NoverlapLayoutManager(Noverlap, graph, sigmaInstance, {
           debug: true, // Enable debug logging
+          // Enhanced settings for better spacing
+          settings: {
+            margin: 8, // Increased margin between nodes
+            expansion: 1.2, // More expansion for better spread
+            ratio: 1.4, // Larger collision detection
+            gridSize: 18, // Adaptive grid for better performance
+          },
           onComplete: () => {
             // Fit to view after Noverlap completes
             setTimeout(() => fitToView(), 150);
@@ -477,6 +578,49 @@
     }
   }
 
+  // Throttled refresh function to reduce performance impact
+  function throttledRefresh() {
+    if (refreshTimeout) {
+      clearTimeout(refreshTimeout);
+    }
+    refreshTimeout = setTimeout(() => {
+      if (sigmaInstance) {
+        sigmaInstance.refresh();
+      }
+    }, 50); // 50ms throttle
+  }
+
+  // Highlight nodes for search results
+  function highlightNodes(nodeIds: string[]) {
+    highlightedNodeIds = [...nodeIds];
+    highlightedNodeSet = new Set(nodeIds);
+    throttledRefresh();
+  }
+
+  // Clear node highlighting
+  function clearHighlight() {
+    highlightedNodeIds = [];
+    highlightedNodeSet = new Set();
+    throttledRefresh();
+  }
+
+  // Focus on highlighted node (center camera)
+  function focusOnNode(nodeId: string) {
+    if (!sigmaInstance || !graph.hasNode(nodeId)) return;
+    
+    try {
+      const nodeAttrs = graph.getNodeAttributes(nodeId);
+      const camera = sigmaInstance.getCamera();
+      
+      camera.animate(
+        { x: nodeAttrs.x, y: nodeAttrs.y, ratio: 0.3 },
+        { duration: 500 }
+      );
+    } catch (err) {
+      console.warn('Focus on node failed:', err);
+    }
+  }
+
   // Keyboard shortcuts
   function handleKeyDown(event: KeyboardEvent) {
     if (!sigmaInstance || !currentData) return;
@@ -499,6 +643,18 @@
           event.preventDefault();
           centerOnSelectedNode();
         }
+        break;
+      case 'h':
+      case '?':
+        event.preventDefault();
+        console.log('🔧 Network Graph Controls:\n' +
+                   '• F: Fit to view\n' +
+                   '• R: Run layout\n' +
+                   '• C: Center on selected node\n' +
+                   '• Esc: Clear selection\n' +
+                   '• H/?: Show this help\n' +
+                   '• Drag nodes with mouse to reposition them\n' +
+                   '• Click nodes to select, click background to deselect');
         break;
     }
   }
@@ -527,6 +683,15 @@
         layoutController.stop();
         layoutController = null;
       }
+      if (dragHandler) {
+        dragHandler.destroy();
+        dragHandler = null;
+      }
+      
+      // Clean up highlighting functions from app state
+      if (appState.networkHighlightingFunctions) {
+        appState.networkHighlightingFunctions = null;
+      }
     };
   });
 
@@ -541,6 +706,10 @@
         if (layoutController) {
           layoutController.stop();
           layoutController = null;
+        }
+        if (dragHandler) {
+          dragHandler.destroy();
+          dragHandler = null;
         }
         await initializeSigma();
       }

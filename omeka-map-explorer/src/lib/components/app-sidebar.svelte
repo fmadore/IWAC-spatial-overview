@@ -12,6 +12,7 @@
 	import EntitySelector from '$lib/components/entities/entity-selector.svelte';
 	import { networkState, getNodeById, applyFilters } from '$lib/state/networkData.svelte';
 	import { NetworkInteractionHandler } from '$lib/components/network/modules/NetworkInteractionHandler';
+	import NetworkSearchBar from '$lib/components/network/NetworkSearchBar.svelte';
 	import { Label } from '$lib/components/ui/label';
 	import { Badge } from '$lib/components/ui/badge';
 
@@ -98,6 +99,11 @@
 		NetworkInteractionHandler.handleNodeSelection(null);
 	}
 
+	// Get network highlighting functions from app state
+	const highlightNodes = $derived(appState.networkHighlightingFunctions?.highlightNodes);
+	const clearHighlight = $derived(appState.networkHighlightingFunctions?.clearHighlight);
+	const focusOnNode = $derived(appState.networkHighlightingFunctions?.focusOnNode);
+
 	// Node type colors and labels
 	const typeColors: Record<string, string> = {
 		person: '#2563eb',
@@ -160,6 +166,24 @@
 				</Sidebar.GroupContent>
 			</Sidebar.Group>
 		{:else if appState.activeVisualization === 'network'}
+			<Sidebar.Separator />
+
+			<Sidebar.Group>
+				<Sidebar.GroupLabel>Search Nodes</Sidebar.GroupLabel>
+				<Sidebar.GroupContent>
+					<NetworkSearchBar
+						placeholder="Search nodes..."
+						onHighlight={highlightNodes}
+						onClearHighlight={clearHighlight}
+						onNodeSelect={(node: import('$lib/types').NetworkNode) => {
+							if (focusOnNode) {
+								focusOnNode(node.id);
+							}
+						}}
+					/>
+				</Sidebar.GroupContent>
+			</Sidebar.Group>
+
 			<Sidebar.Separator />
 
 			<Sidebar.Group>
