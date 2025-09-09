@@ -10,7 +10,10 @@
 	import CountryFilter from '$lib/components/filters/CountryFilter.svelte';
 	import YearRangeFilter from '$lib/components/filters/YearRangeFilter.svelte';
 	import EntitySelector from '$lib/components/entities/entity-selector.svelte';
-	import { networkState, getNodeById } from '$lib/state/networkData.svelte';
+	import { networkState, getNodeById, applyFilters } from '$lib/state/networkData.svelte';
+	import { NetworkInteractionHandler } from '$lib/components/network/modules/NetworkInteractionHandler';
+	import { Label } from '$lib/components/ui/label';
+	import { Badge } from '$lib/components/ui/badge';
 
 	let { variant = 'inset' } = $props<{ variant?: 'floating' | 'inset' }>();
 
@@ -38,6 +41,79 @@
 		// Use centralized navigator to update state + URL immediately
 		urlManager.navigateTo(item.view ?? 'dashboard', item.id);
 	}
+
+	// Network-specific computed values
+	const networkStats = $derived.by(() => {
+		if (!networkState.filtered) {
+			return { nodes: 0, edges: 0, types: {} as Record<string, number>, totalArticles: 0, avgArticles: 0 };
+		}
+		const nodeStats = NetworkInteractionHandler.getNodeStatistics(networkState.filtered.nodes);
+		return {
+			nodes: networkState.filtered.nodes.length,
+			edges: networkState.filtered.edges.length,
+			types: nodeStats.typeDistribution,
+			totalArticles: nodeStats.totalCount,
+			avgArticles: Math.round(nodeStats.averageCount)
+		};
+	});
+
+	const availableTypes = $derived.by(() => {
+		if (!networkState.data) return [] as string[];
+		return NetworkInteractionHandler.getAvailableTypes(networkState.data.nodes);
+	});
+
+	// Network event handlers
+	function onWeightChange(e: Event) {
+		const value = Number((e.target as HTMLInputElement).value);
+		if (Number.isFinite(value) && value >= 1) {
+			networkState.weightMin = value;
+			applyFilters();
+		}
+	}
+
+	function onDegreeCapChange(e: Event) {
+		const value = Number((e.target as HTMLInputElement).value);
+		networkState.degreeCap = Number.isFinite(value) && value > 0 ? value : undefined;
+		applyFilters();
+	}
+
+	function toggleType(type: string) {
+		if (!(type in networkState.typesEnabled)) {
+			networkState.typesEnabled[type] = true;
+		}
+		networkState.typesEnabled[type] = !networkState.typesEnabled[type];
+		applyFilters();
+	}
+
+	function resetNetworkFilters() {
+		networkState.weightMin = 2;
+		networkState.degreeCap = undefined;
+		Object.keys(networkState.typesEnabled).forEach((t) => {
+			networkState.typesEnabled[t] = true;
+		});
+		applyFilters();
+	}
+
+	function clearNetworkSelection() {
+		NetworkInteractionHandler.handleNodeSelection(null);
+	}
+
+	// Node type colors and labels
+	const typeColors: Record<string, string> = {
+		person: '#2563eb',
+		organization: '#7c3aed',
+		event: '#059669',
+		subject: '#d97706',
+		location: '#ef4444',
+	};
+
+	const typeLabels: Record<string, string> = {
+		person: 'Persons',
+		organization: 'Organizations',
+		event: 'Events',
+		subject: 'Subjects',
+		location: 'Locations',
+	};
 </script>
 
 <Sidebar.Root class={cn(variant === 'inset' && 'bg-sidebar')}>
@@ -84,7 +160,116 @@
 				</Sidebar.GroupContent>
 			</Sidebar.Group>
 		{:else if appState.activeVisualization === 'network'}
-			<!-- Network controls are handled in the main layout, no sidebar controls needed -->
+			<Sidebar.Separator />
+
+			<Sidebar.Group>
+				<Sidebar.GroupLabel>Network Filters</Sidebar.GroupLabel>
+				<Sidebar.GroupContent class="space-y-4">
+					<div class="space-y-2">
+						<Label for="weightMin" class="text-sm font-medium">
+							Minimum edge weight: {networkState.weightMin}
+						</Label>
+						<input
+							id="weightMin"
+							type="range"
+							min="1"
+							max="10"
+							step="1"
+							value={networkState.weightMin}
+							oninput={onWeightChange}
+							class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-primary"
+						/>
+						<p class="text-xs text-muted-foreground">
+							Filter out weak connections
+						</p>
+					</div>
+
+					<div class="space-y-2">
+						<Label for="degreeCap" class="text-sm font-medium">
+							Max connections per node
+						</Label>
+						<input
+							id="degreeCap"
+							type="number"
+							min="1"
+							placeholder="No limit"
+							value={networkState.degreeCap || ''}
+							oninput={onDegreeCapChange}
+							class="w-full h-9 rounded-md border border-input bg-background px-3 py-1 text-sm ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+						/>
+						<p class="text-xs text-muted-foreground">
+							Limit highly connected nodes
+						</p>
+					</div>
+				</Sidebar.GroupContent>
+			</Sidebar.Group>
+
+			<Sidebar.Separator />
+
+			<Sidebar.Group>
+				<Sidebar.GroupLabel>Entity Types</Sidebar.GroupLabel>
+				<Sidebar.GroupContent class="space-y-2">
+					{#each availableTypes as type}
+						<button
+							class="flex items-center justify-between w-full px-3 py-2 text-sm rounded-md border transition-colors {networkState.typesEnabled[type] !== false ? 'bg-primary text-primary-foreground' : 'bg-background hover:bg-accent'}"
+							onclick={() => toggleType(type)}
+						>
+							<div class="flex items-center gap-2">
+								<div 
+									class="w-3 h-3 rounded-full" 
+									style="background-color: {typeColors[type] || '#6b7280'}"
+								></div>
+								<span>{typeLabels[type] || type}</span>
+							</div>
+							<span class="text-xs opacity-70">
+								{networkStats.types[type] || 0}
+							</span>
+						</button>
+					{/each}
+				</Sidebar.GroupContent>
+			</Sidebar.Group>
+
+			{#if appState.networkNodeSelected}
+				<Sidebar.Separator />
+
+				<Sidebar.Group>
+					<Sidebar.GroupLabel>Selected Node</Sidebar.GroupLabel>
+					<Sidebar.GroupContent>
+						<div class="space-y-2 p-3 bg-accent/20 rounded-md border">
+							<div class="flex items-center justify-between">
+								<span class="font-medium text-sm">
+									{getNodeById(appState.networkNodeSelected.id)?.label || 'Unknown'}
+								</span>
+								<button
+									onclick={clearNetworkSelection}
+									class="text-xs text-muted-foreground hover:text-foreground"
+								>
+									Clear
+								</button>
+							</div>
+							<div class="text-sm text-muted-foreground">
+								Articles: {getNodeById(appState.networkNodeSelected.id)?.count || 0}
+							</div>
+						</div>
+					</Sidebar.GroupContent>
+				</Sidebar.Group>
+			{/if}
+
+			<Sidebar.Separator />
+
+			<Sidebar.Group>
+				<Sidebar.GroupLabel>Statistics</Sidebar.GroupLabel>
+				<Sidebar.GroupContent>
+					<div class="space-y-2 text-xs text-muted-foreground">
+						<div class="grid grid-cols-2 gap-2">
+							<div>Visible nodes: <span class="font-medium">{networkStats.nodes}</span></div>
+							<div>Visible edges: <span class="font-medium">{networkStats.edges}</span></div>
+							<div>Total articles: <span class="font-medium">{networkStats.totalArticles}</span></div>
+							<div>Avg per node: <span class="font-medium">{networkStats.avgArticles}</span></div>
+						</div>
+					</div>
+				</Sidebar.GroupContent>
+			</Sidebar.Group>
 		{/if}
 	</Sidebar.Content>
 	<Sidebar.Footer>
@@ -114,8 +299,32 @@
 					Reset All Filters
 				</button>
 			</div>
+		{:else if appState.activeVisualization === 'network'}
+			<div class="p-4">
+				<div class="mb-3 text-xs text-muted-foreground">Network view</div>
+				<button
+					class="w-full px-4 py-2 text-sm font-medium text-foreground bg-background border border-input rounded-md hover:bg-accent hover:text-accent-foreground transition-colors"
+					onclick={resetNetworkFilters}
+				>
+					Reset Network Filters
+				</button>
+				<div class="mt-3 text-xs text-muted-foreground">
+					<div class="space-y-1">
+						<div><kbd class="px-1 py-0.5 text-xs bg-muted rounded">F</kbd> Fit to view</div>
+						<div><kbd class="px-1 py-0.5 text-xs bg-muted rounded">R</kbd> Run layout</div>
+						<div><kbd class="px-1 py-0.5 text-xs bg-muted rounded">Esc</kbd> Clear selection</div>
+						<div><kbd class="px-1 py-0.5 text-xs bg-muted rounded">C</kbd> Center on selected</div>
+					</div>
+				</div>
+			</div>
 		{:else}
 			<div class="p-4 text-xs text-muted-foreground">v1 • Dashboard</div>
 		{/if}
 	</Sidebar.Footer>
 </Sidebar.Root>
+
+<style>
+	kbd {
+		font-family: ui-monospace, SFMono-Regular, "SF Mono", Consolas, "Liberation Mono", Menlo, monospace;
+	}
+</style>
