@@ -142,17 +142,19 @@
           // Visual hierarchy
           zIndex: nodeType === 'location' ? 2 : 1, // Locations on top
         });
-      });    // Add edges with enhanced styling
+      });
+      
+    // Add edges with enhanced styling
     networkData.edges.forEach(edge => {
       if (newGraph.hasNode(edge.source) && newGraph.hasNode(edge.target)) {
-        // Enhanced edge thickness calculation
-        const thickness = Math.max(1, Math.min(8, edge.weight * 0.8));
+        // Much thinner edge thickness calculation for cleaner appearance
+        const thickness = Math.max(0.5, Math.min(3, edge.weight * 0.4));
         
         newGraph.addEdge(edge.source, edge.target, {
           weight: edge.weight,
           size: thickness,
-          color: '#94a3b8', // Neutral gray-blue
-          alpha: 0.6, // Semi-transparent
+          color: '#cbd5e1', // Lighter gray for less visual clutter
+          alpha: 0.4, // More transparent for subtlety
           type: 'line'
         });
       }
@@ -200,10 +202,10 @@
         // Enhanced size settings with better scaling
   minNodeSize: 5,
   maxNodeSize: 30,
-        minEdgeSize: 1,
-        maxEdgeSize: 8,
+        minEdgeSize: 0.3,    // Much thinner minimum edge size
+        maxEdgeSize: 2.5,    // Reduced maximum edge size
         
-        // Edge appearance
+        // Edge appearance with subtle styling
         defaultEdgeType: 'line',
         defaultEdgeColor: '#e2e8f0',
         edgeColor: 'default',
