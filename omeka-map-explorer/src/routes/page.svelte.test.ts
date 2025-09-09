@@ -15,6 +15,55 @@ vi.mock('$app/stores', async () => {
 	} as any;
 });
 
+// Mock Sigma.js library to prevent WebGL context issues in tests
+vi.mock('sigma', () => ({
+	default: vi.fn().mockImplementation(() => ({
+		getGraph: vi.fn(() => ({
+			addNode: vi.fn(),
+			addEdge: vi.fn(),
+			clear: vi.fn(),
+			forEachNode: vi.fn(),
+			forEachEdge: vi.fn(),
+			order: 0,
+			size: 0
+		})),
+		getCamera: vi.fn(() => ({
+			getState: vi.fn(() => ({ x: 0, y: 0, ratio: 1 })),
+			setState: vi.fn(),
+			on: vi.fn(),
+			animatedReset: vi.fn(),
+			animatedZoom: vi.fn()
+		})),
+		on: vi.fn(),
+		off: vi.fn(),
+		kill: vi.fn(),
+		refresh: vi.fn(),
+		resize: vi.fn(),
+		setSetting: vi.fn(),
+		getSetting: vi.fn()
+	}))
+}));
+
+// Mock Graphology
+vi.mock('graphology', () => ({
+	default: vi.fn().mockImplementation(() => ({
+		addNode: vi.fn(),
+		addEdge: vi.fn(),
+		clear: vi.fn(),
+		forEachNode: vi.fn(),
+		forEachEdge: vi.fn(),
+		order: 0,
+		size: 0
+	}))
+}));
+
+// Mock ForceAtlas2 layout
+vi.mock('graphology-layout-forceatlas2', () => ({
+	default: {
+		assign: vi.fn()
+	}
+}));
+
 // Avoid network/file fetches by stubbing data loaders used in +page.svelte
 vi.mock('$lib/utils/staticDataLoader', () => ({
 	loadStaticData: async () => ({
