@@ -18,9 +18,6 @@ export { NetworkInteractionHandler } from './modules/NetworkInteractionHandler';
 export { default as ModularNetworkGraph } from './ModularNetworkGraph.svelte';
 export { default as ModularNetworkPanel } from './ModularNetworkPanel.svelte';
 
-// Legacy components (for backwards compatibility)
-export { default as SigmaNetworkGraph } from './SigmaNetworkGraph.svelte';
-
 // Type exports
 export type { RenderConfig, Transform, Position } from './modules/NetworkRenderer';
 export type { LayoutConfig } from './modules/NetworkLayout';

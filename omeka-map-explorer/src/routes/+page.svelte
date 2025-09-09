@@ -30,9 +30,6 @@
 	import { getVisibleData } from '$lib/state/derived.svelte';
 	import { networkState, loadNetwork, applyFilters } from '$lib/state/networkData.svelte';
 	import { ModularNetworkGraph } from '$lib/components/network';
-	// Keep legacy imports for comparison (can be removed after testing)
-	// import SigmaNetworkGraph from '$lib/components/network/SigmaNetworkGraph.svelte';
-	// import NetworkPanel from '$lib/components/network/NetworkPanel.svelte';
 
 	// Configuration
 	const countryItemSets: Record<string, number[]> = {
