@@ -16,6 +16,7 @@
   let Sigma: any = null;
   let Graph: any = null;
   let ForceAtlas2: any = null;
+  let Noverlap: any = null;
   let NodeBorderProgram: any = null;
   let NodeSquareProgram: any = null;
 
@@ -30,6 +31,7 @@
   let layoutProgress = $state(0);
   let error = $state<string | null>(null);
   let isInitialized = $state(false);
+  let cameraRatio = $state(1);
 
   // Reactive data
   const currentData = $derived(data ?? networkState.filtered ?? networkState.data);
@@ -55,10 +57,11 @@
   // Lazy load sigma.js modules
   async function loadSigmaModules() {
     try {
-      const [sigmaModule, graphModule, fa2Module, borderModule, squareModule] = await Promise.all([
+      const [sigmaModule, graphModule, fa2Module, noverlapModule, borderModule, squareModule] = await Promise.all([
         import('sigma'),
         import('graphology'),
         import('graphology-layout-forceatlas2'),
+        import('graphology-layout-noverlap'),
         import('@sigma/node-border'),
         import('@sigma/node-square')
       ]);
@@ -66,6 +69,7 @@
       Sigma = sigmaModule.default;
       Graph = graphModule.default;
       ForceAtlas2 = fa2Module.default;
+      Noverlap = noverlapModule.default;
       NodeBorderProgram = borderModule.NodeBorderProgram;
       NodeSquareProgram = squareModule.NodeSquareProgram;
       
@@ -89,9 +93,16 @@
     const maxCount = Math.max(...counts);
     const countRange = maxCount - minCount || 1;
 
-      // Add nodes with enhanced styling and radial seeding (no square)
-      const TWO_PI = Math.PI * 2;
-      const SEED_RADIUS = 500;
+      // Add nodes with enhanced styling and neutral (non-radial) seeding
+      // Use a mild gaussian distribution around (0,0) to avoid an initial "disc" shape
+      function gaussianRand() {
+        // Box–Muller transform
+        let u = 0, v = 0;
+        while (u === 0) u = Math.random();
+        while (v === 0) v = Math.random();
+        return Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v);
+      }
+      const SEED_STDDEV = 250; // controls initial spread
       networkData.nodes.forEach(node => {
         const nodeType = node.id.split(':')[0] || 'unknown';
         const typeConfig = nodeTypeConfig[nodeType as keyof typeof nodeTypeConfig] || nodeTypeConfig.subject;
@@ -101,11 +112,9 @@
         const normalizedCount = (node.count - minCount) / countRange;
         const baseSize = 8 + (30 - 8) * normalizedCount; // 8-30 size range for better visibility
 
-        // Radial initial position (uniform in disc)
-        const theta = Math.random() * TWO_PI;
-        const r = Math.sqrt(Math.random()) * SEED_RADIUS;
-        const seedX = r * Math.cos(theta);
-        const seedY = r * Math.sin(theta);
+  // Non-radial initial position (gaussian around origin)
+  const seedX = gaussianRand() * SEED_STDDEV;
+  const seedY = gaussianRand() * SEED_STDDEV;
         
         // Determine node type for rendering
         let renderType = undefined; // Use default for circles
@@ -177,13 +186,14 @@
         enableEdgeHoverEvents: 'debounce',
         
         // Improved label settings
-        labelFont: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
-        labelSize: 12,
-        labelWeight: '500',
-        labelColor: { color: '#1f2937' },
-  labelDensity: 0.06, // Show more labels
-  labelGridCellSize: 90,
-  labelRenderedSizeThreshold: 8, // Avoid too many small labels
+  labelFont: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
+  labelSize: 12,
+  labelWeight: '500',
+  labelColor: { color: '#1f2937' },
+  // Show fewer labels at global zoom to reduce clutter
+  labelDensity: 0.03,
+  labelGridCellSize: 100,
+  labelRenderedSizeThreshold: 9,
         
         // Enhanced size settings with better scaling
   minNodeSize: 5,
@@ -229,6 +239,15 @@
 
   // Warm-up layout once to avoid initial square cloud
   runLayout();
+
+      // Track camera ratio for zoom-aware reducers
+      try {
+        const cam = sigmaInstance.getCamera();
+        cameraRatio = cam.getState().ratio;
+        cam.on('updated', () => {
+          cameraRatio = cam.getState().ratio;
+        });
+      } catch {}
 
     } catch (err) {
       error = `Failed to initialize sigma.js: ${err instanceof Error ? err.message : 'Unknown error'}`;
@@ -282,19 +301,20 @@
     layoutProgress = 0;
 
     try {
-      const totalIterations = graph.order > 1000 ? 600 : graph.order > 500 ? 450 : 300;
+      const totalIterations = graph.order > 1000 ? 700 : graph.order > 500 ? 520 : 360;
       const batchSize = graph.order > 2000 ? 4 : graph.order > 1000 ? 6 : graph.order > 500 ? 10 : 14;
 
+      // ForceAtlas2 tuned for a less "sphere" look and lower density at global view
       const settings = {
         barnesHutOptimize: graph.order > 400,
         strongGravityMode: false,
-        gravity: graph.order > 1000 ? 0.02 : 0.04,
-        scalingRatio: graph.order > 1000 ? 18 : 12,
-        slowDown: 1.1,
-        linLogMode: false,
-        outboundAttractionDistribution: graph.order > 200,
+        gravity: graph.order > 1000 ? 0.012 : 0.016,
+        scalingRatio: graph.order > 2000 ? 56 : graph.order > 1000 ? 44 : graph.order > 500 ? 36 : 28,
+        slowDown: 1.15,
+        linLogMode: true,
+        outboundAttractionDistribution: true,
         adjustSizes: true,
-        edgeWeightInfluence: 1.0,
+        edgeWeightInfluence: 0.8,
         barnesHutTheta: 0.5,
       } as any;
 
@@ -311,7 +331,8 @@
           layoutProgress = 0;
           if (sigmaInstance) {
             sigmaInstance.refresh();
-            fitToView();
+            // Apply Noverlap after ForceAtlas2 to spread out dense clusters
+            applyNoverlapLayout();
           }
         }
       });
@@ -323,6 +344,47 @@
       console.error('Layout error:', err);
       isLayoutRunning = false;
       layoutProgress = 0;
+    }
+  }
+
+  // Apply Noverlap layout to reduce density and overlaps
+  async function applyNoverlapLayout() {
+    if (!graph || !Noverlap || !sigmaInstance) return;
+
+    try {
+      // Calculate appropriate margin based on node sizes
+      const nodeCount = graph.order;
+      const avgNodeSize = nodeCount > 0 ? 
+        graph.nodes().reduce((sum: number, nodeId: string) => {
+          const attrs = graph.getNodeAttributes(nodeId);
+          return sum + (attrs.size || 10);
+        }, 0) / nodeCount : 10;
+
+      // Settings for Noverlap - spreads out dense clusters
+      const noverlapSettings = {
+        margin: Math.max(avgNodeSize * 0.8, 8), // Adaptive margin based on node size
+        ratio: 1.2, // Scaling factor for node sizes during collision detection
+        expansion: 1.05, // Slight expansion of the layout space
+        gridSize: Math.min(Math.max(Math.floor(Math.sqrt(nodeCount) / 2), 8), 40), // Adaptive grid
+        speed: 2, // Moderate speed for smooth spreading
+      };
+
+      console.log('🔧 Applying Noverlap with settings:', noverlapSettings);
+
+      // Apply Noverlap directly to the graph
+      Noverlap.assign(graph, {
+        maxIterations: Math.min(nodeCount, 200), // Adaptive iterations
+        settings: noverlapSettings
+      });
+
+      // Refresh sigma and fit to view
+      sigmaInstance.refresh();
+      setTimeout(() => fitToView(), 100); // Small delay to ensure positions are updated
+
+    } catch (err) {
+      console.warn('Noverlap layout failed:', err);
+      // Fallback to just fitting the view
+      setTimeout(() => fitToView(), 100);
     }
   }
 
@@ -517,9 +579,15 @@
         };
       });
       
-      // Enhanced edge reducer for better visual hierarchy
+      // Enhanced edge reducer for better visual hierarchy and zoom-based visibility
       sigmaInstance.setSetting('edgeReducer', (edgeKey: string, data: any) => {
         const isConnectedToSelected = selectedId && (graph.source(edgeKey) === selectedId || graph.target(edgeKey) === selectedId);
+        
+        // Hide edges when zoomed out to reduce clutter (only keep selected neighborhood)
+        const hideEdgesWhenRatioAbove = 1.2; // larger = more zoomed out
+        if (!isConnectedToSelected && cameraRatio > hideEdgesWhenRatioAbove) {
+          return { ...data, hidden: true };
+        }
         
         let opacity = 0.6;
         let size = data.size;
