@@ -29,6 +29,7 @@ interface AppState {
 	// Network view state
 	networkNodeSelected?: { id: string } | null;
 	networkLoaded?: boolean;
+	networkRenderer: 'modular' | 'sigma';
 
 	// Country Focus facets
 	countryFocus?: {
@@ -52,6 +53,7 @@ export const appState = $state<AppState>({
 	selectedEntity: null,
 	networkNodeSelected: null,
 	networkLoaded: false,
+	networkRenderer: 'sigma', // Default to new sigma.js implementation
 	countryFocus: {
 		country: 'Benin',
 		level: 'regions',

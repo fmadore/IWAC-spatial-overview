@@ -63,6 +63,10 @@
     NetworkInteractionHandler.handleNodeSelection(null);
   }
 
+  function toggleRenderer() {
+    appState.networkRenderer = appState.networkRenderer === 'sigma' ? 'modular' : 'sigma';
+  }
+
   // Node type colors
   const typeColors: Record<string, string> = {
     person: '#2563eb',
@@ -85,14 +89,37 @@
   <CardHeader>
     <CardTitle class="flex items-center justify-between">
       <span>Network Controls</span>
-      {#if appState.networkLoaded}
-        <Badge variant="secondary" class="text-xs">
-          {stats.nodes} nodes
-        </Badge>
-      {/if}
+      <div class="flex items-center gap-2">
+        {#if appState.networkLoaded}
+          <Badge variant="secondary" class="text-xs">
+            {stats.nodes} nodes
+          </Badge>
+        {/if}
+        <!-- Renderer Toggle -->
+        <button 
+          onclick={toggleRenderer}
+          title="Switch renderer: {appState.networkRenderer === 'sigma' ? 'Sigma.js (WebGL)' : 'Custom (Canvas2D)'}"
+          class="h-6 px-2 text-xs rounded-md border bg-background hover:bg-accent transition-colors"
+        >
+          {appState.networkRenderer === 'sigma' ? '🚀' : '🎨'}
+        </button>
+      </div>
     </CardTitle>
   </CardHeader>
   <CardContent class="space-y-6">
+    
+    <!-- Renderer Info -->
+    <div class="text-xs text-muted-foreground bg-accent/20 rounded-md p-3 border">
+      <div class="font-medium text-foreground mb-1">
+        Active Renderer: {appState.networkRenderer === 'sigma' ? 'Sigma.js (WebGL)' : 'Custom (Canvas2D)'}
+      </div>
+      <div>
+        {appState.networkRenderer === 'sigma' 
+          ? 'Hardware-accelerated with ForceAtlas2 layout'
+          : 'Custom Canvas2D with D3 force simulation'
+        }
+      </div>
+    </div>
     
     <!-- Filter Controls -->
     <div class="space-y-4">
