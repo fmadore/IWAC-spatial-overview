@@ -210,7 +210,7 @@
 <div
   bind:this={container}
   class="relative w-full h-full rounded-md border bg-muted/40 overflow-hidden"
-  style="background-color: red !important; min-height: 500px; width: 100%; height: 100%; display: block;"
+  style="min-height: 500px; width: 100%; height: 100%; display: block;"
 >
   <!-- Error display -->
   {#if error}
