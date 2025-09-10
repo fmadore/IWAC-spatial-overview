@@ -50,21 +50,23 @@ export async function createSpatialNetworkRenderer(
   let isFirstInitialization = true;
 
   /**
-   * Get node color based on country
+   * Get node color based on importance/frequency - much cleaner scheme
    */
   function getNodeColor(node: SpatialNetworkNode): string {
-    const countryColors: Record<string, string> = {
-      'Burkina Faso': '#e74c3c',
-      'Côte d\'Ivoire': '#3498db', 
-      'Benin': '#2ecc71',
-      'Togo': '#f39c12',
-      'Mali': '#9b59b6',
-      'Ghana': '#1abc9c',
-      'Niger': '#34495e',
-      'Nigeria': '#e67e22',
-    };
+    // Color nodes based on article count (importance) rather than arbitrary country colors
+    const count = node.count || 1;
     
-    return countryColors[node.country] || '#95a5a6';
+    if (count >= 50) {
+      return '#1e40af'; // Dark blue for very important locations (50+ articles)
+    } else if (count >= 20) {
+      return '#3b82f6'; // Medium blue for important locations (20-49 articles)
+    } else if (count >= 10) {
+      return '#60a5fa'; // Light blue for moderate locations (10-19 articles)
+    } else if (count >= 5) {
+      return '#93c5fd'; // Very light blue for minor locations (5-9 articles)
+    } else {
+      return '#dbeafe'; // Pale blue for rare locations (1-4 articles)
+    }
   }
 
   /**
@@ -99,16 +101,16 @@ export async function createSpatialNetworkRenderer(
         });
       });
 
-      // Add edges to graph with better color scheme
+      // Add edges to graph with subtle monochromatic scheme
       options.data.edges.forEach((edge: SpatialNetworkEdge) => {
         if (graph.hasNode(edge.source) && graph.hasNode(edge.target)) {
-          // Color edges based on weight - stronger connections get more visible colors
-          let edgeColor = '#cbd5e1'; // Light blue-gray for weak connections
+          // Subtle gray edges that don't compete with node colors
+          let edgeColor = '#e2e8f0'; // Very light gray for weak connections
           if (edge.weight >= 5) {
-            edgeColor = '#64748b'; // Medium gray-blue for moderate connections  
+            edgeColor = '#cbd5e1'; // Light gray for moderate connections  
           }
           if (edge.weight >= 10) {
-            edgeColor = '#475569'; // Darker blue-gray for strong connections
+            edgeColor = '#94a3b8'; // Medium gray for strong connections
           }
           
           graph.addEdge(edge.source, edge.target, {
@@ -305,13 +307,13 @@ export async function createSpatialNetworkRenderer(
 
     data.edges.forEach((edge: SpatialNetworkEdge) => {
       if (graph.hasNode(edge.source) && graph.hasNode(edge.target)) {
-        // Color edges based on weight - stronger connections get more visible colors
-        let edgeColor = '#cbd5e1'; // Light blue-gray for weak connections
+        // Subtle gray edges that don't compete with node colors
+        let edgeColor = '#e2e8f0'; // Very light gray for weak connections
         if (edge.weight >= 5) {
-          edgeColor = '#64748b'; // Medium gray-blue for moderate connections  
+          edgeColor = '#cbd5e1'; // Light gray for moderate connections  
         }
         if (edge.weight >= 10) {
-          edgeColor = '#475569'; // Darker blue-gray for strong connections
+          edgeColor = '#94a3b8'; // Medium gray for strong connections
         }
         
         graph.addEdge(edge.source, edge.target, {
@@ -389,24 +391,28 @@ export async function createSpatialNetworkRenderer(
         }
       }
       
-      // Color and size adjustments
+      // Color and size adjustments with better highlighting
       let color = data.color;
       let size = data.size;
       let zIndex = 1;
       
       if (isSelected || isIsolated) {
-        color = '#f39c12'; // Orange for selected/isolated
+        color = '#dc2626'; // Clean red for selected/isolated nodes
         size = Math.max(data.size * 1.4, 4);
         zIndex = 10;
       } else if (isHighlighted || isNeighborOfIsolated) {
-        color = '#e67e22'; // Darker orange for highlighted/neighbors
+        color = '#ea580c'; // Orange for highlighted/neighbor nodes
         size = Math.max(data.size * 1.2, 3);
         zIndex = 5;
       } else if (isolationMode || highlightedNodeIds.length > 0) {
-        // Mute non-relevant nodes
-        color = data.color + '40'; // Add transparency
-        size = data.size * 0.8;
+        // Better transparency - keep color but reduce opacity
+        color = data.color;
+        size = data.size * 0.7;
         zIndex = 1;
+        // Add transparency by modifying the alpha
+        if (color.indexOf('#') === 0 && color.length === 7) {
+          color = color + '40'; // Add 25% opacity
+        }
       }
       
       return {
@@ -432,10 +438,10 @@ export async function createSpatialNetworkRenderer(
           };
         }
         
-        // Highlight edges connected to isolated node
+        // Highlight edges connected to isolated node with clean styling
         return {
           ...data,
-          color: '#f39c12',
+          color: '#dc2626', // Clean red for isolated edges
           size: Math.max(data.size * 1.5, 0.3),
           zIndex: 5
         };
@@ -448,23 +454,27 @@ export async function createSpatialNetworkRenderer(
       if (isConnectedToSelected) {
         return {
           ...data,
-          color: '#f39c12',
+          color: '#dc2626', // Clean red for selected edges
           size: Math.max(data.size * 1.3, 0.25),
           zIndex: 5
         };
       } else if (isConnectedToHighlighted) {
         return {
           ...data,
-          color: '#e67e22',
+          color: '#ea580c', // Orange for highlighted edges
           size: Math.max(data.size * 1.1, 0.2),
           zIndex: 3
         };
       } else if (selectedNodeId || highlightedNodeIds.length > 0) {
-        // Mute non-relevant edges
+        // Mute non-relevant edges with better transparency
+        let color = data.color;
+        if (color.indexOf('#') === 0 && color.length === 7) {
+          color = color + '30'; // Add 19% opacity for subtle muting
+        }
         return {
           ...data,
-          color: data.color + '30', // Add transparency
-          size: data.size * 0.7,
+          color,
+          size: data.size * 0.6,
           zIndex: 1
         };
       }
