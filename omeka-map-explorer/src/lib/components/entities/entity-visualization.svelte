@@ -80,13 +80,9 @@
 			// Only process articles that are related to this entity
 			const articleId = item.id.split('-')[0];
 			if (entityArticleIds.has(articleId)) {
-				// Add all spatial locations from the article
+				// Add only the original spatial locations from the article (not the country mappings)
 				for (const location of item.spatial) {
 					locations.push(location);
-				}
-				// Also add the article's country
-				if (item.country) {
-					locations.push(item.country);
 				}
 			}
 		}
