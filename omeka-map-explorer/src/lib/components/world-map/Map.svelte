@@ -554,17 +554,24 @@
       usingCachedData = false;
       const singleCountrySelected = filters.selected.countries.length === 1;
       const noCountryFilter = filters.selected.countries.length === 0;
+      const hasDateFilter = !!filters.selected.dateRange;
+      const hasComplexFilters = filters.selected.keywords.length > 0 || 
+                                filters.selected.newspapers.length > 0 || 
+                                hasDateFilter ||
+                                !!appState.selectedEntity;
       
       console.log('🔍 Cache decision:', {
         singleCountrySelected,
         noCountryFilter,
         cacheAvailable,
+        hasDateFilter,
+        hasComplexFilters,
+        shouldUseCache: cacheAvailable && !hasComplexFilters,
         selectedCountry: singleCountrySelected ? filters.selected.countries[0] : null
       });
       
-      // Try article-country choropleth cache when single country is selected
-      // This shows WHERE articles FROM that country mention locations (same logic as bubble map)
-      if (singleCountrySelected && cacheAvailable) {
+      // Try article-country choropleth cache when single country is selected AND no complex filters
+      if (singleCountrySelected && cacheAvailable && !hasComplexFilters) {
         const selectedCountry = filters.selected.countries[0];
         console.log('🚀 Loading choropleth cache for:', selectedCountry);
         try {
@@ -581,7 +588,7 @@
         }
       }
       // Try global choropleth cache when no countries selected (all countries view)
-      else if (noCountryFilter && cacheAvailable && !appState.selectedEntity) {
+      else if (noCountryFilter && cacheAvailable && !appState.selectedEntity && !hasComplexFilters) {
         console.log('🔍 Using global cache (all countries)');
         try {
           const cacheOptions: { year?: number; entityType?: string; dateRange?: { start: Date; end: Date } } = {};
