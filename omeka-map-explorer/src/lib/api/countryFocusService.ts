@@ -1,3 +1,5 @@
+import { base } from '$app/paths';
+
 export type AdminLevel = 'regions' | 'prefectures';
 
 export interface CountryAdminCounts {
@@ -19,7 +21,7 @@ function normalizeCountryForFile(country: string) {
 
 export async function loadAdminCounts(country: string, level: AdminLevel): Promise<CountryAdminCounts | null> {
   const norm = normalizeCountryForFile(country);
-  const file = `data/country_focus/${norm}_${level}_counts.json`;
+  const file = `${base}/data/country_focus/${norm}_${level}_counts.json`;
   try {
     const res = await fetch(file, { cache: 'no-cache' });
     if (!res.ok) return null;
