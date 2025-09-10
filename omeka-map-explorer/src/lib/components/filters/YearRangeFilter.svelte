@@ -4,7 +4,7 @@
 	import { Slider } from '$lib/components/ui/slider';
 
 	let { 
-		range = { min: new Date('1900-01-01'), max: new Date('2023-12-31') },
+		range = { min: new Date('1961-01-01'), max: new Date('2025-12-31') },
 		onChange
 	} = $props<{
 		range?: { min: Date; max: Date };
