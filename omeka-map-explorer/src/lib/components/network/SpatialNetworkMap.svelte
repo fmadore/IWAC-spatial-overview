@@ -332,7 +332,7 @@
 </script>
 
 <!-- Map container -->
-<div class="relative w-full h-full overflow-hidden rounded-lg border border-border bg-card" data-testid="spatial-network-container">
+<div class="relative w-full overflow-hidden rounded-lg border border-border bg-card" data-testid="spatial-network-container" style="height: {height};">
   {#if error}
     <div class="flex h-96 items-center justify-center">
       <div class="rounded-lg bg-destructive/10 p-4 text-destructive">
@@ -345,7 +345,6 @@
     <div 
       bind:this={mapContainer}
       class="w-full h-full"
-      style="min-height: {height};"
       data-testid="spatial-network-map"
     ></div>
 

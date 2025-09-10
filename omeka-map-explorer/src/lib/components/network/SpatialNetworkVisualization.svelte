@@ -123,7 +123,7 @@
   });
 </script>
 
-<div class="flex flex-col h-full">
+<div class="flex flex-col h-full max-h-screen">
   <!-- Header -->
   <div class="flex-none">
     <Card class="border-b rounded-b-none">
@@ -168,7 +168,7 @@
   <div class="flex-1 min-h-0">
     <div class="flex h-full gap-4">
       <!-- Main Visualization Area - Give map 75% of space -->
-      <div class="flex-[3] min-w-0 overflow-hidden">
+      <div class="flex-[3] min-w-0 overflow-hidden h-full">
           {#if isLoading}
             <!-- Loading State -->
             <Card class="h-full">
@@ -210,13 +210,15 @@
             </Card>
           {:else if hasData}
             <!-- Network Visualization -->
-            <SpatialNetworkMap
-              bind:this={mapComponent}
-              data={spatialNetworkState.filtered}
-              height="100%"
-              onNodeSelect={handleNodeSelect}
-              onNodeHover={handleNodeHover}
-            />
+            <div class="h-full">
+              <SpatialNetworkMap
+                bind:this={mapComponent}
+                data={spatialNetworkState.filtered}
+                height="600px"
+                onNodeSelect={handleNodeSelect}
+                onNodeHover={handleNodeHover}
+              />
+            </div>
           {:else}
             <!-- No Data State -->
             <Card class="h-full">
@@ -244,7 +246,7 @@
 
         <!-- Sidebar - Regular flex layout instead of Sidebar component -->
         {#if hasData && !isLoading}
-          <div class="flex-[1] w-80 max-w-sm bg-sidebar border-l border-border overflow-y-auto">
+          <div class="flex-[1] w-80 max-w-sm h-full bg-sidebar border-l border-border overflow-y-auto">
             <div class="p-4">
               <SpatialNetworkSidebar
                 {selectedNodeId}
