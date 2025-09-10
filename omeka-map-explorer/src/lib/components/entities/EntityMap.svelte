@@ -89,6 +89,36 @@
     return groups;
   }
 
+  function calculateBounds(groups: Map<string, {lat:number; lng:number; count:number; sample:ProcessedItem; items:ProcessedItem[]; name?:string }>): L.LatLngBounds | null {
+    if (!L || groups.size === 0) return null;
+    
+    const coordinates = Array.from(groups.values()).map(g => [g.lat, g.lng] as [number, number]);
+    
+    if (coordinates.length === 0) return null;
+    if (coordinates.length === 1) {
+      // Single point: create a small bounds around it
+      const [lat, lng] = coordinates[0];
+      const offset = 0.01; // ~1km offset
+      return L.latLngBounds(
+        [lat - offset, lng - offset],
+        [lat + offset, lng + offset]
+      );
+    }
+    
+    // Multiple points: calculate actual bounds
+    let minLat = coordinates[0][0], maxLat = coordinates[0][0];
+    let minLng = coordinates[0][1], maxLng = coordinates[0][1];
+    
+    for (const [lat, lng] of coordinates) {
+      minLat = Math.min(minLat, lat);
+      maxLat = Math.max(maxLat, lat);
+      minLng = Math.min(minLng, lng);
+      maxLng = Math.max(maxLng, lng);
+    }
+    
+    return L.latLngBounds([minLat, minLng], [maxLat, maxLng]);
+  }
+
   function renderMarkers() {
     if (!browser || !map) return;
     const runId = ++currentRun;
@@ -130,6 +160,19 @@
     if (runId === currentRun) {
       layerGroup.addTo(map);
       markerLayer = layerGroup;
+      
+      // Auto-center map to fit all markers with some padding
+      const bounds = calculateBounds(groups);
+      if (bounds) {
+        try {
+          map.fitBounds(bounds, { 
+            padding: [20, 20],
+            maxZoom: 10 // Prevent over-zooming on single points
+          });
+        } catch (error) {
+          console.warn('Failed to fit bounds:', error);
+        }
+      }
     } else {
       try { layerGroup.remove(); } catch {}
     }
