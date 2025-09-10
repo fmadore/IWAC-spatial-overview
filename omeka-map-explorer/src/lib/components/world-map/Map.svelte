@@ -65,7 +65,8 @@
     const hasComplexFilters = 
       filters.selected.keywords.length > 0 || 
       filters.selected.newspapers.length > 0 || 
-      filters.selected.countries.length > 0; // country filter MUST recompute article-based filtering
+      filters.selected.countries.length > 0 || // country filter MUST recompute article-based filtering
+      filters.selected.dateRange !== null; // DATE FILTER also requires full computation as cache doesn't have date info
     if (hasComplexFilters) {
       return getVisibleData();
     }
@@ -274,14 +275,17 @@
       // Since we now have single country selection (or all), cache logic is much simpler
       const singleCountrySelected = filters.selected.countries.length === 1;
       const noCountryFilter = filters.selected.countries.length === 0;
-      const shouldUseCache = cacheAvailable && !appState.selectedEntity;
+      const shouldUseCache = cacheAvailable && !appState.selectedEntity && !filters.selected.dateRange;
       
       console.log('🔍 CACHE DEBUG: Bubble map cache decision', {
         cacheAvailable,
         singleCountrySelected,
         noCountryFilter,
         shouldUseCache,
-        selectedCountry: singleCountrySelected ? filters.selected.countries[0] : null
+        hasDateFilter: !!filters.selected.dateRange,
+        dateRange: filters.selected.dateRange ? `${filters.selected.dateRange.start.getFullYear()}-${filters.selected.dateRange.end.getFullYear()}` : 'none',
+        selectedCountry: singleCountrySelected ? filters.selected.countries[0] : null,
+        visibleDataLength: visibleData.length
       });
 
       // Try cache for single country selection
@@ -332,15 +336,11 @@
         else if (noCountryFilter && shouldUseCache) {
           try {
             console.log('🔍 CACHE DEBUG: Loading global cache for all countries');
-            const cacheOptions: { dateRange?: { start: Date; end: Date }; year?: number } = {};
-            if (filters.selected.dateRange) {
-              cacheOptions.dateRange = filters.selected.dateRange;
-            }
-            const cachedClusters = await loadCoordinateCache(cacheOptions);
+            const cachedClusters = await loadCoordinateCache();
             if (cachedClusters && cachedClusters.length > 0) {
               console.log('✅ CACHE DEBUG: Successfully using global cache', {
                 clusters: cachedClusters.length,
-                dateRange: cacheOptions.dateRange ? 'yes' : 'no'
+                dateRange: 'no'
               });
               coordinateGroups = new Map();
               for (const cluster of cachedClusters) {
