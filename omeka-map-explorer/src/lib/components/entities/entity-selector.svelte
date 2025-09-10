@@ -38,14 +38,51 @@
 
 	let open = $state(false);
 	let searchValue = $state('');
+	let debouncedSearchValue = $state('');
+	let searchTimeoutId: number | undefined = undefined;
 
-	const selectedEntity = $derived.by(() => entities.find((e) => e.id === selectedEntityId));
+	// Derive selected entity from app state - this is the source of truth
+	const selectedEntity = $derived.by(() => {
+		const currentEntity = appState.selectedEntity;
+		if (!currentEntity || currentEntity.type !== entityType) {
+			return null;
+		}
+		return entities.find((e) => e.id === currentEntity.id) || null;
+	});
 
+	// Derive the selected ID for the check mark display
+	const currentSelectedId = $derived.by(() => selectedEntity?.id || null);
+
+	// Optimized filtering with debounced search and early returns
 	const filteredEntities = $derived.by(() => {
-		if (!searchValue) return entities;
-		return entities.filter((entity) =>
-			entity.name.toLowerCase().includes(searchValue.toLowerCase())
-		);
+		// Return early if no search term
+		if (!debouncedSearchValue) return entities;
+		
+		const searchLower = debouncedSearchValue.toLowerCase();
+		const results: Entity[] = [];
+		
+		// Optimized filtering: exact matches first, then includes matches
+		for (const entity of entities) {
+			const nameLower = entity.name.toLowerCase();
+			if (nameLower === searchLower) {
+				// Exact match - put at beginning
+				results.unshift(entity);
+			} else if (nameLower.includes(searchLower)) {
+				// Partial match - add to end
+				results.push(entity);
+			}
+		}
+		
+		return results;
+	});
+
+	// Cleanup timeout on component unmount
+	$effect(() => {
+		return () => {
+			if (searchTimeoutId) {
+				clearTimeout(searchTimeoutId);
+			}
+		};
 	});
 
 	const displayType = $derived.by(() => {
@@ -64,34 +101,53 @@
 	const defaultPlaceholder = $derived.by(() => placeholder || `Select ${displayType}...`);
 
 	function selectEntity(entity: Entity) {
-		selectedEntityId = entity.id;
+		// Always update app state directly - don't rely on prop mutation
+		appState.selectedEntity = {
+			type: entityType,
+			id: entity.id,
+			name: entity.name,
+			relatedArticleIds: entity.relatedArticleIds
+		};
+		urlManager.updateUrl();
+		
+		// Close dropdown and clear search
 		open = false;
 		searchValue = '';
+		debouncedSearchValue = '';
 
+		// Call optional callback if provided
 		if (onSelect) {
 			onSelect(entity);
-		} else {
-			// Default behavior: update app selectedEntity
-			appState.selectedEntity = {
-				type: entityType,
-				id: entity.id,
-				name: entity.name,
-				relatedArticleIds: entity.relatedArticleIds
-			};
-			urlManager.updateUrl();
 		}
 	}
 
 	function clearSelection() {
-		selectedEntityId = null;
+		// Always update app state directly
+		appState.selectedEntity = null;
+		urlManager.updateUrl({ immediate: true });
+		
+		// Clear local state
 		searchValue = '';
+		debouncedSearchValue = '';
 		open = false;
+		
+		// Call optional callback if provided
 		if (onClear) {
 			onClear();
-		} else {
-			appState.selectedEntity = null;
-			urlManager.updateUrl({ immediate: true });
 		}
+	}
+
+	// Debounce search input for better performance
+	function handleSearchInput(value: string) {
+		searchValue = value;
+		
+		if (searchTimeoutId) {
+			clearTimeout(searchTimeoutId);
+		}
+		
+		searchTimeoutId = setTimeout(() => {
+			debouncedSearchValue = value;
+		}, 150);
 	}
 </script>
 
@@ -100,7 +156,7 @@
 		<span class="text-sm font-medium"
 			>Select {displayType.charAt(0).toUpperCase() + displayType.slice(1)}</span
 		>
-		{#if selectedEntityId}
+		{#if currentSelectedId}
 			<Button
 				variant="ghost"
 				size="sm"
@@ -121,18 +177,21 @@
 		</Popover.Trigger>
 		<Popover.Content class="w-[400px] p-0">
 			<Command.Root>
-				<Command.Input bind:value={searchValue} placeholder={`Search ${displayType}s...`} />
+				<Command.Input 
+					oninput={(e) => handleSearchInput(e.currentTarget.value)}
+					placeholder={`Search ${displayType}s...`} 
+				/>
 				<Command.List>
 					{#if filteredEntities.length === 0}
 						<div class="p-4 text-sm text-muted-foreground">No {displayType} found.</div>
 					{:else}
 						<Command.Group>
-							{#each filteredEntities as entity}
+							{#each filteredEntities as entity (entity.id)}
 								<Command.Item value={entity.name} onSelect={() => selectEntity(entity)}>
 									<Check
 										class={cn(
 											'mr-2 h-4 w-4',
-											selectedEntityId === entity.id ? 'opacity-100' : 'opacity-0'
+											currentSelectedId === entity.id ? 'opacity-100' : 'opacity-0'
 										)}
 									/>
 									{entity.name}
