@@ -49,13 +49,20 @@
 			// Add legend
 			createLegendControl();
 
-			// Force immediate update if data is available
+			// Force immediate update if data is available with longer timeout for production
 			setTimeout(() => {
 				if (Object.keys(data).length > 0) {
 					console.log('ChoroplethLayer: Forcing initial style update');
 					updateLayerStyles();
 				}
-			}, 100);
+			}, 300);
+			
+			// Also try immediate update
+			if (Object.keys(data).length > 0) {
+				requestAnimationFrame(() => {
+					updateLayerStyles();
+				});
+			}
 		};
 
 		initMap();
@@ -134,7 +141,11 @@
 		
 		// Immediately apply styles if data is available
 		if (Object.keys(data).length > 0) {
-			updateLayerStyles();
+			// Try multiple approaches to ensure styling works in production
+			requestAnimationFrame(() => updateLayerStyles());
+			setTimeout(() => updateLayerStyles(), 0);
+			setTimeout(() => updateLayerStyles(), 100);
+			setTimeout(() => updateLayerStyles(), 300);
 		}
 	}
 
@@ -211,8 +222,17 @@
 		const value = data[regionName] || 0;
 		const scale = colorScale;
 
+		// Ensure we have a valid color even if scale fails
+		let fillColor = '#f0f0f0';
+		try {
+			fillColor = scale(value);
+		} catch (e) {
+			console.warn('ChoroplethLayer: Color scale failed for', regionName, value, e);
+			fillColor = value > 0 ? '#3182bd' : '#f0f0f0';
+		}
+
 		return {
-			fillColor: scale(value),
+			fillColor: fillColor,
 			weight: 1,
 			opacity: 0.8,
 			color: 'white',
@@ -364,14 +384,19 @@
 	// Watch for changes to data prop and update immediately
 	$effect(() => {
 		if (layer && data && Object.keys(data).length > 0) {
+			// Use multiple timing strategies to ensure it works in production
 			updateLayerStyles();
+			requestAnimationFrame(() => updateLayerStyles());
+			setTimeout(() => updateLayerStyles(), 0);
 		}
 	});
 
 	// Separate effect for browser and layer readiness
 	$effect(() => {
 		if (browser && layer && data && Object.keys(data).length > 0) {
-			updateLayerStyles();
+			// Additional update when browser environment is confirmed ready
+			requestAnimationFrame(() => updateLayerStyles());
+			setTimeout(() => updateLayerStyles(), 100);
 		}
 	});
 
@@ -379,11 +404,21 @@
 	function updateLayerStyles() {
 		if (!layer) return;
 
+		console.log('ChoroplethLayer: Updating styles with data keys:', Object.keys(data).length);
+
 		// Force re-style all features
 		layer.eachLayer((featureLayer: any) => {
 			if (featureLayer.feature) {
 				const newStyle = style(featureLayer.feature);
 				featureLayer.setStyle(newStyle);
+
+				// Force a redraw by temporarily changing and reverting a property
+				// This helps with production rendering issues
+				const currentOpacity = featureLayer.options.fillOpacity;
+				featureLayer.setStyle({ fillOpacity: currentOpacity === 0.8 ? 0.79 : 0.8 });
+				setTimeout(() => {
+					featureLayer.setStyle({ fillOpacity: 0.8 });
+				}, 1);
 
 				// Update tooltip/popups with latest data
 				try {
@@ -414,6 +449,13 @@
 		if (legend && map && L) {
 			legend.remove();
 			createLegendControl();
+		}
+		
+		// Force map to redraw/update
+		if (map && map.invalidateSize) {
+			setTimeout(() => {
+				map.invalidateSize({ animate: false });
+			}, 10);
 		}
 	}
 
