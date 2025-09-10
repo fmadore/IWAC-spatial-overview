@@ -130,7 +130,7 @@
     const layer = e.target;
     const feature = layer.feature;
     if (feature && feature.properties) {
-      console.log('Selected region:', feature.properties.name);
+      // Region selected: feature.properties.name
     }
   }
 
@@ -211,14 +211,8 @@
         dataLoading = true;
         try {
           cacheAvailable = await isWorldMapCacheAvailable();
-          console.log('🔍 CACHE DEBUG: Cache availability check result:', cacheAvailable);
-          if (cacheAvailable && !appState.selectedEntity) {
-            console.log('✅ World map cache is available - using optimized data loading');
-          } else {
-            console.log('⚠️ Cache not used:', { cacheAvailable, hasSelectedEntity: !!appState.selectedEntity });
-          }
         } catch (e) {
-          console.error('❌ CACHE DEBUG: Failed to check cache availability:', e);
+          console.error('Failed to check cache availability:', e);
           cacheAvailable = false;
         }
         try {
@@ -312,26 +306,13 @@
       const singleCountrySelected = filters.selected.countries.length === 1;
       const noCountryFilter = filters.selected.countries.length === 0;
       const shouldUseCache = cacheAvailable && !appState.selectedEntity && !filters.selected.dateRange;
-      
-      console.log('🔍 CACHE DEBUG: Bubble map cache decision', {
-        cacheAvailable,
-        singleCountrySelected,
-        noCountryFilter,
-        shouldUseCache,
-        hasDateFilter: !!filters.selected.dateRange,
-        dateRange: filters.selected.dateRange ? `${filters.selected.dateRange.start.getFullYear()}-${filters.selected.dateRange.end.getFullYear()}` : 'none',
-        selectedCountry: singleCountrySelected ? filters.selected.countries[0] : null,
-        visibleDataLength: visibleData.length
-      });
 
       // Try cache for single country selection
       if (singleCountrySelected && shouldUseCache) {
         try {
           const selectedCountry = filters.selected.countries[0];
-          console.log('🔍 CACHE DEBUG: Loading cache for single country:', selectedCountry);
           const clusters = await loadArticleCountryCoordinateClusters([selectedCountry]);
           if (clusters && clusters.length > 0) {
-            console.log('✅ CACHE DEBUG: Successfully loaded cached data for', selectedCountry, 'clusters:', clusters.length);
             coordinateGroups = new Map();
             for (const cl of clusters) {
               if (!cl.coordinates) continue;
@@ -356,28 +337,19 @@
                   });
                 }
               }
-              console.log('✅ CACHE DEBUG: Successfully using country-specific cache', { 
-                selectedCountry, 
-                clusters: coordinateGroups.size 
-              });
             } else {
-              console.log('⚠️ CACHE DEBUG: No cached data found for country:', selectedCountry);
+              // No cached data found for this country
             }
           } catch (e) {
-            console.warn('⚠️ CACHE DEBUG: Country-specific cache failed, will fallback:', e);
+            console.warn('Country-specific cache failed, will fallback:', e);
           }
         }
 
         // Try cache for "all countries" view (global cache)
         else if (noCountryFilter && shouldUseCache) {
           try {
-            console.log('🔍 CACHE DEBUG: Loading global cache for all countries');
             const cachedClusters = await loadCoordinateCache();
             if (cachedClusters && cachedClusters.length > 0) {
-              console.log('✅ CACHE DEBUG: Successfully using global cache', {
-                clusters: cachedClusters.length,
-                dateRange: 'no'
-              });
               coordinateGroups = new Map();
               for (const cluster of cachedClusters) {
                 const [lat, lng] = cluster.coordinates;
@@ -396,18 +368,12 @@
                 name: cluster.label
               });
             }
-            console.log(`Applied filters to cached clusters: ${coordinateGroups.size} remaining`);
           }
         } catch (e) {
           console.warn('Failed to load cached coordinates, falling back to real-time aggregation:', e);
         }
       }
       if (coordinateGroups === null && visibleData.length > 0) {
-        if (appState.selectedEntity) {
-          console.log('🔍 Using real-time coordinate aggregation for entity view:', appState.selectedEntity.type, appState.selectedEntity.name);
-        } else {
-          console.log('⚠️ Falling back to real-time coordinate aggregation');
-        }
         coordinateGroups = new Map<string, { lat: number; lng: number; count: number; sample: any; items: any[]; name?: string }>();
         for (const item of visibleData) {
           if (!item.coordinates || item.coordinates.length === 0) continue;
@@ -423,7 +389,6 @@
             coordinateGroups.set(key, { lat, lng, count: 1, sample: item, items: [item], name: item.placeLabel });
           }
         }
-        console.log('Map: Aggregated coordinates in real-time:', coordinateGroups.size, 'groups from', visibleData.length, 'items');
       }
       if (coordinateGroups !== null && coordinateGroups.size > 0) {
         if (mapData.viewMode !== 'bubbles' || runId !== loadRunId) {
@@ -500,14 +465,6 @@
       const _dateRange = filters.selected.dateRange;
       const _keywords = filters.selected.keywords;
       
-      console.log('🔍 Map: Filter change detected', {
-        countries: _countries.length,
-        regions: _regions.length,
-        newspapers: _newspapers.length,
-        dateRange: _dateRange ? `${_dateRange.start.getFullYear()}-${_dateRange.end.getFullYear()}` : 'none',
-        keywords: _keywords.length
-      });
-      
       loadMapData();
     }
   });
@@ -576,22 +533,8 @@
     const _newspapers = filters.selected.newspapers;
     const _selectedEntity = appState.selectedEntity;
     
-    console.log('🔍 Choropleth: Filter change detected', {
-      countries: _selectedCountries.length,
-      dateRange: _dateRange ? `${_dateRange.start.getFullYear()}-${_dateRange.end.getFullYear()}` : 'none',
-      keywords: _keywords.length,
-      newspapers: _newspapers.length,
-      entity: _selectedEntity ? `${_selectedEntity.type}:${_selectedEntity.id}` : 'none'
-    });
-    
     if (choroplethUpdateTimeout) { clearTimeout(choroplethUpdateTimeout); }
     choroplethUpdateTimeout = setTimeout(async () => {
-      console.log('🔍 Starting choropleth update for:', {
-        viewMode: mapData.viewMode,
-        selectedCountries: filters.selected.countries.length,
-        cacheAvailable: cacheAvailable
-      });
-      
       let newData: Record<string, number> = {};
       usingCachedData = false;
       const singleCountrySelected = filters.selected.countries.length === 1;
@@ -602,36 +545,21 @@
                                 hasDateFilter ||
                                 !!appState.selectedEntity;
       
-      console.log('🔍 Cache decision:', {
-        singleCountrySelected,
-        noCountryFilter,
-        cacheAvailable,
-        hasDateFilter,
-        hasComplexFilters,
-        shouldUseCache: cacheAvailable && !hasComplexFilters,
-        selectedCountry: singleCountrySelected ? filters.selected.countries[0] : null
-      });
-      
       // Try article-country choropleth cache when single country is selected AND no complex filters
       if (singleCountrySelected && cacheAvailable && !hasComplexFilters) {
         const selectedCountry = filters.selected.countries[0];
-        console.log('🚀 Loading choropleth cache for:', selectedCountry);
         try {
           const cachedData = await loadMultipleArticleCountryChoroplethData([selectedCountry]);
           if (cachedData && Object.keys(cachedData).length > 0) {
-            console.log('✅ Using cached article-country choropleth data for', selectedCountry);
             newData = cachedData;
             usingCachedData = true;
-          } else {
-            console.warn('❌ Cache returned empty data for', selectedCountry);
           }
         } catch (e) { 
-          console.error('❌ Article-country cache failed for', selectedCountry, ':', e); 
+          console.error('Article-country cache failed for', selectedCountry, ':', e); 
         }
       }
       // Try global choropleth cache when no countries selected (all countries view)
       else if (noCountryFilter && cacheAvailable && !appState.selectedEntity && !hasComplexFilters) {
-        console.log('🔍 Using global cache (all countries)');
         try {
           const cacheOptions: { year?: number; entityType?: string; dateRange?: { start: Date; end: Date } } = {};
           if ((appState.selectedEntity as any)?.type) {
@@ -646,7 +574,6 @@
           if (filters.selected.dateRange) { cacheOptions.dateRange = filters.selected.dateRange; }
           const cachedData = await loadChoroplethCache(cacheOptions);
           if (cachedData && Object.keys(cachedData).length > 0) {
-            console.log('✅ Using cached global choropleth data (all countries)');
             newData = cachedData;
             usingCachedData = true;
           }
@@ -655,18 +582,10 @@
       
       // Fallback to real-time calculation if cache unavailable
       if (!usingCachedData || Object.keys(newData).length === 0) {
-        console.log('⚠️ Using real-time calculation - cache unavailable');
-        
         // Use visibleData which already handles country filtering correctly
         // This will show articles FROM the selected country, same as bubble map
         newData = countItemsByCountryHybrid(visibleData, worldGeo);
-        console.log('Map: Choropleth data (filtered) countries:', Object.keys(newData).length);
       }
-      
-      console.log('🔍 Final choropleth result:', {
-        usingCachedData,
-        dataKeys: Object.keys(newData).length
-      });
       
       choroplethData = newData;
       choroplethUpdateTimeout = null;
@@ -748,7 +667,6 @@
     on:selectRegion={(e) => {
       // Clicking choropleth countries should not update URL or filters
       // Only the filter panel should control filtering
-      console.log('Choropleth country clicked:', e.detail?.region);
     }}
   />
 {/if}
