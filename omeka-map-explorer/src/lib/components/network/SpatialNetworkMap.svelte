@@ -10,7 +10,7 @@
 <script lang="ts">
   import { onMount, onDestroy, untrack } from 'svelte';
   import type { SpatialNetworkData, SpatialNetworkNode } from '$lib/types';
-  import { spatialNetworkState, getHighlightedNodeIds } from '$lib/state/spatialNetworkData.svelte';
+  import { spatialNetworkState, getHighlightedNodeIds, toggleSpatialIsolationMode } from '$lib/state/spatialNetworkData.svelte';
   import { createSpatialNetworkRenderer, type SpatialNetworkRenderer } from '$lib/utils/spatialNetworkRenderer';
   import { appState } from '$lib/state/appState.svelte';
 
@@ -132,13 +132,20 @@
       }
       
       // Always update highlighting (lightweight operation)
-      // But untrack to prevent highlighting changes from triggering data updates
-      untrack(() => {
-        renderer!.updateHighlighting(
-          spatialNetworkState.selectedNodeId,
-          Array.from(getHighlightedNodeIds())
-        );
+      // Don't untrack this - we WANT it to be reactive to isolation state changes
+      console.log('🎨 Calling updateHighlighting from effect:', {
+        selectedNodeId: spatialNetworkState.selectedNodeId,
+        highlightedNodes: Array.from(getHighlightedNodeIds()),
+        isolationMode: spatialNetworkState.isolationMode,
+        isolatedNodeId: spatialNetworkState.isolatedNodeId
       });
+      
+      renderer!.updateHighlighting(
+        spatialNetworkState.selectedNodeId,
+        Array.from(getHighlightedNodeIds()),
+        spatialNetworkState.isolationMode,
+        spatialNetworkState.isolatedNodeId
+      );
     }
   });
 

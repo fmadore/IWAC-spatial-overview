@@ -12,6 +12,7 @@
   import { Button } from '$lib/components/ui/button';
   import { Badge } from '$lib/components/ui/badge';
   import SpatialNetworkMap from './SpatialNetworkMap.svelte';
+  import SpatialNetworkIsolationControl from './SpatialNetworkIsolationControl.svelte';
   import { 
     spatialNetworkState, 
     loadSpatialNetworkData,
@@ -210,6 +211,15 @@
                 onNodeSelect={handleNodeSelect}
                 onNodeHover={handleNodeHover}
               />
+              
+              <!-- Isolation Control - floating over map -->
+              {#if spatialNetworkState.selectedNodeId}
+                <div class="absolute top-4 right-4 z-[1001]">
+                  <div class="bg-background/95 backdrop-blur-sm rounded-lg border shadow-lg p-3">
+                    <SpatialNetworkIsolationControl variant="default" size="sm" />
+                  </div>
+                </div>
+              {/if}
               
               <!-- Hover overlay - positioned absolutely to avoid layout shift -->
               {#if hoveredNode}

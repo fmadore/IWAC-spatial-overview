@@ -17,7 +17,7 @@ export interface SpatialNetworkRendererOptions {
 export interface SpatialNetworkRenderer {
   initialize(): Promise<void>;
   updateData(data: SpatialNetworkData): void;
-  updateHighlighting(selectedNodeId?: string | null, highlightedNodeIds?: string[]): void;
+  updateHighlighting(selectedNodeId?: string | null, highlightedNodeIds?: string[], isolationMode?: boolean, isolatedNodeId?: string | null): void;
   fitToView(): void;
   resetView(): void;
   zoomIn(): void;
@@ -80,8 +80,6 @@ export async function createSpatialNetworkRenderer(
       // Create graph with proper structure
       graph = new Graph();
 
-      console.log('🔄 Creating graph with', options.data.nodes.length, 'nodes');
-
       // Add nodes to graph following the official pattern
       options.data.nodes.forEach((node: SpatialNetworkNode) => {
         graph.addNode(node.id, {
@@ -111,8 +109,6 @@ export async function createSpatialNetworkRenderer(
           });
         }
       });
-
-      console.log('🔄 Created graph with', graph.order, 'nodes and', graph.size, 'edges');
 
   // Create Sigma instance with proper settings
   sigmaInstance = new Sigma(graph, targetContainer!, {
@@ -160,8 +156,6 @@ export async function createSpatialNetworkRenderer(
         })
       });
 
-      console.log('✅ Leaflet layer bound to Sigma');
-
       // Force an initial coordinate projection and render with proper timing
       try {
         // Wait a frame to ensure DOM is ready
@@ -169,13 +163,6 @@ export async function createSpatialNetworkRenderer(
           if (leafletBinding && graph && sigmaInstance) {
             leafletBinding.updateGraphCoordinates(graph);
             sigmaInstance.refresh();
-            console.log('🖼️ Initial projection complete', {
-              sigmaSize: sigmaInstance.getDimensions(),
-              containerSize: {
-                w: targetContainer!.clientWidth,
-                h: targetContainer!.clientHeight
-              }
-            });
           }
         });
       } catch (e) {
@@ -187,8 +174,6 @@ export async function createSpatialNetworkRenderer(
       try {
         if (leafletBinding?.map && isFirstInitialization) {
           leafletBinding.map.whenReady(() => {
-            console.log('🗺️ Leaflet map ready, scheduling initial fit...');
-            
             // Schedule multiple attempts with increasing delays for initial fit only
             setTimeout(() => {
               ensureProperSizeAndReproject();
@@ -216,7 +201,7 @@ export async function createSpatialNetworkRenderer(
       // Set up event listeners
       setupEventListeners();
 
-      console.log('✅ Spatial network initialized with', options.data.nodes.length, 'nodes and', options.data.edges.length, 'edges');
+      console.log('✅ Spatial network initialized');
       
       // Mark first initialization as complete to prevent unnecessary re-fits
       isFirstInitialization = false;
@@ -241,6 +226,15 @@ export async function createSpatialNetworkRenderer(
       if (nodeData && options.onNodeSelect) {
         options.onNodeSelect(nodeData);
       }
+    });
+
+    // Node double-click for quick isolation mode toggle
+    sigmaInstance.on('doubleClickNode', (event: any) => {
+      const nodeId = event.node;
+      // Import the function dynamically to avoid circular dependencies
+      import('$lib/state/spatialNetworkData.svelte').then(({ toggleSpatialIsolationMode }) => {
+        toggleSpatialIsolationMode(nodeId);
+      });
     });
 
     // Node hover events
@@ -319,34 +313,141 @@ export async function createSpatialNetworkRenderer(
   }
 
   /**
-   * Update node highlighting
+   * Update node highlighting with support for isolation mode
    */
-  function updateHighlighting(selectedNodeId?: string | null, highlightedNodeIds: string[] = []) {
-    if (!graph || !sigmaInstance) return;
-
-    // Reset all nodes to default appearance
-    graph.forEachNode((nodeId: string) => {
-      const originalData = graph.getNodeAttribute(nodeId, 'originalData');
-      graph.setNodeAttribute(nodeId, 'color', getNodeColor(originalData));
-      graph.setNodeAttribute(nodeId, 'highlighted', false);
-    });
-
-    // Highlight selected node
-    if (selectedNodeId && graph.hasNode(selectedNodeId)) {
-      graph.setNodeAttribute(selectedNodeId, 'highlighted', true);
-      graph.setNodeAttribute(selectedNodeId, 'color', '#f39c12');
+  function updateHighlighting(selectedNodeId?: string | null, highlightedNodeIds: string[] = [], isolationMode?: boolean, isolatedNodeId?: string | null) {
+    if (!graph || !sigmaInstance) {
+      console.warn('⚠️ updateHighlighting called but graph or sigma not ready');
+      return;
     }
 
-    // Highlight hovered nodes
-    highlightedNodeIds.forEach((nodeId: string) => {
-      if (graph.hasNode(nodeId)) {
-        graph.setNodeAttribute(nodeId, 'highlighted', true);
-        graph.setNodeAttribute(nodeId, 'color', '#e67e22');
+    console.log('🎨 updateHighlighting called:', {
+      selectedNodeId,
+      highlightedNodeIds,
+      isolationMode,
+      isolatedNodeId,
+      graphNodes: graph.order,
+      graphEdges: graph.size
+    });
+
+    // Get neighbors of isolated node if in isolation mode
+    const isolatedNeighbors = new Set<string>();
+    if (isolationMode && isolatedNodeId) {
+      console.log('🔍 Finding neighbors of isolated node:', isolatedNodeId);
+      try {
+        graph.forEachNeighbor(isolatedNodeId, (neighbor: string) => {
+          isolatedNeighbors.add(neighbor);
+        });
+        console.log('👥 Isolated neighbors found:', Array.from(isolatedNeighbors));
+      } catch (e) {
+        console.error('❌ Error finding neighbors:', e);
       }
+    }
+
+    // Set up node reducer for dynamic styling based on Sigma.js best practices
+    sigmaInstance.setSetting('nodeReducer', (nodeKey: string, data: any) => {
+      const isSelected = nodeKey === selectedNodeId;
+      const isHighlighted = highlightedNodeIds.includes(nodeKey);
+      const isIsolated = nodeKey === isolatedNodeId;
+      const isNeighborOfIsolated = isolatedNeighbors.has(nodeKey);
+      
+      // In isolation mode, hide all nodes except the isolated node and its neighbors
+      if (isolationMode && isolatedNodeId) {
+        if (!isIsolated && !isNeighborOfIsolated) {
+          return {
+            ...data,
+            hidden: true
+          };
+        }
+      }
+      
+      // Color and size adjustments
+      let color = data.color;
+      let size = data.size;
+      let zIndex = 1;
+      
+      if (isSelected || isIsolated) {
+        color = '#f39c12'; // Orange for selected/isolated
+        size = Math.max(data.size * 1.4, 4);
+        zIndex = 10;
+      } else if (isHighlighted || isNeighborOfIsolated) {
+        color = '#e67e22'; // Darker orange for highlighted/neighbors
+        size = Math.max(data.size * 1.2, 3);
+        zIndex = 5;
+      } else if (isolationMode || highlightedNodeIds.length > 0) {
+        // Mute non-relevant nodes
+        color = data.color + '40'; // Add transparency
+        size = data.size * 0.8;
+        zIndex = 1;
+      }
+      
+      return {
+        ...data,
+        color,
+        size,
+        zIndex
+      };
+    });
+
+    // Set up edge reducer for dynamic styling
+    sigmaInstance.setSetting('edgeReducer', (edgeKey: string, data: any) => {
+      const sourceNode = graph.source(edgeKey);
+      const targetNode = graph.target(edgeKey);
+      
+      // In isolation mode, hide edges not connected to the isolated node
+      if (isolationMode && isolatedNodeId) {
+        const isConnectedToIsolated = sourceNode === isolatedNodeId || targetNode === isolatedNodeId;
+        if (!isConnectedToIsolated) {
+          return {
+            ...data,
+            hidden: true
+          };
+        }
+        
+        // Highlight edges connected to isolated node
+        return {
+          ...data,
+          color: '#f39c12',
+          size: Math.max(data.size * 1.5, 0.3),
+          zIndex: 5
+        };
+      }
+      
+      // Regular highlighting mode
+      const isConnectedToSelected = selectedNodeId && (sourceNode === selectedNodeId || targetNode === selectedNodeId);
+      const isConnectedToHighlighted = highlightedNodeIds.some(nodeId => sourceNode === nodeId || targetNode === nodeId);
+      
+      if (isConnectedToSelected) {
+        return {
+          ...data,
+          color: '#f39c12',
+          size: Math.max(data.size * 1.3, 0.25),
+          zIndex: 5
+        };
+      } else if (isConnectedToHighlighted) {
+        return {
+          ...data,
+          color: '#e67e22',
+          size: Math.max(data.size * 1.1, 0.2),
+          zIndex: 3
+        };
+      } else if (selectedNodeId || highlightedNodeIds.length > 0) {
+        // Mute non-relevant edges
+        return {
+          ...data,
+          color: data.color + '30', // Add transparency
+          size: data.size * 0.7,
+          zIndex: 1
+        };
+      }
+      
+      return data;
     });
 
     // Refresh Sigma to apply changes
+    console.log('🔄 Refreshing Sigma with new highlighting settings');
     sigmaInstance.refresh();
+    console.log('✅ updateHighlighting completed');
   }
 
   /**

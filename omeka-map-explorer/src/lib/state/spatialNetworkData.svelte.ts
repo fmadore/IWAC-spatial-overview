@@ -26,6 +26,10 @@ const spatialNetworkState = $state({
   weightMin: 2,
   showIsolatedNodes: false,
   
+  // Visualization modes
+  isolationMode: false,
+  isolatedNodeId: null as string | null,
+  
   // Map integration
   mapBounds: null as { north: number; south: number; east: number; west: number } | null,
   selectedNodeId: null as string | null,
@@ -215,8 +219,6 @@ export function applySpatialFilters() {
       totalEdges: filteredEdges.length,
     }
   };
-  
-  console.log(`🔍 Spatial network filtered: ${filteredNodes.length} nodes, ${filteredEdges.length} edges`);
 }
 
 /**
@@ -325,6 +327,8 @@ export function getSpatialSelectedNode(): SpatialNetworkNode | null {
 export function resetSpatialFilters() {
   spatialNetworkState.weightMin = 2;
   spatialNetworkState.showIsolatedNodes = false;
+  spatialNetworkState.isolationMode = false;
+  spatialNetworkState.isolatedNodeId = null;
   spatialNetworkState.selectedNodeId = null;
   setHighlightedNodeIds(new Set<string>()); // Create new Set for reactive updates
   
@@ -340,6 +344,82 @@ export function resetSpatialFilters() {
   }
   
   applySpatialFilters();
+}
+
+/**
+ * Enable isolation mode for a specific node
+ * Shows only the selected node and its direct neighbors
+ */
+export function enableSpatialIsolationMode(nodeId: string) {
+  console.log('🔧 enableSpatialIsolationMode called:', nodeId);
+  spatialNetworkState.isolationMode = true;
+  spatialNetworkState.isolatedNodeId = nodeId;
+  spatialNetworkState.selectedNodeId = nodeId;
+  
+  // Get neighbors of the isolated node
+  const neighbors = getSpatialNodeNeighbors(nodeId);
+  console.log('👥 Found neighbors:', neighbors);
+  setHighlightedNodeIds(new Set([nodeId, ...neighbors]));
+  
+  console.log('✅ Isolation mode enabled:', {
+    isolationMode: spatialNetworkState.isolationMode,
+    isolatedNodeId: spatialNetworkState.isolatedNodeId,
+    highlightedNodes: Array.from(getHighlightedNodeIds())
+  });
+}
+
+/**
+ * Disable isolation mode and return to normal view
+ */
+export function disableSpatialIsolationMode() {
+  console.log('🔧 disableSpatialIsolationMode called');
+  spatialNetworkState.isolationMode = false;
+  spatialNetworkState.isolatedNodeId = null;
+  setHighlightedNodeIds(new Set<string>());
+  
+  console.log('✅ Isolation mode disabled:', {
+    isolationMode: spatialNetworkState.isolationMode,
+    isolatedNodeId: spatialNetworkState.isolatedNodeId
+  });
+}
+
+/**
+ * Toggle isolation mode for a node
+ */
+export function toggleSpatialIsolationMode(nodeId: string | null) {
+  console.log('🔧 toggleSpatialIsolationMode called:', nodeId);
+  
+  if (!nodeId) {
+    console.log('🚫 No nodeId provided, disabling isolation');
+    disableSpatialIsolationMode();
+    return;
+  }
+  
+  if (spatialNetworkState.isolationMode && spatialNetworkState.isolatedNodeId === nodeId) {
+    console.log('🔄 Toggling OFF isolation for same node');
+    disableSpatialIsolationMode();
+  } else {
+    console.log('🔄 Toggling ON isolation for node:', nodeId);
+    enableSpatialIsolationMode(nodeId);
+  }
+}
+
+/**
+ * Get neighbor node IDs for a given node
+ */
+export function getSpatialNodeNeighbors(nodeId: string): string[] {
+  if (!spatialNetworkState.data) return [];
+  
+  const neighbors = new Set<string>();
+  spatialNetworkState.data.edges.forEach(edge => {
+    if (edge.source === nodeId) {
+      neighbors.add(edge.target);
+    } else if (edge.target === nodeId) {
+      neighbors.add(edge.source);
+    }
+  });
+  
+  return Array.from(neighbors);
 }
 
 // Export the state for reactive access with separate sets

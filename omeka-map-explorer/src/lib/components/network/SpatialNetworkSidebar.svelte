@@ -14,6 +14,7 @@
   import { Label } from '$lib/components/ui/label';
   import { Badge } from '$lib/components/ui/badge';
   import { Switch } from '$lib/components/ui/switch';
+  import SpatialNetworkIsolationControl from './SpatialNetworkIsolationControl.svelte';
   import { 
     spatialNetworkState, 
     setSpatialWeightMin,
@@ -119,6 +120,20 @@
         Reset View
       </Button>
     </div>
+  </Sidebar.GroupContent>
+</Sidebar.Group>
+
+<Sidebar.Separator />
+
+<!-- Isolation/Focus Mode -->
+<Sidebar.Group>
+  <Sidebar.GroupLabel>Focus Mode</Sidebar.GroupLabel>
+  <Sidebar.GroupContent class="space-y-3">
+    <SpatialNetworkIsolationControl />
+    
+    <p class="text-xs text-muted-foreground">
+      Focus mode shows only the selected location and its direct connections, hiding all other nodes and edges for clearer analysis.
+    </p>
   </Sidebar.GroupContent>
 </Sidebar.Group>
 
