@@ -15,7 +15,7 @@
   } from '$lib/api/worldMapCacheService';
   import { loadMultipleArticleCountryChoroplethData } from '$lib/api/articleCountryChoroplethService';
   import { browser } from '$app/environment';
-  import ChoroplethLayer from '$lib/components/maps/ChoroplethLayer.svelte';
+  import ChoroplethLayer from './ChoroplethLayer.svelte';
   import MapPopup from '$lib/components/maps/MapPopup.svelte';
   import { appState } from '$lib/state/appState.svelte';
   import { urlManager } from '$lib/utils/urlManager.svelte';
