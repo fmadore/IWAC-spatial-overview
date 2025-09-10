@@ -17,7 +17,11 @@ const config = {
 			base: basePath
 		},
 		// SPA build: don't prerender pages, let the client handle routing
-		prerender: { entries: [] }
+		prerender: { entries: [] },
+		// Disable service worker in development to prevent caching issues
+		serviceWorker: {
+			register: !dev
+		}
 	}
 };
 

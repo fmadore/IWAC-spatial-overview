@@ -22,7 +22,8 @@
     resetSpatialFilters,
     getSpatialAvailableCountries,
     getSpatialNetworkStats,
-    getSpatialNodeById
+    getSpatialSelectedNode,
+    getVisibleCountries
   } from '$lib/state/spatialNetworkData.svelte';
 
   // Props for map interaction
@@ -40,10 +41,10 @@
     selectedNodeId?: string | null;
   }>();
 
-  // Reactive data
+  // Reactive data - use derived state for optimized performance
   const availableCountries = $derived(getSpatialAvailableCountries());
   const networkStats = $derived(getSpatialNetworkStats());
-  const selectedNode = $derived(selectedNodeId ? getSpatialNodeById(selectedNodeId) : null);
+  const selectedNode = $derived(selectedNodeId ? getSpatialSelectedNode() : null);
 
   // Country colors for consistency with map
   const countryColors: Record<string, string> = {
@@ -169,7 +170,7 @@
   <Sidebar.GroupLabel>Countries</Sidebar.GroupLabel>
   <Sidebar.GroupContent class="space-y-2">
     {#each availableCountries as country}
-      {@const isVisible = spatialNetworkState.visibleCountries.has(country)}
+      {@const isVisible = getVisibleCountries().has(country)}
       {@const color = getCountryColor(country)}
       {@const countryStats = networkStats?.countries[country] || 0}
       

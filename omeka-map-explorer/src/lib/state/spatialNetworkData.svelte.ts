@@ -10,6 +10,10 @@
 import { base } from '$app/paths';
 import type { SpatialNetworkData, SpatialNetworkNode, SpatialNetworkEdge } from '$lib/types';
 
+// Raw state for better Set performance (must be declared separately)
+let visibleCountries = $state.raw(new Set<string>());
+let highlightedNodeIds = $state.raw(new Set<string>());
+
 // Core spatial network state
 const spatialNetworkState = $state({
   // Data states
@@ -21,15 +25,81 @@ const spatialNetworkState = $state({
   // Filter states
   weightMin: 2,
   showIsolatedNodes: false,
-  visibleCountries: new Set<string>(),
   
   // Map integration
   mapBounds: null as { north: number; south: number; east: number; west: number } | null,
   selectedNodeId: null as string | null,
-  highlightedNodeIds: new Set<string>(),
   
   // UI states
   isInitialized: false,
+});
+
+// Getter/setter functions for raw state
+function getVisibleCountries(): Set<string> {
+  return visibleCountries;
+}
+
+function setVisibleCountries(countries: Set<string>): void {
+  visibleCountries = countries;
+}
+
+function getHighlightedNodeIds(): Set<string> {
+  return highlightedNodeIds;
+}
+
+function setHighlightedNodeIds(nodeIds: Set<string>): void {
+  highlightedNodeIds = nodeIds;
+}
+
+// Derived state for optimized computations - must be separate variable declarations
+const availableCountries = $derived.by(() => {
+  if (!spatialNetworkState.data) return [];
+  
+  const countries = new Set<string>();
+  spatialNetworkState.data.nodes.forEach(node => {
+    if (node.country) {
+      countries.add(node.country);
+    }
+  });
+  
+  return Array.from(countries).sort();
+});
+
+const networkStats = $derived.by(() => {
+  const data = spatialNetworkState.filtered || spatialNetworkState.data;
+  if (!data) return null;
+  
+  const countries = new Map<string, number>();
+  let totalArticles = 0;
+  
+  data.nodes.forEach(node => {
+    totalArticles += node.count;
+    if (node.country) {
+      countries.set(node.country, (countries.get(node.country) || 0) + 1);
+    }
+  });
+  
+  const edgeWeights = data.edges.map(edge => edge.weight);
+  const minWeight = edgeWeights.length > 0 ? Math.min(...edgeWeights) : 0;
+  const maxWeight = edgeWeights.length > 0 ? Math.max(...edgeWeights) : 0;
+  
+  return {
+    totalNodes: data.nodes.length,
+    totalEdges: data.edges.length,
+    totalArticles,
+    countries: Object.fromEntries(countries),
+    countryCount: countries.size,
+    edgeWeights: {
+      min: minWeight,
+      max: maxWeight,
+      avg: edgeWeights.length > 0 ? edgeWeights.reduce((a, b) => a + b, 0) / edgeWeights.length : 0
+    }
+  };
+});
+
+const selectedNode = $derived.by(() => {
+  if (!spatialNetworkState.filtered || !spatialNetworkState.selectedNodeId) return null;
+  return spatialNetworkState.filtered.nodes.find(node => node.id === spatialNetworkState.selectedNodeId) || null;
 });
 
 /**
@@ -78,7 +148,7 @@ export async function loadSpatialNetworkData(pathPrefix = 'data'): Promise<boole
         countries.add(node.country);
       }
     });
-    spatialNetworkState.visibleCountries = countries;
+    setVisibleCountries(countries);
     
     // Apply initial filters
     applySpatialFilters();
@@ -109,7 +179,7 @@ export function applySpatialFilters() {
   
   // Filter nodes by country
   let filteredNodes = data.nodes.filter(node => 
-    !node.country || spatialNetworkState.visibleCountries.has(node.country)
+    !node.country || getVisibleCountries().has(node.country)
   );
   
   // Create set of visible node IDs for edge filtering
@@ -163,11 +233,14 @@ export function setSpatialWeightMin(weight: number) {
  * Toggle country visibility
  */
 export function toggleSpatialCountry(country: string) {
-  if (spatialNetworkState.visibleCountries.has(country)) {
-    spatialNetworkState.visibleCountries.delete(country);
+  // Create new Set for reactive updates since we're using $state.raw
+  const newVisibleCountries = new Set(getVisibleCountries());
+  if (newVisibleCountries.has(country)) {
+    newVisibleCountries.delete(country);
   } else {
-    spatialNetworkState.visibleCountries.add(country);
+    newVisibleCountries.add(country);
   }
+  setVisibleCountries(newVisibleCountries);
   applySpatialFilters();
 }
 
@@ -175,11 +248,14 @@ export function toggleSpatialCountry(country: string) {
  * Set country visibility
  */
 export function setSpatialCountryVisibility(country: string, visible: boolean) {
+  // Create new Set for reactive updates since we're using $state.raw
+  const newVisibleCountries = new Set(getVisibleCountries());
   if (visible) {
-    spatialNetworkState.visibleCountries.add(country);
+    newVisibleCountries.add(country);
   } else {
-    spatialNetworkState.visibleCountries.delete(country);
+    newVisibleCountries.delete(country);
   }
+  setVisibleCountries(newVisibleCountries);
   applySpatialFilters();
 }
 
@@ -202,14 +278,16 @@ export function selectSpatialNode(nodeId: string | null) {
  * Highlight spatial network nodes
  */
 export function highlightSpatialNodes(nodeIds: string[]) {
-  spatialNetworkState.highlightedNodeIds = new Set(nodeIds);
+  // Create new Set for reactive updates since we're using $state.raw
+  setHighlightedNodeIds(new Set(nodeIds));
 }
 
 /**
  * Clear spatial network highlighting
  */
 export function clearSpatialHighlight() {
-  spatialNetworkState.highlightedNodeIds.clear();
+  // Create new empty Set for reactive updates since we're using $state.raw
+  setHighlightedNodeIds(new Set<string>());
 }
 
 /**
@@ -224,51 +302,21 @@ export function getSpatialNodeById(nodeId: string): SpatialNetworkNode | null {
  * Get all available countries in the data
  */
 export function getSpatialAvailableCountries(): string[] {
-  if (!spatialNetworkState.data) return [];
-  
-  const countries = new Set<string>();
-  spatialNetworkState.data.nodes.forEach(node => {
-    if (node.country) {
-      countries.add(node.country);
-    }
-  });
-  
-  return Array.from(countries).sort();
+  return availableCountries;
 }
 
 /**
  * Get spatial network statistics
  */
 export function getSpatialNetworkStats() {
-  const data = spatialNetworkState.filtered || spatialNetworkState.data;
-  if (!data) return null;
-  
-  const countries = new Map<string, number>();
-  let totalArticles = 0;
-  
-  data.nodes.forEach(node => {
-    totalArticles += node.count;
-    if (node.country) {
-      countries.set(node.country, (countries.get(node.country) || 0) + 1);
-    }
-  });
-  
-  const edgeWeights = data.edges.map(edge => edge.weight);
-  const minWeight = edgeWeights.length > 0 ? Math.min(...edgeWeights) : 0;
-  const maxWeight = edgeWeights.length > 0 ? Math.max(...edgeWeights) : 0;
-  
-  return {
-    totalNodes: data.nodes.length,
-    totalEdges: data.edges.length,
-    totalArticles,
-    countries: Object.fromEntries(countries),
-    countryCount: countries.size,
-    edgeWeights: {
-      min: minWeight,
-      max: maxWeight,
-      avg: edgeWeights.length > 0 ? edgeWeights.reduce((a, b) => a + b, 0) / edgeWeights.length : 0
-    }
-  };
+  return networkStats;
+}
+
+/**
+ * Get selected spatial node
+ */
+export function getSpatialSelectedNode(): SpatialNetworkNode | null {
+  return selectedNode;
 }
 
 /**
@@ -278,7 +326,7 @@ export function resetSpatialFilters() {
   spatialNetworkState.weightMin = 2;
   spatialNetworkState.showIsolatedNodes = false;
   spatialNetworkState.selectedNodeId = null;
-  spatialNetworkState.highlightedNodeIds.clear();
+  setHighlightedNodeIds(new Set<string>()); // Create new Set for reactive updates
   
   // Reset countries to all available
   if (spatialNetworkState.data) {
@@ -288,11 +336,17 @@ export function resetSpatialFilters() {
         allCountries.add(node.country);
       }
     });
-    spatialNetworkState.visibleCountries = allCountries;
+    setVisibleCountries(allCountries); // Create new Set for reactive updates
   }
   
   applySpatialFilters();
 }
 
-// Export the state for reactive access
-export { spatialNetworkState };
+// Export the state for reactive access with separate sets
+export { 
+  spatialNetworkState,
+  getVisibleCountries,
+  setVisibleCountries,
+  getHighlightedNodeIds,
+  setHighlightedNodeIds
+};

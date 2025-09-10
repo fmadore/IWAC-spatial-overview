@@ -8,7 +8,6 @@
   - Responsive layout
 -->
 <script lang="ts">
-  import { onMount } from 'svelte';
   import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '$lib/components/ui/card';
   import { Button } from '$lib/components/ui/button';
   import { Badge } from '$lib/components/ui/badge';
@@ -17,7 +16,7 @@
     spatialNetworkState, 
     loadSpatialNetworkData,
     selectSpatialNode,
-    getSpatialNodeById
+    getSpatialSelectedNode
   } from '$lib/state/spatialNetworkData.svelte';
   import type { SpatialNetworkNode } from '$lib/types';
 
@@ -36,7 +35,7 @@
   let hoveredNode = $state<SpatialNetworkNode | null>(null);
   let isDataLoaded = $state(false);
 
-  // Reactive computed values
+  // Reactive computed values using $derived for optimized reactivity
   const hasData = $derived(spatialNetworkState.data !== null);
   const isLoading = $derived(spatialNetworkState.isLoading);
   const error = $derived(spatialNetworkState.error);
@@ -116,9 +115,13 @@
     initializeData();
   }
 
-  // Lifecycle
-  onMount(() => {
+  // Lifecycle - use $effect for proper cleanup
+  $effect(() => {
     initializeData();
+    
+    return () => {
+      // Cleanup if needed
+    };
   });
 </script>
 

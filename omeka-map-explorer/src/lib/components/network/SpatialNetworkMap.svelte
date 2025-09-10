@@ -9,7 +9,7 @@
 <script lang="ts">
   import { onMount, onDestroy } from 'svelte';
   import type { SpatialNetworkData, SpatialNetworkNode } from '$lib/types';
-  import { spatialNetworkState } from '$lib/state/spatialNetworkData.svelte';
+  import { spatialNetworkState, getHighlightedNodeIds } from '$lib/state/spatialNetworkData.svelte';
   import { createSpatialNetworkRenderer, type SpatialNetworkRenderer } from '$lib/utils/spatialNetworkRenderer';
   import { appState } from '$lib/state/appState.svelte';
 
@@ -36,7 +36,7 @@
   let isInitialized = $state(false);
   let error = $state<string | null>(null);
 
-  // Reactive data
+  // Reactive data - use $derived for cleaner reactivity
   const currentData = $derived(data ?? spatialNetworkState.filtered);
 
   // Initialize when we have both data and container; also ensure Leaflet CSS is loaded
@@ -73,6 +73,7 @@
       });
 
       await renderer.initialize();
+      
       // Expose control functions globally for the App Sidebar
       appState.spatialNetworkControlFunctions = {
         fitToView: () => renderer?.fitToView(),
@@ -80,24 +81,31 @@
         zoomIn: () => renderer?.zoomIn(),
         zoomOut: () => renderer?.zoomOut()
       };
+      
       isInitialized = true;
+      error = null;
       
       console.log('✅ Spatial network renderer initialized');
     } catch (err) {
-  console.error('Failed to initialize spatial network renderer:', err);
-  error = (err as any)?.message || 'Failed to initialize network visualization';
+      console.error('Failed to initialize spatial network renderer:', err);
+      error = (err as any)?.message || 'Failed to initialize network visualization';
     }
   }
 
   /**
-   * Update data when it changes
+   * Effect for initialization - runs when container & data are ready
    */
   $effect(() => {
     // Initialize once when container & data are ready
     if (!isInitialized && currentData && mapContainer && !renderer) {
       initializeRenderer();
-      return;
     }
+  });
+
+  /**
+   * Effect for data updates - runs when data changes after initialization
+   */
+  $effect(() => {
     // Update data if already initialized
     if (currentData && renderer && isInitialized) {
       renderer.updateData(currentData);
@@ -105,13 +113,13 @@
   });
 
   /**
-   * Update highlighting when state changes
+   * Effect for highlighting updates - runs when highlighting state changes
    */
   $effect(() => {
     if (renderer && isInitialized) {
       renderer.updateHighlighting(
-  spatialNetworkState.selectedNodeId,
-  Array.from(spatialNetworkState.highlightedNodeIds)
+        spatialNetworkState.selectedNodeId,
+        Array.from(getHighlightedNodeIds())
       );
     }
   });
@@ -124,8 +132,8 @@
       renderer.destroy();
       renderer = null;
     }
-  // Clear exported controls when unmounting
-  appState.spatialNetworkControlFunctions = null;
+    // Clear exported controls when unmounting
+    appState.spatialNetworkControlFunctions = null;
     // Final cleanup of container to ensure no ghost canvases remain
     if (mapContainer) mapContainer.innerHTML = '';
   });

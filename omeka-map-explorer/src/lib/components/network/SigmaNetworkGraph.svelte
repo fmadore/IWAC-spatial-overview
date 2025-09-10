@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { onMount } from 'svelte';
   import type { NetworkData } from '$lib/types';
   import { networkState } from '$lib/state/networkData.svelte';
   import { appState } from '$lib/state/appState.svelte';
@@ -39,14 +38,14 @@
   let noverlapManager: NoverlapLayoutManager | null = null;
   let cameraAnimating = false;
 
-  // Component state
+  // Component state - use proper $state for reactivity
   let isLayoutRunning = $state(false);
   let layoutProgress = $state(0);
   let error = $state<string | null>(null);
   let isInitialized = $state(false);
   let cameraRatio = $state(1);
   let highlightedNodeIds = $state<string[]>([]);
-  let highlightedNodeSet = $state(new Set<string>()); // For O(1) lookups in nodeReducer
+  let highlightedNodeSet = $state.raw(new Set<string>()); // Use $state.raw for better Set performance
   
   // Throttle sigma refresh calls to improve performance
   let refreshTimeout: number | undefined;
@@ -593,14 +592,14 @@
   // Highlight nodes for search results
   function highlightNodes(nodeIds: string[]) {
     highlightedNodeIds = [...nodeIds];
-    highlightedNodeSet = new Set(nodeIds);
+    highlightedNodeSet = new Set(nodeIds); // Create new Set for reactive updates
     throttledRefresh();
   }
 
   // Clear node highlighting and return to full graph overview
   function clearHighlight() {
     highlightedNodeIds = [];
-    highlightedNodeSet = new Set();
+    highlightedNodeSet = new Set<string>(); // Create new Set for reactive updates
     throttledRefresh();
     
     // Return to full view showing all nodes
@@ -662,15 +661,15 @@
     }
   }
 
-  // Lifecycle
-  onMount(() => {
+  // Lifecycle - use $effect for better reactivity management
+  $effect(() => {
     // Load sigma.js modules and initialize
     const initializeComponent = async () => {
       const loaded = await loadSigmaModules();
       if (!loaded) return;
 
       // Initialize when data is available
-      if (currentData) {
+      if (currentData && container) {
         await initializeSigma();
       }
     };
