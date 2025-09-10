@@ -14,6 +14,8 @@
     loadArticleCountryCoordinateClusters
   } from '$lib/api/worldMapCacheService';
   import { loadMultipleArticleCountryChoroplethData } from '$lib/api/articleCountryChoroplethService';
+  import { scaleSequential } from 'd3-scale';
+  import { interpolateYlOrRd, interpolateViridis, interpolatePlasma } from 'd3-scale-chromatic';
   import { browser } from '$app/environment';
   import ChoroplethLayer from './ChoroplethLayer.svelte';
   import MapPopup from '$lib/components/maps/MapPopup.svelte';
@@ -32,6 +34,10 @@
   // Cache optimization tracking
   let cacheAvailable = $state(false);
   let usingCachedData = $state(false);
+  
+  // Legend tracking
+  let currentColorScale: any = $state(null);
+  let currentMaxCount = $state(1);
 
   // Modern tile layer options
   const tileLayerOptions = {
@@ -77,6 +83,7 @@
   // Loading state for better UX
   let mapLoading = $state(true);
   let dataLoading = $state(true);
+  let showLegend = $state(true);
   // Incrementing token to cancel stale async loadMapData runs
   let loadRunId = 0;
 
@@ -215,6 +222,11 @@
     if (!map || !L) return;
     dataLoading = true;
     const runId = ++loadRunId;
+    
+    // Reset legend state
+    currentColorScale = null;
+    currentMaxCount = 1;
+    
     Object.entries(layers).forEach(([key, layer]) => {
       if (layer && typeof (layer as any).$destroy === 'function') {
         try { (layer as any).$destroy(); } catch {}
@@ -394,21 +406,47 @@
           coordinateGroups.clear();
         } else {
           const maxCount = Array.from(coordinateGroups.values()).reduce((m, g) => Math.max(m, g.count), 1);
+          
+          // Create D3 color scale for better visual distinction
+          // Using a custom scale with high contrast colors
+          const colorScale = scaleSequential()
+            .domain([1, maxCount])
+            .interpolator((t) => {
+              // Custom interpolator for maximum visual impact
+              if (t < 0.2) return '#3b82f6'; // Blue for low values
+              if (t < 0.4) return '#10b981'; // Green for low-medium values  
+              if (t < 0.6) return '#f59e0b'; // Orange for medium values
+              if (t < 0.8) return '#ef4444'; // Red for high values
+              return '#dc2626'; // Dark red for highest values
+            });
+          
+          // Store for legend
+          currentColorScale = colorScale;
+          currentMaxCount = maxCount;
+          
           const canvas = L.canvas({ padding: 0.5 });
           const layerGroup = L.layerGroup();
           for (const g of coordinateGroups.values()) {
-            const radius = 6 + 8 * Math.sqrt(g.count / maxCount);
-            const intensity = Math.sqrt(g.count / maxCount);
-            const hue = 220 - (intensity * 60);
-            const saturation = 70 + (intensity * 20);
-            const lightness = 55 - (intensity * 10);
+            // Improved radius scaling with better visual hierarchy
+            const baseRadius = 3;
+            const maxRadius = 25;
+            // Use a more aggressive scaling for better visual distinction
+            const normalizedCount = Math.pow(g.count / maxCount, 0.5); // Square root for better distribution
+            const radius = baseRadius + (maxRadius - baseRadius) * normalizedCount;
+            
+            // Use D3 color scale for consistent, visually appealing colors
+            const fillColor = colorScale(g.count);
+            
+            // Calculate border color (darker version for better definition)
+            const borderColor = colorScale(Math.min(g.count * 1.5, maxCount));
+            
             const circle = L.circleMarker([g.lat, g.lng], {
               radius,
-              color: `hsl(${hue}, ${saturation}%, ${lightness - 15}%)`,
-              weight: 2,
-              opacity: 0.9,
-              fillOpacity: 0.7,
-              fillColor: `hsl(${hue}, ${saturation}%, ${lightness}%)`,
+              color: '#ffffff', // White border for maximum contrast
+              weight: 1.5,
+              opacity: 1,
+              fillOpacity: 0.9,
+              fillColor: fillColor,
               renderer: canvas,
               className: 'modern-marker',
               interactive: true,
@@ -651,6 +689,50 @@
       </div>
     </div>
   {/if}
+  
+  <!-- Color Legend for Bubble View -->
+  {#if showLegend && mapData.viewMode === 'bubbles' && currentColorScale && !mapLoading && !dataLoading}
+    <div class="absolute bottom-4 left-4 bg-white/95 backdrop-blur-sm rounded-lg p-3 shadow-lg z-20 min-w-[200px]">
+      <div class="flex items-center justify-between mb-2">
+        <h4 class="text-xs font-semibold text-gray-700">Article Count</h4>
+        <button 
+          onclick={() => showLegend = false}
+          class="text-gray-400 hover:text-gray-600 transition-colors"
+          title="Hide legend"
+          aria-label="Hide legend"
+        >
+          <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+          </svg>
+        </button>
+      </div>
+      <div class="space-y-1">
+        {#each [1, Math.ceil(currentMaxCount * 0.25), Math.ceil(currentMaxCount * 0.5), Math.ceil(currentMaxCount * 0.75), currentMaxCount] as value}
+          <div class="flex items-center gap-2">
+            <div 
+              class="w-3 h-3 rounded-full border border-gray-300" 
+              style="background-color: {currentColorScale(value)}"
+            ></div>
+            <span class="text-xs text-gray-600">{value} article{value !== 1 ? 's' : ''}</span>
+          </div>
+        {/each}
+      </div>
+    </div>
+  {/if}
+  
+  <!-- Legend Toggle Button -->
+  {#if !showLegend && mapData.viewMode === 'bubbles' && currentColorScale && !mapLoading && !dataLoading}
+    <button 
+      onclick={() => showLegend = true}
+      class="absolute bottom-4 left-4 bg-white/95 backdrop-blur-sm rounded-lg p-2 shadow-lg z-20 text-gray-600 hover:text-gray-800 transition-colors"
+      title="Show legend"
+      aria-label="Show legend"
+    >
+      <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+        <path fill-rule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"></path>
+      </svg>
+    </button>
+  {/if}
 </div>
 
 {#if browser && map && worldGeo && mapData.viewMode === 'choropleth'}
@@ -678,8 +760,8 @@
   :global(.map-popup-wrapper .leaflet-popup-content-wrapper) { padding: 0; border-radius: 12px; overflow: hidden; box-shadow: 0 8px 32px rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.1); backdrop-filter: blur(8px); }
   :global(.map-popup-wrapper .leaflet-popup-content) { margin:0; padding:0; width:auto !important; }
   :global(.map-popup-wrapper .leaflet-popup-tip) { background:white; border:1px solid rgba(255,255,255,0.2); box-shadow:0 2px 8px rgba(0,0,0,0.1); }
-  :global(.modern-marker.leaflet-interactive) { filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1)); transition: all 0.2s ease; }
-  :global(.modern-marker.leaflet-interactive:hover) { filter: drop-shadow(0 4px 8px rgba(0,0,0,0.2)); transform: scale(1.1); z-index: 1000 !important; }
+  :global(.modern-marker.leaflet-interactive) { filter: drop-shadow(0 3px 6px rgba(0,0,0,0.3)); transition: all 0.2s ease; }
+  :global(.modern-marker.leaflet-interactive:hover) { filter: drop-shadow(0 6px 12px rgba(0,0,0,0.4)); transform: scale(1.15); z-index: 1000 !important; }
   :global(.leaflet-marker-pane) { z-index: 600 !important; }
   :global(.leaflet-popup-pane) { z-index: 700 !important; }
   :global(.leaflet-tooltip-pane) { z-index: 650 !important; }
