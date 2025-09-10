@@ -381,31 +381,19 @@
 		return String(Math.round(v * 10) / 10);
 	}
 
-	// Watch for changes to data prop and update immediately
+	// Single effect to watch for data changes and update layer styles
 	$effect(() => {
 		// Explicitly access data to ensure reactivity is triggered
 		const currentData = data;
-		if (layer && currentData) {
-			// Always update when data changes, even if empty
+		
+		// Only update if we have both layer and data
+		if (layer && currentData && Object.keys(currentData).length > 0) {
 			console.log('ChoroplethLayer: Data changed, updating styles. Keys:', Object.keys(currentData).length);
-			// Use multiple timing strategies to ensure it works in production
-			updateLayerStyles();
-			requestAnimationFrame(() => updateLayerStyles());
-			setTimeout(() => updateLayerStyles(), 0);
-			setTimeout(() => updateLayerStyles(), 50);
-		}
-	});
-
-	// Separate effect for browser and layer readiness
-	$effect(() => {
-		// Explicitly access data to ensure reactivity is triggered
-		const currentData = data;
-		if (browser && layer && currentData) {
-			// Additional update when browser environment is confirmed ready
-			console.log('ChoroplethLayer: Browser + layer ready, data keys:', Object.keys(currentData).length);
-			requestAnimationFrame(() => updateLayerStyles());
-			setTimeout(() => updateLayerStyles(), 100);
-			setTimeout(() => updateLayerStyles(), 200);
+			
+			// Use a single requestAnimationFrame for smooth, efficient updates
+			requestAnimationFrame(() => {
+				updateLayerStyles();
+			});
 		}
 	});
 
@@ -415,21 +403,13 @@
 
 		console.log('ChoroplethLayer: Updating styles with data keys:', Object.keys(data).length);
 
-		// Force re-style all features
+		// Efficiently re-style all features without aggressive resets
 		layer.eachLayer((featureLayer: any) => {
 			if (featureLayer.feature) {
 				const newStyle = style(featureLayer.feature);
 				
-				// Force aggressive style update by resetting and reapplying
-				featureLayer.setStyle({
-					fillColor: '#ffffff',
-					fillOpacity: 0
-				});
-				
-				// Apply new style immediately after reset
-				setTimeout(() => {
-					featureLayer.setStyle(newStyle);
-				}, 1);
+				// Apply new style directly - no reset needed
+				featureLayer.setStyle(newStyle);
 
 				// Update tooltip/popups with latest data
 				try {
@@ -456,17 +436,10 @@
 			}
 		});
 
-		// Update legend
+		// Update legend efficiently
 		if (legend && map && L) {
 			legend.remove();
 			createLegendControl();
-		}
-		
-		// Force map to redraw/update
-		if (map && map.invalidateSize) {
-			setTimeout(() => {
-				map.invalidateSize({ animate: false });
-			}, 10);
 		}
 	}
 
