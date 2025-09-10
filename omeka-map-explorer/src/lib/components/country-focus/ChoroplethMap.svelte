@@ -1,21 +1,26 @@
 <script lang="ts">
-  import { onMount } from 'svelte';
+  import { onMount, mount } from 'svelte';
   import { browser } from '$app/environment';
   import { scaleQuantize, scaleThreshold, scaleSqrt } from 'd3-scale';
   import { schemeBlues } from 'd3-scale-chromatic';
   import { quantile } from 'd3-array';
+  import ChoroplethPopup from './ChoroplethPopup.svelte';
 
   // Props
   let {
     geoJson,
     data = {},
     height = 520,
-    scaleType = 'quantile'
+    scaleType = 'quantile',
+    country = 'Unknown',
+    adminLevel = 'regions'
   } = $props<{
     geoJson: any;
     data?: Record<string, number>;
     height?: number;
     scaleType?: 'quantile' | 'linear' | 'sqrt';
+    country?: string;
+    adminLevel?: 'regions' | 'prefectures';
   }>();
 
   // Local state
@@ -168,18 +173,32 @@
     const name = feature.properties?.name || 'Unknown';
     const count = data[name] || 0;
     
-    // Tooltip
+    // Enhanced tooltip
     featureLayer.bindTooltip(`<strong>${name}</strong><br/>${count} articles`, {
-      sticky: true
+      sticky: true,
+      className: 'choropleth-tooltip'
     });
     
-    // Popup
-    featureLayer.bindPopup(`
-      <div style="text-align: center;">
-        <h4 style="margin: 0 0 8px 0;">${name}</h4>
-        <p style="margin: 0;"><strong>${count}</strong> articles</p>
-      </div>
-    `);
+    // Create popup with Svelte component
+    const popupContainer = document.createElement('div');
+    
+    const regionData = {
+      name,
+      count,
+      country,
+      adminLevel
+    };
+    
+    // Mount Svelte component for popup using Svelte 5 syntax
+    mount(ChoroplethPopup, {
+      target: popupContainer,
+      props: { regionData }
+    });
+    
+    featureLayer.bindPopup(popupContainer, {
+      maxWidth: 400,
+      className: 'choropleth-leaflet-popup'
+    });
     
     // Hover effects
     featureLayer.on({
@@ -319,9 +338,10 @@
       maxBoundsViscosity: 1.0 // stickiness at edges once maxBounds applied
     }).setView([9.5, 2.3], 6);
     
-    // Add tiles (noWrap prevents horizontal repetition of the world)
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '© OpenStreetMap contributors',
+    // Add Carto tiles (noWrap prevents horizontal repetition of the world)
+    const cartoAttribution = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="https://carto.com/attribution">CARTO</a>';
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
+      attribution: cartoAttribution,
       noWrap: true
     }).addTo(map);
     
@@ -351,5 +371,28 @@
     padding: 6px 8px !important; 
     border-radius: 4px !important; 
     border: 1px solid #ccc !important; 
+  }
+  :global(.choropleth-tooltip) {
+    background: rgba(0, 0, 0, 0.8) !important;
+    color: white !important;
+    border: none !important;
+    border-radius: 4px !important;
+    padding: 4px 8px !important;
+    font-size: 12px !important;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2) !important;
+  }
+  :global(.choropleth-leaflet-popup .leaflet-popup-content-wrapper) {
+    background: transparent !important;
+    border-radius: 8px !important;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15) !important;
+    padding: 0 !important;
+  }
+  :global(.choropleth-leaflet-popup .leaflet-popup-content) {
+    margin: 0 !important;
+    font: inherit !important;
+  }
+  :global(.choropleth-leaflet-popup .leaflet-popup-tip) {
+    background: white !important;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
   }
 </style>

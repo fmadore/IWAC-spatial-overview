@@ -195,7 +195,7 @@
           </div>
         </div>
       {:else if geoJson}
-        <ChoroplethMap {geoJson} data={counts} {scaleType} />
+        <ChoroplethMap {geoJson} data={counts} {scaleType} {country} adminLevel={level} />
       {:else}
         <div class="h-[520px] w-full rounded-md border flex items-center justify-center">
           <p class="text-sm text-muted-foreground">No data available</p>
