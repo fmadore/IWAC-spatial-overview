@@ -55,7 +55,7 @@
   async function initializeData() {
     if (!spatialNetworkState.isInitialized) {
       console.log('🌍 Loading spatial network data...');
-      const success = await loadSpatialNetworkData();
+      const success = await loadSpatialNetworkData('data');
       if (success) {
         isDataLoaded = true;
         console.log('✅ Spatial network data loaded successfully');

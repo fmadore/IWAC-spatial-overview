@@ -34,14 +34,14 @@ const spatialNetworkState = $state({
 /**
  * Load spatial network data from the server
  */
-export async function loadSpatialNetworkData(): Promise<boolean> {
+export async function loadSpatialNetworkData(pathPrefix = 'data'): Promise<boolean> {
   if (spatialNetworkState.isLoading) return false;
   
   spatialNetworkState.isLoading = true;
   spatialNetworkState.error = null;
   
   try {
-    const response = await fetch('/data/networks/spatial.json');
+    const response = await fetch(`${pathPrefix}/networks/spatial.json`);
     
     if (!response.ok) {
       if (response.status === 404) {
