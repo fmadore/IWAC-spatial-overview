@@ -5,7 +5,7 @@
 	import { getVisibleData } from '$lib/state/derived.svelte';
 	import EntitySelector from './entity-selector.svelte';
 	import EntityStatsCards from './entity-stats-cards.svelte';
-	import EntityLocationsList from './entity-locations-list.svelte';
+	import EntityLocationsWordcloud from './entity-locations-wordcloud.svelte';
 	import EntityArticlesTable from './entity-articles-table.svelte';
 	import EntityMap from './EntityMap.svelte';
 	import { Card, CardContent, CardHeader, CardTitle } from '$lib/components/ui/card';
@@ -70,23 +70,28 @@
 
 	// Get locations from selected entity's articles
 	const selectedEntityLocations = $derived.by(() => {
-		if (!isSelectedEntityOfType) return [];
+		if (!isSelectedEntityOfType || !selectedEntity) return [];
 
-		// Get all spatial locations mentioned in the related articles
-		const locations = new Set<string>();
+		// Get all spatial locations mentioned in the selected entity's related articles only
+		const locations: string[] = [];
+		const entityArticleIds = new Set(selectedEntity.relatedArticleIds);
 
 		for (const item of visibleData) {
-			// Add all spatial locations from the article
-			for (const location of item.spatial) {
-				locations.add(location);
-			}
-			// Also add the article's country
-			if (item.country) {
-				locations.add(item.country);
+			// Only process articles that are related to this entity
+			const articleId = item.id.split('-')[0];
+			if (entityArticleIds.has(articleId)) {
+				// Add all spatial locations from the article
+				for (const location of item.spatial) {
+					locations.push(location);
+				}
+				// Also add the article's country
+				if (item.country) {
+					locations.push(item.country);
+				}
 			}
 		}
 
-		return Array.from(locations).sort();
+		return locations; // Return array with duplicates so word cloud can count them
 	});
 
 	// Statistics for the selected entity
@@ -161,8 +166,8 @@
 			</Card>
 		</div>
 
-		<!-- Locations List -->
-		<EntityLocationsList locations={selectedEntityLocations} entityName={selectedEntity.name} />
+		<!-- Locations Word Cloud -->
+		<EntityLocationsWordcloud locations={selectedEntityLocations} entityName={selectedEntity.name} />
 
 		<!-- Articles Table -->
 		<EntityArticlesTable articles={uniqueArticles} entityName={selectedEntity.name} />

@@ -2,7 +2,6 @@
 export { default as EntityVisualization } from './entity-visualization.svelte';
 export { default as EntitySelector } from './entity-selector.svelte';
 export { default as EntityStatsCards } from './entity-stats-cards.svelte';
-export { default as EntityLocationsList } from './entity-locations-list.svelte';
 export { default as EntityArticlesTable } from './entity-articles-table.svelte';
 export { default as EntityMap } from './EntityMap.svelte';
 
