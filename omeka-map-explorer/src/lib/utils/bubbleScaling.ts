@@ -33,6 +33,7 @@ export interface ColorScale {
   (value: number): string;
   domain(): [number, number];
   range(): string[];
+  interpolator(): (t: number) => string;
 }
 
 /**

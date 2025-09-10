@@ -6,7 +6,8 @@
   import type { ProcessedItem } from '$lib/types';
   import { mapData } from '$lib/state/mapData.svelte';
   import { 
-    createHSLBubbleStyle, 
+    createBubbleColorScale,
+    createD3BubbleStyle, 
     ENTITY_MAP_BUBBLE_CONFIG 
   } from '$lib/utils/bubbleScaling';
 
@@ -96,13 +97,17 @@
     if (groups.size === 0) return;
     const Llocal = L; // local ref
     const maxCount = Array.from(groups.values()).reduce((m,g)=>Math.max(m,g.count),1);
+    
+    // Create D3 color scale for better visual consistency with world map
+    const colorScale = createBubbleColorScale(maxCount);
+    
     const canvas = Llocal.canvas({ padding: 0.5 });
     const layerGroup = Llocal.layerGroup();
     for (const g of groups.values()) {
       if (runId !== currentRun) break; // aborted
       
-      // Use reusable bubble styling utility
-      const bubbleStyle = createHSLBubbleStyle(g.count, maxCount, ENTITY_MAP_BUBBLE_CONFIG);
+      // Use reusable D3-based bubble styling utility for better contrast
+      const bubbleStyle = createD3BubbleStyle(g.count, maxCount, colorScale, ENTITY_MAP_BUBBLE_CONFIG);
       
       const circle = Llocal.circleMarker([g.lat, g.lng], {
         radius: bubbleStyle.radius,
