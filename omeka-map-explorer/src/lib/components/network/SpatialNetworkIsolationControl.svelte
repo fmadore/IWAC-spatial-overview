@@ -38,45 +38,17 @@
     return getSpatialNodeNeighbors(spatialNetworkState.selectedNodeId).length;
   });
 
-  // Debug reactive state changes
-  $effect(() => {
-    console.log('🔄 Isolation control reactive state change:', {
-      selectedNodeId: spatialNetworkState.selectedNodeId,
-      isIsolationMode,
-      isolatedNodeId,
-      canEnableIsolation,
-      neighborCount: neighborCount()
-    });
-  });
-
   /**
    * Handle isolation mode toggle
    */
   function handleToggleIsolation() {
-    console.log('🔄 Toggling isolation mode:', {
-      isIsolationMode,
-      selectedNodeId: spatialNetworkState.selectedNodeId,
-      isolatedNodeId: spatialNetworkState.isolatedNodeId
-    });
-    
     if (isIsolationMode) {
-      console.log('🚫 Disabling isolation mode');
       disableSpatialIsolationMode();
     } else if (spatialNetworkState.selectedNodeId) {
-      console.log('✅ Enabling isolation mode for node:', spatialNetworkState.selectedNodeId);
       toggleSpatialIsolationMode(spatialNetworkState.selectedNodeId);
     } else {
       console.warn('⚠️ No node selected for isolation mode');
     }
-    
-    // Log state after toggle
-    setTimeout(() => {
-      console.log('📊 State after toggle:', {
-        isolationMode: spatialNetworkState.isolationMode,
-        isolatedNodeId: spatialNetworkState.isolatedNodeId,
-        selectedNodeId: spatialNetworkState.selectedNodeId
-      });
-    }, 100);
   }
 
   /**

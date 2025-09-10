@@ -49,11 +49,9 @@
   onMount(async () => {
     try {
       await import('leaflet/dist/leaflet.css');
-      console.debug('[SpatialNetworkMap] Leaflet CSS loaded');
     } catch (e) {
-      console.warn('[SpatialNetworkMap] Failed to load Leaflet CSS:', e);
+      console.warn('Failed to load Leaflet CSS:', e);
     }
-    // actual initialization handled by effect once container + data are ready
   });
 
   /**
@@ -66,12 +64,6 @@
     initializationInProgress = true;
 
     try {
-      console.log('🔄 Initializing spatial network renderer...', {
-        hasContainer: !!mapContainer,
-        nodes: currentData.nodes.length,
-        edges: currentData.edges.length
-      });
-      
       // Ensure clean container (prevents ghost Sigma canvas when rebinding)
       mapContainer.innerHTML = '';
       
@@ -95,8 +87,6 @@
       
       isInitialized = true;
       error = null;
-      
-      console.log('✅ Spatial network renderer initialized');
     } catch (err) {
       console.error('Failed to initialize spatial network renderer:', err);
       error = (err as any)?.message || 'Failed to initialize network visualization';
@@ -123,7 +113,6 @@
       const dataChanged = dataSignature !== lastDataSignature;
       
       if (dataChanged) {
-        console.log('📊 Data changed, updating renderer...', dataSignature);
         // Use untrack for the update to prevent triggering more reactivity
         untrack(() => {
           renderer!.updateData(currentData);
@@ -133,13 +122,6 @@
       
       // Always update highlighting (lightweight operation)
       // Don't untrack this - we WANT it to be reactive to isolation state changes
-      console.log('🎨 Calling updateHighlighting from effect:', {
-        selectedNodeId: spatialNetworkState.selectedNodeId,
-        highlightedNodes: Array.from(getHighlightedNodeIds()),
-        isolationMode: spatialNetworkState.isolationMode,
-        isolatedNodeId: spatialNetworkState.isolatedNodeId
-      });
-      
       renderer!.updateHighlighting(
         spatialNetworkState.selectedNodeId,
         Array.from(getHighlightedNodeIds()),

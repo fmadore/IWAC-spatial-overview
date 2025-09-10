@@ -54,13 +54,11 @@
    */
   async function initializeData() {
     if (!spatialNetworkState.isInitialized) {
-      console.log('🌍 Loading spatial network data...');
       const success = await loadSpatialNetworkData('data');
       if (success) {
         isDataLoaded = true;
-        console.log('✅ Spatial network data loaded successfully');
       } else {
-        console.error('❌ Failed to load spatial network data');
+        console.error('Failed to load spatial network data');
       }
     } else {
       isDataLoaded = true;
@@ -90,22 +88,18 @@
    */
   function handleFitToView() {
     // This would trigger the map to fit to all visible nodes
-    console.log('Fitting to view...');
   }
 
   function handleResetView() {
     // Reset to initial bounds
-    console.log('Resetting view...');
   }
 
   function handleZoomIn() {
     // Zoom in
-    console.log('Zooming in...');
   }
 
   function handleZoomOut() {
     // Zoom out
-    console.log('Zooming out...');
   }
 
   /**

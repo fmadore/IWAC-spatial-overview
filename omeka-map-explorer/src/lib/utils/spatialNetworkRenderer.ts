@@ -155,8 +155,6 @@ export async function createSpatialNetworkRenderer(
         enableCameraControls: false
       });
 
-      console.log('✅ Sigma instance created');
-
   // Bind Leaflet layer using the correct API pattern from documentation
   // Store full binding (clean/map/updateGraphCoordinates)
   leafletBinding = bindLeafletLayer(sigmaInstance, {
@@ -177,7 +175,7 @@ export async function createSpatialNetworkRenderer(
           }
         });
       } catch (e) {
-        console.warn('⚠️ Initial updateGraphCoordinates failed:', e);
+        console.warn('Initial updateGraphCoordinates failed:', e);
       }
 
       // Once the leaflet map is ready, fit to data bounds with proper timing
@@ -206,13 +204,11 @@ export async function createSpatialNetworkRenderer(
           setTimeout(() => fitToNetworkBoundsProper(), 50);
         }
       } catch (e) {
-        console.warn('⚠️ Error scheduling fit to bounds:', e);
+        console.warn('Error scheduling fit to bounds:', e);
       }
 
       // Set up event listeners
       setupEventListeners();
-
-      console.log('✅ Spatial network initialized');
       
       // Mark first initialization as complete to prevent unnecessary re-fits
       isFirstInitialization = false;
@@ -241,15 +237,6 @@ export async function createSpatialNetworkRenderer(
       // Automatically enter focus mode for clicked node
       import('$lib/state/spatialNetworkData.svelte').then(({ enableSpatialIsolationMode }) => {
         enableSpatialIsolationMode(nodeId);
-      });
-    });
-
-    // Node double-click for quick isolation mode toggle
-    sigmaInstance.on('doubleClickNode', (event: any) => {
-      const nodeId = event.node;
-      // Import the function dynamically to avoid circular dependencies
-      import('$lib/state/spatialNetworkData.svelte').then(({ toggleSpatialIsolationMode }) => {
-        toggleSpatialIsolationMode(nodeId);
       });
     });
 
@@ -330,7 +317,7 @@ export async function createSpatialNetworkRenderer(
         leafletBinding.updateGraphCoordinates(graph);
       }
     } catch (e) {
-      console.warn('⚠️ Failed to update graph coordinates after data change:', e);
+      console.warn('Failed to update graph coordinates after data change:', e);
     }
 
   if (sigmaInstance) sigmaInstance.refresh();
@@ -347,30 +334,19 @@ export async function createSpatialNetworkRenderer(
    */
   function updateHighlighting(selectedNodeId?: string | null, highlightedNodeIds: string[] = [], isolationMode?: boolean, isolatedNodeId?: string | null) {
     if (!graph || !sigmaInstance) {
-      console.warn('⚠️ updateHighlighting called but graph or sigma not ready');
+      console.warn('updateHighlighting called but graph or sigma not ready');
       return;
     }
-
-    console.log('🎨 updateHighlighting called:', {
-      selectedNodeId,
-      highlightedNodeIds,
-      isolationMode,
-      isolatedNodeId,
-      graphNodes: graph.order,
-      graphEdges: graph.size
-    });
 
     // Get neighbors of isolated node if in isolation mode
     const isolatedNeighbors = new Set<string>();
     if (isolationMode && isolatedNodeId) {
-      console.log('🔍 Finding neighbors of isolated node:', isolatedNodeId);
       try {
         graph.forEachNeighbor(isolatedNodeId, (neighbor: string) => {
           isolatedNeighbors.add(neighbor);
         });
-        console.log('👥 Isolated neighbors found:', Array.from(isolatedNeighbors));
       } catch (e) {
-        console.error('❌ Error finding neighbors:', e);
+        console.error('Error finding neighbors:', e);
       }
     }
 
@@ -404,7 +380,7 @@ export async function createSpatialNetworkRenderer(
         color = '#ea580c'; // Orange for highlighted/neighbor nodes
         size = Math.max(data.size * 1.2, 3);
         zIndex = 5;
-      } else if (isolationMode || highlightedNodeIds.length > 0) {
+      } else if ((isolationMode && isolatedNodeId) || (highlightedNodeIds.length > 0 && selectedNodeId)) {
         // Better transparency - keep color but reduce opacity
         color = data.color;
         size = data.size * 0.7;
@@ -414,6 +390,7 @@ export async function createSpatialNetworkRenderer(
           color = color + '40'; // Add 25% opacity
         }
       }
+      // If nothing is selected/highlighted, return original data unchanged
       
       return {
         ...data,
@@ -465,7 +442,7 @@ export async function createSpatialNetworkRenderer(
           size: Math.max(data.size * 1.1, 0.2),
           zIndex: 3
         };
-      } else if (selectedNodeId || highlightedNodeIds.length > 0) {
+      } else if ((isolationMode && isolatedNodeId) || (highlightedNodeIds.length > 0 && selectedNodeId)) {
         // Mute non-relevant edges with better transparency
         let color = data.color;
         if (color.indexOf('#') === 0 && color.length === 7) {
@@ -479,13 +456,12 @@ export async function createSpatialNetworkRenderer(
         };
       }
       
+      // If nothing is selected/highlighted, return original data unchanged
       return data;
     });
 
     // Refresh Sigma to apply changes
-    console.log('🔄 Refreshing Sigma with new highlighting settings');
     sigmaInstance.refresh();
-    console.log('✅ updateHighlighting completed');
   }
 
   /**
@@ -523,7 +499,6 @@ export async function createSpatialNetworkRenderer(
     if (leafletBinding && leafletBinding.clean) {
       try {
         leafletBinding.clean();
-        console.log('✅ Leaflet layer cleaned up');
       } catch (err) {
         console.warn('Error cleaning up Leaflet layer:', err);
       }
@@ -533,7 +508,6 @@ export async function createSpatialNetworkRenderer(
     if (sigmaInstance) {
       try {
         sigmaInstance.kill();
-        console.log('✅ Sigma instance destroyed');
       } catch (err) {
         console.warn('Error destroying Sigma instance:', err);
       }
@@ -560,7 +534,6 @@ export async function createSpatialNetworkRenderer(
       if (nodeIds.length === 0) return;
       
       // Use Sigma.js utilities for proper camera positioning
-      console.log('📐 Using Sigma.js fitViewportToNodes for', nodeIds.length, 'nodes');
       
       // First, update graph coordinates to ensure they're current
       leafletBinding.updateGraphCoordinates(graph);
@@ -573,10 +546,9 @@ export async function createSpatialNetworkRenderer(
       // Refresh to apply the new camera position
       sigmaInstance.refresh();
       
-      console.log('✅ Camera fitted to network using Sigma.js utilities');
       
     } catch (e) {
-      console.warn('⚠️ fitToNetworkBoundsProper failed, falling back to manual bounds:', e);
+      console.warn('fitToNetworkBoundsProper failed, falling back to manual bounds:', e);
       // Fallback to the original method if Sigma utils fail
       fitToNetworkBounds();
     }
