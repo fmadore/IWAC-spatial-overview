@@ -5,9 +5,10 @@
   - Uses getNodeLatLng function pattern from Sigma.js docs
   - Proper tile synchronization between Leaflet and Sigma
   - Clean separation of concerns with dedicated renderer
+  - Optimized for Svelte 5 to prevent flashing during initialization
 -->
 <script lang="ts">
-  import { onMount, onDestroy } from 'svelte';
+  import { onMount, onDestroy, untrack } from 'svelte';
   import type { SpatialNetworkData, SpatialNetworkNode } from '$lib/types';
   import { spatialNetworkState, getHighlightedNodeIds } from '$lib/state/spatialNetworkData.svelte';
   import { createSpatialNetworkRenderer, type SpatialNetworkRenderer } from '$lib/utils/spatialNetworkRenderer';
@@ -35,9 +36,14 @@
   // State
   let isInitialized = $state(false);
   let error = $state<string | null>(null);
+  let initializationInProgress = $state(false);
 
   // Reactive data - use $derived for cleaner reactivity
   const currentData = $derived(data ?? spatialNetworkState.filtered);
+  
+  // Track data changes to prevent unnecessary updates
+  const dataSignature = $derived(currentData ? `${currentData.nodes.length}-${currentData.edges.length}` : null);
+  let lastDataSignature = $state<string | null>(null);
 
   // Initialize when we have both data and container; also ensure Leaflet CSS is loaded
   onMount(async () => {
@@ -54,7 +60,10 @@
    * Create and initialize the renderer
    */
   async function initializeRenderer() {
-    if (!currentData || !mapContainer || renderer) return;
+    if (!currentData || !mapContainer || renderer || initializationInProgress) return;
+
+    // Prevent multiple simultaneous initializations
+    initializationInProgress = true;
 
     try {
       console.log('🔄 Initializing spatial network renderer...', {
@@ -62,15 +71,17 @@
         nodes: currentData.nodes.length,
         edges: currentData.edges.length
       });
+      
       // Ensure clean container (prevents ghost Sigma canvas when rebinding)
       mapContainer.innerHTML = '';
       
-      renderer = await createSpatialNetworkRenderer({
-        container: mapContainer,
+      // Use untrack to prevent the creation process from triggering reactivity
+      renderer = await untrack(() => createSpatialNetworkRenderer({
+        container: mapContainer!, // Non-null assertion since we checked above
         data: currentData,
         onNodeSelect,
         onNodeHover
-      });
+      }));
 
       await renderer.initialize();
       
@@ -89,38 +100,45 @@
     } catch (err) {
       console.error('Failed to initialize spatial network renderer:', err);
       error = (err as any)?.message || 'Failed to initialize network visualization';
+    } finally {
+      initializationInProgress = false;
     }
   }
 
   /**
-   * Effect for initialization - runs when container & data are ready
+   * Main effect - handles initialization and all updates in a single reactive block
+   * This prevents multiple re-initializations that cause flashing
    */
   $effect(() => {
-    // Initialize once when container & data are ready
-    if (!isInitialized && currentData && mapContainer && !renderer) {
+    // Only initialize once when container & data are ready
+    if (!isInitialized && !initializationInProgress && currentData && mapContainer && !renderer) {
       initializeRenderer();
+      lastDataSignature = dataSignature;
+      return; // Exit early on initialization to prevent subsequent updates
     }
-  });
-
-  /**
-   * Effect for data updates - runs when data changes after initialization
-   */
-  $effect(() => {
-    // Update data if already initialized
-    if (currentData && renderer && isInitialized) {
-      renderer.updateData(currentData);
-    }
-  });
-
-  /**
-   * Effect for highlighting updates - runs when highlighting state changes
-   */
-  $effect(() => {
-    if (renderer && isInitialized) {
-      renderer.updateHighlighting(
-        spatialNetworkState.selectedNodeId,
-        Array.from(getHighlightedNodeIds())
-      );
+    
+    // If already initialized, handle updates only when necessary
+    if (renderer && isInitialized && currentData && !initializationInProgress) {
+      // Only update data if it actually changed
+      const dataChanged = dataSignature !== lastDataSignature;
+      
+      if (dataChanged) {
+        console.log('📊 Data changed, updating renderer...', dataSignature);
+        // Use untrack for the update to prevent triggering more reactivity
+        untrack(() => {
+          renderer!.updateData(currentData);
+        });
+        lastDataSignature = dataSignature;
+      }
+      
+      // Always update highlighting (lightweight operation)
+      // But untrack to prevent highlighting changes from triggering data updates
+      untrack(() => {
+        renderer!.updateHighlighting(
+          spatialNetworkState.selectedNodeId,
+          Array.from(getHighlightedNodeIds())
+        );
+      });
     }
   });
 

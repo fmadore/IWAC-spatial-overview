@@ -47,6 +47,7 @@ export async function createSpatialNetworkRenderer(
   // Leaflet binding returned by @sigma/layer-leaflet
   let leafletBinding: { clean: () => void; map: any; updateGraphCoordinates: (g: any) => void } | null = null;
   let targetContainer: HTMLElement | null = null;
+  let isFirstInitialization = true;
 
   /**
    * Get node color based on country
@@ -182,12 +183,13 @@ export async function createSpatialNetworkRenderer(
       }
 
       // Once the leaflet map is ready, fit to data bounds with proper timing
+      // But only on first initialization to prevent flashing
       try {
-        if (leafletBinding?.map) {
+        if (leafletBinding?.map && isFirstInitialization) {
           leafletBinding.map.whenReady(() => {
-            console.log('🗺️ Leaflet map ready, scheduling proper initialization...');
+            console.log('🗺️ Leaflet map ready, scheduling initial fit...');
             
-            // Schedule multiple attempts with increasing delays to ensure proper sizing
+            // Schedule multiple attempts with increasing delays for initial fit only
             setTimeout(() => {
               ensureProperSizeAndReproject();
               fitToNetworkBoundsProper();
@@ -204,7 +206,7 @@ export async function createSpatialNetworkRenderer(
             }, 600);
           });
           
-          // Also try to fit immediately after binding
+          // Also try to fit immediately after binding for first init
           setTimeout(() => fitToNetworkBoundsProper(), 50);
         }
       } catch (e) {
@@ -215,6 +217,9 @@ export async function createSpatialNetworkRenderer(
       setupEventListeners();
 
       console.log('✅ Spatial network initialized with', options.data.nodes.length, 'nodes and', options.data.edges.length, 'edges');
+      
+      // Mark first initialization as complete to prevent unnecessary re-fits
+      isFirstInitialization = false;
 
     } catch (err) {
       console.error('Error initializing spatial network:', err);
@@ -306,8 +311,11 @@ export async function createSpatialNetworkRenderer(
 
   if (sigmaInstance) sigmaInstance.refresh();
 
-  // After data updates, try to fit again
-  fitToNetworkBoundsProper();
+  // After data updates, only fit if this is manual user action (not auto-update)
+  // Skip auto-fit to prevent flashing during reactive updates
+  if (isFirstInitialization) {
+    fitToNetworkBoundsProper();
+  }
   }
 
   /**
