@@ -36,6 +36,7 @@ CACHE_DIR = DATA_DIR / 'world_cache'
 (CACHE_DIR / 'choropleth').mkdir(parents=True, exist_ok=True)
 (CACHE_DIR / 'choropleth' / 'by_year').mkdir(parents=True, exist_ok=True)
 (CACHE_DIR / 'choropleth' / 'by_entity').mkdir(parents=True, exist_ok=True)
+(CACHE_DIR / 'choropleth' / 'by_article_country').mkdir(parents=True, exist_ok=True)
 (CACHE_DIR / 'coordinates').mkdir(parents=True, exist_ok=True)
 (CACHE_DIR / 'coordinates' / 'by_country').mkdir(parents=True, exist_ok=True)
 (CACHE_DIR / 'coordinates' / 'by_article_country').mkdir(parents=True, exist_ok=True)
@@ -405,6 +406,86 @@ def build_article_country_coordinates_cache():
         save_json(CACHE_DIR / 'coordinates' / 'by_article_country' / f'{filename}.json', out, compact=True)
     print(f"  Saved article-country coordinate clusters: {len(per_ac)} countries")
 
+def build_article_country_choropleth_cache():
+    """Build choropleth data BY article country for fast union operations.
+    
+    For each articleCountry (e.g., "Benin"), compute what location countries 
+    its articles mention, with proper deduplication:
+    - If one article mentions Cotonou + Porto-Novo + Baghdad, count as Benin: 1, Iraq: 1
+    - NOT Benin: 2, Iraq: 1 (avoid double-counting same country per article)
+    """
+    print("Building article-country choropleth cache...")
+    
+    articles_data = load_json(DATA_DIR / 'articles.json')
+    locations_data = load_json(DATA_DIR / 'entities' / 'locations.json')
+    
+    if not articles_data or not locations_data:
+        print("  Skipping article-country choropleth cache (missing data)")
+        return
+        
+    # Build article_id -> articleCountry mapping
+    article_to_country = {}
+    for article in articles_data:
+        article_id = str(article.get('o:id', ''))
+        if not article_id:
+            continue
+        article_country = (article.get('country', '') or '').strip()
+        if article_country:
+            article_to_country[article_id] = article_country
+    
+    # Build location_id -> country mapping  
+    location_to_country = {}
+    for location in locations_data:
+        loc_id = str(location.get('id', ''))
+        country = (location.get('country', '') or '').strip()
+        if loc_id and country:
+            location_to_country[loc_id] = country
+    
+    # Group by articleCountry: articleCountry -> {locationCountry -> set(unique_article_ids)}
+    article_country_to_location_counts = defaultdict(lambda: defaultdict(set))
+    
+    # Process each location to find which articles mention it
+    for location in locations_data:
+        location_country = (location.get('country', '') or '').strip()
+        if not location_country:
+            continue
+            
+        related_articles = location.get('relatedArticleIds', []) or []
+        for article_id in related_articles:
+            article_id_str = str(article_id)
+            article_country = article_to_country.get(article_id_str)
+            if not article_country:
+                continue
+                
+            # Add this article to the set for this article_country -> location_country pair
+            # Using set ensures each article is counted only once per country pair
+            article_country_to_location_counts[article_country][location_country].add(article_id_str)
+    
+    # Convert sets to counts and save cache files
+    for article_country, location_data in article_country_to_location_counts.items():
+        choropleth_counts = {}
+        total_unique_articles = set()
+        
+        for location_country, article_ids_set in location_data.items():
+            # Count = number of unique articles from this articleCountry that mention this locationCountry
+            choropleth_counts[location_country] = len(article_ids_set)
+            total_unique_articles.update(article_ids_set)
+        
+        # Save to cache file
+        filename = normalize_country_filename(article_country)
+        cache_data = {
+            'type': 'article_country_choropleth',
+            'articleCountry': article_country,
+            'counts': choropleth_counts,
+            'total_location_countries': len(choropleth_counts),
+            'total_unique_articles': len(total_unique_articles),
+            'updatedAt': datetime.utcnow().isoformat()
+        }
+        
+        save_json(CACHE_DIR / 'choropleth' / 'by_article_country' / f'{filename}.json', cache_data, compact=True)
+    
+    print(f"  Saved article-country choropleth cache: {len(article_country_to_location_counts)} countries")
+
 def build_metadata():
     """Rebuild metadata file after generating caches."""
     metadata = {
@@ -416,7 +497,8 @@ def build_metadata():
             'choropleth': {
                 'all_countries.json': 'Global country counts for choropleth coloring',
                 'by_year/': 'Yearly country counts',
-                'by_entity/': 'Entity-type specific country counts'
+                'by_entity/': 'Entity-type specific country counts',
+                'by_article_country/': 'Article-country specific choropleth data with deduplication'
             },
             'coordinates': {
                 'all_locations.json': 'Pre-aggregated coordinate clusters for markers',
@@ -442,6 +524,7 @@ def main():
     build_entity_choropleth_cache() 
     build_coordinates_cache()
     build_article_country_coordinates_cache()
+    build_article_country_choropleth_cache()
     build_metadata()
     
     print("=" * 50)
