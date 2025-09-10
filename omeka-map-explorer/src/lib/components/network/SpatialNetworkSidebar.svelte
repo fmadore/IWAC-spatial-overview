@@ -132,7 +132,7 @@
     <SpatialNetworkIsolationControl />
     
     <p class="text-xs text-muted-foreground">
-      Focus mode shows only the selected location and its direct connections, hiding all other nodes and edges for clearer analysis.
+      Focus mode shows only the selected location and its direct connections. Click any location on the map to automatically enter focus mode, or click the map background to exit.
     </p>
   </Sidebar.GroupContent>
 </Sidebar.Group>

@@ -129,11 +129,15 @@
 <!-- Helper text -->
 {#if selectedNode && !isIsolationMode}
   <p class="text-xs text-muted-foreground mt-1">
-    Click "Focus Location" to show only <strong>{selectedNode.label}</strong> and its {neighborCount()} connected locations.
+    Click any location on the map to automatically focus on it, or use the "Focus Location" button for <strong>{selectedNode.label}</strong> and its {neighborCount()} connected locations.
   </p>
 {:else if isIsolationMode && selectedNode}
   <p class="text-xs text-muted-foreground mt-1">
-    Focusing on <strong>{selectedNode.label}</strong> and its {neighborCount()} connections. Click "Exit Focus" to return to full network view.
+    Focusing on <strong>{selectedNode.label}</strong> and its {neighborCount()} connections. Click "Exit Focus" or click the map background to return to full network view.
+  </p>
+{:else if !selectedNode}
+  <p class="text-xs text-muted-foreground mt-1">
+    Click any location on the map to automatically focus on it and see only its direct connections.
   </p>
 {/if}
 

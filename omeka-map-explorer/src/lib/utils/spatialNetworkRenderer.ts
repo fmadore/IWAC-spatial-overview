@@ -99,12 +99,21 @@ export async function createSpatialNetworkRenderer(
         });
       });
 
-      // Add edges to graph
+      // Add edges to graph with better color scheme
       options.data.edges.forEach((edge: SpatialNetworkEdge) => {
         if (graph.hasNode(edge.source) && graph.hasNode(edge.target)) {
+          // Color edges based on weight - stronger connections get more visible colors
+          let edgeColor = '#cbd5e1'; // Light blue-gray for weak connections
+          if (edge.weight >= 5) {
+            edgeColor = '#64748b'; // Medium gray-blue for moderate connections  
+          }
+          if (edge.weight >= 10) {
+            edgeColor = '#475569'; // Darker blue-gray for strong connections
+          }
+          
           graph.addEdge(edge.source, edge.target, {
             weight: edge.weight,
-            color: '#94a3b8', // Lighter gray for less visual prominence
+            color: edgeColor,
             size: Math.max(0.1, Math.min(0.4, edge.weight / 50))
           });
         }
@@ -218,7 +227,7 @@ export async function createSpatialNetworkRenderer(
   function setupEventListeners() {
     if (!sigmaInstance) return;
 
-    // Node click events
+    // Node click events - automatically enter focus mode
     sigmaInstance.on('clickNode', (event: any) => {
       const nodeId = event.node;
       const nodeData = graph?.getNodeAttributes(nodeId)?.originalData;
@@ -226,6 +235,11 @@ export async function createSpatialNetworkRenderer(
       if (nodeData && options.onNodeSelect) {
         options.onNodeSelect(nodeData);
       }
+      
+      // Automatically enter focus mode for clicked node
+      import('$lib/state/spatialNetworkData.svelte').then(({ enableSpatialIsolationMode }) => {
+        enableSpatialIsolationMode(nodeId);
+      });
     });
 
     // Node double-click for quick isolation mode toggle
@@ -253,11 +267,16 @@ export async function createSpatialNetworkRenderer(
       }
     });
 
-    // Background click to deselect
+    // Background click to deselect and exit focus mode
     sigmaInstance.on('clickStage', () => {
       if (options.onNodeSelect) {
         options.onNodeSelect(null);
       }
+      
+      // Exit focus mode when clicking background
+      import('$lib/state/spatialNetworkData.svelte').then(({ disableSpatialIsolationMode }) => {
+        disableSpatialIsolationMode();
+      });
     });
   }
 
@@ -286,9 +305,18 @@ export async function createSpatialNetworkRenderer(
 
     data.edges.forEach((edge: SpatialNetworkEdge) => {
       if (graph.hasNode(edge.source) && graph.hasNode(edge.target)) {
+        // Color edges based on weight - stronger connections get more visible colors
+        let edgeColor = '#cbd5e1'; // Light blue-gray for weak connections
+        if (edge.weight >= 5) {
+          edgeColor = '#64748b'; // Medium gray-blue for moderate connections  
+        }
+        if (edge.weight >= 10) {
+          edgeColor = '#475569'; // Darker blue-gray for strong connections
+        }
+        
         graph.addEdge(edge.source, edge.target, {
           weight: edge.weight,
-          color: '#94a3b8', // Lighter gray for less visual prominence
+          color: edgeColor,
           size: Math.max(0.1, Math.min(0.4, edge.weight / 50))
         });
       }
