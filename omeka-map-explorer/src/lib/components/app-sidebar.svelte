@@ -76,6 +76,10 @@
 					<CountryFilter
 						countries={filters.available.countries}
 						selected={filters.selected.countries}
+						onChange={(countries) => {
+							// Optional: Handle country filter changes if needed
+							console.log('Country filter changed:', countries);
+						}}
 					/>
 				</Sidebar.GroupContent>
 			</Sidebar.Group>
