@@ -12,7 +12,6 @@
   import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '$lib/components/ui/card';
   import { Button } from '$lib/components/ui/button';
   import { Badge } from '$lib/components/ui/badge';
-  import * as Sidebar from '$lib/components/ui/sidebar';
   import SpatialNetworkMap from './SpatialNetworkMap.svelte';
   import SpatialNetworkSidebar from './SpatialNetworkSidebar.svelte';
   import { 
@@ -167,10 +166,9 @@
 
   <!-- Main Content -->
   <div class="flex-1 min-h-0">
-    <Sidebar.Provider>
-      <div class="flex h-full">
-        <!-- Main Visualization Area -->
-        <div class="flex-1 min-w-0">
+    <div class="flex h-full gap-4">
+      <!-- Main Visualization Area - Give map 75% of space -->
+      <div class="flex-[3] min-w-0 overflow-hidden">
           {#if isLoading}
             <!-- Loading State -->
             <Card class="h-full">
@@ -244,10 +242,10 @@
           {/if}
         </div>
 
-        <!-- Sidebar -->
+        <!-- Sidebar - Regular flex layout instead of Sidebar component -->
         {#if hasData && !isLoading}
-          <Sidebar.Sidebar side="right" class="w-80">
-            <Sidebar.SidebarContent>
+          <div class="flex-[1] w-80 max-w-sm bg-sidebar border-l border-border overflow-y-auto">
+            <div class="p-4">
               <SpatialNetworkSidebar
                 {selectedNodeId}
                 onFitToView={handleFitToView}
@@ -255,13 +253,12 @@
                 onZoomIn={handleZoomIn}
                 onZoomOut={handleZoomOut}
               />
-            </Sidebar.SidebarContent>
-          </Sidebar.Sidebar>
+            </div>
+          </div>
         {/if}
       </div>
-    </Sidebar.Provider>
+    </div>
   </div>
-</div>
 
 <style>
   :global(.spatial-network-container) {

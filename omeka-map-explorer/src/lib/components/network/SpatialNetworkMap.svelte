@@ -64,7 +64,7 @@
       L = leafletModule.default || leafletModule;
       Sigma = sigmaModule.Sigma;
       Graph = graphModule.Graph;
-      LeafletLayer = layerModule.default || layerModule.bindLeafletLayer || layerModule;
+      LeafletLayer = layerModule.default;
 
       // Initialize map
       await initializeMap();
@@ -119,6 +119,8 @@
       // Create graph
       graph = new Graph();
 
+      console.log('🔄 Creating graph with', currentData.nodes.length, 'nodes');
+
       // Add nodes to graph with lat/lng coordinates
       currentData.nodes.forEach((node: SpatialNetworkNode) => {
         graph.addNode(node.id, {
@@ -144,15 +146,24 @@
         }
       });
 
-      // Create a container for Sigma
+      console.log('🔄 Created graph with', graph.order, 'nodes and', graph.size, 'edges');
+
+      // Create a container for Sigma that fills the map container
       const sigmaContainer = document.createElement('div');
       sigmaContainer.style.position = 'absolute';
       sigmaContainer.style.top = '0';
       sigmaContainer.style.left = '0';
       sigmaContainer.style.width = '100%';
       sigmaContainer.style.height = '100%';
-      sigmaContainer.style.pointerEvents = 'none';
+      sigmaContainer.style.pointerEvents = 'auto'; // Enable interactions
+      sigmaContainer.style.zIndex = '1000'; // Above map
       mapContainer.appendChild(sigmaContainer);
+
+      console.log('🔄 Container dimensions:', {
+        width: sigmaContainer.offsetWidth,
+        height: sigmaContainer.offsetHeight,
+        rect: sigmaContainer.getBoundingClientRect()
+      });
 
       // Create Sigma instance
       sigmaInstance = new Sigma(graph, sigmaContainer, {
@@ -184,8 +195,22 @@
         hideLabelsOnMove: true,
       });
 
+      console.log('✅ Sigma instance created');
+
       // Bind Leaflet layer to Sigma using the correct API
-      sigmaLayer = LeafletLayer(sigmaInstance);
+      const layerResult = LeafletLayer(sigmaInstance, {
+        mapOptions: {
+          center: [8.0, -1.0],
+          zoom: 6
+        },
+        tileLayer: {
+          urlTemplate: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+          attribution: '© OpenStreetMap contributors'
+        }
+      });
+
+      sigmaLayer = layerResult;
+      console.log('✅ Leaflet layer bound to Sigma');
 
       // Set up event listeners
       setupEventListeners(sigmaInstance);
@@ -280,9 +305,9 @@
    * Cleanup on component destroy
    */
   onDestroy(() => {
-    if (sigmaLayer) {
+    if (sigmaLayer && sigmaLayer.clean) {
       try {
-        sigmaLayer(); // Call cleanup function returned by bindLeafletLayer
+        sigmaLayer.clean(); // Call cleanup function returned by bindLeafletLayer
       } catch (err) {
         console.warn('Error removing Sigma layer:', err);
       }
@@ -307,7 +332,7 @@
 </script>
 
 <!-- Map container -->
-<div class="relative w-full overflow-hidden rounded-lg border border-border bg-card">
+<div class="relative w-full h-full overflow-hidden rounded-lg border border-border bg-card" data-testid="spatial-network-container">
   {#if error}
     <div class="flex h-96 items-center justify-center">
       <div class="rounded-lg bg-destructive/10 p-4 text-destructive">
@@ -319,8 +344,9 @@
     <!-- Map container -->
     <div 
       bind:this={mapContainer}
-      class="w-full"
-      style="height: {height};"
+      class="w-full h-full"
+      style="min-height: {height};"
+      data-testid="spatial-network-map"
     ></div>
 
     <!-- Loading overlay -->
