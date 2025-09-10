@@ -411,7 +411,7 @@
           // Using a custom scale with high contrast colors
           const colorScale = scaleSequential()
             .domain([1, maxCount])
-            .interpolator((t) => {
+            .interpolator((t: number) => {
               // Custom interpolator for maximum visual impact
               if (t < 0.2) return '#3b82f6'; // Blue for low values
               if (t < 0.4) return '#10b981'; // Green for low-medium values  
