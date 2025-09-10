@@ -149,16 +149,6 @@
             </div>
           {/if}
         </div>
-
-        {#if hoveredNode}
-          <div class="mt-2 p-2 bg-accent/20 rounded-md border text-sm">
-            <strong>{hoveredNode.label}</strong>
-            {#if hoveredNode.country}
-              <span class="text-muted-foreground">• {hoveredNode.country}</span>
-            {/if}
-            <span class="text-muted-foreground">• {hoveredNode.count} articles</span>
-          </div>
-        {/if}
       </CardHeader>
     </Card>
   </div>
@@ -209,7 +199,7 @@
             </Card>
           {:else if hasData}
             <!-- Network Visualization -->
-            <div class="h-full">
+            <div class="h-full relative">
               <SpatialNetworkMap
                 bind:this={mapComponent}
                 data={spatialNetworkState.filtered}
@@ -217,6 +207,19 @@
                 onNodeSelect={handleNodeSelect}
                 onNodeHover={handleNodeHover}
               />
+              
+              <!-- Hover overlay - positioned absolutely to avoid layout shift -->
+              {#if hoveredNode}
+                <div class="absolute top-4 left-4 p-3 bg-background/95 backdrop-blur-sm rounded-lg border shadow-lg text-sm z-[1001] max-w-xs pointer-events-none">
+                  <div class="font-medium text-foreground">{hoveredNode.label}</div>
+                  <div class="text-muted-foreground text-xs">
+                    {#if hoveredNode.country}
+                      {hoveredNode.country} • 
+                    {/if}
+                    {hoveredNode.count} articles
+                  </div>
+                </div>
+              {/if}
             </div>
           {:else}
             <!-- No Data State -->
