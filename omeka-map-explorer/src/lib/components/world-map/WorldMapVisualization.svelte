@@ -1,5 +1,6 @@
 <script lang="ts">
 	import Map from '$lib/components/world-map/Map.svelte';
+	import ViewModeToggle from '$lib/components/world-map/ViewModeToggle.svelte';
 	import { appState } from '$lib/state/appState.svelte';
 	import { Card, CardContent, CardHeader, CardTitle } from '$lib/components/ui/card';
 
@@ -12,10 +13,17 @@
 	<div class="flex-1 relative z-0">
 		<Card class="h-full border-0 rounded-none">
 			<CardHeader class="pb-2">
-				<CardTitle>World Map - Article Locations</CardTitle>
-				<p class="text-sm text-muted-foreground">
-					Explore newspaper articles by geographic location. Switch between bubble and choropleth views using the sidebar controls.
-				</p>
+				<div class="flex items-start justify-between">
+					<div class="flex-1">
+						<CardTitle>World Map - Article Locations</CardTitle>
+						<p class="text-sm text-muted-foreground">
+							Explore newspaper articles by geographic location. Switch between bubble and choropleth views.
+						</p>
+					</div>
+					<div class="ml-4">
+						<ViewModeToggle />
+					</div>
+				</div>
 			</CardHeader>
 			<CardContent class="h-full p-0">
 				<Map />

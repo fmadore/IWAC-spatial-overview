@@ -25,7 +25,7 @@
 			aria-pressed={currentViewMode === 'bubbles'}
 			title="Switch to bubble view"
 		>
-			<CircleDot size={16} />
+			<CircleDot size={14} />
 			<span>Bubbles</span>
 		</button>
 		<button
@@ -36,7 +36,7 @@
 			aria-pressed={currentViewMode === 'choropleth'}
 			title="Switch to choropleth view"
 		>
-			<Globe size={16} />
+			<Globe size={14} />
 			<span>Choropleth</span>
 		</button>
 	</div>
@@ -44,11 +44,8 @@
 
 <style>
 	.view-mode-toggle {
-		position: absolute;
-		top: 1rem;
-		right: 1rem;
-		z-index: 1000;
-		pointer-events: none;
+		/* Remove absolute positioning since it's now in the header layout */
+		display: inline-block;
 	}
 
 	.toggle-group {
@@ -58,19 +55,18 @@
 		border-radius: 0.75rem;
 		padding: 0.25rem;
 		box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-		border: 1px solid rgba(255, 255, 255, 0.2);
-		pointer-events: auto;
+		border: 1px solid rgba(229, 231, 235, 1);
 	}
 
 	.toggle-button {
 		display: flex;
 		align-items: center;
-		gap: 0.5rem;
-		padding: 0.5rem 0.75rem;
+		gap: 0.375rem;
+		padding: 0.375rem 0.625rem;
 		border: none;
 		background: transparent;
 		border-radius: 0.5rem;
-		font-size: 0.875rem;
+		font-size: 0.8125rem;
 		font-weight: 500;
 		color: #6b7280;
 		cursor: pointer;
@@ -96,17 +92,12 @@
 	}
 
 	@media (max-width: 640px) {
-		.view-mode-toggle {
-			top: 0.75rem;
-			right: 0.75rem;
-		}
-
 		.toggle-button span {
 			display: none;
 		}
 
 		.toggle-button {
-			padding: 0.5rem;
+			padding: 0.375rem;
 		}
 	}
 </style>

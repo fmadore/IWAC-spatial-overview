@@ -16,7 +16,6 @@
   import { loadMultipleArticleCountryChoroplethData } from '$lib/api/articleCountryChoroplethService';
   import { browser } from '$app/environment';
   import ChoroplethLayer from './ChoroplethLayer.svelte';
-  import ViewModeToggle from './ViewModeToggle.svelte';
   import MapPopup from '$lib/components/maps/MapPopup.svelte';
   import { appState } from '$lib/state/appState.svelte';
   import { urlManager } from '$lib/utils/urlManager.svelte';
@@ -635,9 +634,6 @@
 
 <div class="map-wrapper relative">
   <div class="map-container relative z-0" bind:this={mapElement} style="height: {height};" data-testid="map-container"></div>
-  
-  <!-- View Mode Toggle - positioned over the map -->
-  <ViewModeToggle />
   
   {#if mapLoading}
     <div class="absolute inset-0 bg-gray-50 flex items-center justify-center z-10">
