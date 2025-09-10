@@ -152,6 +152,7 @@
         id="showIsolated"
         checked={spatialNetworkState.showIsolatedNodes}
         onCheckedChange={onIsolatedNodesToggle}
+        aria-label="Toggle showing isolated locations"
       />
     </div>
 
