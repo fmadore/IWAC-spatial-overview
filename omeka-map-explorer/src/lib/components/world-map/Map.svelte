@@ -270,24 +270,39 @@
 
     if (mapData.viewMode === 'bubbles' && (visibleData.length > 0 || cacheAvailable)) {
       let coordinateGroups: Map<string, { lat: number; lng: number; count: number; sample: any; items: any[]; name?: string }> | null = null;
-      const countryArticleFilterActive = filters.selected.countries.length > 0;
-      const shouldUseCache = cacheAvailable && !appState.selectedEntity && !countryArticleFilterActive;
-      if (cacheAvailable && countryArticleFilterActive && !appState.selectedEntity) {
+      
+      // Since we now have single country selection (or all), cache logic is much simpler
+      const singleCountrySelected = filters.selected.countries.length === 1;
+      const noCountryFilter = filters.selected.countries.length === 0;
+      const shouldUseCache = cacheAvailable && !appState.selectedEntity;
+      
+      console.log('🔍 CACHE DEBUG: Bubble map cache decision', {
+        cacheAvailable,
+        singleCountrySelected,
+        noCountryFilter,
+        shouldUseCache,
+        selectedCountry: singleCountrySelected ? filters.selected.countries[0] : null
+      });
+
+      // Try cache for single country selection
+      if (singleCountrySelected && shouldUseCache) {
         try {
-          const countries = filters.selected.countries.slice();
-            const clusters = await loadArticleCountryCoordinateClusters(countries);
-            if (clusters && clusters.length > 0) {
-              coordinateGroups = new Map();
-              for (const cl of clusters) {
-                if (!cl.coordinates) continue;
-                const [lat, lng] = cl.coordinates;
-                const key = `${lat.toFixed(4)},${lng.toFixed(4)}`;
-                const existing = coordinateGroups.get(key);
-                if (existing) {
-                  existing.count += cl.articleCount;
-                } else {
-                  coordinateGroups.set(key, {
-                    lat,
+          const selectedCountry = filters.selected.countries[0];
+          console.log('🔍 CACHE DEBUG: Loading cache for single country:', selectedCountry);
+          const clusters = await loadArticleCountryCoordinateClusters([selectedCountry]);
+          if (clusters && clusters.length > 0) {
+            console.log('✅ CACHE DEBUG: Successfully loaded cached data for', selectedCountry, 'clusters:', clusters.length);
+            coordinateGroups = new Map();
+            for (const cl of clusters) {
+              if (!cl.coordinates) continue;
+              const [lat, lng] = cl.coordinates;
+              const key = `${lat.toFixed(4)},${lng.toFixed(4)}`;
+              const existing = coordinateGroups.get(key);
+              if (existing) {
+                existing.count += cl.articleCount;
+              } else {
+                coordinateGroups.set(key, {
+                  lat,
                     lng,
                     count: cl.articleCount,
                     sample: {
@@ -301,38 +316,45 @@
                   });
                 }
               }
-              console.log('✅ Using article-country union coordinate cache', { selectedCountries: countries, clusters: coordinateGroups.size });
+              console.log('✅ CACHE DEBUG: Successfully using country-specific cache', { 
+                selectedCountry, 
+                clusters: coordinateGroups.size 
+              });
+            } else {
+              console.log('⚠️ CACHE DEBUG: No cached data found for country:', selectedCountry);
             }
-        } catch (e) {
-          console.warn('Article-country coordinate cache path failed, will fallback:', e);
-        }
-      }
-      if (shouldUseCache) {
-        try {
-          const cacheOptions: { country?: string; countries?: string[]; dateRange?: { start: Date; end: Date }; year?: number } = {};
-          if (filters.selected.dateRange) {
-            cacheOptions.dateRange = filters.selected.dateRange;
+          } catch (e) {
+            console.warn('⚠️ CACHE DEBUG: Country-specific cache failed, will fallback:', e);
           }
-          const cachedClusters = await loadCoordinateCache(cacheOptions);
-          if (cachedClusters && cachedClusters.length > 0) {
-            console.log('✅ Using cached coordinate clusters for map markers with filters:', {
-              clusters: cachedClusters.length,
-              countries: cacheOptions.countries?.length || 'all',
-              dateRange: cacheOptions.dateRange ? 'yes' : 'no'
-            });
-            coordinateGroups = new Map();
-            for (const cluster of cachedClusters) {
-              const [lat, lng] = cluster.coordinates;
-              const key = `${lat.toFixed(4)},${lng.toFixed(4)}`;
-              coordinateGroups.set(key, {
-                lat,
-                lng,
-                count: cluster.articleCount,
-                sample: {
-                  id: cluster.id,
-                  title: cluster.label,
-                  country: cluster.country,
-                  placeLabel: cluster.label
+        }
+
+        // Try cache for "all countries" view (global cache)
+        else if (noCountryFilter && shouldUseCache) {
+          try {
+            console.log('🔍 CACHE DEBUG: Loading global cache for all countries');
+            const cacheOptions: { dateRange?: { start: Date; end: Date }; year?: number } = {};
+            if (filters.selected.dateRange) {
+              cacheOptions.dateRange = filters.selected.dateRange;
+            }
+            const cachedClusters = await loadCoordinateCache(cacheOptions);
+            if (cachedClusters && cachedClusters.length > 0) {
+              console.log('✅ CACHE DEBUG: Successfully using global cache', {
+                clusters: cachedClusters.length,
+                dateRange: cacheOptions.dateRange ? 'yes' : 'no'
+              });
+              coordinateGroups = new Map();
+              for (const cluster of cachedClusters) {
+                const [lat, lng] = cluster.coordinates;
+                const key = `${lat.toFixed(4)},${lng.toFixed(4)}`;
+                coordinateGroups.set(key, {
+                  lat,
+                  lng,
+                  count: cluster.articleCount,
+                  sample: {
+                    id: cluster.id,
+                    title: cluster.label,
+                    country: cluster.country,
+                    placeLabel: cluster.label
                 },
                 items: [],
                 name: cluster.label
@@ -496,35 +518,38 @@
       
       let newData: Record<string, number> = {};
       usingCachedData = false;
-      const countryFacetActive = filters.selected.countries.length > 0;
+      const singleCountrySelected = filters.selected.countries.length === 1;
+      const noCountryFilter = filters.selected.countries.length === 0;
       
-      console.log('🔍 CHOROPLETH DEBUG: Country facet check', {
-        countryFacetActive,
-        countriesLength: filters.selected.countries.length,
-        countries: filters.selected.countries
+      console.log('🔍 CHOROPLETH DEBUG: Cache decision', {
+        singleCountrySelected,
+        noCountryFilter,
+        cacheAvailable,
+        selectedCountry: singleCountrySelected ? filters.selected.countries[0] : null
       });
       
-      // Try article-country choropleth cache when countries are selected
-      if (countryFacetActive && cacheAvailable) {
-        console.log('🚀 CHOROPLETH DEBUG: Attempting article-country cache for countries:', filters.selected.countries);
+      // Try article-country choropleth cache when single country is selected
+      if (singleCountrySelected && cacheAvailable) {
+        const selectedCountry = filters.selected.countries[0];
+        console.log('🚀 CHOROPLETH DEBUG: Attempting single country cache for:', selectedCountry);
         try {
-          const cachedData = await loadMultipleArticleCountryChoroplethData(filters.selected.countries);
-          console.log('🔍 CHOROPLETH DEBUG: Cache result:', {
+          const cachedData = await loadMultipleArticleCountryChoroplethData([selectedCountry]);
+          console.log('🔍 CHOROPLETH DEBUG: Single country cache result:', {
             cachedData: cachedData,
             keysLength: Object.keys(cachedData || {}).length
           });
           if (cachedData && Object.keys(cachedData).length > 0) {
-            console.log('✅ Using cached article-country choropleth data');
+            console.log('✅ CHOROPLETH DEBUG: Using cached single country choropleth data for', selectedCountry);
             newData = cachedData;
             usingCachedData = true;
           }
         } catch (e) { 
-          console.error('❌ CHOROPLETH DEBUG: Cache failed:', e); 
+          console.error('❌ CHOROPLETH DEBUG: Single country cache failed:', e); 
         }
       }
-      // Try global choropleth cache when no countries selected
-      else if (!countryFacetActive && cacheAvailable && !appState.selectedEntity) {
-        console.log('🔍 CHOROPLETH DEBUG: Attempting global cache');
+      // Try global choropleth cache when no countries selected (all countries view)
+      else if (noCountryFilter && cacheAvailable && !appState.selectedEntity) {
+        console.log('🔍 CHOROPLETH DEBUG: Attempting global cache (all countries)');
         try {
           const cacheOptions: { year?: number; entityType?: string; dateRange?: { start: Date; end: Date } } = {};
           if ((appState.selectedEntity as any)?.type) {
@@ -539,7 +564,7 @@
           if (filters.selected.dateRange) { cacheOptions.dateRange = filters.selected.dateRange; }
           const cachedData = await loadChoroplethCache(cacheOptions);
           if (cachedData && Object.keys(cachedData).length > 0) {
-            console.log('✅ Using cached global choropleth data');
+            console.log('✅ CHOROPLETH DEBUG: Using cached global choropleth data (all countries)');
             newData = cachedData;
             usingCachedData = true;
           }
@@ -549,7 +574,7 @@
       // Fallback to real-time calculation if cache unavailable
       if (!usingCachedData || Object.keys(newData).length === 0) {
         console.log('⚠️ CHOROPLETH DEBUG: Using real-time calculation', 
-          countryFacetActive ? '(article-country cache unavailable)' : '(global cache unavailable)');
+          singleCountrySelected ? '(single country cache unavailable)' : '(global cache unavailable)');
         newData = countItemsByCountryHybrid(visibleData, worldGeo);
         console.log('Map: Choropleth data (filtered) countries:', Object.keys(newData).length);
       }
