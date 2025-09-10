@@ -1,3 +1,4 @@
+import { base } from '$app/paths';
 import type { NetworkData, NetworkEdge, NetworkNode } from '$lib/types';
 import { appState } from '$lib/state/appState.svelte';
 
@@ -23,7 +24,7 @@ export const nodeArticleIds = $state<Record<string, string[]>>({});
 export async function loadNetwork(pathPrefix = 'data') {
   if (networkState.data) return networkState.data;
   try {
-    const res = await fetch(`${pathPrefix}/networks/global.json`, { cache: 'no-cache' });
+    const res = await fetch(`${base}/${pathPrefix}/networks/global.json`, { cache: 'no-cache' });
     if (!res.ok) throw new Error(`Failed to load network: ${res.status}`);
     const json = (await res.json()) as NetworkData;
     networkState.data = json;

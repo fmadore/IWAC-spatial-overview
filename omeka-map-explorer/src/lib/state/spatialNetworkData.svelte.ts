@@ -7,6 +7,7 @@
  * - Geographic bounds for map visualization
  */
 
+import { base } from '$app/paths';
 import type { SpatialNetworkData, SpatialNetworkNode, SpatialNetworkEdge } from '$lib/types';
 
 // Core spatial network state
@@ -41,7 +42,7 @@ export async function loadSpatialNetworkData(pathPrefix = 'data'): Promise<boole
   spatialNetworkState.error = null;
   
   try {
-    const response = await fetch(`${pathPrefix}/networks/spatial.json`);
+    const response = await fetch(`${base}/${pathPrefix}/networks/spatial.json`);
     
     if (!response.ok) {
       if (response.status === 404) {

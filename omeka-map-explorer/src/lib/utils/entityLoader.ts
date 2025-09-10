@@ -3,6 +3,7 @@
  * This provides better performance by not loading all entities upfront
  */
 
+import { base } from '$app/paths';
 import type { Entity, LocationEntity } from '$lib/types/index.js';
 
 type EntityType = 'persons' | 'organizations' | 'events' | 'subjects' | 'locations';
@@ -20,7 +21,7 @@ export async function loadEntities(type: EntityType, basePath = 'data'): Promise
 	}
 
 	try {
-		const response = await fetch(`${basePath}/entities/${type}.json`);
+		const response = await fetch(`${base}/${basePath}/entities/${type}.json`);
 		if (!response.ok) {
 			console.warn(`Failed to load ${type}: ${response.statusText}`);
 			return [];

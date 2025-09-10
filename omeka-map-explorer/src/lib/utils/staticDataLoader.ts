@@ -1,3 +1,4 @@
+import { base } from '$app/paths';
 import type { ProcessedItem, TemporalData } from '$lib/types';
 import { loadLocations } from './entityLoader';
 
@@ -94,7 +95,7 @@ function groupByMonth(items: ProcessedItem[]): TemporalData[] {
 
 export async function loadStaticData(basePath = 'data'): Promise<LoadedData> {
 	const [articlesRes] = await Promise.all([
-		fetch(`${basePath}/articles.json`)
+		fetch(`${base}/${basePath}/articles.json`)
 	]);
 	if (!articlesRes.ok) throw new Error(`Failed to load articles.json: ${articlesRes.status}`);
 
