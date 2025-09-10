@@ -88,7 +88,13 @@
 
 			<Sidebar.Group>
 				<Sidebar.GroupContent>
-					<YearRangeFilter range={filters.available.dateRange} />
+					<YearRangeFilter 
+						range={filters.available.dateRange} 
+						onChange={(dateRange) => {
+							// Optional: Handle year range filter changes if needed
+							console.log('Year range filter changed:', dateRange);
+						}}
+					/>
 				</Sidebar.GroupContent>
 			</Sidebar.Group>
 		{:else if appState.activeVisualization === 'network'}

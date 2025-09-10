@@ -1,13 +1,15 @@
 <script lang="ts">
-	import { createEventDispatcher, onDestroy } from 'svelte';
+	import { onDestroy } from 'svelte';
 	import { filters } from '$lib/state/filters.svelte';
 	import { Slider } from '$lib/components/ui/slider';
 
-	let { range = { min: new Date('1900-01-01'), max: new Date('2023-12-31') } } = $props<{
+	let { 
+		range = { min: new Date('1900-01-01'), max: new Date('2023-12-31') },
+		onChange
+	} = $props<{
 		range?: { min: Date; max: Date };
+		onChange?: (dateRange: { start: Date; end: Date } | null) => void;
 	}>();
-
-	const dispatch = createEventDispatcher();
 
 	// Get year range from the date range
 	const minYear = range.min.getFullYear();
@@ -45,6 +47,8 @@
 
 		// Set new timer to delay the actual filter update
 		debounceTimer = setTimeout(() => {
+			let newDateRange: { start: Date; end: Date } | null = null;
+			
 			if (yearRange[0] === minYear && yearRange[1] === maxYear) {
 				// If full range is selected, clear the filter
 				filters.selected.dateRange = null;
@@ -52,9 +56,14 @@
 				// Create date range from the start of first year to end of last year
 				const startDate = new Date(yearRange[0], 0, 1); // January 1st of start year
 				const endDate = new Date(yearRange[1], 11, 31); // December 31st of end year
-				filters.selected.dateRange = { start: startDate, end: endDate };
+				newDateRange = { start: startDate, end: endDate };
+				filters.selected.dateRange = newDateRange;
 			}
-			dispatch('change', { dateRange: filters.selected.dateRange });
+			
+			// Call callback prop if provided
+			onChange?.(newDateRange);
+			
+			// Update URL
 			import('$lib/utils/urlManager.svelte').then(({ urlManager }) => urlManager.updateUrl());
 			debounceTimer = null;
 			isUpdating = false;

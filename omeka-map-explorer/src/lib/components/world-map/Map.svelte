@@ -447,11 +447,29 @@
       updateMapForDate(timeData.currentDate);
     }
   });
+  
+  // Watch for specific filter changes to trigger map data reload
   $effect(() => {
-    if (browser && map && filters.selected) {
+    if (browser && map) {
+      // Explicitly track all filter properties to ensure reactivity
+      const _countries = filters.selected.countries;
+      const _regions = filters.selected.regions;
+      const _newspapers = filters.selected.newspapers;
+      const _dateRange = filters.selected.dateRange;
+      const _keywords = filters.selected.keywords;
+      
+      console.log('🔍 Map: Filter change detected', {
+        countries: _countries.length,
+        regions: _regions.length,
+        newspapers: _newspapers.length,
+        dateRange: _dateRange ? `${_dateRange.start.getFullYear()}-${_dateRange.end.getFullYear()}` : 'none',
+        keywords: _keywords.length
+      });
+      
       loadMapData();
     }
   });
+  
   $effect(() => {
     if (browser && map && visibleData) {
       loadMapData();
@@ -508,8 +526,21 @@
       choroplethData = {};
       return;
     }
-    // Watch for changes in country filter to trigger cache updates
+    
+    // Explicitly track all relevant filter changes for choropleth updates
     const _selectedCountries = filters.selected.countries;
+    const _dateRange = filters.selected.dateRange;
+    const _keywords = filters.selected.keywords;
+    const _newspapers = filters.selected.newspapers;
+    const _selectedEntity = appState.selectedEntity;
+    
+    console.log('🔍 Choropleth: Filter change detected', {
+      countries: _selectedCountries.length,
+      dateRange: _dateRange ? `${_dateRange.start.getFullYear()}-${_dateRange.end.getFullYear()}` : 'none',
+      keywords: _keywords.length,
+      newspapers: _newspapers.length,
+      entity: _selectedEntity ? `${_selectedEntity.type}:${_selectedEntity.id}` : 'none'
+    });
     
     if (choroplethUpdateTimeout) { clearTimeout(choroplethUpdateTimeout); }
     choroplethUpdateTimeout = setTimeout(async () => {
