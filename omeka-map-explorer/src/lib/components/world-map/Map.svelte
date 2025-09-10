@@ -13,6 +13,7 @@
     isWorldMapCacheAvailable,
     loadArticleCountryCoordinateClusters
   } from '$lib/api/worldMapCacheService';
+  import { loadMultipleArticleCountryChoroplethData } from '$lib/api/articleCountryChoroplethService';
   import { browser } from '$app/environment';
   import ChoroplethLayer from '$lib/components/maps/ChoroplethLayer.svelte';
   import MapPopup from '$lib/components/maps/MapPopup.svelte';
@@ -180,11 +181,14 @@
         dataLoading = true;
         try {
           cacheAvailable = await isWorldMapCacheAvailable();
+          console.log('🔍 CACHE DEBUG: Cache availability check result:', cacheAvailable);
           if (cacheAvailable && !appState.selectedEntity) {
-            console.log('World map cache is available - using optimized data loading');
+            console.log('✅ World map cache is available - using optimized data loading');
+          } else {
+            console.log('⚠️ Cache not used:', { cacheAvailable, hasSelectedEntity: !!appState.selectedEntity });
           }
         } catch (e) {
-          console.warn('Could not check world map cache availability:', e);
+          console.error('❌ CACHE DEBUG: Failed to check cache availability:', e);
           cacheAvailable = false;
         }
         try {
@@ -484,10 +488,43 @@
     }
     if (choroplethUpdateTimeout) { clearTimeout(choroplethUpdateTimeout); }
     choroplethUpdateTimeout = setTimeout(async () => {
+      console.log('🔍 CHOROPLETH DEBUG: Starting update', {
+        viewMode: mapData.viewMode,
+        selectedCountries: filters.selected.countries,
+        cacheAvailable: cacheAvailable
+      });
+      
       let newData: Record<string, number> = {};
       usingCachedData = false;
       const countryFacetActive = filters.selected.countries.length > 0;
-      if (!countryFacetActive && cacheAvailable && !appState.selectedEntity) {
+      
+      console.log('🔍 CHOROPLETH DEBUG: Country facet check', {
+        countryFacetActive,
+        countriesLength: filters.selected.countries.length,
+        countries: filters.selected.countries
+      });
+      
+      // Try article-country choropleth cache when countries are selected
+      if (countryFacetActive && cacheAvailable) {
+        console.log('🚀 CHOROPLETH DEBUG: Attempting article-country cache for countries:', filters.selected.countries);
+        try {
+          const cachedData = await loadMultipleArticleCountryChoroplethData(filters.selected.countries);
+          console.log('🔍 CHOROPLETH DEBUG: Cache result:', {
+            cachedData: cachedData,
+            keysLength: Object.keys(cachedData || {}).length
+          });
+          if (cachedData && Object.keys(cachedData).length > 0) {
+            console.log('✅ Using cached article-country choropleth data');
+            newData = cachedData;
+            usingCachedData = true;
+          }
+        } catch (e) { 
+          console.error('❌ CHOROPLETH DEBUG: Cache failed:', e); 
+        }
+      }
+      // Try global choropleth cache when no countries selected
+      else if (!countryFacetActive && cacheAvailable && !appState.selectedEntity) {
+        console.log('🔍 CHOROPLETH DEBUG: Attempting global cache');
         try {
           const cacheOptions: { year?: number; entityType?: string; dateRange?: { start: Date; end: Date } } = {};
           if ((appState.selectedEntity as any)?.type) {
@@ -502,17 +539,27 @@
           if (filters.selected.dateRange) { cacheOptions.dateRange = filters.selected.dateRange; }
           const cachedData = await loadChoroplethCache(cacheOptions);
           if (cachedData && Object.keys(cachedData).length > 0) {
-            console.log('✅ Using cached choropleth data (no country facet active)');
+            console.log('✅ Using cached global choropleth data');
             newData = cachedData;
             usingCachedData = true;
           }
-        } catch (e) { console.warn('Failed to load cached choropleth data:', e); }
+        } catch (e) { console.warn('Failed to load global choropleth cache:', e); }
       }
+      
+      // Fallback to real-time calculation if cache unavailable
       if (!usingCachedData || Object.keys(newData).length === 0) {
-        console.log('⚠️ Real-time choropleth calculation', countryFacetActive ? '(country facet active - cache skipped)' : '(cache unavailable)');
+        console.log('⚠️ CHOROPLETH DEBUG: Using real-time calculation', 
+          countryFacetActive ? '(article-country cache unavailable)' : '(global cache unavailable)');
         newData = countItemsByCountryHybrid(visibleData, worldGeo);
         console.log('Map: Choropleth data (filtered) countries:', Object.keys(newData).length);
       }
+      
+      console.log('🔍 CHOROPLETH DEBUG: Final result:', {
+        usingCachedData,
+        dataKeys: Object.keys(newData).length,
+        sampleData: Object.entries(newData).slice(0, 3)
+      });
+      
       choroplethData = newData;
       choroplethUpdateTimeout = null;
     }, CHOROPLETH_DEBOUNCE_MS);
