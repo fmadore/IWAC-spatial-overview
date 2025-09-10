@@ -38,18 +38,23 @@
       L = await import('leaflet');
       await import('leaflet/dist/leaflet.css');
 
-      // Create the map
+      // Create the map with proper bounds and zoom limits
       map = L.map(mapEl, {
-        maxBounds: [[-85, -180],[85,180]],
+        maxBounds: [[-60, -180], [85, 180]], // Prevent extreme south coordinates
         maxBoundsViscosity: 1.0,
-        worldCopyJump: false
-      }).setView(mapData.center, mapData.zoom);
+        worldCopyJump: false,
+        minZoom: 2, // Prevent zooming out too far
+        maxZoom: 18, // Reasonable max zoom
+        zoomControl: true
+      }).setView(mapData.center, Math.max(mapData.zoom, 2)); // Ensure initial zoom is at least 2
 
       L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
         attribution: '© OpenStreetMap contributors © CARTO',
         subdomains: 'abcd',
-        maxZoom: 20,
-        noWrap: true
+        maxZoom: 18, // Match map maxZoom
+        minZoom: 2,  // Match map minZoom
+        noWrap: true,
+        bounds: [[-60, -180], [85, 180]] // Restrict tile loading to valid bounds
       }).addTo(map);
 
       map.on('moveend', handleMove);
@@ -172,7 +177,8 @@
         try {
           map.fitBounds(bounds, { 
             padding: [20, 20],
-            maxZoom: 10 // Prevent over-zooming on single points
+            maxZoom: 10, // Prevent over-zooming on single points
+            minZoom: 2   // Respect minimum zoom level
           });
         } catch (error) {
           console.warn('Failed to fit bounds:', error);
