@@ -58,8 +58,13 @@
 	const renderSimpleFallback = () => {
 		if (!wordCloudContainer) return;
 		
+		// Calculate a more compact container height based on content
+		const maxWordsPerRow = Math.floor(wordCloudContainer.clientWidth / 120); // Rough estimate
+		const estimatedRows = Math.ceil(locationCounts.length / maxWordsPerRow);
+		const minHeight = Math.max(100, estimatedRows * 45); // Even more compact
+		
 		wordCloudContainer.innerHTML = `
-			<div class="flex flex-wrap gap-3 items-center justify-center text-center leading-relaxed">
+			<div class="flex flex-wrap gap-x-4 gap-y-2 items-center justify-center text-center" style="min-height: ${minHeight}px; line-height: 1.2;">
 				${locationCounts.map(({ name, count }) => {
 					const fontSize = 14 + ((count - minCount) / Math.max(maxCount - minCount, 1)) * 24; // 14px to 38px
 					const hue = 210;
@@ -69,11 +74,11 @@
 					
 					return `<span 
 						class="inline-block font-medium transition-all hover:scale-110 cursor-default relative group"
-						style="font-size: ${fontSize}px; color: ${color};"
+						style="font-size: ${fontSize}px; color: ${color}; line-height: 1.1;"
 						title="${name}: ${count} ${count === 1 ? 'mention' : 'mentions'}"
 					>
 						${name}
-						<span class="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-2 py-1 text-xs text-white bg-gray-800 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-10">
+						<span class="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-1 px-2 py-1 text-xs text-white bg-gray-800 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-10">
 							${count} ${count === 1 ? 'mention' : 'mentions'}
 						</span>
 					</span>`;
@@ -213,7 +218,7 @@
 			<CardTitle>Mentioned Locations ({locationCounts.length})</CardTitle>
 		</CardHeader>
 		<CardContent>
-			<div bind:this={wordCloudContainer} class="w-full min-h-[400px] flex items-center justify-center">
+			<div bind:this={wordCloudContainer} class="w-full flex items-center justify-center p-4">
 				<!-- Word cloud will be rendered here -->
 			</div>
 			
