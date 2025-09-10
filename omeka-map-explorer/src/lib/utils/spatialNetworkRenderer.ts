@@ -18,6 +18,10 @@ export interface SpatialNetworkRenderer {
   initialize(): Promise<void>;
   updateData(data: SpatialNetworkData): void;
   updateHighlighting(selectedNodeId?: string | null, highlightedNodeIds?: string[]): void;
+  fitToView(): void;
+  resetView(): void;
+  zoomIn(): void;
+  zoomOut(): void;
   destroy(): void;
 }
 
@@ -315,6 +319,33 @@ export async function createSpatialNetworkRenderer(
   }
 
   /**
+   * Public controls for external UI (sidebar)
+   */
+  function fitToView() {
+    fitToNetworkBounds();
+  }
+
+  function resetView() {
+    fitToNetworkBounds();
+  }
+
+  function zoomIn() {
+    try {
+      if (leafletBinding?.map) leafletBinding.map.zoomIn();
+    } catch (e) {
+      console.warn('zoomIn failed:', e);
+    }
+  }
+
+  function zoomOut() {
+    try {
+      if (leafletBinding?.map) leafletBinding.map.zoomOut();
+    } catch (e) {
+      console.warn('zoomOut failed:', e);
+    }
+  }
+
+  /**
    * Cleanup resources
    */
   function destroy() {
@@ -404,6 +435,10 @@ export async function createSpatialNetworkRenderer(
     initialize,
     updateData,
     updateHighlighting,
+  fitToView,
+  resetView,
+  zoomIn,
+  zoomOut,
     destroy
   };
 }

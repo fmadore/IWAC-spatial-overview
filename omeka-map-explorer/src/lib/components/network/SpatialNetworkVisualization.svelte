@@ -13,7 +13,6 @@
   import { Button } from '$lib/components/ui/button';
   import { Badge } from '$lib/components/ui/badge';
   import SpatialNetworkMap from './SpatialNetworkMap.svelte';
-  import SpatialNetworkSidebar from './SpatialNetworkSidebar.svelte';
   import { 
     spatialNetworkState, 
     loadSpatialNetworkData,
@@ -244,20 +243,7 @@
           {/if}
         </div>
 
-        <!-- Sidebar - Regular flex layout instead of Sidebar component -->
-        {#if hasData && !isLoading}
-          <div class="flex-[1] w-80 max-w-sm h-full bg-sidebar border-l border-border overflow-y-auto">
-            <div class="p-4">
-              <SpatialNetworkSidebar
-                {selectedNodeId}
-                onFitToView={handleFitToView}
-                onResetView={handleResetView}
-                onZoomIn={handleZoomIn}
-                onZoomOut={handleZoomOut}
-              />
-            </div>
-          </div>
-        {/if}
+  <!-- Sidebar moved into App Sidebar (see AppSidebar for controls) -->
       </div>
     </div>
   </div>

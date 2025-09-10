@@ -11,6 +11,7 @@
   import type { SpatialNetworkData, SpatialNetworkNode } from '$lib/types';
   import { spatialNetworkState } from '$lib/state/spatialNetworkData.svelte';
   import { createSpatialNetworkRenderer, type SpatialNetworkRenderer } from '$lib/utils/spatialNetworkRenderer';
+  import { appState } from '$lib/state/appState.svelte';
 
   // Props
   let { 
@@ -72,6 +73,13 @@
       });
 
       await renderer.initialize();
+      // Expose control functions globally for the App Sidebar
+      appState.spatialNetworkControlFunctions = {
+        fitToView: () => renderer?.fitToView(),
+        resetView: () => renderer?.resetView(),
+        zoomIn: () => renderer?.zoomIn(),
+        zoomOut: () => renderer?.zoomOut()
+      };
       isInitialized = true;
       
       console.log('✅ Spatial network renderer initialized');
@@ -116,6 +124,8 @@
       renderer.destroy();
       renderer = null;
     }
+  // Clear exported controls when unmounting
+  appState.spatialNetworkControlFunctions = null;
     // Final cleanup of container to ensure no ghost canvases remain
     if (mapContainer) mapContainer.innerHTML = '';
   });

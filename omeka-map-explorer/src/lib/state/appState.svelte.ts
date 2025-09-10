@@ -42,6 +42,14 @@ interface AppState {
 	spatialNetworkNodeSelected?: { id: string } | null;
 	spatialNetworkLoaded?: boolean;
 
+	// Spatial network control functions (set by spatial network map)
+	spatialNetworkControlFunctions?: {
+		fitToView: () => void;
+		resetView: () => void;
+		zoomIn: () => void;
+		zoomOut: () => void;
+	} | null;
+
 	// Country Focus facets
 	countryFocus?: {
 		country: 'Benin' | 'Burkina Faso' | 'Cote_dIvoire' | 'Togo';
@@ -65,6 +73,7 @@ export const appState = $state<AppState>({
 	networkNodeSelected: null,
 	networkLoaded: false,
 	networkHighlightingFunctions: null,
+	spatialNetworkControlFunctions: null,
 	countryFocus: {
 		country: 'Benin',
 		level: 'regions',

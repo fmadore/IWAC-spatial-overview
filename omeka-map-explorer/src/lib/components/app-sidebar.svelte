@@ -9,7 +9,7 @@
 	import { Home, Globe2, Users, Building2, CalendarRange, Tags, MapPin, Share2 } from '@lucide/svelte';
 	import CountryFilter from '$lib/components/filters/CountryFilter.svelte';
 	import YearRangeFilter from '$lib/components/filters/YearRangeFilter.svelte';
-	import { NetworkSidebar } from '$lib/components/network';
+	import { NetworkSidebar, SpatialNetworkSidebar } from '$lib/components/network';
 
 	let { variant = 'inset' } = $props<{ variant?: 'floating' | 'inset' }>();
 
@@ -95,6 +95,14 @@
 				clearHighlight={appState.networkHighlightingFunctions?.clearHighlight}
 				focusOnNode={appState.networkHighlightingFunctions?.focusOnNode}
 			/>
+		{:else if appState.activeVisualization === 'spatialNetwork'}
+			<Sidebar.Separator />
+			<SpatialNetworkSidebar
+				onFitToView={appState.spatialNetworkControlFunctions?.fitToView}
+				onResetView={appState.spatialNetworkControlFunctions?.resetView}
+				onZoomIn={appState.spatialNetworkControlFunctions?.zoomIn}
+				onZoomOut={appState.spatialNetworkControlFunctions?.zoomOut}
+			/>
 		{/if}
 	</Sidebar.Content>
 	<Sidebar.Footer>
@@ -142,7 +150,7 @@
 					</div>
 				</div>
 			</div>
-		{:else}
+	{:else}
 			<div class="p-4 text-xs text-muted-foreground">v1 • Dashboard</div>
 		{/if}
 	</Sidebar.Footer>
