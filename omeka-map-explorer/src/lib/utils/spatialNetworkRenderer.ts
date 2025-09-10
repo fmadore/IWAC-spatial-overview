@@ -86,7 +86,7 @@ export async function createSpatialNetworkRenderer(
           x: 0,
           y: 0,
           label: node.label,
-          size: Math.max(4, Math.min(20, Math.sqrt(node.count || 1) * 2)),
+          size: Math.max(2, Math.min(8, Math.sqrt(node.count || 1) * 0.8)),
           color: getNodeColor(node),
           
           // Geographic coordinates for Leaflet layer
@@ -104,7 +104,7 @@ export async function createSpatialNetworkRenderer(
           graph.addEdge(edge.source, edge.target, {
             weight: edge.weight,
             color: '#34495e',
-            size: Math.max(0.5, Math.min(4, edge.weight / 10))
+            size: Math.max(0.2, Math.min(1.5, edge.weight / 20))
           });
         }
       });
@@ -116,25 +116,25 @@ export async function createSpatialNetworkRenderer(
         // Rendering settings
         backgroundColor: 'transparent',
         
-        // Node rendering
+        // Node rendering - smaller sizes for geographic network
         defaultNodeColor: '#e74c3c',
-        defaultNodeSize: 8,
-        minNodeSize: 4,
-        maxNodeSize: 20,
+        defaultNodeSize: 4,
+        minNodeSize: 2,
+        maxNodeSize: 8,
         
-        // Edge rendering  
+        // Edge rendering - thinner edges for better readability
         defaultEdgeColor: '#34495e',
-        defaultEdgeWidth: 1,
-        minEdgeWidth: 0.5,
-        maxEdgeWidth: 4,
+        defaultEdgeWidth: 0.5,
+        minEdgeWidth: 0.2,
+        maxEdgeWidth: 1.5,
         
-        // Labels
+        // Labels - adjusted for smaller nodes
         labelFont: 'Inter, sans-serif',
-        labelSize: 12,
+        labelSize: 10,
         labelWeight: 500,
         labelColor: { color: '#2c3e50' },
-        labelDensity: 0.1,
-        labelRenderedSizeThreshold: 8,
+        labelDensity: 0.05,
+        labelRenderedSizeThreshold: 4,
         
         // Performance optimizations
         hideEdgesOnMove: true,
@@ -254,7 +254,7 @@ export async function createSpatialNetworkRenderer(
         x: 0,
         y: 0,
         label: node.label,
-        size: Math.max(4, Math.min(20, Math.sqrt(node.count || 1) * 2)),
+        size: Math.max(2, Math.min(8, Math.sqrt(node.count || 1) * 0.8)),
         color: getNodeColor(node),
         latitude: node.coordinates[0],
         longitude: node.coordinates[1],
@@ -267,7 +267,7 @@ export async function createSpatialNetworkRenderer(
         graph.addEdge(edge.source, edge.target, {
           weight: edge.weight,
           color: '#34495e',
-          size: Math.max(0.5, Math.min(4, edge.weight / 10))
+          size: Math.max(0.2, Math.min(1.5, edge.weight / 20))
         });
       }
     });
