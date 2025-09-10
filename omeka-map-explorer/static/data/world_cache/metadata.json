@@ -1,13 +1,14 @@
 {
   "cache_version": "1.1",
-  "generated_at": "2025-09-08T11:00:55.008098",
+  "generated_at": "2025-09-10T10:00:44.545964",
   "generator": "build_world_map_cache.py",
   "description": "Precomputed world map data for fast rendering",
   "structure": {
     "choropleth": {
       "all_countries.json": "Global country counts for choropleth coloring",
       "by_year/": "Yearly country counts",
-      "by_entity/": "Entity-type specific country counts"
+      "by_entity/": "Entity-type specific country counts",
+      "by_article_country/": "Article-country specific choropleth data with deduplication"
     },
     "coordinates": {
       "all_locations.json": "Pre-aggregated coordinate clusters for markers",
