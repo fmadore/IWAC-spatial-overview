@@ -89,7 +89,7 @@ export async function createSpatialNetworkRenderer(
           x: 0,
           y: 0,
           label: node.label,
-          size: Math.max(2, Math.min(8, Math.sqrt(node.count || 1) * 0.8)),
+          size: Math.max(1.5, Math.min(6, Math.sqrt(node.count || 1) * 0.6)),
           color: getNodeColor(node),
           
           // Geographic coordinates for Leaflet layer
@@ -106,8 +106,8 @@ export async function createSpatialNetworkRenderer(
         if (graph.hasNode(edge.source) && graph.hasNode(edge.target)) {
           graph.addEdge(edge.source, edge.target, {
             weight: edge.weight,
-            color: '#34495e',
-            size: Math.max(0.2, Math.min(1.5, edge.weight / 20))
+            color: '#94a3b8', // Lighter gray for less visual prominence
+            size: Math.max(0.1, Math.min(0.4, edge.weight / 50))
           });
         }
       });
@@ -121,15 +121,15 @@ export async function createSpatialNetworkRenderer(
         
         // Node rendering - smaller sizes for geographic network
         defaultNodeColor: '#e74c3c',
-        defaultNodeSize: 4,
-        minNodeSize: 2,
-        maxNodeSize: 8,
+        defaultNodeSize: 3,
+        minNodeSize: 1.5,
+        maxNodeSize: 6,
         
-        // Edge rendering - thinner edges for better readability
-        defaultEdgeColor: '#34495e',
-        defaultEdgeWidth: 0.5,
-        minEdgeWidth: 0.2,
-        maxEdgeWidth: 1.5,
+        // Edge rendering - much thinner edges for better readability
+        defaultEdgeColor: '#94a3b8',
+        defaultEdgeWidth: 0.2,
+        minEdgeWidth: 0.1,
+        maxEdgeWidth: 0.5,
         
         // Labels - adjusted for smaller nodes
         labelFont: 'Inter, sans-serif',
@@ -282,7 +282,7 @@ export async function createSpatialNetworkRenderer(
         x: 0,
         y: 0,
         label: node.label,
-        size: Math.max(2, Math.min(8, Math.sqrt(node.count || 1) * 0.8)),
+        size: Math.max(1.5, Math.min(6, Math.sqrt(node.count || 1) * 0.6)),
         color: getNodeColor(node),
         latitude: node.coordinates[0],
         longitude: node.coordinates[1],
@@ -294,8 +294,8 @@ export async function createSpatialNetworkRenderer(
       if (graph.hasNode(edge.source) && graph.hasNode(edge.target)) {
         graph.addEdge(edge.source, edge.target, {
           weight: edge.weight,
-          color: '#34495e',
-          size: Math.max(0.2, Math.min(1.5, edge.weight / 20))
+          color: '#94a3b8', // Lighter gray for less visual prominence
+          size: Math.max(0.1, Math.min(0.4, edge.weight / 50))
         });
       }
     });
