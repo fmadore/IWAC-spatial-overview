@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { onMount } from 'svelte';
   import { browser } from '$app/environment';
   import MapPopup from '$lib/components/maps/MapPopup.svelte';
   import { mount } from 'svelte';
@@ -19,7 +18,7 @@
   interface Props { items: ProcessedItem[]; height?: string }
   let { items, height = '500px' }: Props = $props();
 
-  let mapEl: HTMLDivElement;
+  let mapEl = $state<HTMLDivElement>();
   let map: any = $state(null);
   let L: any;
   let markerLayer: any = null;
@@ -33,25 +32,31 @@
   }
 
   async function init() {
-    if (!browser || map) return;
-    L = await import('leaflet');
-    await import('leaflet/dist/leaflet.css');
+    if (!browser || map || !mapEl) return;
 
-    map = L.map(mapEl, {
-      maxBounds: [[-85, -180],[85,180]],
-      maxBoundsViscosity: 1.0,
-      worldCopyJump: false
-    }).setView(mapData.center, mapData.zoom);
+    try {
+      L = await import('leaflet');
+      await import('leaflet/dist/leaflet.css');
 
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-      attribution: '© OpenStreetMap contributors © CARTO',
-      subdomains: 'abcd',
-      maxZoom: 20,
-      noWrap: true
-    }).addTo(map);
+      // Create the map
+      map = L.map(mapEl, {
+        maxBounds: [[-85, -180],[85,180]],
+        maxBoundsViscosity: 1.0,
+        worldCopyJump: false
+      }).setView(mapData.center, mapData.zoom);
 
-    map.on('moveend', handleMove);
-    renderMarkers();
+      L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+        attribution: '© OpenStreetMap contributors © CARTO',
+        subdomains: 'abcd',
+        maxZoom: 20,
+        noWrap: true
+      }).addTo(map);
+
+      map.on('moveend', handleMove);
+      renderMarkers();
+    } catch (error) {
+      console.error('Failed to initialize map:', error);
+    }
   }
 
   function clearMarkers() {
@@ -178,22 +183,29 @@
     }
   }
 
+  // Effect to initialize map when DOM element becomes available
+  $effect(() => {
+    if (!browser || !mapEl || map) return;
+    
+    init();
+    
+    // Cleanup function
+    return () => {
+      clearMarkers();
+      if (map) {
+        try { 
+          map.off('moveend', handleMove);
+          map.remove(); 
+        } catch {}
+        map = null;
+      }
+    };
+  });
+
   // Reactive: update markers when items change
   $effect(() => {
     items; // dependency
     if (map) renderMarkers();
-  });
-
-  onMount(() => {
-    if (!browser) return;
-    init();
-    return () => {
-      clearMarkers();
-      if (map) {
-        try { map.remove(); } catch {}
-        map = null;
-      }
-    };
   });
 </script>
 
