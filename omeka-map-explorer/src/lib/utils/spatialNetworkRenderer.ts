@@ -30,15 +30,17 @@ export async function createSpatialNetworkRenderer(
 ): Promise<SpatialNetworkRenderer> {
   
   // Lazy load required libraries
-  const [sigmaModule, graphModule, bindLeafletLayerModule] = await Promise.all([
+  const [sigmaModule, graphModule, bindLeafletLayerModule, sigmaUtilsModule] = await Promise.all([
     import('sigma'),
     import('graphology'),
-    import('@sigma/layer-leaflet')
+    import('@sigma/layer-leaflet'),
+    import('@sigma/utils')
   ]);
 
   const Sigma = sigmaModule.Sigma;
   const Graph = graphModule.Graph;
   const bindLeafletLayer = bindLeafletLayerModule.default;
+  const { fitViewportToNodes } = sigmaUtilsModule;
 
   let sigmaInstance: any = null;
   let graph: any = null;
@@ -159,31 +161,52 @@ export async function createSpatialNetworkRenderer(
 
       console.log('✅ Leaflet layer bound to Sigma');
 
-      // Force an initial coordinate projection and render
+      // Force an initial coordinate projection and render with proper timing
       try {
-        leafletBinding?.updateGraphCoordinates(graph);
-        sigmaInstance.refresh();
-        console.log('🖼️ Initial projection complete', {
-          sigmaSize: sigmaInstance.getDimensions(),
-          containerSize: {
-            w: targetContainer!.clientWidth,
-            h: targetContainer!.clientHeight
+        // Wait a frame to ensure DOM is ready
+        requestAnimationFrame(() => {
+          if (leafletBinding && graph && sigmaInstance) {
+            leafletBinding.updateGraphCoordinates(graph);
+            sigmaInstance.refresh();
+            console.log('🖼️ Initial projection complete', {
+              sigmaSize: sigmaInstance.getDimensions(),
+              containerSize: {
+                w: targetContainer!.clientWidth,
+                h: targetContainer!.clientHeight
+              }
+            });
           }
         });
       } catch (e) {
         console.warn('⚠️ Initial updateGraphCoordinates failed:', e);
       }
 
-      // Once the leaflet map is ready, fit to data bounds
+      // Once the leaflet map is ready, fit to data bounds with proper timing
       try {
-        leafletBinding?.map.whenReady(() => {
-          console.log('🗺️ Leaflet map ready, fitting to network bounds...');
-          fitToNetworkBounds();
-          // Some tile providers need one extra tick for correct bounds
-          setTimeout(() => fitToNetworkBounds(), 300);
-          // And ensure container sizing is correct
-          setTimeout(() => ensureProperSizeAndReproject(), 450);
-        });
+        if (leafletBinding?.map) {
+          leafletBinding.map.whenReady(() => {
+            console.log('🗺️ Leaflet map ready, scheduling proper initialization...');
+            
+            // Schedule multiple attempts with increasing delays to ensure proper sizing
+            setTimeout(() => {
+              ensureProperSizeAndReproject();
+              fitToNetworkBoundsProper();
+            }, 100);
+            
+            setTimeout(() => {
+              ensureProperSizeAndReproject();
+              fitToNetworkBoundsProper();
+            }, 300);
+            
+            setTimeout(() => {
+              ensureProperSizeAndReproject();
+              fitToNetworkBoundsProper();
+            }, 600);
+          });
+          
+          // Also try to fit immediately after binding
+          setTimeout(() => fitToNetworkBoundsProper(), 50);
+        }
       } catch (e) {
         console.warn('⚠️ Error scheduling fit to bounds:', e);
       }
@@ -284,7 +307,7 @@ export async function createSpatialNetworkRenderer(
   if (sigmaInstance) sigmaInstance.refresh();
 
   // After data updates, try to fit again
-  fitToNetworkBounds();
+  fitToNetworkBoundsProper();
   }
 
   /**
@@ -322,11 +345,11 @@ export async function createSpatialNetworkRenderer(
    * Public controls for external UI (sidebar)
    */
   function fitToView() {
-    fitToNetworkBounds();
+    fitToNetworkBoundsProper();
   }
 
   function resetView() {
-    fitToNetworkBounds();
+    fitToNetworkBoundsProper();
   }
 
   function zoomIn() {
@@ -380,7 +403,40 @@ export async function createSpatialNetworkRenderer(
   }
 
   /**
-   * Fit Leaflet map (and therefore Sigma via sync) to the network's geographic bounds
+   * Fit Leaflet map to network bounds with proper camera handling
+   */
+  function fitToNetworkBoundsProper() {
+    try {
+      if (!leafletBinding?.map || !graph || !sigmaInstance) return;
+      
+      const nodeIds = graph.nodes();
+      if (nodeIds.length === 0) return;
+      
+      // Use Sigma.js utilities for proper camera positioning
+      console.log('📐 Using Sigma.js fitViewportToNodes for', nodeIds.length, 'nodes');
+      
+      // First, update graph coordinates to ensure they're current
+      leafletBinding.updateGraphCoordinates(graph);
+      
+      // Use the official Sigma.js utility for fitting viewport
+      fitViewportToNodes(sigmaInstance, nodeIds, {
+        animate: false // No animation for initial positioning
+      });
+      
+      // Refresh to apply the new camera position
+      sigmaInstance.refresh();
+      
+      console.log('✅ Camera fitted to network using Sigma.js utilities');
+      
+    } catch (e) {
+      console.warn('⚠️ fitToNetworkBoundsProper failed, falling back to manual bounds:', e);
+      // Fallback to the original method if Sigma utils fail
+      fitToNetworkBounds();
+    }
+  }
+
+  /**
+   * Fit Leaflet map (and therefore Sigma via sync) to the network's geographic bounds (legacy fallback)
    */
   function fitToNetworkBounds() {
     try {
@@ -401,7 +457,7 @@ export async function createSpatialNetworkRenderer(
       const west = Math.min(...lngs);
       const east = Math.max(...lngs);
       const bounds = [[south, west], [north, east]] as any;
-      console.log('📐 Fitting map to bounds:', { south, west, north, east, count: lats.length });
+      console.log('📐 Fitting map to bounds (legacy):', { south, west, north, east, count: lats.length });
       leafletBinding.map.fitBounds(bounds, { padding: [24, 24] });
     } catch (e) {
       console.warn('⚠️ fitToNetworkBounds failed:', e);
@@ -413,19 +469,38 @@ export async function createSpatialNetworkRenderer(
    */
   function ensureProperSizeAndReproject(attempt = 0) {
     try {
-      if (!leafletBinding?.map || !targetContainer) return;
+      if (!leafletBinding?.map || !targetContainer || !sigmaInstance) return;
+      
       const el = leafletBinding.map.getContainer();
       const w = el.clientWidth;
       const h = el.clientHeight;
+      
       console.log('📏 Map container size check', { w, h, attempt });
+      
+      // If container is too small and we haven't tried too many times, retry
       if ((w < 320 || h < 320) && attempt < 8) {
         setTimeout(() => ensureProperSizeAndReproject(attempt + 1), 150);
         return;
       }
-      leafletBinding.map.invalidateSize({ pan: false, animate: false, duration: 0 });
+      
+      // Invalidate map size to ensure Leaflet knows the correct dimensions
+      leafletBinding.map.invalidateSize({ 
+        pan: false, 
+        animate: false, 
+        duration: 0 
+      });
+      
+      // Update coordinates after size validation
       leafletBinding.updateGraphCoordinates(graph);
-      sigmaInstance?.refresh();
-      fitToNetworkBounds();
+      
+      // Refresh Sigma to apply new coordinates
+      sigmaInstance.refresh();
+      
+      // Finally, fit to the proper bounds
+      fitToNetworkBoundsProper();
+      
+      console.log('✅ Size validation and reproject complete');
+      
     } catch (e) {
       console.warn('⚠️ ensureProperSizeAndReproject failed:', e);
     }
