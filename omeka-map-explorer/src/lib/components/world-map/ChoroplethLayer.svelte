@@ -383,20 +383,29 @@
 
 	// Watch for changes to data prop and update immediately
 	$effect(() => {
-		if (layer && data && Object.keys(data).length > 0) {
+		// Explicitly access data to ensure reactivity is triggered
+		const currentData = data;
+		if (layer && currentData) {
+			// Always update when data changes, even if empty
+			console.log('ChoroplethLayer: Data changed, updating styles. Keys:', Object.keys(currentData).length);
 			// Use multiple timing strategies to ensure it works in production
 			updateLayerStyles();
 			requestAnimationFrame(() => updateLayerStyles());
 			setTimeout(() => updateLayerStyles(), 0);
+			setTimeout(() => updateLayerStyles(), 50);
 		}
 	});
 
 	// Separate effect for browser and layer readiness
 	$effect(() => {
-		if (browser && layer && data && Object.keys(data).length > 0) {
+		// Explicitly access data to ensure reactivity is triggered
+		const currentData = data;
+		if (browser && layer && currentData) {
 			// Additional update when browser environment is confirmed ready
+			console.log('ChoroplethLayer: Browser + layer ready, data keys:', Object.keys(currentData).length);
 			requestAnimationFrame(() => updateLayerStyles());
 			setTimeout(() => updateLayerStyles(), 100);
+			setTimeout(() => updateLayerStyles(), 200);
 		}
 	});
 
@@ -410,14 +419,16 @@
 		layer.eachLayer((featureLayer: any) => {
 			if (featureLayer.feature) {
 				const newStyle = style(featureLayer.feature);
-				featureLayer.setStyle(newStyle);
-
-				// Force a redraw by temporarily changing and reverting a property
-				// This helps with production rendering issues
-				const currentOpacity = featureLayer.options.fillOpacity;
-				featureLayer.setStyle({ fillOpacity: currentOpacity === 0.8 ? 0.79 : 0.8 });
+				
+				// Force aggressive style update by resetting and reapplying
+				featureLayer.setStyle({
+					fillColor: '#ffffff',
+					fillOpacity: 0
+				});
+				
+				// Apply new style immediately after reset
 				setTimeout(() => {
-					featureLayer.setStyle({ fillOpacity: 0.8 });
+					featureLayer.setStyle(newStyle);
 				}, 1);
 
 				// Update tooltip/popups with latest data

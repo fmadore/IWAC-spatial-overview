@@ -77,7 +77,7 @@ export async function loadMultipleArticleCountryChoroplethData(
 	for (const data of results) {
 		if (!data) continue;
 		
-		for (const [locationCountry, count] of Object.entries(data.counts)) {
+			for (const [locationCountry, count] of Object.entries(data.counts)) {
 			merged[locationCountry] = (merged[locationCountry] || 0) + count;
 		}
 	}
@@ -90,9 +90,14 @@ export async function loadMultipleArticleCountryChoroplethData(
  * Should match the normalization used in the Python cache builder.
  */
 function normalizeCountryFilename(country: string): string {
-	return country
-		.toLowerCase()
-		.replace(/[^\w\s-]/g, '') // Remove special chars except spaces and hyphens
-		.replace(/\s+/g, '_')     // Replace spaces with underscores
-		.replace(/-+/g, '_');     // Replace hyphens with underscores
+	// Match Python's unicodedata.normalize('NFD', country) and remove diacritics
+	let normalized = country.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+	
+	// Match Python's apostrophe removal: .replace("'", '').replace("'", '').replace('`', '')
+	normalized = normalized.replace(/['`'']/g, '');
+	
+	// Replace spaces with underscores and convert to lowercase
+	normalized = normalized.replace(/\s+/g, '_').toLowerCase();
+	
+	return normalized;
 }

@@ -508,11 +508,14 @@
       choroplethData = {};
       return;
     }
+    // Watch for changes in country filter to trigger cache updates
+    const _selectedCountries = filters.selected.countries;
+    
     if (choroplethUpdateTimeout) { clearTimeout(choroplethUpdateTimeout); }
     choroplethUpdateTimeout = setTimeout(async () => {
-      console.log('🔍 CHOROPLETH DEBUG: Starting update', {
+      console.log('🔍 Starting choropleth update for:', {
         viewMode: mapData.viewMode,
-        selectedCountries: filters.selected.countries,
+        selectedCountries: filters.selected.countries.length,
         cacheAvailable: cacheAvailable
       });
       
@@ -521,7 +524,7 @@
       const singleCountrySelected = filters.selected.countries.length === 1;
       const noCountryFilter = filters.selected.countries.length === 0;
       
-      console.log('🔍 CHOROPLETH DEBUG: Cache decision', {
+      console.log('🔍 Cache decision:', {
         singleCountrySelected,
         noCountryFilter,
         cacheAvailable,
@@ -532,29 +535,23 @@
       // This shows WHERE articles FROM that country mention locations (same logic as bubble map)
       if (singleCountrySelected && cacheAvailable) {
         const selectedCountry = filters.selected.countries[0];
-        console.log('🚀 CHOROPLETH DEBUG: Attempting article-country cache for:', selectedCountry);
-        console.log('🚀 CHOROPLETH DEBUG: Current filter state:', filters.selected);
+        console.log('🚀 Loading choropleth cache for:', selectedCountry);
         try {
           const cachedData = await loadMultipleArticleCountryChoroplethData([selectedCountry]);
-          console.log('🔍 CHOROPLETH DEBUG: Article-country cache result:', {
-            cachedData: cachedData,
-            keysLength: Object.keys(cachedData || {}).length,
-            sampleEntries: Object.entries(cachedData || {}).slice(0, 5)
-          });
           if (cachedData && Object.keys(cachedData).length > 0) {
-            console.log('✅ CHOROPLETH DEBUG: Using cached article-country choropleth data for', selectedCountry);
+            console.log('✅ Using cached article-country choropleth data for', selectedCountry);
             newData = cachedData;
             usingCachedData = true;
           } else {
-            console.warn('❌ CHOROPLETH DEBUG: Cache returned empty or null data');
+            console.warn('❌ Cache returned empty data for', selectedCountry);
           }
         } catch (e) { 
-          console.error('❌ CHOROPLETH DEBUG: Article-country cache failed:', e); 
+          console.error('❌ Article-country cache failed for', selectedCountry, ':', e); 
         }
       }
       // Try global choropleth cache when no countries selected (all countries view)
       else if (noCountryFilter && cacheAvailable && !appState.selectedEntity) {
-        console.log('🔍 CHOROPLETH DEBUG: Attempting global cache (all countries)');
+        console.log('🔍 Using global cache (all countries)');
         try {
           const cacheOptions: { year?: number; entityType?: string; dateRange?: { start: Date; end: Date } } = {};
           if ((appState.selectedEntity as any)?.type) {
@@ -569,7 +566,7 @@
           if (filters.selected.dateRange) { cacheOptions.dateRange = filters.selected.dateRange; }
           const cachedData = await loadChoroplethCache(cacheOptions);
           if (cachedData && Object.keys(cachedData).length > 0) {
-            console.log('✅ CHOROPLETH DEBUG: Using cached global choropleth data (all countries)');
+            console.log('✅ Using cached global choropleth data (all countries)');
             newData = cachedData;
             usingCachedData = true;
           }
@@ -578,8 +575,7 @@
       
       // Fallback to real-time calculation if cache unavailable
       if (!usingCachedData || Object.keys(newData).length === 0) {
-        console.log('⚠️ CHOROPLETH DEBUG: Using real-time calculation', 
-          singleCountrySelected ? '(article-country cache unavailable)' : '(global cache unavailable)');
+        console.log('⚠️ Using real-time calculation - cache unavailable');
         
         // Use visibleData which already handles country filtering correctly
         // This will show articles FROM the selected country, same as bubble map
@@ -587,10 +583,9 @@
         console.log('Map: Choropleth data (filtered) countries:', Object.keys(newData).length);
       }
       
-      console.log('🔍 CHOROPLETH DEBUG: Final result:', {
+      console.log('🔍 Final choropleth result:', {
         usingCachedData,
-        dataKeys: Object.keys(newData).length,
-        sampleData: Object.entries(newData).slice(0, 3)
+        dataKeys: Object.keys(newData).length
       });
       
       choroplethData = newData;
