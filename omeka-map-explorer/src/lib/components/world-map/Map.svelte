@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { onMount, onDestroy } from 'svelte';
   import { mount } from 'svelte';
   import { mapData } from '$lib/state/mapData.svelte';
   import { timeData } from '$lib/state/timeData.svelte';
@@ -141,10 +140,12 @@
   // Props
   let { height = '600px' } = $props();
 
-  // Initialize map on mount
-  onMount(() => {
-    if (!browser) return undefined;
+  // Initialize map with Svelte 5 effect
+  $effect(() => {
+    if (!browser || !mapElement) return;
+    
     let disposed = false;
+    
     const actuallyInit = async () => {
       if (disposed) return;
       if (!mapElement || !mapElement.isConnected) {
@@ -152,26 +153,36 @@
         return;
       }
       if (map) return;
+      
       L = await import('leaflet');
       await import('leaflet/dist/leaflet.css');
+      
       map = L.map(mapElement, {
         maxBounds: [
           [-85, -180],
           [85, 180]
         ],
         maxBoundsViscosity: 1.0,
-        worldCopyJump: false
+        worldCopyJump: false,
+        minZoom: 2,  // Prevent excessive zoom out that can cause negative tile coordinates
+        maxZoom: 18  // Reasonable maximum zoom
       }).setView(mapData.center, mapData.zoom);
+      
       const tileOptions = tileLayerOptions.cartodb;
       const layerConfig: any = {
         attribution: tileOptions.attribution,
-        maxZoom: 20,
-        noWrap: true
+        maxZoom: 18,  // Match map maxZoom
+        minZoom: 2,   // Match map minZoom  
+        noWrap: true,
+        bounds: [[-85, -180], [85, 180]]  // Explicit tile bounds
       };
+      
       if ('subdomains' in tileOptions) {
         layerConfig.subdomains = tileOptions.subdomains;
       }
+      
       currentTileLayer = L.tileLayer(tileOptions.url, layerConfig).addTo(map);
+      
       const baseMaps: Record<string, any> = {};
       Object.entries(tileLayerOptions).forEach(([key, options]) => {
         if (key === 'cartodb') {
@@ -179,18 +190,22 @@
         } else {
           const layerOptions: any = {
             attribution: options.attribution,
-            maxZoom: 20,
-            noWrap: true
+            maxZoom: 18,
+            minZoom: 2,
+            noWrap: true,
+            bounds: [[-85, -180], [85, 180]]
           };
-            if ('subdomains' in options) {
-              layerOptions.subdomains = options.subdomains;
-            }
+          if ('subdomains' in options) {
+            layerOptions.subdomains = options.subdomains;
+          }
           baseMaps[options.name] = L.tileLayer(options.url, layerOptions);
         }
       });
+      
       L.control.layers(baseMaps).addTo(map);
       map.on('moveend', handleMapMove);
       mapLoading = false;
+      
       setTimeout(async () => {
         if (disposed) return;
         dataLoading = true;
@@ -215,7 +230,9 @@
         dataLoading = false;
       }, 100);
     };
+    
     requestAnimationFrame(actuallyInit);
+    
     return () => {
       disposed = true;
       if (map) {
