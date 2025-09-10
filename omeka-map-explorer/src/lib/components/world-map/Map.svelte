@@ -21,6 +21,13 @@
   import MapPopup from '$lib/components/maps/MapPopup.svelte';
   import { appState } from '$lib/state/appState.svelte';
   import { urlManager } from '$lib/utils/urlManager.svelte';
+  import { 
+    createBubbleColorScale, 
+    createD3BubbleStyle, 
+    createLegendEntries,
+    WORLD_MAP_BUBBLE_CONFIG,
+    type ColorScale 
+  } from '$lib/utils/bubbleScaling';
 
   // Using any types here to avoid TypeScript errors with Leaflet
   let mapElement: HTMLDivElement;
@@ -36,7 +43,7 @@
   let usingCachedData = $state(false);
   
   // Legend tracking
-  let currentColorScale: any = $state(null);
+  let currentColorScale: ColorScale | null = $state(null);
   let currentMaxCount = $state(1);
 
   // Modern tile layer options
@@ -407,18 +414,8 @@
         } else {
           const maxCount = Array.from(coordinateGroups.values()).reduce((m, g) => Math.max(m, g.count), 1);
           
-          // Create D3 color scale for better visual distinction
-          // Using a custom scale with high contrast colors
-          const colorScale = scaleSequential()
-            .domain([1, maxCount])
-            .interpolator((t: number) => {
-              // Custom interpolator for maximum visual impact
-              if (t < 0.2) return '#3b82f6'; // Blue for low values
-              if (t < 0.4) return '#10b981'; // Green for low-medium values  
-              if (t < 0.6) return '#f59e0b'; // Orange for medium values
-              if (t < 0.8) return '#ef4444'; // Red for high values
-              return '#dc2626'; // Dark red for highest values
-            });
+          // Create D3 color scale using reusable utility
+          const colorScale = createBubbleColorScale(maxCount);
           
           // Store for legend
           currentColorScale = colorScale;
@@ -427,26 +424,16 @@
           const canvas = L.canvas({ padding: 0.5 });
           const layerGroup = L.layerGroup();
           for (const g of coordinateGroups.values()) {
-            // Improved radius scaling with better visual hierarchy
-            const baseRadius = 3;
-            const maxRadius = 25;
-            // Use a more aggressive scaling for better visual distinction
-            const normalizedCount = Math.pow(g.count / maxCount, 0.5); // Square root for better distribution
-            const radius = baseRadius + (maxRadius - baseRadius) * normalizedCount;
-            
-            // Use D3 color scale for consistent, visually appealing colors
-            const fillColor = colorScale(g.count);
-            
-            // Calculate border color (darker version for better definition)
-            const borderColor = colorScale(Math.min(g.count * 1.5, maxCount));
+            // Use reusable bubble styling utility
+            const bubbleStyle = createD3BubbleStyle(g.count, maxCount, colorScale, WORLD_MAP_BUBBLE_CONFIG);
             
             const circle = L.circleMarker([g.lat, g.lng], {
-              radius,
-              color: '#ffffff', // White border for maximum contrast
-              weight: 1.5,
-              opacity: 1,
-              fillOpacity: 0.9,
-              fillColor: fillColor,
+              radius: bubbleStyle.radius,
+              color: bubbleStyle.borderColor,
+              weight: bubbleStyle.weight,
+              opacity: bubbleStyle.opacity,
+              fillOpacity: bubbleStyle.fillOpacity,
+              fillColor: bubbleStyle.fillColor,
               renderer: canvas,
               className: 'modern-marker',
               interactive: true,
@@ -707,13 +694,13 @@
         </button>
       </div>
       <div class="space-y-1">
-        {#each [1, Math.ceil(currentMaxCount * 0.25), Math.ceil(currentMaxCount * 0.5), Math.ceil(currentMaxCount * 0.75), currentMaxCount] as value}
+        {#each createLegendEntries(currentColorScale, currentMaxCount) as entry}
           <div class="flex items-center gap-2">
             <div 
               class="w-3 h-3 rounded-full border border-gray-300" 
-              style="background-color: {currentColorScale(value)}"
+              style="background-color: {entry.color}"
             ></div>
-            <span class="text-xs text-gray-600">{value} article{value !== 1 ? 's' : ''}</span>
+            <span class="text-xs text-gray-600">{entry.label} article{entry.value !== 1 ? 's' : ''}</span>
           </div>
         {/each}
       </div>

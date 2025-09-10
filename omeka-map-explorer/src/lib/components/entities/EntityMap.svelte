@@ -5,6 +5,10 @@
   import { mount } from 'svelte';
   import type { ProcessedItem } from '$lib/types';
   import { mapData } from '$lib/state/mapData.svelte';
+  import { 
+    createHSLBubbleStyle, 
+    ENTITY_MAP_BUBBLE_CONFIG 
+  } from '$lib/utils/bubbleScaling';
 
   /** Lightweight bubble-only map for entity views.
    *  Props: items (already filtered ProcessedItem[]), height.
@@ -96,18 +100,17 @@
     const layerGroup = Llocal.layerGroup();
     for (const g of groups.values()) {
       if (runId !== currentRun) break; // aborted
-      const intensity = Math.sqrt(g.count / maxCount);
-      const radius = 6 + 8 * intensity;
-      const hue = 220 - intensity * 60;
-      const saturation = 70 + intensity * 20;
-      const lightness = 55 - intensity * 10;
+      
+      // Use reusable bubble styling utility
+      const bubbleStyle = createHSLBubbleStyle(g.count, maxCount, ENTITY_MAP_BUBBLE_CONFIG);
+      
       const circle = Llocal.circleMarker([g.lat, g.lng], {
-        radius,
-        color: `hsl(${hue}, ${saturation}%, ${lightness - 15}%)`,
-        weight: 2,
-        opacity: 0.9,
-        fillOpacity: 0.7,
-        fillColor: `hsl(${hue}, ${saturation}%, ${lightness}%)`,
+        radius: bubbleStyle.radius,
+        color: bubbleStyle.borderColor,
+        weight: bubbleStyle.weight,
+        opacity: bubbleStyle.opacity,
+        fillOpacity: bubbleStyle.fillOpacity,
+        fillColor: bubbleStyle.fillColor,
         renderer: canvas,
         className: 'modern-marker',
         interactive: true,
