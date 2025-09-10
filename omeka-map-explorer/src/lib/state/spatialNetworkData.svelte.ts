@@ -375,13 +375,11 @@ export function disableSpatialIsolationMode() {
   console.log('🔧 disableSpatialIsolationMode called');
   spatialNetworkState.isolationMode = false;
   spatialNetworkState.isolatedNodeId = null;
-  spatialNetworkState.selectedNodeId = null; // Clear selection too
   setHighlightedNodeIds(new Set<string>());
   
-  console.log('✅ Isolation mode disabled and view reset:', {
+  console.log('✅ Isolation mode disabled:', {
     isolationMode: spatialNetworkState.isolationMode,
-    isolatedNodeId: spatialNetworkState.isolatedNodeId,
-    selectedNodeId: spatialNetworkState.selectedNodeId
+    isolatedNodeId: spatialNetworkState.isolatedNodeId
   });
 }
 

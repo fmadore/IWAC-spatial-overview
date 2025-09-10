@@ -47,16 +47,16 @@
   const networkStats = $derived(getSpatialNetworkStats());
   const selectedNode = $derived(selectedNodeId ? getSpatialSelectedNode() : null);
 
-  // Country colors for consistency with map - now just for UI indicators
+  // Country colors for consistency with map
   const countryColors: Record<string, string> = {
-    'Burkina Faso': '#64748b',
-    'Côte d\'Ivoire': '#64748b', 
-    'Benin': '#64748b',
-    'Togo': '#64748b',
-    'Mali': '#64748b',
-    'Ghana': '#64748b',
-    'Niger': '#64748b',
-    'Nigeria': '#64748b',
+    'Burkina Faso': '#e74c3c',
+    'Côte d\'Ivoire': '#3498db', 
+    'Benin': '#2ecc71',
+    'Togo': '#f39c12',
+    'Mali': '#9b59b6',
+    'Ghana': '#1abc9c',
+    'Niger': '#34495e',
+    'Nigeria': '#e67e22',
   };
 
   // Event handlers
