@@ -110,13 +110,24 @@ const selectedNode = $derived.by(() => {
  * Load spatial network data from the server
  */
 export async function loadSpatialNetworkData(pathPrefix = 'data'): Promise<boolean> {
-  if (spatialNetworkState.isLoading) return false;
+  // Return early if already loaded and no error
+  if (spatialNetworkState.data && !spatialNetworkState.error) {
+    return true;
+  }
+  
+  // Prevent concurrent loading attempts
+  if (spatialNetworkState.isLoading) {
+    console.log('⏳ Spatial network data already loading, waiting...');
+    return false;
+  }
   
   spatialNetworkState.isLoading = true;
   spatialNetworkState.error = null;
   
   try {
-    const response = await fetch(`${base}/${pathPrefix}/networks/spatial.json`);
+    const url = `${base}/${pathPrefix}/networks/spatial.json`;
+    console.log('📡 Loading spatial network data from:', url);
+    const response = await fetch(url);
     
     if (!response.ok) {
       if (response.status === 404) {

@@ -53,15 +53,28 @@
    * Load spatial network data on mount
    */
   async function initializeData() {
-    if (!spatialNetworkState.isInitialized) {
+    // Prevent duplicate initialization
+    if (spatialNetworkState.isInitialized || spatialNetworkState.isLoading) {
+      isDataLoaded = spatialNetworkState.data !== null;
+      return;
+    }
+    
+    // Skip if already loaded
+    if (isDataLoaded && spatialNetworkState.data) {
+      return;
+    }
+    
+    try {
+      console.log('🚀 Initializing spatial network visualization...');
       const success = await loadSpatialNetworkData('data');
       if (success) {
         isDataLoaded = true;
+        console.log('✅ Spatial network visualization initialized successfully');
       } else {
-        console.error('Failed to load spatial network data');
+        console.error('❌ Failed to load spatial network data');
       }
-    } else {
-      isDataLoaded = true;
+    } catch (error) {
+      console.error('❌ Error initializing spatial network data:', error);
     }
   }
 
@@ -112,10 +125,13 @@
 
   // Lifecycle - use $effect for proper cleanup
   $effect(() => {
-    initializeData();
+    // Small delay to ensure DOM is ready and prevent race conditions
+    const timer = setTimeout(() => {
+      initializeData();
+    }, 100);
     
     return () => {
-      // Cleanup if needed
+      clearTimeout(timer);
     };
   });
 </script>
