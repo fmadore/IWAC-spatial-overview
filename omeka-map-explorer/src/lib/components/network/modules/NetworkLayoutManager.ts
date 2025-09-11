@@ -60,8 +60,10 @@ export class NetworkLayoutManager {
     this.graph = graph;
     this.sigmaInstance = sigmaInstance;
     
-    // Clean up existing controllers as they reference old instances
-    this.stop();
+    // Clean up existing controllers only if they exist, without excessive logging
+    if (this.layoutController || this.noverlapManager) {
+      this.stop();
+    }
   }
 
   /**
@@ -72,8 +74,10 @@ export class NetworkLayoutManager {
       return false;
     }
 
-    // Stop any existing layout
-    this.stop();
+    // Only stop if something is actually running to avoid redundant console messages
+    if (this.currentProgress.isRunning || this.layoutController) {
+      this.stop();
+    }
 
     try {
       const nodeCount = this.graph.order;
@@ -225,6 +229,9 @@ export class NetworkLayoutManager {
    * Stop any currently running layout
    */
   stop(): void {
+    // Only show stop message if something was actually running
+    const wasRunning = this.currentProgress.isRunning || this.layoutController || this.noverlapManager;
+    
     if (this.layoutController) {
       this.layoutController.stop();
       this.layoutController = null;
@@ -239,7 +246,9 @@ export class NetworkLayoutManager {
       currentAlgorithm: null
     };
     
-    console.log('🛑 Layout algorithms stopped');
+    if (wasRunning) {
+      console.log('🛑 Layout algorithms stopped');
+    }
   }
 
   /**

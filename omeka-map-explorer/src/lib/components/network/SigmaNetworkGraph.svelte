@@ -132,22 +132,22 @@
       // Create sigma instance
       sigmaInstance = new Sigma(graph, container, config);
 
-      // Initialize modular managers
+      // Initialize modular managers (defined below)
       initializeManagers();
 
-      // Set up event handling
+      // Set up event handling (defined below)
       setupEventHandlers();
 
       isInitialized = true;
       error = null;
 
-      // Expose API functions
+      // Expose API functions (defined below)
       exposeAPIFunctions();
 
-      // Start initial layout
+      // Start initial layout (defined below)
       await startInitialLayout();
 
-      // Track camera state
+      // Track camera state (defined below)
       trackCameraState();
 
     } catch (err) {
@@ -162,59 +162,71 @@
    * Initialize all modular managers
    */
   function initializeManagers(): void {
-    // Initialize camera manager
-    cameraManager = new NetworkCamera(sigmaInstance, graph, container, SigmaUtils);
+    // Update or create camera manager
+    if (cameraManager) {
+      cameraManager.updateReferences(sigmaInstance, graph);
+    } else {
+      cameraManager = new NetworkCamera(sigmaInstance, graph, container, SigmaUtils);
+    }
 
-    // Initialize layout manager
-    layoutManager = new NetworkLayoutManager(
-      ForceAtlas2,
-      Noverlap,
-      graph,
-      sigmaInstance,
-      {
-        onProgressUpdate: (progress) => {
-          isLayoutRunning = progress.isRunning;
-          layoutProgress = progress.progress;
-        },
-        onLayoutComplete: (algorithm) => {
-          console.log(`✅ ${algorithm} layout completed`);
-          isLayoutRunning = false;
-          layoutProgress = 0;
-        },
-        onLayoutError: (errorMsg) => {
-          console.error('❌ Layout error:', errorMsg);
-          isLayoutRunning = false;
-          layoutProgress = 0;
-        },
-        onSigmaRefresh: () => {
-          if (sigmaInstance) sigmaInstance.refresh();
+    // Update or create layout manager  
+    if (layoutManager) {
+      layoutManager.updateReferences(graph, sigmaInstance);
+    } else {
+      layoutManager = new NetworkLayoutManager(
+        ForceAtlas2,
+        Noverlap,
+        graph,
+        sigmaInstance,
+        {
+          onProgressUpdate: (progress) => {
+            isLayoutRunning = progress.isRunning;
+            layoutProgress = progress.progress;
+          },
+          onLayoutComplete: (algorithm) => {
+            console.log(`✅ ${algorithm} layout completed`);
+            isLayoutRunning = false;
+            layoutProgress = 0;
+          },
+          onLayoutError: (errorMsg) => {
+            console.error('❌ Layout error:', errorMsg);
+            isLayoutRunning = false;
+            layoutProgress = 0;
+          },
+          onSigmaRefresh: () => {
+            if (sigmaInstance) sigmaInstance.refresh();
+          }
         }
-      }
-    );
+      );
+    }
 
-    // Initialize event handlers
-    eventHandlers = new NetworkEventHandlers({
-      onFitView: () => cameraManager?.resetToFullView(),
-      onRunLayout: () => layoutManager?.runForceAtlas2(),
-      onCenterOnSelected: () => {
-        const selectedId = appState.networkNodeSelected?.id;
-        if (selectedId) cameraManager?.centerOnNode(selectedId);
-      },
-      onClearSelection: () => {
-        appState.networkNodeSelected = null;
-        appState.selectedEntity = null;
-      },
-      onShowHelp: () => {
-        const shortcuts = NetworkEventHandlers.getShortcutsHelp();
-        const helpText = [
-          '🔧 Network Graph Controls:',
-          ...Object.values(shortcuts).map(desc => `• ${desc}`),
-          '• Drag nodes with mouse to reposition them',
-          '• Click nodes to select, click background to deselect'
-        ].join('\n');
-        console.log(helpText);
-      }
-    });
+    // Update or create event handlers
+    if (eventHandlers) {
+      eventHandlers.updateData(currentData);
+    } else {
+      eventHandlers = new NetworkEventHandlers({
+        onFitView: () => cameraManager?.resetToFullView(),
+        onRunLayout: () => layoutManager?.runForceAtlas2(),
+        onCenterOnSelected: () => {
+          const selectedId = appState.networkNodeSelected?.id;
+          if (selectedId) cameraManager?.centerOnNode(selectedId);
+        },
+        onClearSelection: () => {
+          appState.networkNodeSelected = null;
+          appState.selectedEntity = null;
+        },
+        onShowHelp: () => {
+          const shortcuts = NetworkEventHandlers.getShortcutsHelp();
+          const helpText = [
+            '🔧 Network Graph Controls:',
+            ...Object.values(shortcuts).map(desc => `• ${desc}`),
+            '• Drag nodes with mouse to reposition them',
+            '• Click nodes to select, click background to deselect'
+          ].join('\n');
+          console.log(helpText);
+        }
+      });
+    }
   }
 
   /**
@@ -248,10 +260,7 @@
    * Start initial layout to avoid square clustering
    */
   async function startInitialLayout(): Promise<void> {
-    if (layoutManager && currentData && !isLayoutRunning) {
-      const recommendation = layoutManager.getLayoutRecommendations();
-      console.log('🎯 Layout recommendation:', recommendation);
-      
+    if (layoutManager && currentData && !isLayoutRunning && !layoutManager.isRunning()) {
       // Start with ForceAtlas2 for most cases
       try {
         await layoutManager.runForceAtlas2();
@@ -370,23 +379,21 @@
 
   // Separate effect for data changes - only runs when currentData changes
   $effect(() => {
-    // Only track currentData as dependency
-    if (currentData) {
+    // Only reinitialize if we already have a sigma instance and the data actually changed
+    if (currentData && sigmaInstance && Sigma && Graph && container && isInitialized) {
       // Use a timeout to prevent immediate re-initialization during the same tick
       const timeoutId = setTimeout(async () => {
-        if (Sigma && Graph && container && sigmaInstance) {
-          // Clean up previous instance
-          if (sigmaInstance) {
-            sigmaInstance.kill();
-            sigmaInstance = null;
-          }
-          if (layoutManager) {
-            layoutManager.stop();
-          }
-          
-          // Re-initialize with new data
-          await initializeSigma();
+        // Clean up previous instance quietly
+        if (sigmaInstance) {
+          sigmaInstance.kill();
+          sigmaInstance = null;
         }
+        if (layoutManager) {
+          layoutManager.stop();
+        }
+        
+        // Re-initialize with new data
+        await initializeSigma();
       }, 10);
       
       return () => clearTimeout(timeoutId);
