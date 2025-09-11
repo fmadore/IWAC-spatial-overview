@@ -193,6 +193,8 @@
   :global(.leaflet-container) {
     background: transparent !important;
     outline: none;
+    /* Improve touch responsiveness */
+    touch-action: pan-x pan-y;
   }
   
   :global(.leaflet-control-attribution) {
@@ -203,5 +205,16 @@
   /* Ensure Sigma canvas is properly positioned over Leaflet */
   :global(.sigma-scene) {
     z-index: 1000 !important;
+    /* Allow touch events to pass through when appropriate */
+    touch-action: manipulation;
+  }
+  
+  /* Optimize touch interactions for mobile devices */
+  :global(.leaflet-touch .leaflet-control-layers) {
+    touch-action: manipulation;
+  }
+  
+  :global(.leaflet-touch .leaflet-bar) {
+    touch-action: manipulation;
   }
 </style>
