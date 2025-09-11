@@ -18,11 +18,14 @@
   interface Props { items: ProcessedItem[]; height?: string }
   let { items, height = '500px' }: Props = $props();
 
+  // Reactive state for DOM elements and map instance
   let mapEl = $state<HTMLDivElement>();
-  let map: any = $state(null);
+  let map = $state<any>(null);
+  
+  // Non-reactive state (doesn't need $state as it doesn't drive UI updates)
   let L: any;
   let markerLayer: any = null;
-  let currentRun = 0; // simple invalidation token
+  let currentRun = 0; // simple invalidation token for aborting async operations
 
   function handleMove() {
     if (!map) return;
@@ -32,11 +35,19 @@
   }
 
   async function init() {
+    // Early returns for invalid states
     if (!browser || map || !mapEl) return;
 
     try {
+      // Dynamic imports for lazy loading
       L = await import('leaflet');
       await import('leaflet/dist/leaflet.css');
+
+      // Verify container still exists before creating map (important for fast navigation)
+      if (!mapEl || !mapEl.parentNode) {
+        console.debug('Map container was removed before initialization completed');
+        return;
+      }
 
       // Create the map with proper bounds and zoom limits
       map = L.map(mapEl, {
@@ -48,6 +59,7 @@
         zoomControl: true
       }).setView(mapData.center, Math.max(mapData.zoom, 2)); // Ensure initial zoom is at least 2
 
+      // Add tile layer
       L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
         attribution: '© OpenStreetMap contributors © CARTO',
         subdomains: 'abcd',
@@ -57,10 +69,15 @@
         bounds: [[-60, -180], [85, 180]] // Restrict tile loading to valid bounds
       }).addTo(map);
 
+      // Set up event listeners
       map.on('moveend', handleMove);
+      
+      // Initial render
       renderMarkers();
     } catch (error) {
       console.error('Failed to initialize map:', error);
+      // Reset state on failure
+      map = null;
     }
   }
 
@@ -130,7 +147,7 @@
   }
 
   function renderMarkers() {
-    if (!browser || !map) return;
+    if (!browser || !map || !mapEl || !mapEl.parentNode) return;
     const runId = ++currentRun;
     clearMarkers();
     const groups = groupItems(items);
@@ -189,29 +206,39 @@
     }
   }
 
-  // Effect to initialize map when DOM element becomes available
+  // Initialize map when DOM element becomes available (runs once)
   $effect(() => {
     if (!browser || !mapEl || map) return;
     
     init();
     
-    // Cleanup function
+    // Cleanup function for map instance
     return () => {
       clearMarkers();
       if (map) {
         try { 
           map.off('moveend', handleMove);
-          map.remove(); 
-        } catch {}
+          // Check if the map container still exists in DOM before removing
+          // This prevents "Map container not found" errors when the component
+          // is unmounted and the container is removed by Svelte
+          if (mapEl && mapEl.parentNode) {
+            map.remove(); 
+          }
+        } catch (error) {
+          // Silently handle cleanup errors that can occur during unmounting
+          console.debug('Map cleanup error (safe to ignore):', error);
+        }
         map = null;
       }
     };
   });
 
-  // Reactive: update markers when items change
+  // Reactive effect: update markers when items change
   $effect(() => {
-    items; // dependency
-    if (map) renderMarkers();
+    // Explicitly track items dependency
+    if (map && items) {
+      renderMarkers();
+    }
   });
 </script>
 
