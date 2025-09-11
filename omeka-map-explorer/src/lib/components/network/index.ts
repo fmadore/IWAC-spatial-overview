@@ -23,6 +23,9 @@ export { default as NetworkSidebar } from './NetworkSidebar.svelte';
 export { default as SpatialNetworkMap } from './SpatialNetworkMap.svelte';
 export { default as SpatialNetworkSidebar } from './SpatialNetworkSidebar.svelte';
 export { default as SpatialNetworkVisualization } from './SpatialNetworkVisualization.svelte';
+export { default as SpatialNetworkIsolationControl } from './SpatialNetworkIsolationControl.svelte';
+export { default as SpatialNetworkLocationSelector } from './SpatialNetworkLocationSelector.svelte';
+export { default as SpatialNetworkFocusCard } from './SpatialNetworkFocusCard.svelte';
 
 // Type exports
 export type { EntityMapping } from './modules/NetworkInteractionHandler';

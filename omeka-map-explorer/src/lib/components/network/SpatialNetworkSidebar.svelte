@@ -14,17 +14,14 @@
   import { Label } from '$lib/components/ui/label';
   import { Badge } from '$lib/components/ui/badge';
   import { Switch } from '$lib/components/ui/switch';
-  import SpatialNetworkIsolationControl from './SpatialNetworkIsolationControl.svelte';
+  import SpatialNetworkFocusCard from './SpatialNetworkFocusCard.svelte';
   import { 
     spatialNetworkState, 
     setSpatialWeightMin,
-    toggleSpatialCountry,
     toggleSpatialIsolatedNodes,
     resetSpatialFilters,
-    getSpatialAvailableCountries,
     getSpatialNetworkStats,
-    getSpatialSelectedNode,
-    getVisibleCountries
+    getSpatialSelectedNode
   } from '$lib/state/spatialNetworkData.svelte';
 
   // Props for map interaction
@@ -43,7 +40,6 @@
   }>();
 
   // Reactive data - use derived state for optimized performance
-  const availableCountries = $derived(getSpatialAvailableCountries());
   const networkStats = $derived(getSpatialNetworkStats());
   const selectedNode = $derived(selectedNodeId ? getSpatialSelectedNode() : null);
 
@@ -65,10 +61,6 @@
     if (Number.isFinite(value) && value >= 1) {
       setSpatialWeightMin(value);
     }
-  }
-
-  function onCountryToggle(country: string) {
-    toggleSpatialCountry(country);
   }
 
   function onIsolatedNodesToggle() {
@@ -125,15 +117,15 @@
 
 <Sidebar.Separator />
 
-<!-- Isolation/Focus Mode -->
+<!-- Focus Mode -->
 <Sidebar.Group>
-  <Sidebar.GroupLabel>Focus Mode</Sidebar.GroupLabel>
-  <Sidebar.GroupContent class="space-y-3">
-    <SpatialNetworkIsolationControl />
-    
-    <p class="text-xs text-muted-foreground">
-      Focus mode shows only the selected location and its direct connections. Click any location on the map to automatically enter focus mode, or click the map background to exit.
-    </p>
+  <Sidebar.GroupContent class="px-0">
+    <SpatialNetworkFocusCard 
+      variant="outline" 
+      compact={true}
+      showQuickActions={true}
+      showLocationDetails={true}
+    />
   </Sidebar.GroupContent>
 </Sidebar.Group>
 
@@ -179,34 +171,6 @@
 </Sidebar.Group>
 
 <Sidebar.Separator />
-
-<!-- Country Filters -->
-<Sidebar.Group>
-  <Sidebar.GroupLabel>Countries</Sidebar.GroupLabel>
-  <Sidebar.GroupContent class="space-y-2">
-    {#each availableCountries as country}
-      {@const isVisible = getVisibleCountries().has(country)}
-      {@const color = getCountryColor(country)}
-      {@const countryStats = networkStats?.countries[country] || 0}
-      
-      <button
-        class="flex items-center justify-between w-full px-3 py-2 text-sm rounded-md border transition-colors {isVisible ? 'bg-primary text-primary-foreground' : 'bg-background hover:bg-accent'}"
-        onclick={() => onCountryToggle(country)}
-      >
-        <div class="flex items-center gap-2">
-          <div 
-            class="w-3 h-3 rounded-full border border-background"
-            style="background-color: {color};"
-          ></div>
-          <span class="font-medium">{country}</span>
-        </div>
-        <Badge variant="secondary" class="text-xs">
-          {countryStats}
-        </Badge>
-      </button>
-    {/each}
-  </Sidebar.GroupContent>
-</Sidebar.Group>
 
 <!-- Selected Location -->
 {#if selectedNode}

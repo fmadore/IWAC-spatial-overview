@@ -222,11 +222,11 @@
                 onNodeHover={handleNodeHover}
               />
               
-              <!-- Isolation Control - floating over map -->
+              <!-- Quick Focus Control - floating over map -->
               {#if spatialNetworkState.selectedNodeId}
-                <div class="absolute top-4 right-4 z-[1001]">
+                <div class="absolute top-4 right-4 z-[1001] max-w-xs">
                   <div class="bg-background/95 backdrop-blur-sm rounded-lg border shadow-lg p-3">
-                    <SpatialNetworkIsolationControl variant="default" size="sm" />
+                    <SpatialNetworkIsolationControl variant="default" size="sm" showHelpText={false} />
                   </div>
                 </div>
               {/if}
