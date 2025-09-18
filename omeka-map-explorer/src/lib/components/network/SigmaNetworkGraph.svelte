@@ -93,6 +93,12 @@
       const squareCandidate: any = squareModule;
       NodeBorderProgram = borderCandidate?.NodeBorderProgram ?? borderCandidate?.default ?? borderModule;
       NodeSquareProgram = squareCandidate?.NodeSquareProgram ?? squareCandidate?.default ?? squareModule;
+      if (!NodeBorderProgram || !NodeSquareProgram) {
+        console.warn('Custom Sigma node program modules:', {
+          borderKeys: Object.keys(borderCandidate || {}),
+          squareKeys: Object.keys(squareCandidate || {})
+        });
+      }
       SigmaUtils = utilsModule;
       if (!NodeBorderProgram || !NodeSquareProgram) {
         console.warn('Sigma custom node programs missing', {
@@ -516,9 +522,12 @@
         }
 
         // Fallback node type if program is not registered (prevents crashes)
-        let type: string | undefined = data.type;
-        if (type === 'border' && !supportsBorder) type = undefined;
-        if (type === 'square' && !supportsSquare) type = undefined;
+        let type: string | undefined;
+        if (data.type === 'border' && supportsBorder) {
+          type = 'border';
+        } else if (data.type === 'square' && supportsSquare) {
+          type = 'square';
+        }
 
         return {
           ...data,

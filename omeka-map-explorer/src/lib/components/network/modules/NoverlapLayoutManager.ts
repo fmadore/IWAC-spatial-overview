@@ -147,7 +147,7 @@ export class NoverlapLayoutManager {
 
     try {
       this.graph.forEachNode((nodeId: string, attrs: any) => {
-        if (attrs.type === 'border' || attrs.type === 'square') {
+        if (typeof attrs.type !== 'undefined') {
           this.graph.removeNodeAttribute(nodeId, 'type');
         }
       });
