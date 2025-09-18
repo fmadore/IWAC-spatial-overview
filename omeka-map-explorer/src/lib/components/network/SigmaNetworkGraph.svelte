@@ -62,6 +62,7 @@
   let cameraRatio = $state(1);
   let highlightedNodeIds = $state<string[]>([]);
   let highlightedNodeSet = $state.raw(new Set<string>());
+  let importantNodeIds = $state.raw(new Set<string>());
   
   // Throttle sigma refresh calls
   let refreshTimeout: number | undefined;
@@ -134,6 +135,9 @@
 
       // Initialize modular managers (defined below)
       initializeManagers();
+
+      // Precompute a small set of important nodes for label LOD
+      importantNodeIds = computeImportantNodes(graph);
 
       // Set up event handling (defined below)
       setupEventHandlers();
@@ -261,9 +265,9 @@
    */
   async function startInitialLayout(): Promise<void> {
     if (layoutManager && currentData && !isLayoutRunning && !layoutManager.isRunning()) {
-      // Start with ForceAtlas2 for most cases
+      // Run a full sequence by default (FA2 + Noverlap) for readability
       try {
-        await layoutManager.runForceAtlas2();
+        await layoutManager.runFullLayout();
       } catch (err) {
         console.warn('Initial layout failed:', err);
       }
@@ -321,6 +325,32 @@
     refreshTimeout = setTimeout(() => {
       if (sigmaInstance) sigmaInstance.refresh();
     }, 50);
+  }
+
+  /**
+   * Compute a small set of important nodes (top degree/count)
+   * used to keep a few labels visible at low zoom.
+   */
+  function computeImportantNodes(g: any): Set<string> {
+    try {
+      const ids: string[] = g.nodes();
+      if (!ids?.length) return new Set();
+
+      const scored = ids.map((id: string) => {
+        const a = g.getNodeAttributes(id) || {};
+        const d = typeof g.degree === 'function' ? g.degree(id) : (a.degree || 0);
+        const c = a.count || 0;
+        // Degree is more informative for visibility; count still matters
+        const score = d * 2 + c * 0.5 + (a.size || 0) * 0.25;
+        return { id, score };
+      });
+
+      scored.sort((a, b) => b.score - a.score);
+      const k = Math.max(10, Math.min(50, Math.floor(ids.length * 0.05)));
+      return new Set(scored.slice(0, k).map(s => s.id));
+    } catch (e) {
+      return new Set();
+    }
   }
 
   /**
@@ -409,25 +439,43 @@
       sigmaInstance.setSetting('nodeReducer', (nodeKey: string, data: any) => {
         const isSelected = nodeKey === selectedId;
         const hasSelection = selectedId !== null;
+        const isHighlighted = highlightedNodeSet.has(nodeKey);
         
         let opacity = 1;
         if (hasSelection && !isSelected) opacity = 0.3;
         
         let sizeMultiplier = 1;
         if (isSelected) sizeMultiplier = 1.8;
-        
+        const computedSize = data.size * sizeMultiplier;
+
         let nodeColor = data.color;
         if (isSelected) {
           nodeColor = '#ff6b35'; // Orange for selected
         } else if (opacity < 1) {
           nodeColor = data.color + '4D'; // Add transparency
         }
-        
+        // Label level-of-detail: show only for selected/highlighted/important
+        // or when sufficiently zoomed in relative to node size.
+        let showLabel = false;
+        if (isSelected || isHighlighted || importantNodeIds.has(nodeKey)) {
+          showLabel = true;
+        } else {
+          const r = cameraRatio; // Higher = further out
+          let threshold = 999; // default hide when zoomed far out
+          if (r <= 0.4) threshold = 8;
+          else if (r <= 0.6) threshold = 10;
+          else if (r <= 0.9) threshold = 12;
+          else if (r <= 1.2) threshold = 14;
+          else threshold = 18; // very zoomed out
+          showLabel = computedSize >= threshold;
+        }
+
         return {
           ...data,
-          size: data.size * sizeMultiplier,
+          size: computedSize,
           color: nodeColor,
-          zIndex: isSelected ? 10 : data.zIndex || 1
+          zIndex: isSelected ? 10 : data.zIndex || 1,
+          label: showLabel ? data.label : ''
         };
       });
       
@@ -437,10 +485,16 @@
           graph.source(edgeKey) === selectedId || 
           graph.target(edgeKey) === selectedId
         );
+        const isConnectedToHighlight = highlightedNodeSet.size > 0 && (
+          highlightedNodeSet.has(graph.source(edgeKey)) ||
+          highlightedNodeSet.has(graph.target(edgeKey))
+        );
         
-        // Hide edges when zoomed out, except for selected node's edges
-        const hideEdgesWhenRatioAbove = 1.2;
-        if (!isConnectedToSelected && cameraRatio > hideEdgesWhenRatioAbove) {
+        // Hide most edges when zoomed out; keep for selected/highlighted/important pairs
+        const hideEdgesWhenRatioAbove = 1.0;
+        const keepImportant =
+          importantNodeIds.has(graph.source(edgeKey)) && importantNodeIds.has(graph.target(edgeKey));
+        if (!isConnectedToSelected && !isConnectedToHighlight && !keepImportant && cameraRatio > hideEdgesWhenRatioAbove) {
           return { ...data, hidden: true };
         }
         
@@ -450,7 +504,7 @@
         if (isConnectedToSelected) {
           opacity = 1.0;
           size = data.size * 1.5;
-        } else if (selectedId) {
+        } else if (selectedId || isConnectedToHighlight) {
           opacity = 0.2;
         }
         

@@ -150,8 +150,8 @@ export class NetworkLayoutManager {
         this.noverlapManager = new NoverlapLayoutManager(this.Noverlap, this.graph, this.sigmaInstance, {
           debug: true,
           settings: {
-            gridSize: 25, // Increased grid size for better spacing
-            margin: 8,    // Add margin between nodes for breathing room
+            gridSize: 35, // Larger grid for clearer separation
+            margin: 10,   // Extra margin between nodes
           },
           onComplete: () => {
             console.log('✅ Noverlap layout completed - nodes should now have better spacing');

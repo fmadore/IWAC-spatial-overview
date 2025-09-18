@@ -53,16 +53,16 @@ function calculateInitialSpread(nodeCount: number): number {
 function calculateNodeSize(count: number, minCount: number, maxCount: number): number {
   const countRange = maxCount - minCount || 1;
   const normalizedCount = (count - minCount) / countRange;
-  // Significantly increased size range for better visibility and much more breathing room
-  return 15 + (50 - 15) * normalizedCount; // 15-50 size range
+  // More conservative range to reduce clutter while keeping contrast
+  return 6 + (20 - 6) * normalizedCount; // 6–20 size range
 }
 
 /**
  * Calculate edge thickness with emphasis on minimal visual noise
  */
 function calculateEdgeThickness(weight: number): number {
-  // Even thinner edges to reduce visual clutter and emphasize spacing
-  return Math.max(0.3, Math.min(2, weight * 0.25));
+  // Thin edges to reduce visual clutter; clamp to subtle range
+  return Math.max(0.2, Math.min(1.5, weight * 0.2));
 }
 
 /**
@@ -135,7 +135,7 @@ export function buildGraphologyGraph(Graph: any, networkData: NetworkData): any 
         weight: edge.weight,
         size: thickness,
         color: '#e2e8f0', // Very light gray for minimal visual impact
-        alpha: 0.25, // Much more transparent for better spacing perception
+        alpha: 0.15, // Even more transparent for better spacing perception
         type: 'line'
       });
     }

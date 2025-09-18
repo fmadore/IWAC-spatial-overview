@@ -88,19 +88,19 @@ export function buildSigmaConfig(
     
     // Improved label settings
     labelFont: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
-    labelSize: 12,
+    labelSize: 11,
     labelWeight: '500',
     labelColor: { color: '#1f2937' },
     // Show fewer labels at global zoom to reduce clutter
-    labelDensity: 0.03,
-    labelGridCellSize: 100,
-    labelRenderedSizeThreshold: 9,
+    labelDensity: 0.02,
+    labelGridCellSize: 120,
+    labelRenderedSizeThreshold: 12,
     
-    // Enhanced size settings optimized for much better spacing
-    minNodeSize: 8,   // Increased minimum for better visibility
-    maxNodeSize: 60,  // Significantly increased to match our 15-50 base size range
-    minEdgeSize: 0.2, // Even thinner minimum edge size for less visual noise
-    maxEdgeSize: 2.0, // Reduced maximum edge size
+    // Size settings aligned with tighter node sizes in graph
+    minNodeSize: 2,
+    maxNodeSize: 28,
+    minEdgeSize: 0.15,
+    maxEdgeSize: 1.5,
     
     // Edge appearance with subtle styling
     defaultEdgeType: 'line',
