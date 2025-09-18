@@ -89,9 +89,19 @@
       Graph = graphModule.default;
       ForceAtlas2 = fa2Module.default;
       Noverlap = noverlapModule.default;
-      NodeBorderProgram = borderModule.NodeBorderProgram;
-      NodeSquareProgram = squareModule.NodeSquareProgram;
+      const borderCandidate: any = borderModule;
+      const squareCandidate: any = squareModule;
+      NodeBorderProgram = borderCandidate?.NodeBorderProgram ?? borderCandidate?.default ?? borderModule;
+      NodeSquareProgram = squareCandidate?.NodeSquareProgram ?? squareCandidate?.default ?? squareModule;
       SigmaUtils = utilsModule;
+      if (!NodeBorderProgram || !NodeSquareProgram) {
+        console.warn('Sigma custom node programs missing', {
+          hasBorder: !!NodeBorderProgram,
+          hasSquare: !!NodeSquareProgram,
+          borderKeys: Object.keys(borderModule ?? {}),
+          squareKeys: Object.keys(squareModule ?? {})
+        });
+      }
       
       return true;
     } catch (err) {
@@ -117,6 +127,22 @@
         return;
       }
 
+      // If custom node programs are missing, downgrade node types to avoid render crashes
+      if (!NodeBorderProgram || !NodeSquareProgram) {
+        try {
+          graph.forEachNode((nodeId: string, attrs: any) => {
+            if (!NodeBorderProgram && attrs.type === 'border') {
+              graph.removeNodeAttribute(nodeId, 'type');
+            }
+            if (!NodeSquareProgram && attrs.type === 'square') {
+              graph.removeNodeAttribute(nodeId, 'type');
+            }
+          });
+        } catch (downgradeErr) {
+          console.warn('Failed to downgrade node types without custom programs:', downgradeErr);
+        }
+      }
+
       // Validate graph structure
       const validation = validateGraph(graph);
       if (!validation.isValid) {
@@ -127,11 +153,23 @@
       const stats = getGraphStatistics(graph);
       console.log('📊 Graph statistics:', stats);
 
-      // Build sigma configuration
+      // Build sigma configuration (use appState.networkViz for density/thresholds)
       const config = buildSigmaConfig(currentData, NodeBorderProgram, NodeSquareProgram, highlightedNodeSet, appState);
 
       // Create sigma instance
       sigmaInstance = new Sigma(graph, container, config);
+
+      // Ensure custom node programs remain registered (guard against downstream overrides)
+      try {
+        const existingClasses = sigmaInstance.getSetting('nodeProgramClasses') ?? {};
+        sigmaInstance.setSetting('nodeProgramClasses', {
+          ...existingClasses,
+          border: NodeBorderProgram,
+          square: NodeSquareProgram
+        });
+      } catch (setErr) {
+        console.warn('Unable to register custom node programs:', setErr);
+      }
 
       // Initialize modular managers (defined below)
       initializeManagers();
@@ -279,6 +317,7 @@
    */
   function trackCameraState(): void {
     try {
+      if (!sigmaInstance || !('getCamera' in sigmaInstance)) return;
       const cam = sigmaInstance.getCamera();
       cameraRatio = cam.getState().ratio;
       cam.on('updated', () => {
@@ -435,7 +474,12 @@
     if (sigmaInstance && graph) {
       const selectedId = appState.networkNodeSelected?.id;
       
-      // Update node reducer for selection styling
+      // Snapshot supported node programs to avoid program-missing crashes
+      const nodePrograms = (sigmaInstance.getSetting && sigmaInstance.getSetting('nodeProgramClasses')) || {};
+      const supportsBorder = !!nodePrograms.border;
+      const supportsSquare = !!nodePrograms.square;
+
+      // Update node reducer for selection styling and label LOD
       sigmaInstance.setSetting('nodeReducer', (nodeKey: string, data: any) => {
         const isSelected = nodeKey === selectedId;
         const hasSelection = selectedId !== null;
@@ -467,15 +511,22 @@
           else if (r <= 0.9) threshold = 12;
           else if (r <= 1.2) threshold = 14;
           else threshold = 18; // very zoomed out
-          showLabel = computedSize >= threshold;
+          const mul = appState.networkViz?.labelThresholdMul ?? 1.0;
+          showLabel = computedSize >= threshold * mul;
         }
+
+        // Fallback node type if program is not registered (prevents crashes)
+        let type: string | undefined = data.type;
+        if (type === 'border' && !supportsBorder) type = undefined;
+        if (type === 'square' && !supportsSquare) type = undefined;
 
         return {
           ...data,
           size: computedSize,
           color: nodeColor,
           zIndex: isSelected ? 10 : data.zIndex || 1,
-          label: showLabel ? data.label : ''
+          label: showLabel ? data.label : '',
+          ...(type ? { type } : {})
         };
       });
       
@@ -491,7 +542,7 @@
         );
         
         // Hide most edges when zoomed out; keep for selected/highlighted/important pairs
-        const hideEdgesWhenRatioAbove = 1.0;
+        const hideEdgesWhenRatioAbove = appState.networkViz?.edgeHideRatio ?? 1.0;
         const keepImportant =
           importantNodeIds.has(graph.source(edgeKey)) && importantNodeIds.has(graph.target(edgeKey));
         if (!isConnectedToSelected && !isConnectedToHighlight && !keepImportant && cameraRatio > hideEdgesWhenRatioAbove) {
@@ -516,6 +567,25 @@
       });
       
       // Use throttledRefresh instead of direct refresh to prevent cascading updates
+      throttledRefresh();
+    }
+  });
+
+  // Effect: react to labelDensity changes at runtime
+  $effect(() => {
+    if (sigmaInstance) {
+      const density = appState.networkViz?.labelDensity ?? 0.02;
+      sigmaInstance.setSetting('labelDensity', density);
+      throttledRefresh();
+    }
+  });
+
+  // Effect: react to label threshold multiplier changes at runtime
+  $effect(() => {
+    if (sigmaInstance) {
+      const mul = appState.networkViz?.labelThresholdMul ?? 1.0;
+      const base = 12; // keep in sync with config default
+      sigmaInstance.setSetting('labelRenderedSizeThreshold', Math.max(8, Math.round(base * mul)));
       throttledRefresh();
     }
   });

@@ -30,6 +30,13 @@ interface AppState {
 	// Network view state
 	networkNodeSelected?: { id: string } | null;
 	networkLoaded?: boolean;
+
+	// Network visualization tunables
+	networkViz?: {
+		edgeHideRatio: number; // Hide most edges when camera ratio is above this
+		labelThresholdMul: number; // Multiply size thresholds for showing labels
+		labelDensity: number; // Sigma label sampling density
+	};
 	
 	// Network highlighting functions (set by network components)
 	networkHighlightingFunctions?: {
@@ -73,6 +80,11 @@ export const appState = $state<AppState>({
 	networkNodeSelected: null,
 	networkLoaded: false,
 	networkHighlightingFunctions: null,
+	networkViz: {
+		edgeHideRatio: 1.0,
+		labelThresholdMul: 1.0,
+		labelDensity: 0.02,
+	},
 	spatialNetworkControlFunctions: null,
 	countryFocus: {
 		country: 'Benin',

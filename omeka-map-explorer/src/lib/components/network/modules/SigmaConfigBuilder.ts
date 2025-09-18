@@ -92,9 +92,9 @@ export function buildSigmaConfig(
     labelWeight: '500',
     labelColor: { color: '#1f2937' },
     // Show fewer labels at global zoom to reduce clutter
-    labelDensity: 0.02,
+    labelDensity: (appState?.networkViz?.labelDensity ?? 0.02),
     labelGridCellSize: 120,
-    labelRenderedSizeThreshold: 12,
+    labelRenderedSizeThreshold: Math.max(8, Math.round(12 * (appState?.networkViz?.labelThresholdMul ?? 1.0))),
     
     // Size settings aligned with tighter node sizes in graph
     minNodeSize: 2,

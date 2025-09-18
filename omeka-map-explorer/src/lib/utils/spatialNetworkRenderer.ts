@@ -49,6 +49,17 @@ export async function createSpatialNetworkRenderer(
   let targetContainer: HTMLElement | null = null;
   let isFirstInitialization = true;
 
+  // Wait until container has a non-zero size to avoid Sigma init errors
+  async function waitForContainerSize(el: HTMLElement, maxAttempts = 10, delayMs = 80): Promise<boolean> {
+    for (let i = 0; i < maxAttempts; i++) {
+      const w = el.clientWidth;
+      const h = el.clientHeight;
+      if (w > 0 && h > 0) return true;
+      await new Promise((r) => setTimeout(r, delayMs));
+    }
+    return false;
+  }
+
   /**
    * Get node color based on importance/frequency - much cleaner scheme
    */
@@ -122,9 +133,12 @@ export async function createSpatialNetworkRenderer(
       });
 
   // Create Sigma instance with proper settings
+  // Ensure container has size; if not, allowInvalidContainer to bypass early errors
+  const hasSize = await waitForContainerSize(targetContainer!, 12, 80);
   sigmaInstance = new Sigma(graph, targetContainer!, {
         // Rendering settings
         backgroundColor: 'transparent',
+        allowInvalidContainer: !hasSize,
         
         // Node rendering - smaller sizes for geographic network
         defaultNodeColor: '#e74c3c',

@@ -72,6 +72,11 @@
 			networkState.typesEnabled[t] = true;
 		});
 		applyFilters();
+		// Reset display tunables
+		if (!appState.networkViz) appState.networkViz = { edgeHideRatio: 1.0, labelThresholdMul: 1.0, labelDensity: 0.02 };
+		appState.networkViz.edgeHideRatio = 1.0;
+		appState.networkViz.labelThresholdMul = 1.0;
+		appState.networkViz.labelDensity = 0.02;
 		if (onResetFilters) {
 			onResetFilters();
 		}
@@ -97,6 +102,25 @@
 		subject: 'Subjects',
 		location: 'Locations',
 	};
+
+	// Display controls handlers
+	function onEdgeHideRatioChange(e: Event) {
+		const v = Number((e.target as HTMLInputElement).value);
+		if (!appState.networkViz) appState.networkViz = { edgeHideRatio: 1.0, labelThresholdMul: 1.0, labelDensity: 0.02 };
+		appState.networkViz.edgeHideRatio = v;
+	}
+
+	function onLabelThresholdMulChange(e: Event) {
+		const v = Number((e.target as HTMLInputElement).value);
+		if (!appState.networkViz) appState.networkViz = { edgeHideRatio: 1.0, labelThresholdMul: 1.0, labelDensity: 0.02 };
+		appState.networkViz.labelThresholdMul = v;
+	}
+
+	function onLabelDensityChange(e: Event) {
+		const v = Number((e.target as HTMLInputElement).value);
+		if (!appState.networkViz) appState.networkViz = { edgeHideRatio: 1.0, labelThresholdMul: 1.0, labelDensity: 0.02 };
+		appState.networkViz.labelDensity = v;
+	}
 </script>
 
 <!-- Search Nodes -->
@@ -157,6 +181,65 @@
 			<p class="text-xs text-muted-foreground">
 				Limit highly connected nodes
 			</p>
+		</div>
+	</Sidebar.GroupContent>
+</Sidebar.Group>
+
+<Sidebar.Separator />
+
+<!-- Display Controls -->
+<Sidebar.Group>
+	<Sidebar.GroupLabel>Display</Sidebar.GroupLabel>
+	<Sidebar.GroupContent class="space-y-4">
+		<div class="space-y-2">
+			<Label for="edgeHideRatio" class="text-sm font-medium">
+				Hide edges when zoom ratio &gt; { (appState.networkViz?.edgeHideRatio ?? 1).toFixed(1) }
+			</Label>
+			<input
+				id="edgeHideRatio"
+				type="range"
+				min="0.8"
+				max="1.8"
+				step="0.1"
+				value={appState.networkViz?.edgeHideRatio ?? 1}
+				oninput={onEdgeHideRatioChange}
+				class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-primary"
+			/>
+			<p class="text-xs text-muted-foreground">Higher value hides edges longer while zoomed out.</p>
+		</div>
+
+		<div class="space-y-2">
+			<Label for="labelThresholdMul" class="text-sm font-medium">
+				Label threshold ×{ (appState.networkViz?.labelThresholdMul ?? 1).toFixed(1) }
+			</Label>
+			<input
+				id="labelThresholdMul"
+				type="range"
+				min="0.6"
+				max="1.8"
+				step="0.1"
+				value={appState.networkViz?.labelThresholdMul ?? 1}
+				oninput={onLabelThresholdMulChange}
+				class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-primary"
+			/>
+			<p class="text-xs text-muted-foreground">Lower value shows more labels earlier.</p>
+		</div>
+
+		<div class="space-y-2">
+			<Label for="labelDensity" class="text-sm font-medium">
+				Label density: { (appState.networkViz?.labelDensity ?? 0.02).toFixed(3) }
+			</Label>
+			<input
+				id="labelDensity"
+				type="range"
+				min="0.010"
+				max="0.080"
+				step="0.005"
+				value={appState.networkViz?.labelDensity ?? 0.02}
+				oninput={onLabelDensityChange}
+				class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-primary"
+			/>
+			<p class="text-xs text-muted-foreground">Controls global label sampling; affects performance.</p>
 		</div>
 	</Sidebar.GroupContent>
 </Sidebar.Group>

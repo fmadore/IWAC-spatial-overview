@@ -34,6 +34,7 @@ export class NoverlapLayoutManager {
   private noverlapLib: NoverlapLib;
   private graph: any;
   private sigma: any;
+  private downgradedCustomPrograms = false;
   private options: Required<Omit<NoverlapOptions, 'onProgress' | 'onComplete' | 'settings'>> & {
     settings: Required<NoverlapSettings>;
     onProgress?: (progress: number) => void;
@@ -129,7 +130,38 @@ export class NoverlapLayoutManager {
       return true;
 
     } catch (error) {
+      if (!this.downgradedCustomPrograms && this.handleMissingProgramError(error)) {
+        this.downgradedCustomPrograms = true;
+        return this.apply();
+      }
       console.error('❌ NoverlapLayoutManager error:', error);
+      return false;
+    }
+  }
+
+  private handleMissingProgramError(error: unknown): boolean {
+    const message = (error instanceof Error ? error.message : String(error ?? '')).toLowerCase();
+    if (!message.includes('could not find a suitable program')) {
+      return false;
+    }
+
+    try {
+      this.graph.forEachNode((nodeId: string, attrs: any) => {
+        if (attrs.type === 'border' || attrs.type === 'square') {
+          this.graph.removeNodeAttribute(nodeId, 'type');
+        }
+      });
+
+      try {
+        const classes = this.sigma.getSetting('nodeProgramClasses') ?? {};
+        const { border, square, ...rest } = classes as Record<string, any>;
+        this.sigma.setSetting('nodeProgramClasses', rest);
+      } catch {}
+
+      console.warn('NoverlapLayoutManager: downgraded custom node programs after render error');
+      return true;
+    } catch (downgradeError) {
+      console.warn('Failed to downgrade node programs after error:', downgradeError);
       return false;
     }
   }
@@ -205,3 +237,5 @@ export class NoverlapLayoutManager {
     };
   }
 }
+
+
